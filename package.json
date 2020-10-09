@@ -1,11 +1,14 @@
 {
   "name": "myapp",
+  "main": "app.js",
   "version": "0.0.0",
   "private": true,
+
   "scripts": {
     "start": "node app.js",
     "build": "node app.js"
   },
+  
   "dependencies": {
     "@hapi/joi": "^17.1.1",
     "body-parser": "^1.19.0",
@@ -33,7 +36,6 @@
     "pg-format": "^1.0.4",
     "pg-promise": "^10.5.1"
   },
-  "main": "app.js",
   "author": "amit,anukarsh,chitranshi",
   "license": "ISC",
   "description": ""

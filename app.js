@@ -7,8 +7,8 @@ const bodyParser = require('body-parser');
 var expressLayout = require('express-ejs-layouts');
 const dotenv = require('dotenv');
 const flash = require('connect-flash');
-//const session = require('express-session');
-var session = require('cookie-session');
+const session = require('express-session');
+//var session = require('cookie-session');
 dotenv.config();
 
 
