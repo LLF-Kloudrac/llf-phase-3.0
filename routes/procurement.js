@@ -2233,7 +2233,7 @@ router.get('/getfeedbackIT/:procid',verify,(request,response)=>{
 router.get('/getfeedbackITlist',verify,(request,response)=>{
     let parentid=request.query.parentId;
     console.log('parentid '+parentid);
-    let qry = 'SELECT sfid,Name,quyantiut__c,timely_submissions_of_deliverables_goods__c,work_quality_goods_quality__c,issue_knowledge_expertise__c,procurement_it__c FROM salesforce.Feedbacks_IT__c WHERE procurement_it__c=$1';
+    let qry = 'SELECT sfid,Name,quyantiut__c,timely_submissions_of_deliverables_goods__c,work_quality_goods_quality__c,issue_knowledge_expertise__c,Procurement_IT__c FROM salesforce.Feedbacks_IT__c WHERE Procurement_IT__c=$1';
     console.log('qry  =>'+qry)
      pool.query(qry,[parentid])
      .then((feedbackqueryresult) => {
@@ -2368,7 +2368,7 @@ router.post('/savefeedbackIT',(request,response)=>{
     let lstRecord =[];
     lstRecord.push(record);
     console.log('lst record '+lstRecord);
-    let feedCreateqry = format('INSERT INTO salesforce.Feedbacks_IT__c (quyantiut__c,timely_submissions_of_deliverables_goods__c,work_quality_goods_quality__c,issue_knowledge_expertise__c,procurement_it__c ) VALUES %L returning id',lstRecord);;
+    let feedCreateqry = format('INSERT INTO salesforce.Feedbacks_IT__c (quyantiut__c,timely_submissions_of_deliverables_goods__c,work_quality_goods_quality__c,issue_knowledge_expertise__c,Procurement_IT__c ) VALUES %L returning id',lstRecord);;
     console.log('feedCreateqry=>'+feedCreateqry);
     pool.query(feedCreateqry)
     .then((queryResult)=>{
