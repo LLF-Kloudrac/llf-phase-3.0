@@ -133,7 +133,7 @@ router.get('/getRelatedTourBillClaimDetails/:tourBillClaimId', async (request, r
 
 
     var airRailBusQuery = 'SELECT sfid, Name, Departure_Date__c, Arrival_Date__c, Departure_Station__c,'+ 
-    'Arrival_Station__c, Amount__c, Tour_Bill_Claim__c,Project_Tasks__c '+
+    'Arrival_Station__c, Amount__c, Tour_Bill_Claim__c '+
     'FROM salesforce.Air_Rail_Bus_Fare__c WHERE Tour_Bill_Claim__c = $1';
     await 
     pool
@@ -154,7 +154,7 @@ router.get('/getRelatedTourBillClaimDetails/:tourBillClaimId', async (request, r
 
 
     var conveyanceChargesQuery = 'SELECT sfid, Name, Date__c, Amount__c, Place__c,'+ 
-                          'Remarks__c, Tour_Bill_Claim__c,Project_Tasks__c, Heroku_Image_URL__c  '+
+                          'Remarks__c, Tour_Bill_Claim__c, Heroku_Image_URL__c  '+
                           'FROM salesforce.Conveyance_Charges__c WHERE Tour_Bill_Claim__c = $1';
     await
     pool
@@ -173,7 +173,7 @@ router.get('/getRelatedTourBillClaimDetails/:tourBillClaimId', async (request, r
 
 
     var boardingLodgingChargesQuery = 'SELECT sfid, Name, Tour_Bill_Claim__c, Stay_Option__c, Place_Journey__c,'+ 
-                          'Correspondence_City__c,   Own_Stay_Amount__c, Project_Tasks__c , From__c, To__c,'+
+                          'Correspondence_City__c,   Own_Stay_Amount__c , From__c, To__c,'+
                           'No_of_Days__c,Heroku_Image_URL__c,Daily_Allowance__c,Amount_of_B_L_as_per_policy__c Total_time__c, Actual_Amount_for_boarding_and_lodging__c, Amount_for_boarding_and_lodging__c,'+
                           'Total_Amount__c, Extra_Amount__c, Total_Allowance__c '+
                           'FROM salesforce.Boarding_Lodging__c WHERE Tour_Bill_Claim__c = $1';
@@ -193,7 +193,7 @@ router.get('/getRelatedTourBillClaimDetails/:tourBillClaimId', async (request, r
 
 
     var telephoneFoodQuery = 'SELECT sfid, Name, Laundry_Expense__c, Fooding_Expense__c, Remarks__c,'+ 
-                          'Tour_Bill_Claim__c,   Project_Tasks__c, Total_Amount__c '+
+                          'Tour_Bill_Claim__c, Total_Amount__c '+
                           'FROM salesforce.Telephone_Fooding_Laundry_Expenses__c WHERE Tour_Bill_Claim__c = $1';
     await
     pool
@@ -211,7 +211,7 @@ router.get('/getRelatedTourBillClaimDetails/:tourBillClaimId', async (request, r
 
 
     var miscellenousChargesQuery = 'SELECT sfid, Name, Date__c, Amount__c, Particulars_Mode__c,'+ 
-    'Remarks__c,Tour_Bill_Claim__c, Project_Tasks__c, Heroku_Image_URL__c '+
+    'Remarks__c,Tour_Bill_Claim__c, Heroku_Image_URL__c '+
     'FROM salesforce.Miscellaneous_Expenses__c WHERE Tour_Bill_Claim__c = $1';
     await
     pool
@@ -785,7 +785,7 @@ router.get('/boardingLodgingCharges/:parentTourBillId', verify, (request, respon
     console.log(' boardingLodgingCharges parentTourBillId  : '+request.params.parentTourBillId);
 
     var boardingLodgingChargesQuery = 'SELECT sfid, Name, Tour_Bill_Claim__c, Stay_Option__c, Place_Journey__c,'+ 
-                          'Correspondence_City__c,   Own_Stay_Amount__c, Project_Tasks__c , From__c, To__c,'+
+                          'Correspondence_City__c,   Own_Stay_Amount__c , From__c, To__c,'+
                           'No_of_Days__c, Total_time__c, Actual_Amount_for_boarding_and_lodging__c, Amount_for_boarding_and_lodging__c,'+
                           'Total_Amount__c, Extra_Amount__c, Total_Allowance__c '+
                           'FROM salesforce.Boarding_Lodging__c WHERE Tour_Bill_Claim__c = $1';
@@ -814,7 +814,7 @@ router.get('/boardingLodgingCharges/:parentTourBillId', verify, (request, respon
   console.log(' boardingLodgingCharges parentTourBillId  : '+request.params.parentTourBillId);
 
   var boardingLodgingChargesQuery = 'SELECT sfid, Name, Tour_Bill_Claim__c, Stay_Option__c, Place_Journey__c,'+ 
-                        'Correspondence_City__c,   Own_Stay_Amount__c, Project_Tasks__c , From__c, To__c,'+
+                        'Correspondence_City__c,   Own_Stay_Amount__c , From__c, To__c,'+
                         'No_of_Days__c, Total_time__c, Actual_Amount_for_boarding_and_lodging__c, Amount_for_boarding_and_lodging__c,'+
                         'Total_Amount__c, Extra_Amount__c, Total_Allowance__c '+
                         'FROM salesforce.Boarding_Lodging__c WHERE Tour_Bill_Claim__c = $1';
@@ -1670,7 +1670,7 @@ router.get('/miscellaneousCharge',verify,(request,response)=>{
     
     let tourbillId = request.query.tourbillId;
     console.log('tourbillId  : '+tourbillId);
-    let queryText = 'SELECT misChar.sfid, act.name as activityCode, misChar.project_tasks__c, misChar.remarks__c, misChar.Amount__c,misChar.date__c,misChar.Particulars_Mode__c, misChar.name as chargegname,tourBill.sfid  as tourId ,tourBill.name as tourbillname,misChar.createddate, misChar.Heroku_Image_URL__c '+
+    let queryText = 'SELECT misChar.sfid, act.name as activityCode, misChar.remarks__c, misChar.Amount__c,misChar.date__c,misChar.Particulars_Mode__c, misChar.name as chargegname,tourBill.sfid  as tourId ,tourBill.name as tourbillname,misChar.createddate, misChar.Heroku_Image_URL__c '+
                      'FROM salesforce.Miscellaneous_Expenses__c misChar '+ 
                      'INNER JOIN salesforce.Tour_Bill_Claim__c tourBill '+
                      'ON misChar.Tour_Bill_Claim__c =  tourBill.sfid '+
