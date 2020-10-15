@@ -841,7 +841,8 @@ router.get('/pettyCash/:parentExpenseId',verify,(request, response) => {
   var objUser = request.user;
   console.log('Expense userId : '+userId);
 
-  response.render('expenses/pettyCash/pettycash',{objUser, parentExpenseId:parentExpenseId });
+  response.render('expenses/pettyCash/pettyCash',{objUser, parentExpenseId: parentExpenseId });
+ // response.render('expenses/pettyCash/pettyCash',{objUser, parentExpenseId:parentExpenseId });
 });
 
 

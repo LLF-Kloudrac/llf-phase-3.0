@@ -1067,7 +1067,7 @@ router.get('/getRelatedQuote',(request, response) => {
     console.log('filtervalues  '+JSON.stringify(filterValues));
     console.log('filterValues.itemsCategoryValue '+filterValues.itemsCategoryValue);
 
-    pool.query('SELECT sfid, Quote_Public_URL__c FROM salesforce.Impaneled_Vendor__c WHERE services__c = $1 AND items__c = $2 AND location_vendor__c = $3 ',[filterValues.itemsCategoryValue ,filterValues.itemValue,filterValues.placeValue])
+    pool.query('SELECT sfid, Quote_Public_URL__c FROM salesforce.Impaneled_Vendor__c WHERE items__c = $1 AND location_vendor__c = $2 ',[filterValues.itemValue,filterValues.placeValue])
     .then((QuoteQueryResult) => {
         console.log('QuoteQueryResult  '+JSON.stringify(QuoteQueryResult.rows));
         if(QuoteQueryResult.rowCount > 0)
@@ -1598,7 +1598,7 @@ router.get('/getVendorListView',verify,(request,response)=>{
 })
 
 router.get('/getVendorsList',(request,response)=>{
-    let qry ='select sfid ,name,vendor_Name__c ,services__c,address__c,createddate,items__c,GST_No__c,Reason_for_not_providing_GST_no__c,Bank_IFSC_Code__c ,Bank_Account_No__c,State__c,District__c '+
+    let qry ='select sfid ,name,vendor_Name__c ,address__c,createddate,items__c,GST_No__c,Reason_for_not_providing_GST_no__c,Bank_IFSC_Code__c ,Bank_Account_No__c,State__c,District__c '+
      'FROM salesforce.Impaneled_Vendor__c WHERE sfid IS NOT NULL';
      console.log('qry  =>'+qry)
      pool.query(qry)
@@ -1655,7 +1655,7 @@ router.get('/getVendorDetail',async(request,response)=>{
     let recordDeatil={};
     await
     pool
-    .query('select sfid ,name,vendor_Name__c ,services__c,contact_no__c,name_of_signing_authority__c,bank_details__c,pan_no__c,address__c,items__c,GST_No__c,Reason_for_not_providing_GST_no__c,Bank_IFSC_Code__c ,Bank_Account_No__c,ownerid,Others__c,quote_public_url__c,State__c,District__c '+
+    .query('select sfid ,name,vendor_Name__c ,contact_no__c,name_of_signing_authority__c,bank_details__c,pan_no__c,address__c,items__c,GST_No__c,Reason_for_not_providing_GST_no__c,Bank_IFSC_Code__c ,Bank_Account_No__c,ownerid,Others__c,quote_public_url__c,State__c,District__c '+
     'FROM salesforce.Impaneled_Vendor__c where sfid =$1 ',[vendorId])
     .then((queryResult)=>{
         console.log('queryResult +>'+JSON.stringify(queryResult.rows));
