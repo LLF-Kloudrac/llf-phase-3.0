@@ -1459,7 +1459,7 @@ router.get('/telephoneFoodCharge',verify,(request,response)=>{
     let tourbillId = request.query.tourbillId;
     console.log('Tourbill Telephone'+tourbillId);
     pool
-    .query('SELECT sfid, name, Total_Amount__c,	Fooding_Expense__c,Laundry_Expense__c ,createddate from salesforce.Telephone_Fooding_Laundry_Expenses__c WHERE Tour_Bill_Claim__c = $1',[tourbillId])
+    .query('SELECT sfid, name, Total_Amount__c,	Fooding_Expense__c,Laundry_Expense__c ,createddate from salesforce.Telephone_Fooding_Laundry_Expenses__c WHERE Tour_Bill_Claim__c = $1 AND sfid IS NOT NULL',[tourbillId])
     .then((telephonegQueryResult)=>{
       console.log('telephonegQueryResult '+telephonegQueryResult.rows);
       if(telephonegQueryResult.rowCount>0)
@@ -1503,7 +1503,7 @@ router.get('/telephoneFoodCharge',verify,(request,response)=>{
                      'INNER JOIN salesforce.Tour_Bill_Claim__c tourBill '+
                      'ON charge.Tour_Bill_Claim__c =  tourBill.sfid '+
                      'INNER JOIN salesforce.Activity_Code__c act ON charge.Activity_Code_Project__c = act.sfid '+
-                     'WHERE  charge.sfid= $1 AND charge.sfid IS NOT NULL ';
+                     'WHERE  charge.sfid= $1 ';
   
     pool
     .query(queryText,[tourbillId])
