@@ -1598,7 +1598,7 @@ router.get('/getVendorListView',verify,(request,response)=>{
 })
 
 router.get('/getVendorsList',(request,response)=>{
-    let qry ='select sfid ,name,vendor_Name__c ,address__c,createddate,items__c,GST_No__c,Reason_for_not_providing_GST_no__c,Bank_IFSC_Code__c ,Bank_Account_No__c,State__c,District__c '+
+    let qry ='select sfid ,name,vendor_Name__c ,address__c,createddate,GST_No__c,Reason_for_not_providing_GST_no__c,Bank_IFSC_Code__c ,Bank_Account_No__c,State__c,District__c '+
      'FROM salesforce.Impaneled_Vendor__c WHERE sfid IS NOT NULL';
      console.log('qry  =>'+qry)
      pool.query(qry)
