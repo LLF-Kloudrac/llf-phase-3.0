@@ -524,10 +524,12 @@ router.get('/details', async (request, response) => {
   'WHERE exp.sfid = $1';
 
 
-  var pettyCashQueryText = 'SELECT id, sfid, name, Activity_Code__c, Bill_No__c, Bill_Date__c,Nature_of_exp__c, Amount__c FROM salesforce.Petty_Cash_Expense__c WHERE Expense__c = $1';
+  var pettyCashQueryText = 'SELECT id, sfid, name, Bill_No__c, Bill_Date__c,Nature_of_exp__c, Amount__c FROM salesforce.Petty_Cash_Expense__c WHERE Expense__c = $1';
   var conveyanceQueryText = 'SELECT id, sfid, Name, Amount__c, Mode_of_Conveyance__c, From__c FROM salesforce.Conveyance_Voucher__c WHERE Expense__c = $1';
   var tourBillClaimQueryText = 'SELECT id, sfid, Name,Grand__c FROM salesforce.Tour_Bill_Claim__c WHERE Expense__c = $1 ';
-  var customApprovalText = 'SELECT cust.id, cust.sfid, cust.Name as custname, cust.Comment__c as custcomm,cust.Approver_PM__c,con.name as conname,cust.Approver_RM__c '+
+ // var customApprovalText = 'SELECT cust.id, cust.sfid, cust.Name as custname, cust.Comment__c as custcomm,cust.Approver_PM__c,con.name as conname,cust.Approver_RM__c '+
+  var customApprovalText = 'SELECT cust.id, cust.sfid, cust.Name as custname, cust.Comment__c as custcomm,cust.Approver_PM__c,con.name as conname '+
+
   'FROM salesforce.Custom_Approval__c cust '+
   'INNER JOIN salesforce.Contact con '+
   'ON cust.Approver_RM__c=con.sfid '+
