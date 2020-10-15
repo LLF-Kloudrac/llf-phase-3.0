@@ -1067,7 +1067,7 @@ router.get('/getRelatedQuote',(request, response) => {
     console.log('filtervalues  '+JSON.stringify(filterValues));
     console.log('filterValues.itemsCategoryValue '+filterValues.itemsCategoryValue);
 
-    pool.query('SELECT sfid, Quote_Public_URL__c FROM salesforce.Impaneled_Vendor__c WHERE items__c = $1 AND location_vendor__c = $2 ',[filterValues.itemValue,filterValues.placeValue])
+    pool.query('SELECT sfid FROM salesforce.Impaneled_Vendor__c WHERE location_vendor__c = $1 ',[filterValues.placeValue])
     .then((QuoteQueryResult) => {
         console.log('QuoteQueryResult  '+JSON.stringify(QuoteQueryResult.rows));
         if(QuoteQueryResult.rowCount > 0)
@@ -1116,13 +1116,13 @@ router.get('/getCostandGSt',async(request,response)=>{
      })
      if(dstr=='' || dstr==null)
      {
-         qry='SELECT sfid,vendor_name__c,GST_No__c,	Quote_Public_URL__c FROM salesforce.Impaneled_Vendor__c WHERE state__c = $1 ';
+         qry='SELECT sfid,vendor_name__c,GST_No__c FROM salesforce.Impaneled_Vendor__c WHERE state__c = $1 ';
          lst.push(st);
          lst.push(ite);
          console.log('qryyy '+qry+'lstItem '+lst);
      }
      else{
-         qry='SELECT sfid,vendor_name__c,GST_No__c,Quote_Public_URL__c FROM salesforce.Impaneled_Vendor__c WHERE state__c = $1 AND District__c = $2  ';
+         qry='SELECT sfid,vendor_name__c,GST_No__c FROM salesforce.Impaneled_Vendor__c WHERE state__c = $1 AND District__c = $2  ';
          lst=[st,dstr];
          console.log('qry '+qry+'lst '+lst);
      }
@@ -1655,7 +1655,7 @@ router.get('/getVendorDetail',async(request,response)=>{
     let recordDeatil={};
     await
     pool
-    .query('select sfid ,name,vendor_Name__c ,contact_no__c,name_of_signing_authority__c,bank_details__c,pan_no__c,address__c,items__c,GST_No__c,Reason_for_not_providing_GST_no__c,Bank_IFSC_Code__c ,Bank_Account_No__c,ownerid,Others__c,quote_public_url__c,State__c,District__c '+
+    .query('select sfid ,name,vendor_Name__c ,contact_no__c,name_of_signing_authority__c,bank_details__c,pan_no__c,address__c,GST_No__c,Reason_for_not_providing_GST_no__c,Bank_IFSC_Code__c ,Bank_Account_No__c,ownerid,Others__c,State__c,District__c '+
     'FROM salesforce.Impaneled_Vendor__c where sfid =$1 ',[vendorId])
     .then((queryResult)=>{
         console.log('queryResult +>'+JSON.stringify(queryResult.rows));
@@ -2092,8 +2092,8 @@ router.post('/updateVendor',(request,response)=>{
                          'address__c = \''+add+'\', '+
                          'GST_No__c = \''+gst+'\', '+ 
                          'Reason_for_not_providing_GST_no__c = \''+reason+'\', '+ 
-                         'Others__c = \''+other+'\', '+ 
-                         'quote_public_url__c = \''+quote+'\' '+                       
+                         'Others__c = \''+other+'\' '+ 
+                      //   'quote_public_url__c = \''+quote+'\' '+                       
                          'WHERE sfid = $1';
   console.log('updateQuerry  '+updateQuerry);
     pool
