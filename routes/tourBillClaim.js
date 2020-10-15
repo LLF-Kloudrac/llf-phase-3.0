@@ -1503,7 +1503,7 @@ router.get('/telephoneFoodCharge',verify,(request,response)=>{
                      'INNER JOIN salesforce.Tour_Bill_Claim__c tourBill '+
                      'ON charge.Tour_Bill_Claim__c =  tourBill.sfid '+
                      'INNER JOIN salesforce.Activity_Code__c act ON charge.Activity_Code_Project__c = act.sfid '+
-                     'WHERE  charge.sfid= $1 ';
+                     'WHERE  charge.sfid= $1 AND charge.sfid IS NOT NULL ';
   
     pool
     .query(queryText,[tourbillId])
