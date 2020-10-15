@@ -1417,7 +1417,7 @@ router.get('/getProcurementITDetail',(request,response)=>{
       let procurementId=request.query.procurementId;
       var procDetail={};
         console.log('getProcurementITDetail Id='+procurementId);
-        let qry='SELECT procIT.sfid,procIT.Name as procItName,procIT.Others__c,procIT.state__c,procIT.district__c,procIT.Justification__c,procIT.Number_of_quotes__c,procIT.Per_Unit_Cost__c,procIT.Unit__c,procIT.Quote1__c,procIT.Quote2__c,procIT.Quote3__c,procIT.Approvers__c ,procIT.Items__c ,procIT.Product_Service_specification__c,vend.name as venderName,procIT.Quantity__c, procIT.Budget__c,procIT.Impaneled_Vendor__c '+
+        let qry='SELECT procIT.sfid,procIT.Name as procItName,procIT.Others__c,procIT.state__c,procIT.district__c,procIT.Justification__c,procIT.Number_of_quotes__c,procIT.Per_Unit_Cost__c,procIT.Unit__c,procIT.Quote1__c,procIT.Quote2__c,procIT.Quote3__c,procIT.Items__c ,procIT.Product_Service_specification__c,vend.name as venderName,procIT.Quantity__c, procIT.Budget__c,procIT.Impaneled_Vendor__c '+
         'FROM salesforce.Product_Line_Item_IT__c procIT '+
         'INNER JOIN salesforce.Impaneled_Vendor__c vend '+
         'ON procIT.Impaneled_Vendor__c =  vend.sfid '+        
