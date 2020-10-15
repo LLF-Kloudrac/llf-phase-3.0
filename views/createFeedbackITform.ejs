@@ -67,6 +67,14 @@
                     <option value="NA">NA</option>
                 </select> 
               </div>
+
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-md-6">
+                     <input type="hidden" class="form-control" id="hide" value="" required="true"  name="hide" > 
+                    </div>
+                </div>
+            </div>
         
             </div>
         </div>
@@ -78,8 +86,10 @@
     $(document).ready(function(){
 
         $('#parentId').hide();
-        let parentId=document.getElementById('parentId').innerHTML;
-     //   alert('parentId '+parentId);
+     let procid = document.getElementById('parentId').innerHTML;
+      //  let vendId = document.getElementById('parentId').innerHTML;
+      //  alert('venbderoIDv'+vendId);
+        document.forms["formdata"]["hide"].value = procid;
     })
 
     $(function () {

@@ -1524,7 +1524,7 @@ router.get('/getProcurementDetail',async(request,response)=>{
    // response.send(querryResult.rows);
     procDetail.proc=querryResult.rows;
     console.log('oddskd '+JSON.stringify(procDetail));
-    pool.query('SELECT sfid,Name,Timely_submissions_of_all_Deliverables__c,Work_Quality_Goods_Quality__c,Issue_Knowledge_Expertise__c,quantity_requested_vs_received__c,Procurement_Non_IT__c FROM salesforce.Feedback__c WHERE Procurement_Non_IT__c=$1',[procurementId])
+    pool.query('SELECT sfid,Name,Timely_submissions_of_all_Deliverables__c,Work_Quality_Goods_Quality__c,Issue_Knowledge_Expertise__c,quantity_requested_vs_received__c,Procurement_Non_IT__c FROM salesforce.Feedback__c WHERE Procurement_Non_IT__c = $1',[procurementId])
                 .then((queryResult)=>{
                          console.log('queryResult'+JSON.stringify(queryResult));
                          procDetail.feedback=queryResult.rows;
@@ -2298,16 +2298,16 @@ router.get('/getfeedbackdetailIT',(request,response)=>{
 router.post('/savefeedback',(request,response)=>{
     let body = request.body;
     console.log('body  : '+JSON.stringify(body));
-    const{time,quality, issue,quantity,procid}=request.body;
+    const{time,quality, issue,quantity,hide}=request.body;
     console.log('time'+time);
     console.log('quality'+quality);
-    console.log('procidt'+procid);
+    console.log('procidt'+hide);
     console.log('issue'+issue);
     console.log('quantity '+quantity);
 
     let feedCreateqry = 'INSERT INTO salesforce.Feedback__c (quantity_requested_vs_received__c,work_quality_goods_quality__c,timely_submissions_of_all_deliverables__c,procurement_non_it__c,issue_knowledge_expertise__c ) VALUES ($1,$2,$3,$4,$5)';
     console.log('feedCreateqry=>'+feedCreateqry);
-    pool.query(feedCreateqry,[quantity,time,quality,procid,issue])
+    pool.query(feedCreateqry,[quantity,time,quality,hide,issue])
     .then((queryResult)=>{
         console.log('feedback INsert query result '+JSON.stringify(queryResult));
         response.send('Succesfully Inserted');
@@ -2352,11 +2352,11 @@ response.send('Error');
 router.post('/savefeedbackIT',(request,response)=>{
     let body = request.body;
     console.log('body  : '+JSON.stringify(body));
-    const{time,quality,name, issue,quantity,procid}=request.body;
+    const{time,quality,name, issue,quantity,hide}=request.body;
     console.log('name '+name);
     console.log('time'+time);
     console.log('quality'+quality);
-    console.log('procidt'+procid);
+    console.log('procidt'+hide);
     console.log('issue'+issue);
     console.log('quantity '+quantity);
     let record=[];
@@ -2364,7 +2364,7 @@ router.post('/savefeedbackIT',(request,response)=>{
     record.push(time);
     record.push(quality);
     record.push(issue);
-    record.push(procid);
+    record.push(hide);
     let lstRecord =[];
     lstRecord.push(record);
     console.log('lst record '+lstRecord);
