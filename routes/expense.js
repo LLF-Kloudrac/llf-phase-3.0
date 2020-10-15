@@ -678,7 +678,7 @@ router.get('/printdetails',async(request,response)=>{
     'FROM salesforce.Conveyance_Voucher__c con '+
     'INNER JOIN salesforce.Activity_Code__c act ON con.Activity_Code_Project__c = act.sfid '+
     'WHERE Expense__c = $1';
-    var tourBillClaimQueryText = 'SELECT id, sfid, Name, Grand_Total__c,Grand__c FROM salesforce.Tour_Bill_Claim__c WHERE Expense__c = $1 ';
+    var tourBillClaimQueryText = 'SELECT id, sfid, Name,Grand__c FROM salesforce.Tour_Bill_Claim__c WHERE Expense__c = $1 ';
     
     var objData =  {};
     try{

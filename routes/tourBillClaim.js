@@ -14,7 +14,7 @@ router.get('/tourBillClaimListview',verify,(request, response) => {
     console.log('Tour Bill expenseId  :'+expenseId);
     console.log('Tour Bill objUser  :'+JSON.stringify(objUser));
 
-    pool.query('SELECT Id, sfid, Name, Expense__c, Grand_Total__c,Grand__c FROM salesforce.Tour_Bill_Claim__c WHERE Expense__c = $1 ',[expenseId])
+    pool.query('SELECT Id, sfid, Name, Expense__c,Grand__c FROM salesforce.Tour_Bill_Claim__c WHERE Expense__c = $1 ',[expenseId])
     .then((tourBillClaimResult) => {
         console.log('tourBillClaimResult '+JSON.stringify(tourBillClaimResult.rows));
         //response.send(tourBillClaimResult.rows);
@@ -37,7 +37,7 @@ router.get('/gettourbillclaim',verify,(request,response)=>{
     let expenseId = request.query.expenseId;
     console.log('expenseId TourBill '+expenseId);
     pool
-    .query('SELECT sfid, name, grand_Total__c ,createddate, Grand__c from salesforce.Tour_Bill_Claim__c WHERE expense__c = $1',[expenseId])
+    .query('SELECT sfid, name ,createddate, Grand__c from salesforce.Tour_Bill_Claim__c WHERE expense__c = $1',[expenseId])
     .then((tourBillClaimResult)=>{
       console.log('tourBillClaimResult '+tourBillClaimResult.rows);
       if(tourBillClaimResult.rowCount>0)
@@ -110,7 +110,7 @@ router.get('/getRelatedTourBillClaimDetails/:tourBillClaimId', async (request, r
     var tourBillClaimId = request.params.tourBillClaimId; //request.query.tourBillClaimId;
     console.log('tourBillClaimId  KKKKKKKKKKKKKK '+tourBillClaimId);
     var objTourbillClaimRelatedData = {};
-    let tourBillClaimQuery = 'SELECT tbc.Id ,tbc.sfid ,tbc.name ,exp.name as expname, tbc.Grand_Total__c, tbc.Grand__c  '+
+    let tourBillClaimQuery = 'SELECT tbc.Id ,tbc.sfid ,tbc.name ,exp.name as expname, tbc.Grand__c  '+
                              'FROM salesforce.Tour_Bill_Claim__c tbc '+ 
                              'INNER JOIN salesforce.Milestone1_Expense__c exp ON tbc.expense__c =  exp.sfid '+
                              'WHERE tbc.sfid = $1 ';
