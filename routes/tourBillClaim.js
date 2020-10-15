@@ -194,7 +194,7 @@ router.get('/getRelatedTourBillClaimDetails/:tourBillClaimId', async (request, r
 
     var telephoneFoodQuery = 'SELECT sfid, Name, Laundry_Expense__c, Fooding_Expense__c, Remarks__c,'+ 
                           'Tour_Bill_Claim__c, Total_Amount__c '+
-                          'FROM salesforce.Telephone_Fooding_Laundry_Expenses__c WHERE Tour_Bill_Claim__c = $1';
+                          'FROM salesforce.Telephone_Fooding_Laundry_Expenses__c WHERE Tour_Bill_Claim__c = $1 AND sfid IS NOT NULL';
     await
     pool
     .query(telephoneFoodQuery,[tourBillClaimId])
