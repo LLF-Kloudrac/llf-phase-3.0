@@ -96,7 +96,7 @@ router.get('/assetEditDetails',verify ,async(request, response) =>{
     console.log('assetId  '+assetId);
     let objUser = request.user;
     console.log('User:' +objUser);
-    let qyr='SELECT  asset.sfid as sfidt,asset.name as name ,asset.Activity_Code_Project__c,asset.Requested_Closure_Plan_Date__c,asset.Requested_Closure_Actual_Date__c,asset.Project_Department__c as pid, '+
+    let qyr='SELECT  asset.sfid as sfidt,asset.name as name ,asset.Activity_Code_Project__c,asset.Requested_Closure_Plan_Date__c,asset.Project_Department__c as pid, '+
     'asset.Manager_Approval__c,asset.Management_Approval__c,asset.Procurement_Committee_Approval__c,asset.Chairperson_Approval__c,asset.Committee_Approved_Counts__c,'+
     'asset.Comittee_Rejected_Count__c,asset.Procurement_Committee_Status__c,asset.Accounts_Approval__c,asset.UTR_Number_Transaction_details__c,asset.Advance_Payment_Status__c,asset.Payment_Status__c,asset.PO_Attachment_URL__c,asset.Procurement_Head_Approval__c,'+
     'asset.Number_Of_IT_Product__c,asset.Number_Of_Non_IT_Product__c,asset.Procurement_IT_total_amount__c,asset.Procurement_Non_IT_total_amount__c, asset.Total_amount__c,proj.name as projname,proj.sfid as profsfid,'+
@@ -350,7 +350,7 @@ router.get('/details',verify, async(request, response) => {
 
     var assetFormAndRelatedRecords = {};
 
-    let qyr1='SELECT asset.id, asset.sfid,asset.name as name ,asset.Requested_Closure_Plan_Date__c,asset.Requested_Closure_Actual_Date__c,asset.Project_Department__c,asset.Activity_Code_Project__c as actname, '+
+    let qyr1='SELECT asset.id, asset.sfid,asset.name as name ,asset.Requested_Closure_Plan_Date__c,asset.Project_Department__c,asset.Activity_Code_Project__c as actname, '+
  'asset.Manager_Approval__c,asset.Management_Approval__c,asset.Procurement_Committee_Approval__c,asset.Chairperson_Approval__c,asset.Committee_Approved_Counts__c,'+
  'asset.Comittee_Rejected_Count__c,asset.Procurement_Committee_Status__c,asset.Accounts_Approval__c,asset.Procurement_Head_Approval__c,'+
  'asset.Number_Of_IT_Product__c,asset.Number_Of_Non_IT_Product__c,asset.Procurement_IT_total_amount__c,asset.Procurement_Non_IT_total_amount__c, asset.Total_amount__c,proj.name as projname,proj.sfid, '+
@@ -363,7 +363,7 @@ router.get('/details',verify, async(request, response) => {
   'INNER JOIN salesforce.Milestone1_Project__c proj ON asset.Project_Department__c =  proj.sfid '+
    'WHERE asset.sfid = $1';
     
- let qyr='SELECT asset.id, asset.sfid,asset.name as name ,act.name as actname,asset.Requested_Closure_Plan_Date__c,asset.Requested_Closure_Actual_Date__c,asset.Project_Department__c, '+
+ let qyr='SELECT asset.id, asset.sfid,asset.name as name ,act.name as actname,asset.Requested_Closure_Plan_Date__c,asset.Project_Department__c, '+
  'asset.Manager_Approval__c,asset.Management_Approval__c,asset.Procurement_Committee_Approval__c,asset.Chairperson_Approval__c,asset.Committee_Approved_Counts__c,'+
  'asset.Comittee_Rejected_Count__c,asset.Procurement_Committee_Status__c,asset.Accounts_Approval__c,asset.Procurement_Head_Approval__c,'+
  'asset.Number_Of_IT_Product__c,asset.Number_Of_Non_IT_Product__c,asset.Procurement_IT_total_amount__c,asset.Procurement_Non_IT_total_amount__c, asset.Total_amount__c,proj.name as projname,proj.sfid, '+
@@ -1937,7 +1937,7 @@ router.post('/sendProcurementAccountsApproval',(request, response) => {
     console.log('body  : '+JSON.stringify(body));
     let comment = body.comment;
     console.log('comment'+comment);
-    let selectqry ='SELECT asset.id, asset.sfid as sfid,asset.name as name ,asset.Activity_Code__c,asset.Requested_Closure_Plan_Date__c,asset.Requested_Closure_Actual_Date__c,asset.Project_Department__c, '+
+    let selectqry ='SELECT asset.id, asset.sfid as sfid,asset.name as name ,asset.Activity_Code__c,asset.Requested_Closure_Plan_Date__c,asset.Project_Department__c, '+
     'asset.Manager_Approval__c,asset.Management_Approval__c,asset.Procurement_Committee_Approval__c,asset.Chairperson_Approval__c,asset.Committee_Approved_Counts__c,'+
     'asset.Comittee_Rejected_Count__c,asset.Procurement_Committee_Status__c,asset.Accounts_Approval__c,asset.Procurement_Head_Approval__c,'+
     'asset.Number_Of_IT_Product__c,asset.Number_Of_Non_IT_Product__c,asset.Procurement_IT_total_amount__c,asset.Procurement_Non_IT_total_amount__c, asset.Total_amount__c,proj.name as projname,proj.sfid as profsfid, '+
