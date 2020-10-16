@@ -364,7 +364,7 @@ pool.query('SELECT Id,sfid, Name,project__c FROM salesforce.Milestone1_Milestone
         var timesheetMilestoneId =  milestoneQueryResult.rows[0].sfid;
         console.log('timesheetMilestoneId Inside Milestone : '+timesheetMilestoneId +' Name :'+milestoneQueryResult.rows[0].name);   /*'a020p000001cObIAAU'*/
           pool
-            .query('INSERT INTO salesforce.Milestone1_Task__c (Name, project_milestone__c, RecordTypeId, Task_Stage__c, Project_Name__c, Start_Date__c, Assigned_Manager__c,Task_Type__c ,Start_Time__c,End_Time__c) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *',[taskname,timesheetMilestoneId ,'0120p000000C8plAAC',status,projectname,taskdate,assignedresource,tasktype,startTime,endTime])
+            .query('INSERT INTO salesforce.Milestone1_Task__c (Name, project_milestone__c, RecordTypeId, Task_Stage__c, Project_Name__c, Start_Date__c, Assigned_Manager__c,Task_Type__c ,Start_Time__c,End_Time__c) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *',[taskname,timesheetMilestoneId ,'0122y00000005mMAAQ',status,projectname,taskdate,assignedresource,tasktype,startTime,endTime])
             .then((saveTaskResult) => {
                     console.log('saveTaskResult =====>>>>>>>>>>>>  : '+JSON.stringify(saveTaskResult.rows[0]));
     //  response.send('savedInserted');
