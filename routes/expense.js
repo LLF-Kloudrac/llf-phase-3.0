@@ -976,7 +976,7 @@ router.post('/uploadImage',upload.any(),async (request, response) => {
     console.log('uploadImage  Called !');
     console.log('request.files[0].path   '+request.files[0].path);
     try{
-    cloudinary.uploader.upload(request.files[0].path, function(error, result) {
+    cloudinary.uploader.upload(request.files[0].path, { resource_type: "raw" }, function(error, result) {
  
         if(error){
           console.log('cloudinary  error' + error);
