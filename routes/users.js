@@ -178,6 +178,7 @@ router.get('/timesheet',verify,function(request,response){
   var userId = request.user.sfid;
   let objUser = request.user;
   console.log('userId : '+userId);
+  console.log('is manager objUser '+objUser);
 //  response.render('timesheetcalendar');
 
    var projectName ='';
