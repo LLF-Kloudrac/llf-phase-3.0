@@ -6,6 +6,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.2/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.1/fullcalendar.min.js"></script>
 <div class="form-group" style="overflow-y: auto;">
+  <p id="objUser"><%= objUser %></p>
+  <p id="objname"><%= objname %></p>
+  <p id="objUserId"><%= objUserId %></p>
+  <p id="contactList"><%= contactList %></p>
   <center><h3 style="text-align: center; margin-top: 20px;">Calendar</h3></center>     
 
      <div class="row" style="overflow-y: auto;">
@@ -88,6 +92,18 @@
 
 <script>
     $(document).ready(function() {
+      $('#objUser').hide();
+      $('#objname').hide();
+      $('#objUserId').hide(); 
+      $('#contactList').hide();
+      let objUser = document.getElementById('objUser').innerHTML; 
+      let objUserName = document.getElementById('objname').innerHTML; 
+      let objUserId = document.getElementById('objUserId').innerHTML; 
+      let contactList = document.getElementById('contactList').innerHTML;
+      console.log('objuser +++'+objUser);
+      console.log('objuser name +++'+objUserName);
+      console.log('objuser objUserId +++'+objUserId);
+      console.log('contactList +++'+contactList);
         var today = new Date();
         var eventsData ;  
 
@@ -644,28 +660,61 @@
                  //   if(seletedDate.getTime()<todaydate && seletedDate.getTime()>before)
                       if(seletedDate.getTime()>before)
                     {
-                     // document.getElementById("taskForm").reset();
+                      console.log('objuser name++++'+objUserName);
+                      console.log('objuserId ++++'+objUserId);
+                      console.log('contactList ++++'+contactList.name);
                       $("#createTaskModal").modal("show");
-                    /*   // Fetching Task Type From the Task 
-                      $.ajax({ 
-                                type: 'GET',
-                                url: '/timesheets/getTaskType',
-                                data : {
-                                        'projectId' : selectedProject,
-                                        'selectedDate' : selectedDate
-                                },
-                                dataType: 'json'
-                                })
-                                .done(function( taskTypeData ) {
-                                    console.log( "Sample of taskTypeData :", JSON.stringify(taskTypeData));
-                                        
-                                })
-                                .fail(function(jqXHR, textStatus, err){
-                                    console.log('AJAX error response :',textStatus);
-                                    
-                                })
- */
+                   //     $('#Selectview').on('change',function(){
+                     console.log('Selected view ++ '+selectedView);
+                         // selectedView=this.value;
+                        console.log('hii i m inside current user view');
+                        $('#assignedresource').val('');
 
+                        if(selectedView == 'currentuser')
+                        {
+                          $('#assignedresource').attr("readonly","readonly");
+                          $('#assignedresource')
+                          .append($("<option></option>")
+                          .attr("value",objUserId)
+                          .text(objUserName))                        
+                        }
+
+                        if(selectedView == 'teamview')
+                        {
+                          console.log('hii i m inside team view');
+                          $('#assignedresource').attr("readonly",false);
+                          $.ajax({
+                        url : '/users/getContact',
+                        data : {
+                          
+                        },
+                        dataType : 'json',
+                        type : 'get'
+                    })
+                    .done((response) => {
+                        console.log('response  '+JSON.stringify(response));
+                        if(response.length > 0)
+                            {
+                            response.forEach((eachContact) => {
+                            console.log('eachContact.name '+eachContact.name);
+                            $('#assignedresource')
+                            .append($("<option></option>")
+                            .attr("value",eachContact.sfid)
+                            .text(eachContact.name))
+                            }); 
+                            }
+                    })
+                    .fail((jqXHR,text,err) => {
+                        console.log('text  '+text + '  err '+err);
+                        console.log('jqXHR '+JSON.stringify(jqXHR));
+
+                    })
+
+
+                        }
+                      
+                
+                   //   })
                     }
                     else{
                       alert('The timesheet tasks are locked. You cannot create task before 7 days from today date. !');
@@ -1009,19 +1058,11 @@
           <div class="row">
             <div class="col-md-6">
               <label for="validationTooltip02">Assign to Heroku user</label>
-              <select class="custom-select custom-select-sm form-control" name="assignedresource">
-                  <% if(objUser.isManager == false) { %>
-                   <option value="<%= objUser.sfid %>" readonly="true"><%= objUser.name %></option> 
-                  <% } %>
-                  <% if(objUser.isManager != false) { %>
-                    <option value="" >None</option>
-                  <% if(contactList.length != 0) { %>
-                    <% contactList.forEach((eachContact) => { %>
-                    <option value="<%= eachContact.sfid %>" ><%= eachContact.name %></option>
-                    <% }) %>
-                   <% } %>
-                   <% } %>
+              <select class="custom-select custom-select-sm form-control" name="assignedresource" id="assignedresource">
+                <option value="">None</option>
                </select>
+
+
             </div>
 
             <div class="col-md-6">

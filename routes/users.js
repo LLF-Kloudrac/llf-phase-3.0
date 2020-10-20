@@ -136,6 +136,8 @@ router.post('/login', async (request,response)=>{
               objUser.isManager = true;
         else
               objUser.isManager = false; 
+
+    console.log('is Manager ++++'+objUser.isManager);
   })
   .catch((teamQueryError) => {
 
@@ -172,10 +174,28 @@ router.get('/getuser',verify, (request, response) => {
 
 });
 
+router.get('/getContact',verify, (request, response) => {
+
+  console.log('request.user '+JSON.stringify(request.user));
+  pool
+  .query('SELECT sfid, Name FROM salesforce.Contact')
+  .then((contactQueryResult) => {
+    console.log('contactQueryResult  : '+JSON.stringify(contactQueryResult.rows));
+      response.send(contactQueryResult.rows);
+    
+  })
+  .catch((contactQueryError) => {
+    console.error('Error executing contact query', contactQueryError.stack);
+    response.send(403);
+});
+
+});
+
 router.get('/timesheet',verify,function(request,response){ 
 
   console.log('request.user '+JSON.stringify(request.user));
   var userId = request.user.sfid;
+  let objusername = request.user.name;
   let objUser = request.user;
   console.log('userId : '+userId);
   console.log('is manager objUser '+objUser);
@@ -256,7 +276,7 @@ router.get('/timesheet',verify,function(request,response){
                       .query(taskQueryText, lstProjectId)
                       .then((taskQueryResult) => {
                           console.log('taskQueryResult  rows '+taskQueryResult.rows.length);
-                          response.render('./timesheets/timesheetcalendar',{objUser, projectList : projectQueryResult.rows, contactList : contactResult.rows, taskList : taskQueryResult.rows }); // render calendar
+                          response.render('./timesheets/timesheetcalendar',{objUser, objname : objusername, objUserId : userId, projectList : projectQueryResult.rows, contactList : contactResult.rows, taskList : taskQueryResult.rows }); // render calendar
                       })
                       .catch((taskQueryError) => {
                           console.log('taskQueryError : '+taskQueryError.stack);
