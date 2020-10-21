@@ -519,7 +519,7 @@ let st =["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Go
         {
      //    alert('You Choose=> '+state);
          $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+     //    $('#district').clearQueue();
           for(let i=0; i <dstrUK.length; i++)
           {
            $('#district')
@@ -532,7 +532,7 @@ let st =["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Go
         {
      //    alert('You Choose=> '+state);
          $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+     //    $('#district').clearQueue();
           for(let i=0; i <dstrJK.length; i++)
           {
            $('#district')
@@ -577,8 +577,8 @@ let st =["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Go
             document.forms["editvendor"]["add"].value = response.VendorDetail[0].address__c;
             document.forms["editvendor"]["aacc"].value = response.VendorDetail[0].bank_account_no__c;
             document.forms["editvendor"]["auth"].value = response.VendorDetail[0].name_of_signing_authority__c; 
-            document.forms["editvendor"]["district"].value=response.VendorDetail[0].district__c;
             document.forms["editvendor"]["state"].value = response.VendorDetail[0].state__c;
+            document.forms["editvendor"]["district"].value=response.VendorDetail[0].district__c;
             document.forms["editvendor"]["quote"].value = response.VendorDetail[0].quote_public_url__c;
             document.forms["editvendor"]["gst"].value = response.VendorDetail[0].gst_no__c;
             document.forms["editvendor"]["reason"].value = response.VendorDetail[0].reason_for_not_providing_gst_no__c;

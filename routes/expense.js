@@ -349,13 +349,14 @@ router.post('/createExpense',(request, response) => {
 
    const schema=joi.object({
     taskname:joi.string().required().label('Please Fill Expense Name'),
-    task:joi.string().invalid(' ').required().label('Please Fill Expense Name'),
-    expense:joi.string().min(1).max(80).required().label(' Expense Name too long.'),
+    task:joi.string().min(3).required().label('Please Fill Expense Name'),
+    expense:joi.string().max(80).required().label(' Expense Name too long.'),
     proj:joi.string().required().label('Please choose Project'),
     department:joi.string().required().label('Please choose Department'),
-    depart:joi.string().min(1).max(255).required().label('Department value too long.'),
+    departm:joi.string().min(3).required().label('Please Fill Department'),
+    depart:joi.string().max(255).required().label('Department value too long.'),
       })
-let result=schema.validate({taskname:taskname,task:taskname,expense:taskname,proj:proj,department:department,depart:department});
+let result=schema.validate({taskname:taskname,task:taskname,expense:taskname,proj:proj,department:department,depart:department,departm:department});
 if(result.error){
     console.log('fd'+result.error);
     response.send(result.error.details[0].context.label);    
@@ -1202,9 +1203,10 @@ router.post('/sendForApproval',verify, async(request, response) => {
     let approvalStatus = 'Pending';
     const schema=joi.object({
       comment:joi.string().required().label('Please Fill Comment'),
+      comm:joi.string().min(6).required().label('Please Fill Comment'),
       
   })
-  let result=schema.validate({comment:comment});
+  let result=schema.validate({comment:comment, comm:comment});
   if(result.error){
       console.log('fd'+result.error);
       response.send(result.error.details[0].context.label);    

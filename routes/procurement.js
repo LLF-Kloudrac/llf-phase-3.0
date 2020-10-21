@@ -487,8 +487,8 @@ router.post('/insertAsssetForm',(request,response)=>{
    }
   
 const schema=joi.object({
-    assetRequisitionName:joi.string().required().label('Please Fill Asset Requisition Name'),
-    asset: joi.string().min(1).max(255).required().label('Asset Requisition Name is too long'),
+    assetRequisitionName:joi.string().min(5).required().label('Please Fill Asset Requisition Name'),
+    asset: joi.string().max(255).required().label('Asset Requisition Name is too long'),
     project:joi.string().required().label('Please choose Project/Department'),
     planDate:joi.string().required().label('Please fill Target Date of Receiving'),
 })
@@ -764,7 +764,7 @@ router.post('/nonItProducts', (request,response) => {
              itemsCategory:joi.string().required().label('Please select Item Category.'),
              items:joi.string().invalid('None').required().label('Please fill Items'),
              vendor:joi.string().required().label(' Please select Vendor from Vendor Picklist.'),
-            itemSpecification:joi.string().required().label('Please fill Item Specification.'),          
+            itemSpecification:joi.min(4).string().required().label('Please fill Item Specification.'),          
             quantity:joi.number().required().label('Please enter Quantity.'),
             quanty:joi.number().min(0).label('The Quantity cannot be negative.'),
             budget:joi.number().required().label('Please enter Budget.'),
@@ -818,7 +818,7 @@ router.post('/nonItProducts', (request,response) => {
                 itemsCategory:joi.string().required().label('Please select Item Category.'),
                 items:joi.string().invalid('None').required().label('Please fill Items'),
                 vendor:joi.string().required().label(' Please select Vendor from Vendor Picklist.'),
-                itemSpecification:joi.string().required().label('Please fill Item Specification.'),          
+                itemSpecification:joi.min(4).string().required().label('Please fill Item Specification.'),          
                 quantity:joi.number().required().label('Please enter Quantity.'),
                 quanty:joi.number().min(0).label('The Quantity cannot be negative.'),
                 budget:joi.number().required().label('Please enter Budget.'),

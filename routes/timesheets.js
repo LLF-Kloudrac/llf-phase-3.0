@@ -421,8 +421,8 @@ router.post('/fillactuals',(request, response) => {
       actualEndTimeTimesheet:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select Actual End Time !'),
      // actual:joi.string().required().less(joi.ref('actualStartTimeTimesheet')).label('Planned Start time should be less than Planned End time. !'),
       descriptionTimesheet:joi.string().required().label('Please enter Description !'),
-      descriptionTimesheets:joi.string().min(5).required().label('Please enter Description '),
-      description:joi.string().invalid('').required().label('Please enter Description '),
+      descriptionTimesheets:joi.string().min(4).required().label('Please enter Description !'),
+      description:joi.string().invalid('').required().label('Please enter Description !'),
       descr:joi.string().min(1).max(80).required().label('Description too long. !'),
    
   
