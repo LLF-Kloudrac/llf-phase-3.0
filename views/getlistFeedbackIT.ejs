@@ -54,8 +54,7 @@
                       <input type="text"  class="form-control" id="name" value="" readonly  name="name" required="true">
                     </div>
 
-                    <div class="form-group">
-                      <div class="row">
+                 
                           <div class="col-md-6">
                               <label for="quantity">Quantity Requested vs Received </label>
                               <select id="quantity" name="quantity" class="form-control" required="true" >
@@ -66,9 +65,10 @@
                                   <option value="NA">NA</option>
                               </select> 
                           </div>
+                        </div>
                       </div>
-                  </div>
-                    
+                      <div class="form-group">
+                        <div class="row">
                     <div class="col-md-6">
                     <label for="time">Timely submissions of Deliverables/Goods</label>
                     <select id="time" name="time" class="form-control" required="true" >
@@ -79,11 +79,7 @@
                         <option value="NA">NA</option>
                     </select> 
                     </div>
-                </div>
-              </div>
-              
-              <div class="form-group">
-                <div class="row">
+               
                     <div class="col-md-6">
                     <label for="quality">Work Quality/Goods Quality</label>
                     <select id="quality" name="quality" class="form-control" required="true" >
@@ -94,7 +90,10 @@
                         <option value="NA">NA</option>
                     </select> 
                    </div>
-
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
                   <div class="col-md-6">
                     <label for="issue">Issue Knowledge/ Expertise </label>
                     <select id="issue" name="issue" class="form-control" required="true" >
@@ -105,13 +104,13 @@
                         <option value="NA">NA</option>
                     </select> 
                  </div>
-                </div>
 
                 <div class="col-md-6">
                   <input type="hidden" class="form-control" id="feedid" value=""   name="feedid" >
                   </div>
             </div>
-          
+          </div>
+        </div>
             <div class="modal-footer">
                   <button type="submit" class="btn btn-primary" id="editfeedbutton" data-dismiss="modal">Save</button>
                   <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>

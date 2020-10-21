@@ -2243,12 +2243,12 @@ router.get('/getfeedbackITlist',verify,(request,response)=>{
              feedbackqueryresult.rows.forEach((eachRecord) => {
               let obj = {};
               obj.sequence = i;
+              obj.editAction = '<button href="#" class="btn btn-primary editfeedIt" id="'+eachRecord.sfid+'" >Edit</button>'
               obj.name = '<a href="#" class="vendorTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
               obj.quantity=eachRecord.quyantiut__c
               obj.time=eachRecord.timely_submissions_of_deliverables_goods__c;
               obj.quality=eachRecord.work_quality_goods_quality__c;
               obj.issue = eachRecord.issue_knowledge_expertise__c;
-              obj.editAction = '<button href="#" class="btn btn-primary editfeedIt" id="'+eachRecord.sfid+'" >Edit</button>'
               i= i+1;
               modifiedList.push(obj);
             })
