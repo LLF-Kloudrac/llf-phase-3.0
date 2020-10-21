@@ -78,8 +78,8 @@ router.post('/saveTourBillClaim',(request, response) => {
 
     const schema=joi.object({
       tourBillClaimName:joi.string().required().label('Please Fill Tour Bill Claim Name'),
-      tour:joi.string().invalid(' ').required().label('Please Fill Tour Bill Claim Name'),
-      tourBillClaim: joi.string().min(1).max(255).required().label('Please enter Tour Bill Claim Name, ranging from 1-80 Characters'),
+      tour:joi.string().min(3).required().label('Please Fill Tour Bill Claim Name'),
+      tourBillClaim: joi.string().max(255).required().label('Please enter Tour Bill Claim Name, ranging from 1-80 Characters'),
 
         })
   let result=schema.validate({tourBillClaimName:tourBillClaimName,tour:tourBillClaimName,tourBillClaim:tourBillClaimName});
