@@ -90,48 +90,47 @@
      
       
       <div class="card">
-      <div class="card-header" id="headingThree">
-      <h5 class="mb-0">
-      <button class="btn btn-link collapsed text-left" type="button"
-      data-toggle="collapse" data-target="#headingThree"
-      aria-expanded="false" aria-controls="headingThree">
-      <i class="fa fa-angle-double-right mr-3"></i>Approval
-      </button>
-      <!-- <button class="btn btn-primary float-right">New</button> -->
-      <!-- <a href="#" class="btn btn-primary float-right approval" style="color:white;">New</a>-->
-      </h5> 
-      </div>
-      <div id="headingThree" class="collapse fade" aria-labelledby="headingThree" data-parent="#accordionExample">
-      
-      <div style="overflow-x:auto;">
-      <table id="approvalTable" class="table table-hover striped">
-      <thead>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Date</th>
-      
-      </thead>
-      </table>
-      </div>
-      </div>
-      </div>
-     
-      <div class="card">
-      <div class="card-header" id="headingOne">
-      <h5 class="mb-0">
-      <button class="btn btn-link text-left" type="pettyCashButton"
-      data-toggle="collapse" data-target="#collapseOne"
-      aria-expanded="true" aria-controls="collapseOne">
-      <i class="fa fa-angle-double-right mr-3"></i>Notes/Attachments 
-      </button>
+        <div class="card-header" id="headingThree">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed text-left" type="button"
+                    data-toggle="collapse" data-target="#collapseThree"
+                    aria-expanded="false" aria-controls="collapseThree">
+                    <i class="fa fa-angle-double-right mr-3"></i>Approval
+                      </button>
+                    </h5>
+                  </div>
+                  <div id="collapseThree" class="collapse fade" 
+                  aria-labelledby="headingTwo" data-parent="#accordionExample">
+                      <div class="card-body" style="overflow-y: auto;">
+                        <table id="approvalTable" class="table table-hover striped">
+                        <thead>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                        
+                        </thead>
+                      </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+              <div class="card-header" id="headingFour">
+                  <h5 class="mb-0">
+                  <button class="btn btn-link collapsed text-left" type="button"
+                      data-toggle="collapse" data-target="#collapseFour"
+                      aria-expanded="false" aria-controls="collapseFour">
+                      <i class="fa fa-angle-double-right mr-3"></i>Notes/Attachments 
+                           </button>
       <!-- <button class="btn btn-primary float-right" id="pettyCashButton" >New</button> -->
-      <a href="#" class="btn btn-primary float-right notes" id="notes" style="color:white;" >New</a>
-      </h5>
-      </div>
-     
-      <div id="collapseOne" class="collapse show fade" aria-labelledby="headingOne" data-parent="#accordionExample">
-      <div class="card-body">
+                      <a href="#" class="btn btn-primary float-right notes" id="notes" style="color:white;" >New</a>
+                  </h5>
+                </div>
+                <div id="collapseFour" class="collapse fade" aria-labelledby="headingFour" data-parent="#accordionExample">
+                  <div class="card-body" style="overflow-y: auto;">
       <table id="notesbuttontable" class="table table-hover striped">
+        <thead>
+          <th>Name</th>
+          </thead>
       </table>
       </div>
       </div>
@@ -429,6 +428,24 @@
                         approvalHtml+=  '<td colspan="6"><center><a target="_blank" href="/procurement/getProcurementApproval/'+assetId+'">View All</a></centre></td>';
                         $('#approvalTable').empty();
                         $('#approvalTable').append(approvalHtml);   
+                    }
+
+                    if(assetDetails.assetFormDetails.length > 0)
+                    {
+                        let notesAttachmentTable = '';
+                        assetDetails.assetFormDetails.forEach((assetDetailsRecord) => {
+                        notesAttachmentTable+='<thead><th>Name (PO Attachment URL) </th></thead>';
+                        if(assetDetailsRecord.po_attachment_url__c!="demo"){
+                        if(assetDetailsRecord.po_attachment_url__c!=null){
+                          notesAttachmentTable += '<td>'+'<a href="'+assetDetailsRecord.po_attachment_url__c+'" target="_blank">Click to View </a></td>';
+                        }
+                        }
+                        else{
+                          notesAttachmentTable +='<td></td>';
+                        }
+                      })
+                        $('#notesbuttontable').empty();
+                        $('#notesbuttontable').append(notesAttachmentTable);   
                     }
 
                 })
