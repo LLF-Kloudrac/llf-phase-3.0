@@ -139,13 +139,13 @@
   
           let columns ={
               sequence : 'Sequence',
+              editAction:'Action',
               name: 'Feedback Name',
               time : 'Timely submissions of all Deliverables',
               quality: 'Work Quality/Goods Quality',
               issue:'Issue Knowledge/ Expertise',
               quant:'Quantity Requested vs Received',
-              createDdate: 'Created Date',
-              editAction:'Action',
+            
           }
           var table = $('#procurementItListView').tableSortable({
             data :[],
@@ -154,7 +154,7 @@
             sorting: true,
             rowsPerPage: 15,
             pagination:true,
-            sorting: ['sequence','createDdate'],
+            sorting: ['sequence'],
             tableWillMount: () => {
                 console.log('table will mount')
                 
