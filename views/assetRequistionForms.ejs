@@ -679,6 +679,9 @@
               <div id="collapseFour" class="collapse fade" aria-labelledby="headingFour" data-parent="#accordionExample">
                 <div class="card-body" style="overflow-y: auto;">
     <table id="notesbuttontable" class="table table-hover striped">
+      <thead>
+        <th>Name</th>
+        </thead>
     </table>
     </div>
     </div>
@@ -1137,6 +1140,24 @@
                         approvalHtml+=  '<td colspan="6"><center><a target="_blank" href="/procurement/getProcurementApproval/'+assetId+'">View All</a></centre></td>';
                         $('#approvalTable').empty();
                         $('#approvalTable').append(approvalHtml);   
+                    }
+
+                    if(assetDetails.assetFormDetails.length > 0)
+                    {
+                        let notesAttachmentTable = '';
+                        assetDetails.assetFormDetails.forEach((assetDetailsRecord) => {
+                        notesAttachmentTable+='<thead><th>Name (PO Attachment URL) </th></thead>';
+                        if(assetDetailsRecord.po_attachment_url__c!="demo"){
+                        if(assetDetailsRecord.po_attachment_url__c!=null){
+                          notesAttachmentTable += '<td>'+'<a href="'+assetDetailsRecord.po_attachment_url__c+'" target="_blank">Click to View </a></td>';
+                        }
+                        }
+                        else{
+                          notesAttachmentTable +='<td></td>';
+                        }
+                      })
+                        $('#notesbuttontable').empty();
+                        $('#notesbuttontable').append(approvalHtml);   
                     }
 
                 })
