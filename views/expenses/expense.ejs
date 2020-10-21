@@ -494,7 +494,7 @@
       </div>
       <div class="modal-body">
         <div class="">
-          <div id="errorMessages"></div>
+          <div id="errorMessagesTourBill"></div>
         <form  id="taskForm" class="needs-validation" novalidate >
 
         <div class="form-group">  
@@ -569,7 +569,7 @@
       </div>
       <div class="modal-body">
         <div class="">
-          <div id="errorMessagesss"></div>
+          <div id="errorMessagesTourBill"></div>
         <form  id="taskForm" class="needs-validation" novalidate >
 
         <div class="form-group">  
@@ -608,7 +608,7 @@
       </div>
       <div class="modal-body">
         <div class="">
-          <div id="errorMessagesss"></div>
+          <div id="errorMessagesTourBill"></div>
         <form  id="tourBillClaimForm" class="needs-validation" novalidate >
 
         <div class="form-group">  
@@ -1308,28 +1308,24 @@
                              {
                                   alert('Successfully Inserted!');
                                 $('#tourBillClaimForm')[0].reset()
-                                let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+jqXHR.responseText+
-                                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
-                                '<span aria-hidden="true">&times;</span>'+
-                                '</button>'+
-                                '</div>';
-                                $('#errorMessages').empty();
-                                $('#errorMessages').append(errorHtml); 
+                                let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+ jqXHR.responseText+
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+                            '<span aria-hidden="true">&times;</span>'+
+                            '</button>'+
+                            '</div>';
+                            $('#errorMessagesTourBill').empty();
+                            $('#errorMessagesTourBill').append(errorHtml); 
                                 $("#tourBillClaimSubmitbutton").attr("disabled", false);
                               }
                               else
                               {
-                                let msg = jqXHR.responseText;
-                                console.log('msg +++'+msg);
-                                console.log('jqXHR   '+JSON.stringify(jqXHR));
-                                  alert('Error: '+msg);
-                                let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+jqXHR.responseText+
-                                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
-                                '<span aria-hidden="true">&times;</span>'+
-                                '</button>'+
-                                '</div>';
-                                $('#errorMessages').empty();
-                                $('#errorMessages').append(errorHtml); 
+                                let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+ jqXHR.responseText+
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+                            '<span aria-hidden="true">&times;</span>'+
+                            '</button>'+
+                            '</div>';
+                            $('#errorMessagesTourBill').empty();
+                            $('#errorMessagesTourBill').append(errorHtml); 
                                 $("#tourBillClaimSubmitbutton").attr("disabled", false);
                               }
                           
