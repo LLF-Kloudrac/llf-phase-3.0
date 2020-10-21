@@ -434,29 +434,45 @@ $('#tourBillClaimSubmitbutton').on('click',function(event){
         
 
         $.ajax({
-          url: '/expense/tourBillClaim/saveTourBillClaim',
-          type: 'post',
-          data:  values,
-          dataType : 'json'
-        })
-        .done((response) => {
-            console.log('response  '+response);
-        })
-        .fail((jqXHR,text,err) => {
-            $("#popup").modal("show");
-              console.log('jqXHR   '+JSON.stringify(jqXHR));
-              if(jqXHR.responseText == 'Success')
-              {
-                alert('Saved Successfully !');
-                $('#createTourBillClaimModal').modal('hide');
-                
-              }
-              else
-              {
-                alert('There occured error while saving !');
-              }
-              console.log('text  '+text+' err :'+err);
-        })
+                        url: '/expense/tourBillClaim/saveTourBillClaim',
+                        type: 'post',
+                        data:  values,
+                        dataType : 'json'
+                      })
+                      .done((response) => {
+                        console.log('resonse :'+JSON.stringify(response));
+                        
+                        })
+                        .fail((jqXHR,text,err) => {
+
+                          if(jqXHR.responseText== "Saved Successfully !")
+                             {
+                                  alert('Successfully Inserted!');
+                                $('#tourBillClaimForm')[0].reset()
+                                let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+jqXHR.responseText+
+                                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+                                '<span aria-hidden="true">&times;</span>'+
+                                '</button>'+
+                                '</div>';
+                                $('#errorMessages').empty();
+                                $('#errorMessages').append(errorHtml); 
+                                $("#tourBillClaimSubmitbutton").attr("disabled", false);
+                              }
+                              else
+                              {
+                                console.log('jqXHR   '+JSON.stringify(jqXHR));
+                                  alert('Error: '+jqXHR.responseText);
+                                let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+jqXHR.responseText+
+                                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+                                '<span aria-hidden="true">&times;</span>'+
+                                '</button>'+
+                                '</div>';
+                                $('#errorMessages').empty();
+                                $('#errorMessages').append(errorHtml); 
+                                $("#tourBillClaimSubmitbutton").attr("disabled", false);
+                              }
+                          
+                      })
       })
 })
 
