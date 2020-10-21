@@ -53,6 +53,21 @@
                       <label for="name">Feedbacks(IT) Name</label>
                       <input type="text"  class="form-control" id="name" value="" readonly  name="name" required="true">
                     </div>
+
+                    <div class="form-group">
+                      <div class="row">
+                          <div class="col-md-6">
+                              <label for="quantity">Quantity Requested vs Received </label>
+                              <select id="quantity" name="quantity" class="form-control" required="true" >
+                                  <option value="">None</option>
+                                  <option value="Delighted">Delighted</option>
+                                  <option value="Satisfactory">Satisfactory	</option>
+                                  <option value="Dissatisfied">Dissatisfied</option>
+                                  <option value="NA">NA</option>
+                              </select> 
+                          </div>
+                      </div>
+                  </div>
                     
                     <div class="col-md-6">
                     <label for="time">Timely submissions of Deliverables/Goods</label>
@@ -91,24 +106,10 @@
                     </select> 
                  </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="quantity">Quantity Requested vs Received </label>
-                        <select id="quantity" name="quantity" class="form-control" required="true" >
-                            <option value="">None</option>
-                            <option value="Delighted">Delighted</option>
-                            <option value="Satisfactory">Satisfactory	</option>
-                            <option value="Dissatisfied">Dissatisfied</option>
-                            <option value="NA">NA</option>
-                        </select> 
-                    </div>
-                    <div class="col-md-6">
-                    <input type="hidden" class="form-control" id="feedid" value=""   name="feedid" >
-                    </div>
-                </div>
+                <div class="col-md-6">
+                  <input type="hidden" class="form-control" id="feedid" value=""   name="feedid" >
+                  </div>
             </div>
           
             <div class="modal-footer">
@@ -141,12 +142,13 @@
   
           let columns ={
               sequence : 'Sequence',
+              editAction:'Action',
               name: 'Feedbacks(IT) Name',
               quantity:'Quantity Requested vs Received',
               time : 'Timely submissions of Deliverables/Goods',
               quality: 'Work Quality/Goods Quality',
               issue:'Issue Knowledge/ Expertise',
-              editAction:'Action',
+             
           }
           var table = $('#procurementItListView').tableSortable({
             data :[],
