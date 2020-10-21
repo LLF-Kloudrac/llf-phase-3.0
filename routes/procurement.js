@@ -1920,9 +1920,7 @@ router.post('/sendProcurementApproval',(request, response) => {
      }
      else{
     pool
-  //  .query('UPDATE salesforce.Asset_Requisition_Form__c SET isSentForApprovalFromHeroku__c = $1 ,Heroku_Approval_Comment__c =$2, isHerokuApprovalButtonDisabled__c = $3 WHERE sfid= $4;',[true, body.comment,true, body.assetRequisitionFormId])
-    .query('UPDATE salesforce.Asset_Requisition_Form__c SET isSentForApprovalFromHeroku__c = $1 , isHerokuApprovalButtonDisabled__c = $2 WHERE sfid= $3;',[true, true, body.assetRequisitionFormId])
-
+    .query('UPDATE salesforce.Asset_Requisition_Form__c SET isSentForApprovalFromHeroku__c = $1 ,Heroku_Approval_Comment__c =$2, isHerokuApprovalButtonDisabled__c = $3 WHERE sfid= $4;',[true, body.comment,true, body.assetRequisitionFormId])
     .then((requisitionQueryResult) =>{
         console.log('requisitionQueryResult  : '+JSON.stringify(requisitionQueryResult));
         response.send('Approval Sent Successfully !');
