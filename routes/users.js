@@ -1524,21 +1524,27 @@ router.get('/resetPassword/:userId',(request,response)=>{
 router.post('/updatePass',(request,response)=>{
   console.log('BODy'+JSON.stringify(request.body));
   const { pass ,pass2, user}=request.body;
-  let updateQuerryPass='UPDATE salesforce.contact SET '+
-                 'password__c = \''+pass+'\', '+
-                  'password2__c=\''+pass2+'\' '+
-                  'WHERE sfid = $1';
-                  console.log('update query'+updateQuerryPass);
-  pool
-  .query(updateQuerryPass,[user])
-  .then((querryResult)=>{
-    console.log('querryResult'+JSON.stringify(querryResult));
-    response.send('DOne');
-  })
-  .catch((queryyError)=>{
-    console.log('queryyError'+queryyError.stack);
-    response.send('queryyError');
-   })
+  if(pass != pass2){
+    response.send('Please enter both password same')
+  }
+  else{
+    let updateQuerryPass='UPDATE salesforce.contact SET '+
+    'password__c = \''+pass+'\', '+
+     'password2__c=\''+pass2+'\' '+
+     'WHERE sfid = $1';
+     console.log('update query'+updateQuerryPass);
+      pool
+      .query(updateQuerryPass,[user])
+      .then((querryResult)=>{
+      console.log('querryResult'+JSON.stringify(querryResult));
+      response.send('Updated Successfully !');
+      })
+      .catch((queryyError)=>{
+      console.log('queryyError'+queryyError.stack);
+      response.send('queryyError');
+      })
+        }
+ 
 })
 
 router.get('/editProfile',verify,(request,response)=>{
