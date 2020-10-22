@@ -778,7 +778,7 @@ router.post('/nonItProducts', (request,response) => {
             response.send(result.error.details[0].context.label);
         }
         else{
-            if(nonItFormResult.quoteNum<3 && (nonItFormResult.justification==null || nonItFormResult.justification=="")){
+            if(nonItFormResult.quoteNum<3 && (nonItFormResult.justification==null || nonItFormResult.justification=="" || nonItFormResult.justification==' ')){
                     response.send('Please enter Justification because quote count is not equal to 3.');    
            }
            else{
@@ -834,7 +834,7 @@ router.post('/nonItProducts', (request,response) => {
                 response.send(result.error.details[0].context.label);
             }
             else{
-                if(nonItFormResult.quoteNum[i]<3 &&(nonItFormResult.justification[i]==null || nonItFormResult.justification[i]=="")){               
+                if(nonItFormResult.quoteNum[i]<3 &&(nonItFormResult.justification[i]==null || nonItFormResult.justification[i]=="" || nonItFormResult.justification[i]== ' ')){               
                         response.send('Please enter Justification because quote count is not equal to 3.');    
                 }
                 else{
@@ -949,7 +949,7 @@ router.post('/itProducts', (request,response) => {
             response.send(result.error.details[0].context.label);
         }
         else{
-            if(itFormResult.quoteNum<3 &&(itFormResult.justification==null || itFormResult.justification=="")){
+            if(itFormResult.quoteNum<3 &&(itFormResult.justification==null || itFormResult.justification=="" || itFormResult.justification==' ')){
                     response.send('Please enter Justification because quote count is not equal to 3.');     
              }
              else{
@@ -1000,7 +1000,7 @@ router.post('/itProducts', (request,response) => {
                 response.send(result.error.details[0].context.label);
             }
             else{                
-                if(itFormResult.quoteNum[i]<3 &&(itFormResult.justification[i]==null || itFormResult.justification[i]=="")){
+                if(itFormResult.quoteNum[i]<3 &&(itFormResult.justification[i]==null || itFormResult.justification[i]=="" || itFormResult.justification[i]== ' ')){
                     response.send('Please enter Your Justificaton for Quote less than 3 in row number');     
              }
              else{
