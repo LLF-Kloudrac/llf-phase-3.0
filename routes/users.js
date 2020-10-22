@@ -1524,10 +1524,20 @@ router.get('/resetPassword/:userId',(request,response)=>{
 router.post('/updatePass',(request,response)=>{
   console.log('BODy'+JSON.stringify(request.body));
   const { pass ,pass2, user}=request.body;
-  if(pass != pass2){
-    response.send('Please enter both password same')
-  }
-  else{
+  const schema=joi.object({
+    pass:joi.string().required().label('Please Fill Password'),
+    password:joi.string().min(8).required().label('Password must be 8 characters long'),
+    pass2:joi.string().required().label('Please Re-enter Password'),
+    password2:joi.any.valid(Joi.ref('password')).label('passwords don\'t match'),
+    
+      })
+      let result=schema.validate({pass:pass,password:pass,pass2:pass2,password2:pass2});
+      if(result.error){
+          console.log('fd'+result.error);
+          response.send(result.error.details[0].context.label);    
+      }
+        else{
+ 
     let updateQuerryPass='UPDATE salesforce.contact SET '+
     'password__c = \''+pass+'\', '+
      'password2__c=\''+pass2+'\' '+
@@ -1536,14 +1546,16 @@ router.post('/updatePass',(request,response)=>{
       pool
       .query(updateQuerryPass,[user])
       .then((querryResult)=>{
+      console.log('querryResult.rows '+JSON.stringify(querryResult.rows));
       console.log('querryResult'+JSON.stringify(querryResult));
       response.send('Updated Successfully !');
+    
       })
       .catch((queryyError)=>{
       console.log('queryyError'+queryyError.stack);
       response.send('queryyError');
       })
-        }
+    }
  
 })
 
