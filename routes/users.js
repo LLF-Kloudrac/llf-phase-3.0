@@ -1528,7 +1528,8 @@ router.post('/updatePass',(request,response)=>{
     pass:joi.string().required().label('Please Fill Password'),
     password:joi.string().min(8).required().label('Password must be 8 characters long'),
     pass2:joi.string().required().label('Please Re-enter Password'),
-    password2:joi.any.valid(joi.ref('password')).label('passwords don\'t match'),
+   // arrival_Date:joi.date().max(joi.ref('departure_Dated'))
+    password2:joi.string.valid(joi.ref('password')).label('passwords don\'t match'),
     
       })
       let result=schema.validate({pass:pass,password:pass,pass2:pass2,password2:pass2});
