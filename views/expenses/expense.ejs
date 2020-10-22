@@ -985,6 +985,8 @@
                 $('#taskFormEdit').submit(function(e){
                  // alert('Form Going to Submit');
                   e.preventDefault();
+                  e.stopPropagation();
+                  e.stopImmediatePropagation();
                   var values = $(this).serialize();
                   console.log('Expense Updated Form Values : '+values);
                   $.ajax({
@@ -1003,7 +1005,7 @@
                       {
   
                           alert('Updated Successfully !');
-                          onLoadTask();
+                         // onLoadTask();
                       }
                      else
                      {
