@@ -1529,13 +1529,7 @@ router.post('/updatePass',(request,response)=>{
     password:joi.string().required().label('Please Fill Password'),
     pass:joi.string().min(8).required().label('Password must be 8 characters long'),
     password2:joi.string().required().label('Please Re-enter Password'),  
-    confirmPassword:joi.string().required().valid(joi.ref('password')).options({
-      label: {
-        any: {
-          allowOnly: '!!Passwords do not match',
-        }
-      } 
-    }),
+    confirmPassword:joi.string().required().valid(joi.ref('password')).label('Passwords does not match'),
       })
       let Result=schema.validate({password:pass,pass:pass,password2:pass2,confirmPassword:pass2});
           console.log('validaton result '+JSON.stringify(Result.error));
