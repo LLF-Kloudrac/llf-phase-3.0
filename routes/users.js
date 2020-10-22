@@ -1495,9 +1495,9 @@ router.post('/sendEMail',(request,response)=>{
   let message = {
     from: 'agupta3@kloudrac.com',
     to:email,
-    subject: 'Heroku Password Forget',
+    subject: 'Heroku Forget Password ',
     text: 'Plz Click the below link to generate your password',
-    html: '<p><a href="http://localhost:7500/users/resetPassword/'+sfid +'">click to resest your password</a></p>' 
+    html: '<p><a href="http://learninglinksfoundation.herokuapp.com/users/resetPassword/'+sfid +'">click to resest your password</a></p>' 
   }
 
   transporter.sendMail(message, (err, info) => {
