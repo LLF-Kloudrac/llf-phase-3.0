@@ -2635,14 +2635,14 @@ router.get('/deleteProcurementNonIt/:parentId',(request,response)=>{
      })
 })
 
-router.get('/getprocurementAssetDetail',async(request,response)=>{
+router.get('/getprocurementAssetDetail',verify,(request,response)=>{
     let proid=request.query.proid;
-    console.log('getProcurement non ITDetail Id='+proid);
+    console.log('getProcurement non ITDetail Id ++++ ='+proid);
   
     let objUser=request.user;
     console.log('user '+objUser); 
 
-    let qry ='SELECT sfid,name,asset_requisition_form__c as assetid FROM salesforce.Product_Line_Item_IT__c WHERE  sfid = $1';
+    let qry ='SELECT sfid,name,asset_requisition_form__c as assetid FROM salesforce.Product_Line_Item__c WHERE  sfid = $1';
     pool.query(qry,[proid])
     .then((testQueryResult) => {
       console.log('testQueryResult '+JSON.stringify(testQueryResult.rows));
