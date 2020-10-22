@@ -1530,7 +1530,7 @@ router.post('/updatePass',(request,response)=>{
     pass:joi.string().min(8).required().label('Password must be 8 characters long'),
     password2:joi.string().required().label('Please Re-enter Password'),  
     confirmPassword:joi.string().required().valid(joi.ref('password')).options({
-      language: {
+      label: {
         any: {
           allowOnly: '!!Passwords do not match',
         }
