@@ -1524,21 +1524,24 @@ router.get('/resetPassword/:userId',(request,response)=>{
 router.post('/updatePass',(request,response)=>{
   console.log('BODy'+JSON.stringify(request.body));
   const { pass ,pass2, user}=request.body;
-  const schema=joi.object({
-    pass:joi.string().required().label('Please Fill Password'),
-    password:joi.string().min(8).required().label('Password must be 8 characters long'),
-    pass2:joi.string().required().label('Please Re-enter Password'),
+
+   const schema = joi.object({
+    password:joi.string().required().label('Please Fill Password'),
+    passwo:joi.string().min(8).required().label('Password must be 8 characters long'),
+    password2:joi.string().required().label('Please Re-enter Password'),
    // arrival_Date:joi.date().max(joi.ref('departure_Dated'))
    // password2:joi.string.valid(joi.ref('password')).label('passwords don\'t match'),
     
       })
-      let result=schema.validate({pass:pass,password:pass,pass2:pass2});
-      if(result.error){
-          console.log('fd'+result.error);
-          response.send(result.error.details[0].context.label);    
-      }
-        else{
- 
+      let Result=schema.validate({password:pass,passwo:pass,password2:pass2});
+          console.log('validaton result '+JSON.stringify(Result.error));
+          if(Result.error)
+          {
+              console.log('fd'+Result.error)
+              response.send(Result.error.details[0].context.label);
+          } 
+          else
+          {    
     let updateQuerryPass='UPDATE salesforce.contact SET '+
     'password__c = \''+pass+'\', '+
      'password2__c=\''+pass2+'\' '+
