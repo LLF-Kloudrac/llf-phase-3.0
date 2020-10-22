@@ -474,10 +474,10 @@
 
 <!--Approval Pop up-->
 
-<div id="approvalCommentModal" class="modal fade">
+<div id="approvalCommentModal" class="modal fade bs-example-modal-lg" tabindex ="-1" role="dialog" aria-labelledby="myLargeModalLabel">
   <div class="modal-dialog modal-lg" role="document">
-  <div class="modal-content">
-  <div class="modal-header">
+    <div class="modal-content">
+      <div class="modal-header">
   <h5 class="modal-title" id="commentModalHeading">Approval Comment</h5>
   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
   <span aria-hidden="true">&times;</span>
@@ -486,73 +486,79 @@
   <div class="modal-body">
     <div class="">
       <div id="approvalerrorMessages"></div>
-  <form name="approval" id="approvalpopup">
-  <div class="form-group">
-  <label for="commentTextarea">Comment</label>
-  <textarea class="form-control" id="commentTextarea" rows="3" autocomplete="off"></textarea>
-  </div>
-  <div class="form-group"> 
-  <div class="row">
-  <div class="col-md-6">
-  <input type="hidden" class="form-control" value="" id="expenseId" name="expenseId" required>
-  </div>
-  </div>
-  </div>
+        <form id="approvalpopup" class="needs-validation" novalidate>
+          <div class="form-group">  
+            <div class="row">
+              <div class="col-md-9">
+                <label for="commentTextarea">Comment</label>
+                <textarea class="form-control" id="commentTextarea" rows="3" autocomplete="off"></textarea>
+              </div>
+            </div>
+          </div>
+              <div class="form-group"> 
+                <div class="row">
+                  <input type="hidden" class="form-control"  value=""  id="expenseId" name="expenseId" required>
+           
+                </div>
+                </div>
   
-  <div class="modal-footer">
-  <button type="button" class="btn btn-primary" id="submitForApproval" >Submit</button>
-  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-  </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="submitForApproval" >Submit</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          </div>
  
   
-</form>
-</div>
-</div>
-</div>
-  </div> 
-</div>
+        </form>
+        </div>
+        </div>
+        </div>
+          </div> 
+        </div>
 
 <!--Approval Pop up end-->
 
 <!--Accounts Approval Pop up-->
 
-<div id="accountsApprovalCommentModal" class="modal fade">
+<div id="accountsApprovalCommentModal" class="modal fade bs-example-modal-lg" tabindex ="-1" role="dialog" aria-labelledby="myLargeModalLabel">
   <div class="modal-dialog modal-lg" role="document">
-  <div class="modal-content">
-  <div class="modal-header">
+    <div class="modal-content">
+      <div class="modal-header">
   <h5 class="modal-title" id="commentModalHeading">Accounts Approval Comment</h5>
   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-  <span aria-hidden="true">&times;</span>
-  </button>
-  </div>
-  <div class="modal-body">
-    <div class="">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+      <div class="">
     <div id="accApprovalerrorMessages"></div>
-  <form name="accountsapproval" id="accountsapprovalpopup">
-  <div class="form-group">
-  <label for="commentTextarea">Comment</label>
-  <textarea class="form-control" id="acccommentTextarea" rows="3" autocomplete="off"></textarea>
-  </div>
-  <div class="form-group"> 
-  <div class="row">
-  <div class="col-md-6">
-  <input type="hidden" class="form-control" value="" id="expenseId" name="expenseId" required>
-  </div>
-  
-  </div>
-  </div>
-  <div class="modal-footer">
+  <form name="accountsapproval" id="accountsapprovalpopup" class="needs-validation" novalidate>
+    <div class="form-group">  
+      <div class="row">
+        <div class="col-md-9">
+          <label for="commentTextarea">Comment</label>
+            <textarea class="form-control" id="acccommentTextarea" rows="3" autocomplete="off"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="form-group"> 
+            <div class="row">
+              <input type="hidden" class="form-control"  value=""  id="expenseId" name="expenseId" required>
+       
+            </div>
+            </div>
+
+        <div class="modal-footer">
   <button type="button" class="btn btn-primary" id="submitForAccApproval" >Submit</button>
   <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-  </div>
- 
+</div>
+
+
 </form>
 </div>
 </div>
 </div>
-  </div> 
+</div> 
 </div>
-
 
 <!--Accounts Approval Pop up end-->
 

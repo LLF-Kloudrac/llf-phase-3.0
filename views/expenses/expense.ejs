@@ -521,28 +521,32 @@
 
 <!-- Approval Comment Modal Start -->
 
-<div id="approvalCommentModal" class="modal fade">
-  <div class="modal-dialog" role="document">
+<div id="approvalCommentModal" class="modal fade bs-example-modal-lg" tabindex ="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title"  id="commentModalHeading"></h5>Approval Comment</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
-          </button>
-          </div>
-          <div class="modal-body">
+        </button>
+      </div>
+      <div class="modal-body">
         <div class="">
-          <div id="approvalerrorMessages">
-            <form name="approval" id="approvalpopup">
-              <div class="form-group">
+          <div id="approvalerrorMessages"></div>
+            <form id="approvalpopup" class="needs-validation" novalidate>
+              <div class="form-group">  
+                <div class="row">
+                  <div class="col-md-9">
                 <label for="commentTextarea">Comment</label>
           <textarea class="form-control" id="commentTextarea" rows="3" autocomplete="off"></textarea>
         </div>
+      </div>
+    </div>
         <div class="form-group"> 
           <div class="row">
-          <div class="col-md-6">
+        
               <input type="hidden" class="form-control"  value=""  id="expenseId" name="expenseId" required>
-            </div>
+           
           </div>
           </div>
           
@@ -550,12 +554,14 @@
         <button type="button" class="btn btn-primary" id="submitForApproval" >Submit</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
       </div>
-    </form></div>
+    </form>
   </div>
-  </div>
-  </div>
-    </div> 
-  </div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Approval Comment Modal End -->
 
 <!-- Create Tour Bill Claim Modal Start -->
 <div id="createTourBillClaim" class="modal fade bs-example-modal-lg" tabindex ="-1" role="dialog" aria-labelledby="myLargeModalLabel" >
@@ -1087,6 +1093,7 @@
         if(msg == 'Approval Send Succesfully!')
         {
         //  document.getElementById("formdata").reset();
+        $('#approvalpopup')[0].reset()
         let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+msg+
         '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
           '<span aria-hidden="true">&times;</span>'+
