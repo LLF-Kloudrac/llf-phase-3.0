@@ -473,7 +473,7 @@
             })
             .done((response)=>{
               $('#detailLoadingSpinner').hide();
-                console.log('response from the feedback Tab;e Ajax '+JSON.stringify(response));
+                console.log('response from the feedback Tab Ajax '+JSON.stringify(response));
                 let msg = response;
                console.log('messageeee '+msg);
 
@@ -491,6 +491,14 @@
                 $('#detailLoadingSpinner').show();
                 console.log('jqXHR  : '+JSON.stringify(jqXHR));
                 console.log('error  : '+error);
+                if(jqXHR.responseText== "OK"){
+                  console.log('proccurement id '+proid);
+              //  location.assign('/procurement/createFeedback/'+proid);
+                window.open('/procurement/createFeedback/'+proid,'_blank');
+                }
+                if(jqXHR.responseText== "Rejected"){
+                  alert('Feedback cannot be filled unless the Final Payment Status is equal to RELEASED.');
+                }
               });
            
         });
