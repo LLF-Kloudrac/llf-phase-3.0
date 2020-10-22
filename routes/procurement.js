@@ -764,13 +764,14 @@ router.post('/nonItProducts', (request,response) => {
              itemsCategory:joi.string().required().label('Please select Item Category.'),
              items:joi.string().invalid('None').required().label('Please fill Items'),
              vendor:joi.string().required().label(' Please select Vendor from Vendor Picklist.'),
-            itemSpecification:joi.min(4).string().required().label('Please fill Item Specification.'),          
+            itemSpecification:joi.string().required().label('Please fill Item Specification.'),   
+            itemSpeci:joi.string().invalid(' ').label('Please fill Item Specification.'),          
             quantity:joi.number().required().label('Please enter Quantity.'),
             quanty:joi.number().min(0).label('The Quantity cannot be negative.'),
             budget:joi.number().required().label('Please enter Budget.'),
             budg:joi.number().min(0).label('The Budget cannot be negative.'),
         })
-        let result=schema.validate({state:state,items:items,itemsCategory:itemsCategory,district:district,vendor:vendor,itemSpecification:itemSpecification,quantity:quantity,quanty:quantity,budget:budget,budg:budget});
+        let result=schema.validate({state:state,items:items,itemsCategory:itemsCategory,district:district,vendor:vendor,itemSpecification:itemSpecification,itemSpeci:itemSpecification,quantity:quantity,quanty:quantity,budget:budget,budg:budget});
         console.log('validation hsh '+JSON.stringify(result.error));
         if(result.error){
             console.log('fd'+result.error);
@@ -818,14 +819,15 @@ router.post('/nonItProducts', (request,response) => {
                 itemsCategory:joi.string().required().label('Please select Item Category.'),
                 items:joi.string().invalid('None').required().label('Please fill Items'),
                 vendor:joi.string().required().label(' Please select Vendor from Vendor Picklist.'),
-                itemSpecification:joi.min(4).string().required().label('Please fill Item Specification.'),          
+                itemSpecification:joi.string().required().label('Please fill Item Specification.'), 
+                itemSpeci:joi.string().invalid(' ').label('Please fill Item Specification.'),            
                 quantity:joi.number().required().label('Please enter Quantity.'),
                 quanty:joi.number().min(0).label('The Quantity cannot be negative.'),
                 budget:joi.number().required().label('Please enter Budget.'),
                 budg:joi.number().min(0).label('The Budget cannot be negative.'),
     
             })
-            let result=schema.validate({state:state[i],items:items[i],itemsCategory:itemsCategory[i],district:district[i],vendor:vendor[i],itemSpecification:itemSpecification[i],quantity:quantity[i],quanty:quantity[i],budget:budget[i],budg:budget[i]});
+            let result=schema.validate({state:state[i],items:items[i],itemsCategory:itemsCategory[i],district:district[i],vendor:vendor[i],itemSpecification:itemSpecification[i],itemSpeci:itemSpecification[i],quantity:quantity[i],quanty:quantity[i],budget:budget[i],budg:budget[i]});
             console.log('validation REsult mul'+JSON.stringify(result.error));
             if(result.error){
                 console.log('Validation error'+result.error);
@@ -933,13 +935,14 @@ router.post('/itProducts', (request,response) => {
              itemCategory:joi.string().required().label('Please select Item Category.'),
              items:joi.string().invalid('None').required().label('Please fill Items'),
              vendor:joi.string().required().label(' Please select Vendor from Vendor Picklist.'),
-             itemSpecification:joi.string().min(4).required().label('Please fill Item Specification.'),
+             itemSpecification:joi.string().required().label('Please fill Item Specification.'),
+             itemSpeci:joi.string().invalid(' ').label('Please fill Item Specification.'),
              quantity:joi.number().required().label('Please enter Quantity.'),
              quanty:joi.number().min(0).label('The Quantity cannot be negative.'),
              budget:joi.number().required().label('Please enter Budget.'),
              budg:joi.number().min(0).label('The budget cannot be negative.'),
             })
-        let result=schema.validate({state:state,district:district,itemCategory:itemCategory,items:items,vendor:vendor,itemSpecification:itemSpecification,quantity:quantity,quanty:quantity,budget:budget,budg:budget});
+        let result=schema.validate({state:state,district:district,itemCategory:itemCategory,items:items,vendor:vendor,itemSpecification:itemSpecification,itemSpeci:itemSpecification,quantity:quantity,quanty:quantity,budget:budget,budg:budget});
         console.log('validation REsult '+JSON.stringify(result.error));
         if(result.error){
             console.log('fd'+result.error);
@@ -983,13 +986,14 @@ router.post('/itProducts', (request,response) => {
                 district:joi.string().required().label('Please select District.'),
                 items:joi.string().invalid('None').required().label('Please fill Items'),
                 vendor:joi.string().required().label(' Please select Vendor from Vendor Picklist.'),
-                itemSpecification:joi.string().min(4).required().label('Please fill Item Specification.'),          
+                itemSpecification:joi.string().required().label('Please fill Item Specification.'),  
+                itemSpeci:joi.string().invalid(' ').label('Please fill Item Specification.'),        
                 quantity:joi.number().required().label('Please enter Quantity.'),
                 quanty:joi.number().min(0).label('The Quantity cannot be negative.'),
                 budget:joi.number().required().label('Please enter Budget.'),
                 budg:joi.number().min(0).label('The budget cannot be negative.'),
             })
-            let result=schema.validate({state:state[i],items:items[i],district:district[i],vendor:vendor[i],itemSpecification:itemSpecification[i],quantity:quantity[i],quanty:quantity[i],budget:budget[i],budg:budget[i]});
+            let result=schema.validate({state:state[i],items:items[i],district:district[i],vendor:vendor[i],itemSpecification:itemSpecification[i],itemSpeci:itemSpecification[i],quantity:quantity[i],quanty:quantity[i],budget:budget[i],budg:budget[i]});
             console.log('validation REsult '+JSON.stringify(result.error));
             if(result.error){
                 console.log('fd'+result.error);
