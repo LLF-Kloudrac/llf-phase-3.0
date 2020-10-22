@@ -1486,14 +1486,19 @@ router.post('/sendEMail',(request,response)=>{
         return process.exit(1);
     }  */
     const transporter = nodemailer.createTransport({
-     service:'gmail',
+      host: "smtp-mail.outlook.com", // hostname
+      secureConnection: false, // TLS requires secureConnection to be false
+      port: 587, // port for secure SMTP
+      tls: {
+         ciphers:'SSLv3'
+      },
       auth: {
-          user:'agupta3@kloudrac.com',
-          pass:'anukarsh@1998'
+          user:'crm@learninglinksindia.org',
+          pass:'Myworld@1234'
       }
   })
   let message = {
-    from: 'agupta3@kloudrac.com',
+    from: 'crm@learninglinksindia.org',
     to:email,
     subject: 'Heroku Forget Password ',
     text: 'Plz Click the below link to generate your password',
