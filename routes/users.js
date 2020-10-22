@@ -1523,17 +1523,21 @@ router.get('/resetPassword/:userId',(request,response)=>{
 })
 router.post('/updatePass',(request,response)=>{
   console.log('BODy'+JSON.stringify(request.body));
-  const { pass ,pass2, user}=request.body;
+  const { pass,pass2,user}=request.body;
 
    const schema = joi.object({
     password:joi.string().required().label('Please Fill Password'),
-    passwo:joi.string().min(8).required().label('Password must be 8 characters long'),
-    password2:joi.string().required().label('Please Re-enter Password'),
-   // arrival_Date:joi.date().max(joi.ref('departure_Dated'))
-   // password2:joi.string.valid(joi.ref('password')).label('passwords don\'t match'),
-    
+    pass:joi.string().min(8).required().label('Password must be 8 characters long'),
+    password2:joi.string().required().label('Please Re-enter Password'),  
+    confirmPassword:joi.string().required().valid(joi.ref('password')).options({
+      language: {
+        any: {
+          allowOnly: '!!Passwords do not match',
+        }
+      } 
+    }),
       })
-      let Result=schema.validate({password:pass,passwo:pass,password2:pass2});
+      let Result=schema.validate({password:pass,pass:pass,password2:pass2,confirmPassword:pass2});
           console.log('validaton result '+JSON.stringify(Result.error));
           if(Result.error)
           {
