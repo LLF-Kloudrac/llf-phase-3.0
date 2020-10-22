@@ -536,7 +536,7 @@
             <form id="approvalpopup" class="needs-validation" novalidate>
               <div class="form-group">  
                 <div class="row">
-                  <div class="col-md-9">
+                  <div class="col-md-6">
                 <label for="commentTextarea">Comment</label>
           <textarea class="form-control" id="commentTextarea" rows="3" autocomplete="off"></textarea>
         </div>
@@ -544,9 +544,9 @@
     </div>
         <div class="form-group"> 
           <div class="row">
-        
+          <div class="col-md-6">
               <input type="hidden" class="form-control"  value=""  id="expenseId" name="expenseId" required>
-           
+            </div>
           </div>
           </div>
           
@@ -730,6 +730,7 @@
             
             console.log('table did update');
             anchorClickFunctionalities();
+            additionalEditFunctionality();
             //onLoadTask();
           },
           tableWillUnmount: () => console.log('table will unmount'),
@@ -854,7 +855,168 @@
                 .text('None'))
         })
 
+        function additionalEditFunctionality()
+    {
+      $(document).ready(() => {
 
+        $(".expIdEditMode").on('click', function(event){
+            
+            event.stopImmediatePropagation();
+            event.stopPropagation();
+              let strExpenseId = $(this).attr('id');
+             // alert('strExpenseId  '+strExpenseId);
+              let expenseId = strExpenseId.substring(4,23);
+             // alert('expenseId '+expenseId);
+              
+              $.ajax({
+                  url : '/expense/saved-expense-details',
+                  data: {
+                    expenseId : expenseId
+                  },
+                  dataType : 'json',
+                  beforeSend : function()
+                  {
+                    $('#editExpenseSpinner').show();
+                  }
+              })
+              .done((response) => {
+                    console.log('response  : '+JSON.stringify(response));
+                    let expenseDetails = response.expenseDetails;
+                    let objUser = response.objUser;
+                    let projectList = response.projectList;
+                    let projectOptionsHtml = '';
+                    if(projectList.length > 0)
+                    {
+                      projectList.forEach((eachProject) =>
+                      {
+                        if(eachProject.sfid == expenseDetails.projId)
+                            projectOptionsHtml += '<option selected value="'+eachProject.sfid+'">'+eachProject.name+'</option>';
+                        else
+                            projectOptionsHtml += '<option value="'+eachProject.sfid+'">'+eachProject.name+'</option>'; 
+                      })
+                    }
+  
+                    $('#popupEdit').modal('show');
+                  let expenseEdithtml = '<form  id="taskFormEdit" class="needs-validation" novalidate >'+
+                      '<div class="form-group">'+  
+                        '<div class="row">'+
+                          '<div class="col-md-6">'+
+                            '<label for="validationTooltip01">Expense Name</label>'+
+                            '<input type="text" class="form-control" id="validationTooltip01" value="'+expenseDetails.name+'" placeholder="Task Name"  name="taskname" required>'+
+                          '</div>'+
+                          
+                          '<div class="col-md-6">'+
+                          '<label for="validationTooltip03">Project Name</label>'+
+                            '<select class="custom-select custom-select-sm form-control" name="projectname">'+
+                              projectOptionsHtml+
+                            '</select>'+
+                          '</div>'+
+                        '</div>'+
+                      '</div>'+            
+                    
+                    '<div class="form-group">'+
+                        '<div class="row">'+
+                          '<div class="col-md-6">'+
+                            '<label for="validationTooltip03">Department</label>'+
+                            '<input type="text" class="form-control" id="validationTooltip03" value="'+expenseDetails.department__c+'" placeholder="Deaprtment"  name="department" >'+
+                          '</div>'+
+                          '<div class="col-md-6">'+
+                            '<label for="validationTooltip04">Designation</label>'+
+                            '<input type="text" class="form-control" id="validationTooltip04" value="'+expenseDetails.designation__c+'" placeholder="Designation"  name="designation" >'+
+                          '</div>'+
+                        '</div>'+
+                      '</div>'+
+                      
+                      '<div class="form-group">'+
+                        '<div class="row">'+
+                          '<div class="col-md-6">'+
+                              '<label for="validationTooltip08">Incurred By</label>'+
+                              '<select class="custom-select custom-select-sm form-control" name="incurredBy">'+
+                                  '<option selected value="'+objUser.sfid+'" >'+objUser.name+'</option>'+
+                              '</select>'+
+                            
+                          '</div>'+
+          
+                          '<div class="col-md-6">'+
+                            '<label for="validationTooltip06">Employee Category / Band</label>'+
+                            '<input type="text" class="form-control" disabled="true" id="validationTooltip06" value="'+expenseDetails.conveyance_employee_category_band__c+'" placeholder="Employee Category / Band"  name="empCategory" >'+
+                          '</div>'+
+                        '</div>'+
+                      '</div>'+
+                      
+                   /*   '<div class="form-group">'+
+                        '<div class="row">'+
+                          '<div class="col-md-6">'+
+                            '<label for="validationTooltip07">Approval Status</label>'+
+                            '<select disabled="true" class="custom-select custom-select-sm form-control" name="approvalStatus" id="validationTooltip07">'+
+                                  '<option value="'+expenseDetails.approval_status__c+'" selected>'+expenseDetails.approval_status__c+'</option>'+
+                              '</select>'+
+                          '</div>'+
+                          
+                          '<div class="col-md-6">'+
+                            
+                          '</div>'+
+                        '</div>'+  
+                    '</div>'+*/
+                    '<input type="hidden"  value="'+expenseDetails.sfid+'"  name="expenseId">' +
+                    '<div class="modal-footer">'+
+                        '<button type="submit" id="expenseEditSubmitbutton"  class="btn btn-primary">Save</button>'+
+                        '<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>'+
+  
+                    '</div>'+
+                    '</form>';
+                      
+  
+                    $('#editExpenseSpinner').hide();
+                    $('#expenseEditModalBody').empty();
+                    $('#expenseEditModalBody').append(expenseEdithtml); 
+    
+                })
+                .fail((jqXHR, status, error) => {
+                      console.log('Error  : '+JSON.stringify(jqXHR));
+                      $('#editExpenseSpinner').hide();
+                })
+  
+            });
+  
+  
+            $('#expenseEditSubmitbutton').click(function(){
+  
+                $('#taskFormEdit').submit(function(e){
+                 // alert('Form Going to Submit');
+                  e.preventDefault();
+                  var values = $(this).serialize();
+                  console.log('Expense Updated Form Values : '+values);
+                  $.ajax({
+                    url :'/expense/update-expense',
+                    type: 'post',
+                    data : values,
+                    dataType: 'json',
+                    
+                  })
+                  .done((response) => {
+                      console.log('Expense Creation Response : '+JSON.stringify(response));    
+                  })
+                  .fail((xhr, status, error)=> {
+                      console.log('xhr.responseText : '+xhr.responseText);
+                      if(xhr.responseText == 'Success')
+                      {
+  
+                          alert('Updated Successfully !');
+                          onLoadTask();
+                      }
+                     else
+                     {
+                      alert(xhr.responseText);
+                     }
+                      })
+                  })
+              });
+  
+
+      });
+
+    }
 
       function anchorClickFunctionalities()
       {    
@@ -1093,7 +1255,6 @@
         if(msg == 'Approval Send Succesfully!')
         {
         //  document.getElementById("formdata").reset();
-        $('#approvalpopup')[0].reset()
         let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+msg+
         '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
           '<span aria-hidden="true">&times;</span>'+
@@ -1128,160 +1289,7 @@
         });
         
         /***********************************  Edit Functionality *********************/
-        $(".expIdEditMode").on('click', function(event){
-            
-          event.stopImmediatePropagation();
-          event.stopPropagation();
-            let strExpenseId = $(this).attr('id');
-           // alert('strExpenseId  '+strExpenseId);
-            let expenseId = strExpenseId.substring(4,23);
-           // alert('expenseId '+expenseId);
-            
-            $.ajax({
-                url : '/expense/saved-expense-details',
-                data: {
-                  expenseId : expenseId
-                },
-                dataType : 'json',
-                beforeSend : function()
-                {
-                  $('#editExpenseSpinner').show();
-                }
-            })
-            .done((response) => {
-                  console.log('response  : '+JSON.stringify(response));
-                  let expenseDetails = response.expenseDetails;
-                  let objUser = response.objUser;
-                  let projectList = response.projectList;
-                  let projectOptionsHtml = '';
-                  if(projectList.length > 0)
-                  {
-                    projectList.forEach((eachProject) =>
-                    {
-                      if(eachProject.sfid == expenseDetails.projId)
-                          projectOptionsHtml += '<option selected value="'+eachProject.sfid+'">'+eachProject.name+'</option>';
-                      else
-                          projectOptionsHtml += '<option value="'+eachProject.sfid+'">'+eachProject.name+'</option>'; 
-                    })
-                  }
-
-                  $('#popupEdit').modal('show');
-                let expenseEdithtml = '<form  id="taskFormEdit" class="needs-validation" novalidate >'+
-                    '<div class="form-group">'+  
-                      '<div class="row">'+
-                        '<div class="col-md-6">'+
-                          '<label for="validationTooltip01">Expense Name</label>'+
-                          '<input type="text" class="form-control" id="validationTooltip01" value="'+expenseDetails.name+'" placeholder="Task Name"  name="taskname" required>'+
-                        '</div>'+
-                        
-                        '<div class="col-md-6">'+
-                        '<label for="validationTooltip03">Project Name</label>'+
-                          '<select class="custom-select custom-select-sm form-control" name="projectname">'+
-                            projectOptionsHtml+
-                          '</select>'+
-                        '</div>'+
-                      '</div>'+
-                    '</div>'+            
-                  
-                  '<div class="form-group">'+
-                      '<div class="row">'+
-                        '<div class="col-md-6">'+
-                          '<label for="validationTooltip03">Department</label>'+
-                          '<input type="text" class="form-control" id="validationTooltip03" value="'+expenseDetails.department__c+'" placeholder="Deaprtment"  name="department" >'+
-                        '</div>'+
-                        '<div class="col-md-6">'+
-                          '<label for="validationTooltip04">Designation</label>'+
-                          '<input type="text" class="form-control" id="validationTooltip04" value="'+expenseDetails.designation__c+'" placeholder="Designation"  name="designation" >'+
-                        '</div>'+
-                      '</div>'+
-                    '</div>'+
-                    
-                    '<div class="form-group">'+
-                      '<div class="row">'+
-                        '<div class="col-md-6">'+
-                            '<label for="validationTooltip08">Incurred By</label>'+
-                            '<select class="custom-select custom-select-sm form-control" name="incurredBy">'+
-                                '<option selected value="'+objUser.sfid+'" >'+objUser.name+'</option>'+
-                            '</select>'+
-                          
-                        '</div>'+
-        
-                        '<div class="col-md-6">'+
-                          '<label for="validationTooltip06">Employee Category / Band</label>'+
-                          '<input type="text" class="form-control" disabled="true" id="validationTooltip06" value="'+expenseDetails.conveyance_employee_category_band__c+'" placeholder="Employee Category / Band"  name="empCategory" >'+
-                        '</div>'+
-                      '</div>'+
-                    '</div>'+
-                    
-                 /*   '<div class="form-group">'+
-                      '<div class="row">'+
-                        '<div class="col-md-6">'+
-                          '<label for="validationTooltip07">Approval Status</label>'+
-                          '<select disabled="true" class="custom-select custom-select-sm form-control" name="approvalStatus" id="validationTooltip07">'+
-                                '<option value="'+expenseDetails.approval_status__c+'" selected>'+expenseDetails.approval_status__c+'</option>'+
-                            '</select>'+
-                        '</div>'+
-                        
-                        '<div class="col-md-6">'+
-                          
-                        '</div>'+
-                      '</div>'+  
-                  '</div>'+*/
-                  '<input type="hidden"  value="'+expenseDetails.sfid+'"  name="expenseId">' +
-                  '<div class="modal-footer">'+
-                      '<button type="submit" id="expenseEditSubmitbutton"  class="btn btn-primary">Save</button>'+
-                      '<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>'+
-
-                  '</div>'+
-                  '</form>';
-                    
-
-                  $('#editExpenseSpinner').hide();
-                  $('#expenseEditModalBody').empty();
-                  $('#expenseEditModalBody').append(expenseEdithtml); 
-  
-              })
-              .fail((jqXHR, status, error) => {
-                    console.log('Error  : '+JSON.stringify(jqXHR));
-                    $('#editExpenseSpinner').hide();
-              })
-
-          });
-
-
-          $('#expenseEditSubmitbutton').click(function(){
-
-              $('#taskFormEdit').submit(function(e){
-               // alert('Form Going to Submit');
-                e.preventDefault();
-                var values = $(this).serialize();
-                console.log('Expense Updated Form Values : '+values);
-                $.ajax({
-                  url :'/expense/update-expense',
-                  type: 'post',
-                  data : values,
-                  dataType: 'json',
-                  
-                })
-                .done((response) => {
-                    console.log('Expense Creation Response : '+JSON.stringify(response));    
-                })
-                .fail((xhr, status, error)=> {
-                    console.log('xhr.responseText : '+xhr.responseText);
-                    if(xhr.responseText == 'Success')
-                    {
-
-                        alert('Updated Successfully !');
-                       // onLoadTask();
-                    }
-                   else
-                   {
-                    alert(xhr.responseText);
-                   }
-                    })
-                })
-            });
-
+    
             /***** Creating Tour Bill Claim ****/
 
              /***** Creating Tour Bill Claim ****/
