@@ -2635,6 +2635,52 @@ router.get('/deleteProcurementNonIt/:parentId',(request,response)=>{
      })
 })
 
+router.get('/getprocurementAssetDetail',async(request,response)=>{
+    let proid=request.query.proid;
+    console.log('getProcurement non ITDetail Id='+proid);
+  
+    let objUser=request.user;
+    console.log('user '+objUser); 
+
+    let qry ='SELECT sfid,name,asset_requisition_form__c as assetid FROM salesforce.Product_Line_Item_IT__c WHERE  sfid = $1';
+    pool.query(qry,[proid])
+    .then((testQueryResult) => {
+      console.log('testQueryResult '+JSON.stringify(testQueryResult.rows));
+       if(testQueryResult.rowCount>0){
+         console.log('testQueryResult[0].sfid; '+testQueryResult.rows[0].assetid);
+         let parentprocurementId = testQueryResult.rows[0].assetid;
+         console.log('parentprocurementId '+parentprocurementId); 
+
+         let qry ='SELECT sfid,name,Payment_Status__c FROM salesforce.Asset_Requisition_Form__c WHERE  sfid = $1';
+        pool.query(qry,[parentprocurementId])
+        .then((AssetQueryResult) => {
+        console.log('AssetQueryResult '+JSON.stringify(AssetQueryResult.rows));
+        if(AssetQueryResult.rowCount>0){
+         console.log('AssetQueryResult[0].sfid; '+AssetQueryResult.rows[0].assetid);
+         let name = AssetQueryResult.rows[0].name;
+         let status = AssetQueryResult.rows[0].payment_status__c;
+         console.log('Status under asset '+status);
+         console.log('Status under name '+name);
+
+         if(status == 'Released'){
+             response.send('OK');
+         }
+         else{
+             response.send('Rejected');
+         }
+       
+       }
+    })
+    .catch((AssetQueryResultError) => {
+      response.send(AssetQueryResultError.stack);
+    })
+       
+       }
+    })
+    .catch((testQueryError) => {
+      response.send(testQueryError.stack);
+    })
+})
  
    
 
