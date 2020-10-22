@@ -2189,7 +2189,7 @@ router.get('/getfeedback/:procid',verify,(request,response)=>{
 router.get('/getFeedbacklist',verify,(request,response)=>{
     let parentid=request.query.parentId;
     console.log('parentid '+parentid);
-    let qry = 'SELECT sfid,Name,quantity_requested_vs_received__c,createddate,Timely_submissions_of_all_Deliverables__c,Work_Quality_Goods_Quality__c,Issue_Knowledge_Expertise__c,Procurement_Non_IT__c FROM salesforce.Feedback__c WHERE Procurement_Non_IT__c=$1';
+    let qry = 'SELECT sfid,Name,quantity_requested_vs_received__c,createddate,Timely_submissions_of_all_Deliverables__c,Work_Quality_Goods_Quality__c,Issue_Knowledge_Expertise__c,Procurement_Non_IT__c FROM salesforce.Feedback__c WHERE Procurement_Non_IT__c=$1 AND sfid IS NOT NULL';
     console.log('qry  =>'+qry)
      pool.query(qry,[parentid])
      .then((feedbackqueryresult) => {
@@ -2237,7 +2237,7 @@ router.get('/getfeedbackIT/:procid',verify,(request,response)=>{
 router.get('/getfeedbackITlist',verify,(request,response)=>{
     let parentid=request.query.parentId;
     console.log('parentid '+parentid);
-    let qry = 'SELECT sfid,Name,quyantiut__c,timely_submissions_of_deliverables_goods__c,work_quality_goods_quality__c,issue_knowledge_expertise__c,Procurement_IT__c FROM salesforce.Feedbacks_IT__c WHERE Procurement_IT__c=$1';
+    let qry = 'SELECT sfid,Name,quyantiut__c,timely_submissions_of_deliverables_goods__c,work_quality_goods_quality__c,issue_knowledge_expertise__c,Procurement_IT__c FROM salesforce.Feedbacks_IT__c WHERE Procurement_IT__c=$1 AND sfid IS NOT NULL';
     console.log('qry  =>'+qry)
      pool.query(qry,[parentid])
      .then((feedbackqueryresult) => {
@@ -2682,6 +2682,52 @@ router.get('/getprocurementAssetDetail',verify,(request,response)=>{
     })
 })
  
+router.get('/getprocurementITAssetDetail',verify,(request,response)=>{
+    let proid=request.query.proid;
+    console.log('getProcurement ITDetail Id ++++ ='+proid);
+  
+    let objUser=request.user;
+    console.log('user '+objUser); 
+
+    let qry ='SELECT sfid,name,asset_requisition_form__c as assetid FROM salesforce.Product_Line_Item_IT__c WHERE  sfid = $1';
+    pool.query(qry,[proid])
+    .then((testQueryResult) => {
+      console.log('testQueryResult '+JSON.stringify(testQueryResult.rows));
+       if(testQueryResult.rowCount>0){
+         console.log('testQueryResult[0].sfid; '+testQueryResult.rows[0].assetid);
+         let parentprocurementId = testQueryResult.rows[0].assetid;
+         console.log('parentprocurementId '+parentprocurementId); 
+
+         let qry ='SELECT sfid,name,Payment_Status__c FROM salesforce.Asset_Requisition_Form__c WHERE  sfid = $1';
+        pool.query(qry,[parentprocurementId])
+        .then((AssetQueryResult) => {
+        console.log('AssetQueryResult '+JSON.stringify(AssetQueryResult.rows));
+        if(AssetQueryResult.rowCount>0){
+         console.log('AssetQueryResult[0].sfid; '+AssetQueryResult.rows[0].assetid);
+         let name = AssetQueryResult.rows[0].name;
+         let status = AssetQueryResult.rows[0].payment_status__c;
+         console.log('Status under asset '+status);
+         console.log('Status under name '+name);
+
+         if(status == 'Released'){
+             response.send('OK');
+         }
+         else{
+             response.send('Rejected');
+         }
+       
+       }
+    })
+    .catch((AssetQueryResultError) => {
+      response.send(AssetQueryResultError.stack);
+    })
+       
+       }
+    })
+    .catch((testQueryError) => {
+      response.send(testQueryError.stack);
+    })
+})
    
 
 module.exports = router;

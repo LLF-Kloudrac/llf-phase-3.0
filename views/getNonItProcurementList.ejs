@@ -458,7 +458,7 @@
         function createFeedback(proid){
          // alert('procId'+proid);
           $('a.feedback').click(() => {
-            $("#feedback").attr("disabled", true);
+         //   $("#feedback").attr("disabled", true);
             console.log('proccurement not it id '+proid);
             $.ajax({
                 url : '/procurement/getprocurementAssetDetail',
@@ -488,7 +488,7 @@
 
             })
             .fail((jqXHR, status, error) =>{
-                $('#detailLoadingSpinner').show();
+              $('#detailLoadingSpinner').hide();
                 console.log('jqXHR  : '+JSON.stringify(jqXHR));
                 console.log('error  : '+error);
                 if(jqXHR.responseText== "OK"){

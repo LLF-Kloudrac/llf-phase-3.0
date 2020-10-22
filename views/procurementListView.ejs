@@ -398,8 +398,47 @@
           // alert('procId'+proid);
            $('a.feedback').click(() => {
              console.log('proccurement id '+proid);
-            // location.assign('/procurement/createFeedbackIT/'+proid);
-             window.open('/procurement/createFeedbackIT/'+proid,'_blank');
+            
+             $.ajax({
+                url : '/procurement/getprocurementITAssetDetail',
+                type:'get',
+                data : {
+                  proid : proid
+                },
+                dataType: 'json',
+                beforeSend : function(){
+                  $('#detailLoadingSpinner').show();
+                }
+            })
+            .done((response)=>{
+              $('#detailLoadingSpinner').hide();
+                console.log('response from the feedback Tab Ajax '+JSON.stringify(response));
+                let msg = response;
+               console.log('messageeee '+msg);
+
+               if(msg == 'OK'){
+                console.log('proccurement id '+proid);
+         // location.assign('/procurement/createFeedbackIT/'+proid);
+         window.open('/procurement/createFeedbackIT/'+proid,'_blank');
+               }
+               if(msg == 'Rejected'){
+                 alert('Feedback cannot be filled unless the Final Payment Status is equal to RELEASED.');
+               }
+
+            })
+            .fail((jqXHR, status, error) =>{
+              $('#detailLoadingSpinner').hide();
+                console.log('jqXHR  : '+JSON.stringify(jqXHR));
+                console.log('error  : '+error);
+                if(jqXHR.responseText== "OK"){
+                  console.log('proccurement id '+proid);
+              //  location.assign('/procurement/createFeedback/'+proid);
+                window.open('/procurement/createFeedback/'+proid,'_blank');
+                }
+                if(jqXHR.responseText== "Rejected"){
+                  alert('Feedback cannot be filled unless the Final Payment Status is equal to RELEASED.');
+                }
+              });
          });
          }
 
