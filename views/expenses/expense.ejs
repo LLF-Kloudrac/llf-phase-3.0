@@ -432,7 +432,7 @@
               <div class="col-md-6">
                 <label for="editProject">Project Name </label>
                 <select id="editProject" class="custom-select custom-select-sm form-control" name="editProject">
-                <option value="">--None--</option> 
+                  <option value="">--None--</option> 
                 </select> 
                 </div>
 
@@ -948,19 +948,18 @@
                         {
                           projectsList.push(response.projectList[i]);
                         }
-                   console.log('Project List ++ '+projectsList);
+                        console.log('projectsList '+JSON.stringify(projectsList));
   
-                      for(let i=0; i< projectsList.length ;i++)
-                        {
-                          $('#editProject')
-                          .append($("<option></option>")
-                          .attr("value",projectsList[i].sfid)
-                          .text(projectsList[i].name));	
-                        }
-              
-
+                        for(let i=0; i< projectsList.length ;i++)
+                          {
+                            $('#editProject')
+                            .append($("<option></option>")
+                            .attr("value",projectsList[i].sfid)
+                            .text(projectsList[i].name));	
+                          }
+                        console.log('expenseDetails.projname ++ '+expenseDetails.projname);
             document.forms["expIdEditMode"]["name"].value = expenseDetails.name;
-            document.forms["expIdEditMode"]["editProject"].value = expenseDetails.projname;
+            document.forms["expIdEditMode"]["editProject"].value = expenseDetails.project_name__c;
             document.forms["expIdEditMode"]["department"].value = expenseDetails.department__c;
             document.forms["expIdEditMode"]["designation"].value = expenseDetails.designation__c;
             document.forms["expIdEditMode"]["incurredBy"].value = objUser.name;

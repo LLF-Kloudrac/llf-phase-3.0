@@ -387,7 +387,7 @@ router.get('/saved-expense-details',verify, async (request, response) => {
 
   let expenseId = request.query.expenseId;
   console.log('Hurrah expenseId '+expenseId);
-  let expenseQueryText = 'SELECT exp.id,exp.sfid,exp.Name, proj.name as projname, proj.sfid as projId, exp.Department__c, exp.Designation__c, '+
+  let expenseQueryText = 'SELECT exp.id,exp.sfid,exp.Name,exp.project_name__c, proj.name as projname, proj.sfid as projId, exp.Department__c, exp.Designation__c, '+
     'exp.Conveyance_Employee_Category_Band__c,'+
     'exp.Approval_Status__c, exp.Amount_Claimed__c, exp.petty_cash_amount__c, exp.Conveyance_Amount__c '+
     'FROM salesforce.Milestone1_Expense__c exp '+
