@@ -330,7 +330,7 @@
 
 
 <!-- Create Expense Modal  Start -->
-<div id="createExpenseModal" class="modal fade bs-example-modal-lg" tabindex ="-1" role="dialog" aria-labelledby="myLargeModalLabel" >
+<div id="createExpenseModal"  class="modal fade bs-example-modal-lg" tabindex ="-1" role="dialog" aria-labelledby="myLargeModalLabel" >
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -409,29 +409,87 @@
 
 <!--  Edit Expense Modal Start -->      
 
-<div class="modal fade" id="popupEdit">
-  <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-            <!-- Header -->
-            <div class="modal-header">
-              <h5 class="modal-title" id="createTaskModal">Edit Expense</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-
-            <!-- Body -->
-            <div class="modal-body" id="expenseEditModalBody">
-                <div id="editExpenseSpinner">
-                    <center> <img src="/spinner-gif-transparent-background-14.gif" />  </center>
-                </div>
-            </div>
-
-            <!-- Footer -->
-            
+<div id="popupEdit" class="modal fade bs-example-modal-lg" tabindex ="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+     <div class="modal-header">
+      <h5 class="modal-title" id="createTaskModal">Edit Expense Form</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
       </div>
-  </div>
-</div>
+      <div class="modal-body">
+      <div class="">
+      <div id="editErrorMessages"></div>
+      <form id="expIdEditMode" class="needs-validation" novalidate  >
+        <div class="form-group"> 
+          <div class="row">
+          <div class="col-md-6">
+                <label for="name">Expense Name</label>
+                <input type="text" class="form-control" id="name" value=""   name="name" >
+              </div>
+
+              <div class="col-md-6">
+                <label for="editProject">Project Name </label>
+                <select id="editProject" class="custom-select custom-select-sm form-control" name="editProject">
+                <option value="">--None--</option> 
+                </select> 
+                </div>
+
+          </div>
+        </div>
+        <div class="form-group"> 
+          <div class="row">
+         
+          <div class="col-md-6">
+            <label for="department">Department </label>
+            <input type="text"  class="form-control" id="department" value=""   name="department" >
+            </div>
+            <div class="col-md-6">
+              <label for="designation">Designation</label>
+              <input type="text"  class="form-control" id="designation" value=""   name="designation" >
+            </div>
+          </div>
+      </div>
+
+
+        <div class="form-group">
+          <div class="row">
+
+              <div class="col-md-6">
+                <label for="incurredBy">Incurred By</label>
+                <input type="text" class="form-control" id="incurredBy" value="" name="incurredBy" readonly="true">
+                </div>
+
+            <div class="col-md-6">
+              <label for="empCategory">Employee Category / Band</label>
+              <input type="text" class="form-control" id="empCategory" value=""   name="empCategory" readonly="true">
+              </div>
+          </div>
+      </div>
+
+        <div class="form-group">
+            <div class="row">
+              
+                <div class="col-md-6">
+                  <input type="hidden" class="form-control" id="hide" value=""   name="hide" >
+                  </div>
+            </div>     
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" id="expenseEditSubmitbutton" >Save</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          </div>
+
+        </form>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+
+
+
 <!--  Edit Expense Modal End -->      
 
 <!-- Popup PRINT MODAL START -->
@@ -855,19 +913,19 @@
                 .text('None'))
         })
 
-        function additionalEditFunctionality()
-    {
-      $(document).ready(() => {
-
+       function additionalEditFunctionality()
+        {
         $(".expIdEditMode").on('click', function(event){
             
-            event.stopImmediatePropagation();
-            event.stopPropagation();
+              event.stopPropagation();
+              event.stopImmediatePropagation();
               let strExpenseId = $(this).attr('id');
              // alert('strExpenseId  '+strExpenseId);
               let expenseId = strExpenseId.substring(4,23);
              // alert('expenseId '+expenseId);
-              
+             console.log('expenseId + + '+expenseId);
+             $('#popupEdit').modal('show');
+
               $.ajax({
                   url : '/expense/saved-expense-details',
                   data: {
@@ -883,143 +941,98 @@
                     console.log('response  : '+JSON.stringify(response));
                     let expenseDetails = response.expenseDetails;
                     let objUser = response.objUser;
-                    let projectList = response.projectList;
-                    let projectOptionsHtml = '';
-                    if(projectList.length > 0)
-                    {
-                      projectList.forEach((eachProject) =>
-                      {
-                        if(eachProject.sfid == expenseDetails.projId)
-                            projectOptionsHtml += '<option selected value="'+eachProject.sfid+'">'+eachProject.name+'</option>';
-                        else
-                            projectOptionsHtml += '<option value="'+eachProject.sfid+'">'+eachProject.name+'</option>'; 
-                      })
-                    }
+                    console.log('ObjUser++ '+objUser.name);
+                   // let projectList = response.projectList;
+                    let projectsList= [];
+                  for(let i=0; i< response.projectList.length ;i++)
+                        {
+                          projectsList.push(response.projectList[i]);
+                        }
+                   console.log('Project List ++ '+projectsList);
   
-                    $('#popupEdit').modal('show');
-                  let expenseEdithtml = '<form  id="taskFormEdit" class="needs-validation" novalidate >'+
-                      '<div class="form-group">'+  
-                        '<div class="row">'+
-                          '<div class="col-md-6">'+
-                            '<label for="validationTooltip01">Expense Name</label>'+
-                            '<input type="text" class="form-control" id="validationTooltip01" value="'+expenseDetails.name+'" placeholder="Task Name"  name="taskname" required>'+
-                          '</div>'+
-                          
-                          '<div class="col-md-6">'+
-                          '<label for="validationTooltip03">Project Name</label>'+
-                            '<select class="custom-select custom-select-sm form-control" name="projectname">'+
-                              projectOptionsHtml+
-                            '</select>'+
-                          '</div>'+
-                        '</div>'+
-                      '</div>'+            
-                    
-                    '<div class="form-group">'+
-                        '<div class="row">'+
-                          '<div class="col-md-6">'+
-                            '<label for="validationTooltip03">Department</label>'+
-                            '<input type="text" class="form-control" id="validationTooltip03" value="'+expenseDetails.department__c+'" placeholder="Deaprtment"  name="department" >'+
-                          '</div>'+
-                          '<div class="col-md-6">'+
-                            '<label for="validationTooltip04">Designation</label>'+
-                            '<input type="text" class="form-control" id="validationTooltip04" value="'+expenseDetails.designation__c+'" placeholder="Designation"  name="designation" >'+
-                          '</div>'+
-                        '</div>'+
-                      '</div>'+
-                      
-                      '<div class="form-group">'+
-                        '<div class="row">'+
-                          '<div class="col-md-6">'+
-                              '<label for="validationTooltip08">Incurred By</label>'+
-                              '<select class="custom-select custom-select-sm form-control" name="incurredBy">'+
-                                  '<option selected value="'+objUser.sfid+'" >'+objUser.name+'</option>'+
-                              '</select>'+
-                            
-                          '</div>'+
-          
-                          '<div class="col-md-6">'+
-                            '<label for="validationTooltip06">Employee Category / Band</label>'+
-                            '<input type="text" class="form-control" disabled="true" id="validationTooltip06" value="'+expenseDetails.conveyance_employee_category_band__c+'" placeholder="Employee Category / Band"  name="empCategory" >'+
-                          '</div>'+
-                        '</div>'+
-                      '</div>'+
-                      
-                   /*   '<div class="form-group">'+
-                        '<div class="row">'+
-                          '<div class="col-md-6">'+
-                            '<label for="validationTooltip07">Approval Status</label>'+
-                            '<select disabled="true" class="custom-select custom-select-sm form-control" name="approvalStatus" id="validationTooltip07">'+
-                                  '<option value="'+expenseDetails.approval_status__c+'" selected>'+expenseDetails.approval_status__c+'</option>'+
-                              '</select>'+
-                          '</div>'+
-                          
-                          '<div class="col-md-6">'+
-                            
-                          '</div>'+
-                        '</div>'+  
-                    '</div>'+*/
-                    '<input type="hidden"  value="'+expenseDetails.sfid+'"  name="expenseId">' +
-                    '<div class="modal-footer">'+
-                        '<button type="submit" id="expenseEditSubmitbutton"  class="btn btn-primary">Save</button>'+
-                        '<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>'+
-  
-                    '</div>'+
-                    '</form>';
-                      
-  
-                    $('#editExpenseSpinner').hide();
-                    $('#expenseEditModalBody').empty();
-                    $('#expenseEditModalBody').append(expenseEdithtml); 
-    
-                })
-                .fail((jqXHR, status, error) => {
-                      console.log('Error  : '+JSON.stringify(jqXHR));
-                      $('#editExpenseSpinner').hide();
-                })
-  
-            });
-  
+                      for(let i=0; i< projectsList.length ;i++)
+                        {
+                          $('#editProject')
+                          .append($("<option></option>")
+                          .attr("value",projectsList[i].sfid)
+                          .text(projectsList[i].name));	
+                        }
+              
+
+            document.forms["expIdEditMode"]["name"].value = expenseDetails.name;
+            document.forms["expIdEditMode"]["editProject"].value = expenseDetails.projname;
+            document.forms["expIdEditMode"]["department"].value = expenseDetails.department__c;
+            document.forms["expIdEditMode"]["designation"].value = expenseDetails.designation__c;
+            document.forms["expIdEditMode"]["incurredBy"].value = objUser.name;
+            document.forms["expIdEditMode"]["empCategory"].value = expenseDetails.conveyance_employee_category_band__c;
+            document.forms["expIdEditMode"]["hide"].value = expenseDetails.sfid;
+          })
+          .fail((jqXHR, status, error) =>{
+            $('#detailLoadingSpinner').show();
+            console.log('jqXHR  : '+JSON.stringify(jqXHR));
+            console.log('error  : '+error);
+          })
+            })
   
             $('#expenseEditSubmitbutton').click(function(){
-  
-                $('#taskFormEdit').submit(function(e){
-                 // alert('Form Going to Submit');
-                  e.preventDefault();
-                  e.stopPropagation();
-                  e.stopImmediatePropagation();
-                  var values = $(this).serialize();
-                  console.log('Expense Updated Form Values : '+values);
-                  $.ajax({
-                    url :'/expense/update-expense',
-                    type: 'post',
-                    data : values,
-                    dataType: 'json',
-                    
-                  })
-                  .done((response) => {
-                      console.log('Expense Creation Response : '+JSON.stringify(response));    
-                  })
-                  .fail((xhr, status, error)=> {
-                      console.log('xhr.responseText : '+xhr.responseText);
-                      if(xhr.responseText == 'Success')
-                      {
-  
-                          alert('Updated Successfully !');
-                         // onLoadTask();
-                      }
-                     else
-                     {
-                      alert(xhr.responseText);
-                     }
-                      })
-                  })
-              });
-  
-
-      });
-
-    }
-
+             
+              event.preventDefault();
+              event.stopPropagation();
+              event.stopImmediatePropagation();
+              var $inputs = $('#expIdEditMode :input');
+                      var values = {};
+                      $inputs.each(function() {
+                          values[this.name] = $(this).val();
+                          console.log('fomvalues=> '+JSON.stringify(values));
+                      });
+                      console.log('fomvalues=> '+JSON.stringify(values));
+                 $("#expenseEditSubmitbutton").attr("disabled", true);
+                      $.ajax({
+                        url :'/expense/update-expense',
+                        type:'post',
+                        data: values,
+                    })
+                    .done((data) => {
+                        console.log('data '+JSON.stringify(data))
+                    let resp = JSON.stringify(data);
+                    console.log('dataaaaa' +resp);
+                    if(data == 'Successfully Updated !')
+                    {
+                     // document.getElementById("taskForm").reset()
+                      let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+ resp+
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+                        '<span aria-hidden="true">&times;</span>'+
+                        '</button>'+
+                        '</div>';
+                        $('#editErrorMessages').empty();
+                        $('#editErrorMessages').append(errorHtml); 
+                        $("#expenseEditSubmitbutton").attr("disabled", false);
+                      //  $("#createTaskModal").modal("hide");
+                        window.location.reload()
+                    }
+                    else
+                    {
+                      //document.getElementById("taskForm").reset()
+                      let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+ resp+
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+                        '<span aria-hidden="true">&times;</span>'+
+                        '</button>'+
+                        '</div>';
+                        $('#editErrorMessages').empty();
+                        $('#editErrorMessages').append(errorHtml); 
+                        $("#expenseEditSubmitbutton").attr("disabled", false);
+                      //  $("#createTaskModal").modal("hide");
+                       // window.location.reload()
+                    }  
+                         
+                    })
+                    .fail((jqXHR, status, error) => {
+                          console.log('jqXHR  '+JSON.stringify(jqXHR));
+                        
+                    }) 
+                    })
+                
+        }
       function anchorClickFunctionalities()
       {    
         $("a.expId").click(function(event){

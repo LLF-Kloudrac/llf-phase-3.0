@@ -467,41 +467,50 @@ router.post('/update-expense',verify,(request, response) => {
 
   console.log('Expense request.user '+JSON.stringify(request.user));
   let objUser = request.user;
- 
-
+  
     let formBody = request.body;
     console.log('formBody  :'+JSON.stringify(formBody));
-    const {taskname,projectname ,department, designation, employeeId, approvalStatus, incurredBy, expenseId} = request.body;
-   console.log('taskname  '+taskname);
-   console.log('projectname  '+projectname);
+    const {name,editProject ,department, designation, incurredBy, empCategory, hide} = request.body;
+   console.log('name  '+name);
+   console.log('project  '+editProject);
    console.log('department  '+department);
    console.log('designation  '+designation);
-   console.log('employeeId  '+employeeId);
-   console.log('approvalStatus  '+approvalStatus);
    console.log('incurredBy  '+incurredBy);
-   console.log('expense Id '+expenseId);
+   console.log('empCategory  '+empCategory);
+   console.log('expense Id '+hide);
+
+   const schema=joi.object({
+    name:joi.string().min(3).required().label('Please fill Expense Name'),
+    editProject: joi.string().required().label('Please choose Project'),
+    department:joi.string().required().label('Please fill Department'),
+    designation:joi.string().required().label('Please fill Designation'),
+})
+let result=schema.validate({name,editProject,department,designation});
+if(result.error){
+    console.log('fd'+result.error);
+    response.send(result.error.details[0].context.label);    
+}
+else{
 
    let updateExpenseQuery = 'UPDATE salesforce.Milestone1_Expense__c SET '+
-                             'name = \''+taskname+'\', '+
-                             'project_name__c = \''+projectname+'\' , '+
+                             'name = \''+name+'\', '+
+                             'project_name__c = \''+editProject+'\' , '+
                              'department__c = \''+department+'\' , '+
-                             'designation__c = \''+designation+'\', '+
-                             'Conveyance_Voucher_Employee_ID__c = \''+employeeId+'\' ,'+
-                             'Incurred_By_Heroku_User__c  = \''+incurredBy+'\' '+
+                             'designation__c = \''+designation+'\' '+
                              'WHERE sfid = $1';
   console.log('updateExpenseQuery  '+updateExpenseQuery);
 
    pool
-   .query(updateExpenseQuery,[expenseId])
+   .query(updateExpenseQuery,[hide])
    .then((expenseInsertResult) => {     
             console.log('expenseInsertResult.rows '+JSON.stringify(expenseInsertResult.rows));
-            response.send('Success');
+            response.send('Successfully Updated !');
    })
    .catch((expenseInsertError) => {
         console.log('expenseInsertError   '+expenseInsertError.stack);
         response.send('Error');
    })
-
+  }
 });
 
 
