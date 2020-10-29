@@ -1285,7 +1285,7 @@ router.post('/sendForApproval',verify, async(request, response) => {
                                 console.log('Inside projectManagerQueryResult  : '+projectManagerId);
           
                                 await
-                                pool.query('INSERT INTO salesforce.Custom_Approval__c (Approval_Type__c,Submitter__c, Assign_To_PM__c ,Expense__c, Comment__c, Status__c, Record_Name__c,amount__c) values($1, $2, $3, $4, $5, $6, $7, $8) ',['Expense',objUser.sfid, projectManagerId, expenseId, comment, 'Pending', expenseName, totalAmount ])
+                                pool.query('INSERT INTO salesforce.Custom_Approval__c (Approval_Type__c,Submitter_Heroku__c, Assign_To_PM__c ,Expense__c, Comment__c, Status__c, Record_Name__c,amount__c) values($1, $2, $3, $4, $5, $6, $7, $8) ',['Expense',objUser.sfid, projectManagerId, expenseId, comment, 'Pending', expenseName, totalAmount ])
                                 .then((customApprovalQueryResult) => {
                                         console.log('customApprovalQueryResult  '+JSON.stringify(customApprovalQueryResult));
                                 })
@@ -1303,7 +1303,7 @@ router.post('/sendForApproval',verify, async(request, response) => {
       
                           else
                           {
-                            pool.query('INSERT INTO salesforce.Custom_Approval__c (Approval_Type__c,Submitter__c, Approver_RM__c ,Expense__c, Comment__c, Status__c, Record_Name__c,amount__c) values($1, $2, $3, $4, $5, $6, $7, $8) ',['Expense',objUser.sfid, managerId, expenseId, comment, 'Pending', expenseName, totalAmount ])
+                            pool.query('INSERT INTO salesforce.Custom_Approval__c (Approval_Type__c,Submitter_Heroku__c, Approver_RM__c ,Expense__c, Comment__c, Status__c, Record_Name__c,amount__c) values($1, $2, $3, $4, $5, $6, $7, $8) ',['Expense',objUser.sfid, managerId, expenseId, comment, 'Pending', expenseName, totalAmount ])
                             .then((customApprovalQueryResult) => {
                                     console.log('customApprovalQueryResult  '+JSON.stringify(customApprovalQueryResult));
                             })
