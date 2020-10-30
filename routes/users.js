@@ -154,6 +154,7 @@ router.post('/login', async (request,response)=>{
   }
   else
   {
+    errors.push({ msg: 'Please enter correct email or correct password' });
     response.render('login',{errors});
   }
     
