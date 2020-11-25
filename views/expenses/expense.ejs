@@ -1395,32 +1395,26 @@ $('.printexp').on('click', function(event){
     expenseTableRows += '<td>'+expenseRecord.conveyance_employee_category_band__c+'</td>';
   else
   expenseTableRows += '<td> </td>';
-  expenseTableRows += '</tr>';   
-
-  expenseTableRows += '<tr>';
   expenseTableRows += '<td><strong>Reporting Manager Status<strong></td>';
   if(expenseRecord.approval_status__c != null)
     expenseTableRows += '<td>'+expenseRecord.approval_status__c+'</td>';
   else 
     expenseTableRows += '<td> </td>';
+  expenseTableRows += '</tr>';   
+
+  expenseTableRows += '<tr>';
+ 
   expenseTableRows += '<td><strong>Project Manager Status<strong></td>';
   if(expenseRecord.project_manager_status__c != null)
     expenseTableRows += '<td>'+expenseRecord.project_manager_status__c+'</td>';
   else 
     expenseTableRows += '<td> </td>';
-  expenseTableRows += '</tr>'; 
-
-
-  expenseTableRows += '<tr>';
     expenseTableRows += '<td><strong>Accounts Status<strong></td>';
     if(expenseRecord.accounts_status__c != null)
       expenseTableRows += '<td>'+expenseRecord.accounts_status__c+'</td>';
     else 
       expenseTableRows += '<td> </td>';
-    expenseTableRows += '<td><strong><strong></td>';
-    expenseTableRows += '<td> </td>';
-    expenseTableRows += '</tr>'; 
-  
+  expenseTableRows += '</tr>'; 
 
   expenseTableRows += '<tr>';
   expenseTableRows += '<td colspan="4" style="background-color:#d3d3d3;padding:5px;"><h5 style="padding-left:5px;">Amount Information</h5></td>';    
