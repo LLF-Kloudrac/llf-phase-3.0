@@ -470,11 +470,11 @@ router.post('/update-expense',verify,(request, response) => {
   
     let formBody = request.body;
     console.log('formBody  :'+JSON.stringify(formBody));
-    const {name,editProject , designation, incurredBy, empCategory, hide} = request.body;
+    const {name,editProject , incurredBy, empCategory, hide} = request.body;
    console.log('name  '+name);
    console.log('project  '+editProject);
    //console.log('department  '+department);
-   console.log('designation  '+designation);
+   //console.log('designation  '+designation);
    console.log('incurredBy  '+incurredBy);
    console.log('empCategory  '+empCategory);
    console.log('expense Id '+hide);
@@ -483,9 +483,9 @@ router.post('/update-expense',verify,(request, response) => {
     name:joi.string().min(3).required().label('Please fill Expense Name'),
     editProject: joi.string().required().label('Please choose Project'),
    // department:joi.string().required().label('Please fill Department'),
-    designation:joi.string().required().label('Please fill Designation'),
+    //designation:joi.string().required().label('Please fill Designation'),
 })
-let result=schema.validate({name,editProject,designation});
+let result=schema.validate({name,editProject});
 if(result.error){
     console.log('fd'+result.error);
     response.send(result.error.details[0].context.label);    
@@ -494,9 +494,9 @@ else{
 
    let updateExpenseQuery = 'UPDATE salesforce.Milestone1_Expense__c SET '+
                              'name = \''+name+'\', '+
-                             'project_name__c = \''+editProject+'\' , '+
+                             'project_name__c = \''+editProject+'\' '+
                            //  'department__c = \''+department+'\' , '+
-                             'designation__c = \''+designation+'\' '+
+                            // 'designation__c = \''+designation+'\' '+
                              'WHERE sfid = $1';
   console.log('updateExpenseQuery  '+updateExpenseQuery);
 
