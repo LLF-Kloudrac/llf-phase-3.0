@@ -340,10 +340,10 @@ router.post('/createExpense',(request, response) => {
    // var {expenseName, projectName} = request.body;
     console.log('request.body  '+JSON.stringify(request.body));
 
-   const {taskname,proj ,department, empCategory, incurredBy} = request.body;
+   const {taskname,proj , empCategory, incurredBy} = request.body;
    console.log('taskname  '+taskname);
    console.log('proj  '+proj);
-   console.log('department  '+department);
+  // console.log('department  '+department);
    console.log('empCategory  '+empCategory);
    console.log('incurredBy  '+incurredBy);
 
@@ -352,18 +352,18 @@ router.post('/createExpense',(request, response) => {
     task:joi.string().min(3).required().label('Please Fill Expense Name'),
     expense:joi.string().max(80).required().label(' Expense Name too long.'),
     proj:joi.string().required().label('Please choose Project'),
-    department:joi.string().required().label('Please choose Department'),
-    departm:joi.string().min(3).required().label('Please Fill Department'),
-    depart:joi.string().max(255).required().label('Department value too long.'),
+  //  department:joi.string().required().label('Please choose Department'),
+ //   departm:joi.string().min(3).required().label('Please Fill Department'),
+ //   depart:joi.string().max(255).required().label('Department value too long.'),
       })
-let result=schema.validate({taskname:taskname,task:taskname,expense:taskname,proj:proj,department:department,depart:department,departm:department});
+let result=schema.validate({taskname:taskname,task:taskname,expense:taskname,proj:proj});
 if(result.error){
     console.log('fd'+result.error);
     response.send(result.error.details[0].context.label);    
 }
   else{
     pool
-    .query('INSERT INTO salesforce.Milestone1_Expense__c (name,project_name__c,department__c,Conveyance_Employee_Category_Band__c,Incurred_By_Heroku_User__c) values ($1,$2,$3,$4,$5)',[taskname,proj,department,empCategory,incurredBy])
+    .query('INSERT INTO salesforce.Milestone1_Expense__c (name,project_name__c,Conveyance_Employee_Category_Band__c,Incurred_By_Heroku_User__c) values ($1,$2,$3,$4,$5)',[taskname,proj,empCategory,incurredBy])
     .then((expenseInsertResult) => {     
              console.log('expenseInsertResult.rows '+JSON.stringify(expenseInsertResult.rows));
              response.send('Successfully Inserted');
@@ -387,7 +387,7 @@ router.get('/saved-expense-details',verify, async (request, response) => {
 
   let expenseId = request.query.expenseId;
   console.log('Hurrah expenseId '+expenseId);
-  let expenseQueryText = 'SELECT exp.id,exp.sfid,exp.Name,exp.project_name__c, proj.name as projname, proj.sfid as projId, exp.Department__c, exp.Designation__c, '+
+  let expenseQueryText = 'SELECT exp.id,exp.sfid,exp.Name,exp.project_name__c, proj.name as projname, proj.sfid as projId, exp.Designation__c, '+
     'exp.Conveyance_Employee_Category_Band__c,'+
     'exp.Approval_Status__c, exp.Amount_Claimed__c, exp.petty_cash_amount__c, exp.Conveyance_Amount__c '+
     'FROM salesforce.Milestone1_Expense__c exp '+
@@ -470,10 +470,10 @@ router.post('/update-expense',verify,(request, response) => {
   
     let formBody = request.body;
     console.log('formBody  :'+JSON.stringify(formBody));
-    const {name,editProject ,department, designation, incurredBy, empCategory, hide} = request.body;
+    const {name,editProject , designation, incurredBy, empCategory, hide} = request.body;
    console.log('name  '+name);
    console.log('project  '+editProject);
-   console.log('department  '+department);
+   //console.log('department  '+department);
    console.log('designation  '+designation);
    console.log('incurredBy  '+incurredBy);
    console.log('empCategory  '+empCategory);
@@ -482,10 +482,10 @@ router.post('/update-expense',verify,(request, response) => {
    const schema=joi.object({
     name:joi.string().min(3).required().label('Please fill Expense Name'),
     editProject: joi.string().required().label('Please choose Project'),
-    department:joi.string().required().label('Please fill Department'),
+   // department:joi.string().required().label('Please fill Department'),
     designation:joi.string().required().label('Please fill Designation'),
 })
-let result=schema.validate({name,editProject,department,designation});
+let result=schema.validate({name,editProject,designation});
 if(result.error){
     console.log('fd'+result.error);
     response.send(result.error.details[0].context.label);    
@@ -495,7 +495,7 @@ else{
    let updateExpenseQuery = 'UPDATE salesforce.Milestone1_Expense__c SET '+
                              'name = \''+name+'\', '+
                              'project_name__c = \''+editProject+'\' , '+
-                             'department__c = \''+department+'\' , '+
+                           //  'department__c = \''+department+'\' , '+
                              'designation__c = \''+designation+'\' '+
                              'WHERE sfid = $1';
   console.log('updateExpenseQuery  '+updateExpenseQuery);

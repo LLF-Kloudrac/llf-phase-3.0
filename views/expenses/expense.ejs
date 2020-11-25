@@ -362,33 +362,20 @@
   
               <div class="form-group"> 
                 <div class="row">
-                  <div class="col-md-6">
-                    <label for="validationTooltip03">Department</label>
-                    <input type="text" class="form-control" id="validationTooltip03" placeholder="Department"  name="department" >
-                  </div>
+                 
                   <div class="col-md-6">
                     <label for="validationTooltip06">Employee Category / Band</label>
                     <input type="text" class="form-control" id="validationTooltip06" placeholder="Employee Category / Band" readonly="true" name="empCategory">
                   </div>
-                </div>
-              </div>
-              
-             
-              
-              <div class="form-group">
-                <div class="row">
                   <div class="col-md-6">
                     <label for="validationTooltip08">Incurred By</label>
                     <select class="custom-select custom-select-sm form-control" name="incurredBy">
                         <option selected value="<%= objUser.sfid %>" ><%= objUser.name %></option>
                     </select>
                   </div>
-                  
-                  <div class="col-md-6">
-                   
-                  </div>
-                </div>  
+                </div>
               </div>
+              
   
               <div class="modal-footer">
                 <button type="submit" id="expensebutton"  class="btn btn-primary">Save</button>
@@ -441,25 +428,20 @@
         <div class="form-group"> 
           <div class="row">
          
-          <div class="col-md-6">
-            <label for="department">Department </label>
-            <input type="text"  class="form-control" id="department" value=""   name="department" >
-            </div>
             <div class="col-md-6">
               <label for="designation">Designation</label>
               <input type="text"  class="form-control" id="designation" value=""   name="designation" >
             </div>
+            <div class="col-md-6">
+              <label for="incurredBy">Incurred By</label>
+              <input type="text" class="form-control" id="incurredBy" value="" name="incurredBy" readonly="true">
+              </div>
           </div>
       </div>
 
 
         <div class="form-group">
           <div class="row">
-
-              <div class="col-md-6">
-                <label for="incurredBy">Incurred By</label>
-                <input type="text" class="form-control" id="incurredBy" value="" name="incurredBy" readonly="true">
-                </div>
 
             <div class="col-md-6">
               <label for="empCategory">Employee Category / Band</label>
@@ -960,7 +942,7 @@
                         console.log('expenseDetails.projname ++ '+expenseDetails.projname);
             document.forms["expIdEditMode"]["name"].value = expenseDetails.name;
             document.forms["expIdEditMode"]["editProject"].value = expenseDetails.project_name__c;
-            document.forms["expIdEditMode"]["department"].value = expenseDetails.department__c;
+         //   document.forms["expIdEditMode"]["department"].value = expenseDetails.department__c;
             document.forms["expIdEditMode"]["designation"].value = expenseDetails.designation__c;
             document.forms["expIdEditMode"]["incurredBy"].value = objUser.name;
             document.forms["expIdEditMode"]["empCategory"].value = expenseDetails.conveyance_employee_category_band__c;
@@ -1070,17 +1052,12 @@
             expenseTableRows += '</tr>';   
             
             expenseTableRows += '<tr>';
-            expenseTableRows += '<td><strong>Department<strong></td>';
-            if(expenseRecord.department__c != null)
-              expenseTableRows += '<td>'+expenseRecord.department__c+'</td>';
-            else
-              expenseTableRows += '<td> </td>';
             expenseTableRows += '<td><strong>Designation<strong></td>';
             expenseTableRows += '<td>'+expenseRecord.designation__c+'</td>';
-            expenseTableRows += '</tr>';   
-            expenseTableRows += '<tr>';
             expenseTableRows += '<td><strong>Employee ID<strong></td>';
             expenseTableRows += '<td>'+expenseRecord.employee_id__c+'</td>';
+            expenseTableRows += '</tr>';   
+            expenseTableRows += '<tr>';
             expenseTableRows += '<td><strong>Employee Category / Band<strong></td>';
             if(expenseRecord.conveyance_employee_category_band__c != null)
               expenseTableRows += '<td>'+expenseRecord.conveyance_employee_category_band__c+'</td>';
@@ -1406,18 +1383,13 @@ $('.printexp').on('click', function(event){
   expenseTableRows += '</tr>';   
   
   expenseTableRows += '<tr>';
-  expenseTableRows += '<td><strong>Department<strong></td>';
-  if(expenseRecord.department__c != null)
-    expenseTableRows += '<td>'+expenseRecord.department__c+'</td>';
-  else
-    expenseTableRows += '<td> </td>';
   expenseTableRows += '<td><strong>Designation<strong></td>';
   expenseTableRows += '<td>'+expenseRecord.designation__c+'</td>';
+  expenseTableRows += '<td><strong>Employee ID<strong></td>';
+  expenseTableRows += '<td>'+expenseRecord.employee_id__c+'</td>';
   expenseTableRows += '</tr>';   
 
   expenseTableRows += '<tr>';
-  expenseTableRows += '<td><strong>Employee ID<strong></td>';
-  expenseTableRows += '<td>'+expenseRecord.employee_id__c+'</td>';
   expenseTableRows += '<td><strong>Employee Category / Band<strong></td>';
   if(expenseRecord.conveyance_employee_category_band__c != null)
     expenseTableRows += '<td>'+expenseRecord.conveyance_employee_category_band__c+'</td>';
