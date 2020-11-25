@@ -363,7 +363,7 @@ if(result.error){
 }
   else{
     pool
-    .query('INSERT INTO salesforce.Milestone1_Expense__c (name,project_name__c,Conveyance_Employee_Category_Band__c,Incurred_By_Heroku_User__c) values ($1,$2,$3,$4,$5)',[taskname,proj,empCategory,incurredBy])
+    .query('INSERT INTO salesforce.Milestone1_Expense__c (name,project_name__c,Conveyance_Employee_Category_Band__c,Incurred_By_Heroku_User__c) values ($1,$2,$3,$4)',[taskname,proj,empCategory,incurredBy])
     .then((expenseInsertResult) => {     
              console.log('expenseInsertResult.rows '+JSON.stringify(expenseInsertResult.rows));
              response.send('Successfully Inserted');
