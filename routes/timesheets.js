@@ -1410,7 +1410,7 @@ router.get('/getTasklist',verify,(request,response)=>{
           obj.sequence = i;
           obj.name = '<a href="#" class="taskreferenceTag" id="'+eachRecord.sfids+'" >'+eachRecord.tskname+'</a>';
           obj.assigned = eachRecord.contname;
-          obj.hrs=eachRecord.planned_hours__c.toFixed(2);
+          obj.hrs=eachRecord.planned_hours__c;
           obj.startTime=eachRecord.start_time__c;
           obj.endtime=eachRecord.end_time__c;
           obj.taskType=eachRecord.task_type__c;
