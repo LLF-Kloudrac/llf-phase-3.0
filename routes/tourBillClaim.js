@@ -174,7 +174,7 @@ router.get('/getRelatedTourBillClaimDetails/:tourBillClaimId', async (request, r
 
     var boardingLodgingChargesQuery = 'SELECT sfid, Name, Tour_Bill_Claim__c, Stay_Option__c, Place_Journey__c,'+ 
                           'Correspondence_City__c,   Own_Stay_Amount__c , From__c, To__c,'+
-                          'No_of_Days__c,Heroku_Image_URL__c,Daily_Allowance__c,Amount_of_B_L_as_per_policy__c Total_time__c, Actual_Amount_for_boarding_and_lodging__c, Amount_for_boarding_and_lodging__c,'+
+                          'Heroku_Image_URL__c,Daily_Allowance__c,Amount_of_B_L_as_per_policy__c Total_time__c, Actual_Amount_for_boarding_and_lodging__c, Amount_for_boarding_and_lodging__c,'+
                           'Total_Amount__c, Extra_Amount__c, Total_Allowance__c '+
                           'FROM salesforce.Boarding_Lodging__c WHERE Tour_Bill_Claim__c = $1';
     await
