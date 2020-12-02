@@ -888,9 +888,8 @@
 
   })
    $('#createExpenseModal').modal('show');
-   
-   document.forms["taskForm"]["incurredBy"].value = '<%= objUser.name %>';
    $('#proj').empty()
+   $('#unam').attr("value",'<%=objUser.sfid %>');
    $('#proj')
                 .append($("<option></option>")
                 .attr("value",'')
