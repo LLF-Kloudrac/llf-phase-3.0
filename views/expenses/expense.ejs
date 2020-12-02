@@ -2,7 +2,7 @@
 <% include ../partials/navbar %>
 <% include ../partials/messages %>
 <% include ../partials/footer %>
-
+<% =objUser.sfid>
 <!DOCTYPE html>
 <html>
 <head>
@@ -889,7 +889,6 @@
   })
    $('#createExpenseModal').modal('show');
    $('#proj').empty()
-   $('#unam').attr("value",'<%=objUser.sfid %>');
    $('#proj')
                 .append($("<option></option>")
                 .attr("value",'')
