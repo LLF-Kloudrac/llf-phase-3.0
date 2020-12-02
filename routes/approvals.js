@@ -297,7 +297,7 @@ router.get('/getApprovalDetail',verify, async(request,response)=>{
         
         var approvalFormAndRelatedRecords = {};
     
-          /* let qry ='SELECT app.sfid as appsfid, app.name as appname, app.Approval_Type__c, app.comment__c, app.Reporting_Manager_Comment__c, app.Submitter_Heroku__c, cont.name as contname, '+
+           let qry ='SELECT app.sfid as appsfid, app.name as appname, app.Approval_Type__c, app.comment__c, app.Reporting_Manager_Comment__c, app.Submitter_Heroku__c, cont.name as contname, '+
           'app.Project_Manager_Comment__c, app.Status__c, con.name as conname, exp.name as expname, exp.sfid as expsfid, app.Approver_RM__c, usr.name as username, '+
           'app.Amount__c,app.createddate, app.Expense__c, app.Assign_To_PM__c, app.Project_Manager_Approval_Status__c, app.Project_Manager_Comment__c, app.Approver_PM__c '+
           'FROM salesforce.Custom_Approval__c app '+
@@ -309,8 +309,8 @@ router.get('/getApprovalDetail',verify, async(request,response)=>{
          'ON app.Approver_PM__c = usr.sfid '+
          'INNER JOIN salesforce.Milestone1_Expense__c exp '+
          'ON app.Expense__c = exp.sfid '+
-         'WHERE app.sfid = $1 '; */
-         let qry ='Select sfid ,name as appname ,Approval_Type__c, Approver_RM__c FROM salesforce.Custom_Approval__c WHERE sfid = $1 ';
+         'WHERE app.appsfid = $1 '; 
+        // let qry ='Select sfid ,name as appname ,Approval_Type__c, Approver_RM__c FROM salesforce.Custom_Approval__c WHERE sfid = $1 ';
         
           console.log('qry '+qry);
           pool
