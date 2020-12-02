@@ -892,8 +892,9 @@
   })
    $('#createExpenseModal').modal('show');
    
-   var uid = document.getElementById('uid').val;
+   var uid = document.getElementById('uid').innerHTML;
    alert('uid '+JSON.stringify(uid));
+   $('#uNam').setAttribute('value',uid);
    $('#proj').empty()
    $('#proj')
                 .append($("<option></option>")
