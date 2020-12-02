@@ -709,6 +709,7 @@
 
       
       $(document).ready(function(){
+        $('#uid').hide();
         $('#success').hide();
         $('#spinner').hide();
         $('#editExpenseSpinner').hide();
@@ -890,8 +891,8 @@
 
   })
    $('#createExpenseModal').modal('show');
-   $('#uid').hide();
-   var uid = document.getElementById('uid').value();
+   
+   var uid = document.getElementById('uid').val();
    alert('uid '+uid);
    $('#proj').empty()
    $('#proj')
