@@ -894,9 +894,9 @@
    
    var uid = document.getElementById('uid').innerHTML;
   // alert('uid '+JSON.stringify(uid));
-  // $('#uNam').setAttribute('value',uid);
+   $('#uNam').attr("value",uid);
   console.log('jckjnc '+uid);
-  document.forms["taskForm"]["incurredBy"].value = uid;
+  //document.forms["taskForm"]["incurredBy"].value = uid;
    $('#proj').empty()
    $('#proj')
                 .append($("<option></option>")
