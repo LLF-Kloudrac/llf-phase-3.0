@@ -312,8 +312,7 @@ router.get('/getApprovalDetail',verify, async(request,response)=>{
          'WHERE app.sfid = $1 ';
        
           console.log('qry '+qry);
-            await
-            pool
+          pool
             .query(qry,[approvalId])
             .then((querryResult)=>{
                 if(querryResult.rowCount > 0)
