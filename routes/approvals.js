@@ -309,7 +309,7 @@ router.get('/getApprovalDetail',verify, async(request,response)=>{
          'ON app.Approver_PM__c = usr.sfid '+
          'INNER JOIN salesforce.Milestone1_Expense__c exp '+
          'ON app.Expense__c = exp.sfid '+
-         'WHERE app.appsfid = $1 '; 
+         'WHERE app.sfid = $1 '; 
         // let qry ='Select sfid ,name as appname ,Approval_Type__c, Approver_RM__c FROM salesforce.Custom_Approval__c WHERE sfid = $1 ';
         
           console.log('qry '+qry);
