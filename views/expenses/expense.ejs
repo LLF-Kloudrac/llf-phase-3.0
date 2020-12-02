@@ -892,8 +892,8 @@
   })
    $('#createExpenseModal').modal('show');
    
-   var uid = document.getElementById('uid');
-   alert('uid '+uid);
+   var uid = document.getElementById('uid').val;
+   alert('uid '+JSON.stringify(uid));
    $('#proj').empty()
    $('#proj')
                 .append($("<option></option>")
