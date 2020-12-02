@@ -2,7 +2,7 @@
 <% include ../partials/navbar %>
 <% include ../partials/messages %>
 <% include ../partials/footer %>
-<p id="uid"><%= objUser.name %> </p>
+<p id="uid"><%= objUser.sfid %> </p>
 <!DOCTYPE html>
 <html>
 <head>
@@ -331,7 +331,7 @@
 
 <!-- Create Expense Modal  Start -->
 <div id="createExpenseModal"  class="modal fade bs-example-modal-lg" tabindex ="-1" role="dialog" aria-labelledby="myLargeModalLabel" >
-      <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-dialog modal-lg" role="document">taskForm
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="createTaskModal">Create New Expense</h5>
@@ -342,7 +342,7 @@
           <div class="modal-body">
             <div class="">
               <div id="errorMessages"></div>
-            <form  id="taskForm" class="needs-validation" novalidate >
+            <form  id="" class="needs-validation" novalidate >
   
               <div class="form-group">  
                 <div class="row">
@@ -893,8 +893,9 @@
    $('#createExpenseModal').modal('show');
    
    var uid = document.getElementById('uid').innerHTML;
-   alert('uid '+JSON.stringify(uid));
-   $('#uNam').setAttribute('value',uid);
+  // alert('uid '+JSON.stringify(uid));
+  // $('#uNam').setAttribute('value',uid);
+  document.forms["taskForm"]["incurredBy"].value = uid;
    $('#proj').empty()
    $('#proj')
                 .append($("<option></option>")
