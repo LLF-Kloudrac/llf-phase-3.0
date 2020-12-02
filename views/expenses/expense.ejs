@@ -369,7 +369,7 @@
                   </div>
                   <div class="col-md-6">
                     <label for="validationTooltip08">Incurred By</label>
-                    <select class="custom-select custom-select-sm form-control" name="incurredBy">
+                    <select class="custom-select custom-select-sm form-control" id="uNam" name="incurredBy">
                         <option selected value="<%= objUser.sfid %>" ><%= objUser.name %></option>
                     </select>
                   </div>
@@ -888,6 +888,8 @@
 
   })
    $('#createExpenseModal').modal('show');
+   
+   document.forms["taskForm"]["incurredBy"].value = '<%= objUser.name %>';
    $('#proj').empty()
    $('#proj')
                 .append($("<option></option>")
