@@ -316,6 +316,7 @@ router.get('/getApprovalDetail',verify, async(request,response)=>{
           pool
             .query(qry,[approvalId])
             .then((querryResult)=>{
+                console.log('testttt '+JSON.stringify(querryResult.rows));
                 if(querryResult.rowCount > 0)
                 {
                     console.log('querryResult  '+querryResult.rows);
