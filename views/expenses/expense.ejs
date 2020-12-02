@@ -2,6 +2,7 @@
 <% include ../partials/navbar %>
 <% include ../partials/messages %>
 <% include ../partials/footer %>
+<p id="uid"><%= objUser.name %> </p>
 <!DOCTYPE html>
 <html>
 <head>
@@ -368,11 +369,11 @@
                   </div>
                   <div class="col-md-6">
                     <label for="validationTooltip08">Incurred By</label>
-                    <input type="text" class="form-control" id="validationTooltip07" readonly="true" value="<%= objUser.name %>" name="incurredBy">
+                   <!--  <input type="text" class="form-control" id="validationTooltip07" readonly="true" value="<%= objUser.sfid %>" name="incurredBy"> -->
                 
-                   <!--  <select class="custom-select custom-select-sm form-control" id="uNam" name="incurredBy">
+                     <select class="custom-select custom-select-sm form-control" id="uNam" name="incurredBy">
                         <option selected value="<%= objUser.sfid %>" ><%= objUser.name %></option>
-                     </select>  -->
+                     </select>  
                   </div>
                 </div>
               </div>
@@ -889,6 +890,9 @@
 
   })
    $('#createExpenseModal').modal('show');
+   $('#uid').hide();
+   var uid = document.getElementById('uid').value();
+   alert('uid '+uid);
    $('#proj').empty()
    $('#proj')
                 .append($("<option></option>")
