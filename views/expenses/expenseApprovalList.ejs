@@ -195,7 +195,7 @@ function anchorClickFunctionalities(){
             event.stopImmediatePropagation();
             event.stopPropagation();
             let approvalId = this.id;
-        //    alert('Approval ID=>'+approvalId);
+            alert('Approval ID=>'+approvalId);
             $('#approvalModal').modal('show');
             $.ajax({
                 url : '/approvals/getExpenseApprovalDetail',
