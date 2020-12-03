@@ -1563,6 +1563,10 @@ function accountsApprovalFunctionality(){
       $('#createAssetRequisitionForm').modal('show');
       console.log('After Show Edit Modal ');
       $('#act').empty();
+      $('#act')
+                .append($("<option></option>")
+                .attr("value",'')
+                .text('None'))
      // $('#assetRequisitionForm')[0].reset();
       /* let select = document.getElementById("act");
            let length = select.options.length;
