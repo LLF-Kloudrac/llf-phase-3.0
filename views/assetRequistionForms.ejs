@@ -1564,17 +1564,17 @@ function accountsApprovalFunctionality(){
         console.log('response '+JSON.stringify(response));
         if(response.length > 0)
         {
-          var selectobject = document.getElementById('project');
+          let select = document.getElementById("project");
+           let length = select.options.length;
+           for (i = length-1; i > 0; i--) {
+             select.options[i] = null;
+            }
+          /* var selectobject = document.getElementById('project');
           console.log('ghhg '+JSON.stringify(selectobject));
           for (var i=0; i<selectobject.length; i++) {
           selectobject.remove(i);
-          }
-
-          $('#project')
-        .append($("<option></option>")
-        .attr("value",'')
-        .text('None'))
-          console.log('nc');
+          } */
+          console.log('nc1');
         response.forEach((eachRpoject) => {
         console.log('eachRpoject.name '+eachRpoject.name);
         $('#project')
