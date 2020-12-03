@@ -1,7 +1,7 @@
 <% include ../partials/navbar %>
 <% include ../partials/messages %>
 <% include ../partials/footer %>
-  <p id="uid"><%= objUser.sfid %> </p>
+ <!--  <p id="uid"><%= objUser.sfid %> </p> -->
 <!-- <p id="usname"><%= objUser.name %> </p>  --> 
 <!DOCTYPE html>
 <html>
@@ -709,7 +709,7 @@
 
       
       $(document).ready(function(){
-        $('#uid').hide();
+       // $('#uid').hide();
         //$('#usname').hide();
         $('#success').hide();
         $('#spinner').hide();
@@ -858,10 +858,10 @@
         });  */
 
         $('#createNewExpenseButton').click(() =>{
-          let uid =document.getElementById('uid').val();
+         /*  let uid =document.getElementById('uid').val();
           console.log('uid '+uid);
           document.forms["taskForm1"]["uNam"].value=uid;
-          $.ajax({
+ */          $.ajax({
       url : '/expense/fetchProjectforCreateNew',
       data : {
          
@@ -881,6 +881,31 @@
           .text(eachProject.name))
           }); 
           }
+          $.ajax({
+            url : '/expense/userid',
+           data : {
+         
+      },
+      dataType : 'json',
+      type : 'get'
+  })
+  .done((response) => {
+    console.log('resp '+JSON.stringify(response));
+    let uid=response[0].uid;
+    let uname=response[0].uname;
+    console.log('uid '+uid);
+    console.log('uname'+uname);
+    $('#uNam')
+          .append($("<option></option>")
+          .attr("value",uid)
+          .text(uname))
+  })
+  .fail((jqXHR,text,err) => {
+    console.log('text  '+text + '  err '+err);
+      console.log('jqXHR '+JSON.stringify(jqXHR));
+  })
+
+
 
   })
   .fail((jqXHR,text,err) => {
@@ -912,11 +937,11 @@
                 .attr("value",'')
                 .text('None'))
         })
-       /*  $('#uNam').empty()
+         $('#uNam').empty()
         $('#uNam')
                 .append($("<option></option>")
                 .attr("value",'')
-                .text('None'))   */
+                .text('None'))   
                 //document.forms["taskForm"]["incurredBy"].value = uid;
        function additionalEditFunctionality()
         {
