@@ -860,7 +860,7 @@
         $('#createNewExpenseButton').click(() =>{
           let uid =document.getElementById('uid').innerHTML;
           console.log('uid '+uid);
-          document.forms[taskForm1][uNam].value=uid;
+          document.forms["taskForm1"]["uNam"].value=uid;
           $.ajax({
       url : '/expense/fetchProjectforCreateNew',
       data : {
