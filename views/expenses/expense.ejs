@@ -858,7 +858,7 @@
         });  */
 
         $('#createNewExpenseButton').click(() =>{
-          let uid =document.getElementById('uid').innerHTML;
+          let uid =document.getElementById('uid').val();
           console.log('uid '+uid);
           document.forms["taskForm1"]["uNam"].value=uid;
           $.ajax({
