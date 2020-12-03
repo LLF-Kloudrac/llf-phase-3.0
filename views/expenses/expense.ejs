@@ -1,8 +1,8 @@
 <% include ../partials/navbar %>
 <% include ../partials/messages %>
 <% include ../partials/footer %>
- <p id="uid"><%= objUser.sfid %> </p>
-<p id="usname"><%= objUser.name %> </p> 
+<!--  <p id="uid"><%= objUser.sfid %> </p>
+<p id="usname"><%= objUser.name %> </p>  -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -369,11 +369,11 @@
                   </div>
                   <div class="col-md-6">
                     <label for="validationTooltip08">Incurred By</label>
-                   <!--  <input type="text" class="form-control" id="validationTooltip07" readonly="true" value="<%= objUser.sfid %>" name="incurredBy"> -->
+                     <input type="text" class="form-control" id="validationTooltip07" readonly="true" placeholder="<%= objUser.name %>" value="<%= objUser.sfid %>" name="incurredBy"> 
                 
-                     <select class="custom-select custom-select-sm form-control" id="uNam" name="incurredBy">
+                    <!--  <select class="custom-select custom-select-sm form-control" id="uNam" name="incurredBy">
                         <option selected value="<%= objUser.sfid %>" ><%= objUser.name %></option>
-                     </select>  
+                     </select>  --> 
                   </div>
                 </div>
               </div>
@@ -709,8 +709,8 @@
 
       
       $(document).ready(function(){
-        $('#uid').hide();
-        $('#usname').hide();
+        //$('#uid').hide();
+        //$('#usname').hide();
         $('#success').hide();
         $('#spinner').hide();
         $('#editExpenseSpinner').hide();
@@ -894,12 +894,12 @@
   })
    $('#createExpenseModal').modal('show');
    
-    var uid = document.getElementById('uid').innerHTML;
+  /*  var uid = document.getElementById('uid').innerHTML;
     var usname =document.getElementById('usname').innerHTML;
     console.log('userId '+uid+'  nm '+usname);
   // alert('uid '+JSON.stringify(uid));
  //  $('#uNam').attr("value",uid);
- /* var ui = JSON.stringify(uid);
+  var ui = JSON.stringify(uid);
  var un =JSON.stringify(usname);
   console.log('jckjnc '+ui+'  dds'+ un);
    */
@@ -907,13 +907,13 @@
    $('#proj')
                 .append($("<option></option>")
                 .attr("value",'')
-                .text(''))
+                .text('None'))
         })
-        $('#uNam').empty()
+       /*  $('#uNam').empty()
         $('#uNam')
                 .append($("<option></option>")
-                .attr("value",uid)
-                .text(usname))  
+                .attr("value",'')
+                .text('None'))   */
                 //document.forms["taskForm"]["incurredBy"].value = uid;
        function additionalEditFunctionality()
         {
@@ -1795,8 +1795,8 @@ $('.printexp').on('click', function(event){
                 $('#errorMessages').append(errorHtml); 
                 $("#expensebutton").attr("disabled", false);
                 if(jqXHR.responseText=='Successfully Inserted'){
-               $('#taskForm')[0].reset() 
-                // document.forms[taskForm1][taskname].value='';
+               //$('#taskForm')[0].reset() 
+                 document.forms[taskForm1][taskname].value='';
 
               // $('#taskForm').modal('hide');
                let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+ jqXHR.responseText+
