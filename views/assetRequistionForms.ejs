@@ -1563,7 +1563,10 @@ function accountsApprovalFunctionality(){
         console.log('response '+JSON.stringify(response));
         if(response.length > 0)
         {
-          $('#project')[0].reset()
+          var selectobject = document.getElementById("project");
+          for (var i=0; i<selectobject.length; i++) {
+          selectobject.remove(i);
+          } 
           console('nc');
         response.forEach((eachRpoject) => {
         console.log('eachRpoject.name '+eachRpoject.name);
@@ -1582,7 +1585,11 @@ function accountsApprovalFunctionality(){
 
 
         $('#project').on('change', function() {
-          $('#act')[0].reset()
+          var selectobject = document.getElementById("act");
+           for (var i=0; i<selectobject.length; i++) {
+           // if (selectobject.options[i].value == 'A')
+              selectobject.remove(i);
+              }
           
           $('#act')
                 .append($("<option></option>")
