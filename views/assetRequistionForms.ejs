@@ -1553,6 +1553,11 @@ function accountsApprovalFunctionality(){
       console.log('procurement roter ');
       $('#createAssetRequisitionForm').modal('show');
       console.log('After Show Edit Modal ');
+      let select = document.getElementById("act");
+           let length = select.options.length;
+           for (i = length-1; i > 0; i--) {
+             select.options[i] = null;
+            }
       let lstActivityCodes = [];
 
          $.ajax({
@@ -1592,14 +1597,6 @@ function accountsApprovalFunctionality(){
 
 
         $('#project').on('change', function() {
-          var select = document.getElementById("act");
-          let length = select.options.length;
-          console.log('length '+length);
-            for (i = length-1; i > 0; i--) {
-             select.options[i] = null;
-            }
-          
-           
           
           $('#act')
                 .append($("<option></option>")
