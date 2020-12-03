@@ -1563,6 +1563,7 @@ function accountsApprovalFunctionality(){
         console.log('response '+JSON.stringify(response));
         if(response.length > 0)
         {
+          $('#project')[0].reset();
         response.forEach((eachRpoject) => {
         console.log('eachRpoject.name '+eachRpoject.name);
         $('#project')
@@ -1580,7 +1581,8 @@ function accountsApprovalFunctionality(){
 
 
         $('#project').on('change', function() {
-          $('#act').empty();
+          $('#act')[0].reset();
+          
           $('#act')
                 .append($("<option></option>")
                 .attr("value",'')
