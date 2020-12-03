@@ -16,7 +16,7 @@
   
   $('#createAssetRequisitionFormButton').click(function() {
    let projId = this.id;
-  console.log('Before Show create Asset Requisition Form Button Modal ');
+  console.log('procuremment fetchhhhhhh ');
   console.log('projId'+projId);
   $('#createAssetRequisitionForm').modal('show');
   console.log('After Show Edit Modal ');
@@ -1549,7 +1549,7 @@ function accountsApprovalFunctionality(){
       }     
          $('#createAssetRequisitionFormButton').click(function() {
         let projId = this.id;
-      console.log('Before Show create Asset Requisition Form Button Modal ');
+      console.log('procurement roter ');
       $('#createAssetRequisitionForm').modal('show');
       console.log('After Show Edit Modal ');
       let lstActivityCodes = [];
@@ -1566,7 +1566,8 @@ function accountsApprovalFunctionality(){
           var selectobject = document.getElementById("project");
           for (var i=0; i<selectobject.length; i++) {
           selectobject.remove(i);
-          } 
+          }
+
           $('#project')
         .append($("<option></option>")
         .attr("value",'')
