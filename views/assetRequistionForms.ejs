@@ -1556,6 +1556,7 @@ function accountsApprovalFunctionality(){
       let select = document.getElementById("act");
            let length = select.options.length;
            for (i = length-1; i > 0; i--) {
+             console.log('aa');
              select.options[i] = null;
             }
       let lstActivityCodes = [];
@@ -1598,10 +1599,10 @@ function accountsApprovalFunctionality(){
 
         $('#project').on('change', function() {
           
-          $('#act')
+          /* $('#act')
                 .append($("<option></option>")
                 .attr("value",'')
-                .text('None'))
+                .text('None')) */
                   proj=this.value;
                       console.log('proj  : '+proj);
                   
