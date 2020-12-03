@@ -299,7 +299,7 @@ router.get('/getApprovalDetail',verify, async(request,response)=>{
     
         let qry ='SELECT sfid ,name , Approval_Type__c, comment__c,Reporting_Manager_Comment__c, Submitter_Heroku__c, '+
           'Project_Manager_Comment__c, Status__c,  Approver_RM__c, '+
-          'Amount__c,createddate, Expense__c, Assign_To_PM__r.name, Project_Manager_Approval_Status__c, Project_Manager_Comment__c, Approver_PM__c '+
+          'Amount__c,createddate, Expense__c, Assign_To_PM__c(salesforce.Assign_To_PM__c), Project_Manager_Approval_Status__c, Project_Manager_Comment__c, Approver_PM__c '+
           'FROM salesforce.Custom_Approval__c where sfid = $1 ';
 
           /*  let qry ='SELECT app.sfid as appsfid, app.name as appname, app.Approval_Type__c, app.comment__c, app.Reporting_Manager_Comment__c, app.Submitter_Heroku__c, cont.name as contname, '+
