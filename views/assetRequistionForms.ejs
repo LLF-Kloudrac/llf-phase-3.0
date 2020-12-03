@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="/stylesheets/table-sortable.css">
 <script src="/scripts/table-sortable.js" ></script>
 <p id="expenseIdpTag"> </p>
+<!-- 
 <script>
   
   $('#createAssetRequisitionFormButton').click(function() {
@@ -91,7 +92,7 @@
   })
   
   </script>
-
+ -->
 <!--Asset Requisition List View-->
 <p id="assetIdpTag"> </p>
 <div class="responsive">
@@ -1563,7 +1564,8 @@ function accountsApprovalFunctionality(){
         console.log('response '+JSON.stringify(response));
         if(response.length > 0)
         {
-          var selectobject = document.getElementById("project");
+          var selectobject = document.getElementById('project');
+          console.log('ghhg '+JSON.stringify(selectobject));
           for (var i=0; i<selectobject.length; i++) {
           selectobject.remove(i);
           }
