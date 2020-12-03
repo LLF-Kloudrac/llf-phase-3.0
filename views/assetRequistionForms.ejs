@@ -1600,9 +1600,10 @@ function accountsApprovalFunctionality(){
 
 
         $('#project').on('change', function() {
-         var selact= $('#act');
-         selact.empty();
-         selact.html('');
+          var selectobject = document.getElementById('act');
+          console.log('ghhg '+JSON.stringify(selectobject));
+          for (var i=0; i<selectobject.length; i++) {
+          selectobject.remove(i);
           /* $('#act')
                 .append($("<option></option>")
                 .attr("value",'')
