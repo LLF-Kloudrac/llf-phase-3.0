@@ -1276,6 +1276,10 @@
       }
       
              $('#activityCode').empty();
+             $('#activityCode')
+                   .append($("<option></option>")
+                   .attr("value",'')
+                   .text('None'));
             for(let i=0; i< activityCodes.length ;i++)
                 {
                   $('#activityCode')
