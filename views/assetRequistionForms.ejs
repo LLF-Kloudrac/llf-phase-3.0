@@ -1567,6 +1567,10 @@ function accountsApprovalFunctionality(){
           for (var i=0; i<selectobject.length; i++) {
           selectobject.remove(i);
           } 
+          $('#project')
+        .append($("<option></option>")
+        .attr("value",'')
+        .text('None'))
           console.log('nc');
         response.forEach((eachRpoject) => {
         console.log('eachRpoject.name '+eachRpoject.name);
