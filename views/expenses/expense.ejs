@@ -341,7 +341,7 @@
           <div class="modal-body">
             <div class="">
               <div id="errorMessages"></div>
-            <form  id="taskForm1" class="needs-validation" novalidate >
+            <form  id="taskForm" class="needs-validation" novalidate >
   
               <div class="form-group">  
                 <div class="row">
@@ -893,15 +893,20 @@
    
    var uid = document.getElementById('uid').innerHTML;
   // alert('uid '+JSON.stringify(uid));
-   $('#uNam').attr("value",uid);
+ //  $('#uNam').attr("value",uid);
  // console.log('jckjnc '+uid);
-  document.forms["taskForm1"]["incurredBy"].value = uid;
+  document.forms["taskForm"]["incurredBy"].value = uid;
    $('#proj').empty()
    $('#proj')
                 .append($("<option></option>")
                 .attr("value",'')
                 .text('None'))
         })
+        $('#uNam').empty()
+        $('#uNam')
+                .append($("<option></option>")
+                .attr("value",'')
+                .text('None'))  
 
        function additionalEditFunctionality()
         {
@@ -1783,8 +1788,8 @@ $('.printexp').on('click', function(event){
                 $('#errorMessages').append(errorHtml); 
                 $("#expensebutton").attr("disabled", false);
                 if(jqXHR.responseText=='Successfully Inserted'){
-              // $('#taskForm')[0].reset() 
-                 document.forms[taskForm1][taskname].value='';
+               $('#taskForm')[0].reset() 
+                // document.forms[taskForm1][taskname].value='';
 
               // $('#taskForm').modal('hide');
                let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+ jqXHR.responseText+
