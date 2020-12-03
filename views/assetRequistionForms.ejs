@@ -1610,12 +1610,14 @@ function accountsApprovalFunctionality(){
 
 
         $('#project').on('change', function() {
-          let select = document.getElementById("act");
+
+          
+         /*  let select = document.getElementById("act");
            let length = select.options.length;
            for (i = length-1; i > 0; i--) {
              console.log('aa');
              select.options[i] = null;
-          }
+          } */
          /* 
             $('#act')
                 .append($("<option></option>")
@@ -1636,7 +1638,12 @@ function accountsApprovalFunctionality(){
             console.log('response  '+JSON.stringify(response));
             if(response.length > 0)
                 {
-                  
+                  $('#act').empty(); 
+                  $('#act')
+                .append($("<option></option>")
+                .attr("value",'')
+                .text('None'))
+                                  
                 response.forEach((eachActivity) => {
                 console.log('eachActivity.name '+eachActivity.name);
               //  $('#act').empty();
