@@ -891,8 +891,8 @@
   })
   .done((response) => {
     console.log('resp '+JSON.stringify(response));
-    let uid=response[0].uid;
-    let uname=response[0].uname;
+    let uid=response.uid;
+    let uname=response.uname;
     console.log('uid '+uid);
     console.log('uname'+uname);
     $('#uNam')
