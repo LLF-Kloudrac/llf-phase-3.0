@@ -1593,10 +1593,10 @@ function accountsApprovalFunctionality(){
 
         $('#project').on('change', function() {
           var selectobject = document.getElementById("act");
-           for (var i=0; i<selectobject.length; i++) {
-           // if (selectobject.options[i].value == 'A')
-              selectobject.remove(i);
-              }
+          let length = select.options.length;
+           for (i = length-1; i > 0; i--) {
+             select.options[i] = null;
+            }
           
           $('#act')
                 .append($("<option></option>")
