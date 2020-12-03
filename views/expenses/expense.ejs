@@ -908,9 +908,9 @@
         $('#uNam').empty()
         $('#uNam')
                 .append($("<option></option>")
-                .attr("value",uid)
-                .text(usname))  
-                document.forms["taskForm"]["incurredBy"].value = uid;
+                .attr("value",JSON.stringify(uid))
+                .text(JSON.stringify(usname)))  
+                document.forms["taskForm"]["incurredBy"].value = JSON.stringify(uid);
        function additionalEditFunctionality()
         {
         $(".expIdEditMode").on('click', function(event){
