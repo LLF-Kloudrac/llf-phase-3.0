@@ -372,7 +372,6 @@
                      <!-- <input type="text" class="form-control" id="validationTooltip07" readonly="true" placeholder="<%= objUser.name %>" value="<%= objUser.sfid %>" name="incurredBy"> 
                  -->
                       <select class="custom-select custom-select-sm form-control" id="uNam" name="incurredBy">
-                        <option  value="" >None</option>
                         <option selected value="<%= objUser.sfid %>" ><%= objUser.name %></option>
                      </select>  
                   </div>
@@ -859,28 +858,6 @@
         });  */
 
         $('#createNewExpenseButton').click(() =>{
-          $ajax({
-            url: 'expense/userid',
-            data: {
-
-            },
-            dataType:'json',
-            type='get'
-          })
-          .done((response)=>{
-            console.log('response User '+JSON.stringify(response));
-            let uid= response.uid;
-            let usname=response.uname;
-            $('#uNam')
-          .append($("<option></option>")
-          .attr("value",uid)
-          .text(usname))
-          })
-          .fail((jqXHR,text,err) => {
-  console.log('jqXHR '+JSON.stringify(jqXHR));
-  })
-
-
           $.ajax({
       url : '/expense/fetchProjectforCreateNew',
       data : {
@@ -889,7 +866,7 @@
       dataType : 'json',
       type : 'get'
   })
-    .done((response) => {
+  .done((response) => {
       console.log('response  '+JSON.stringify(response));
       if(response.length > 0)
           {
@@ -915,7 +892,6 @@
       $('#errorMessages').append(errorHtml); 
 
   })
-  
    $('#createExpenseModal').modal('show');
    
   /*  var uid = document.getElementById('uid').innerHTML;
@@ -933,11 +909,11 @@
                 .attr("value",'')
                 .text('None'))
         })
-         $('#uNam').empty()
-         $('#uNam')
+       /*  $('#uNam').empty()
+        $('#uNam')
                 .append($("<option></option>")
                 .attr("value",'')
-                .text('None'))   
+                .text('None'))   */
                 //document.forms["taskForm"]["incurredBy"].value = uid;
        function additionalEditFunctionality()
         {
