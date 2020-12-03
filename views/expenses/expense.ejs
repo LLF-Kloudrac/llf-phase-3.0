@@ -895,18 +895,16 @@
     let uname=response.uname;
     console.log('uid '+uid);
     console.log('uname'+uname);
-    $('#uNam')
+    document.forms["taskForm1"]["incurredBy"].value=uid;
+    /* $('#uNam')
           .append($("<option></option>")
           .attr("value",uid)
-          .text(uname))
+          .text(uname)) */
   })
   .fail((jqXHR,text,err) => {
     console.log('text  '+text + '  err '+err);
       console.log('jqXHR '+JSON.stringify(jqXHR));
   })
-
-
-
   })
   .fail((jqXHR,text,err) => {
       console.log('text  '+text + '  err '+err);
@@ -1823,8 +1821,8 @@ $('.printexp').on('click', function(event){
                 $('#errorMessages').append(errorHtml); 
                 $("#expensebutton").attr("disabled", false);
                 if(jqXHR.responseText=='Successfully Inserted'){
-               //$('#taskForm')[0].reset() 
-                 document.forms[taskForm1][taskname].value='';
+               $('#taskForm')[0].reset() 
+                // document.forms[taskForm1][taskname].value='';
 
               // $('#taskForm').modal('hide');
                let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+ jqXHR.responseText+
