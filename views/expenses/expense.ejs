@@ -1,8 +1,8 @@
 <% include ../partials/navbar %>
 <% include ../partials/messages %>
 <% include ../partials/footer %>
-<p id="uid"><%= objUser.sfid %> </p>
-<p id="usname"><%= objUser.name %> </p>
+ <p id="uid"><%= objUser.sfid %> </p>
+<p id="usname"><%= objUser.name %> </p> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -342,7 +342,7 @@
           <div class="modal-body">
             <div class="">
               <div id="errorMessages"></div>
-            <form  id="taskForm" class="needs-validation" novalidate >
+            <form  id="taskForm1" class="needs-validation" novalidate >
   
               <div class="form-group">  
                 <div class="row">
@@ -878,6 +878,7 @@
           .text(eachProject.name))
           }); 
           }
+
   })
   .fail((jqXHR,text,err) => {
       console.log('text  '+text + '  err '+err);
@@ -893,9 +894,9 @@
   })
    $('#createExpenseModal').modal('show');
    
- /*   var uid = document.getElementById('uid').innerHTML;
-   var usname =document.getElementById('usname').innerHTML;
-   console.log('userId '+uid+'  nm '+usname); */
+    var uid = document.getElementById('uid').innerHTML;
+    var usname =document.getElementById('usname').innerHTML;
+    console.log('userId '+uid+'  nm '+usname);
   // alert('uid '+JSON.stringify(uid));
  //  $('#uNam').attr("value",uid);
  /* var ui = JSON.stringify(uid);
@@ -906,13 +907,13 @@
    $('#proj')
                 .append($("<option></option>")
                 .attr("value",'')
-                .text('None'))
+                .text(''))
         })
         $('#uNam').empty()
         $('#uNam')
                 .append($("<option></option>")
-                .attr("value",'')
-                .text('None'))  
+                .attr("value",uid)
+                .text(usname))  
                 //document.forms["taskForm"]["incurredBy"].value = uid;
        function additionalEditFunctionality()
         {
