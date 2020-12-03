@@ -1274,20 +1274,16 @@
       strReceivingGoodsDate = assetRecord.date_of_receiving_goods__c.split('T')[0];
       console.log('strReceivingGoodsDate : '+strReceivingGoodsDate +' :clousrePlanDate '+ clousrePlanDate);
       }
-      let select = document.getElementById("activityCode");
-           let length = select.options.length;
-           if(length<1){
-             console.log('length '+length);
+      
              $('#activityCode').empty();
             for(let i=0; i< activityCodes.length ;i++)
-      {
-
-        $('#activityCode')
-        .append($("<option></option>")
-        .attr("value",activityCodes[i].sfid)
-        .text(activityCodes[i].name));	
-      }
-               }
+                {
+                  $('#activityCode')
+                   .append($("<option></option>")
+                   .attr("value",activityCodes[i].sfid)
+                   .text(activityCodes[i].name));	
+                }
+               
 
       
     /*   $('#activityCode').on('change',function(){
