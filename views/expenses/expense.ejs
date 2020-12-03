@@ -895,9 +895,12 @@
    
    var uid = document.getElementById('uid').innerHTML;
    var usname =document.getElementById('usname').innerHTML;
+   
   // alert('uid '+JSON.stringify(uid));
  //  $('#uNam').attr("value",uid);
- // console.log('jckjnc '+uid);
+ var ui = JSON.stringify(uid);
+ var un =JSON.stringify(usname);
+  console.log('jckjnc '+ui+'  dds'+ un);
   
    $('#proj').empty()
    $('#proj')
@@ -908,8 +911,8 @@
         $('#uNam').empty()
         $('#uNam')
                 .append($("<option></option>")
-                .attr("value",JSON.stringify(uid))
-                .text(JSON.stringify(usname)))  
+                .attr("value",ui)
+                .text(JSON.stringify(un)))  
                 document.forms["taskForm"]["incurredBy"].value = JSON.stringify(uid);
        function additionalEditFunctionality()
         {
