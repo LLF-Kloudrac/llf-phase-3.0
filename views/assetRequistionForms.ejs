@@ -1594,11 +1594,11 @@ function accountsApprovalFunctionality(){
         $('#project').on('change', function() {
           var select = document.getElementById("act");
           let length = select.options.length;
-          if(length>0){
+          console.log('length '+length);
             for (i = length-1; i > 0; i--) {
              select.options[i] = null;
             }
-          }
+          
            
           
           $('#act')
