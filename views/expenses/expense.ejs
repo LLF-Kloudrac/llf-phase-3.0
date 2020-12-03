@@ -893,9 +893,9 @@
   })
    $('#createExpenseModal').modal('show');
    
-   var uid = document.getElementById('uid').innerHTML;
+ /*   var uid = document.getElementById('uid').innerHTML;
    var usname =document.getElementById('usname').innerHTML;
-   console.log('userId '+uid+'  nm '+usname);
+   console.log('userId '+uid+'  nm '+usname); */
   // alert('uid '+JSON.stringify(uid));
  //  $('#uNam').attr("value",uid);
  /* var ui = JSON.stringify(uid);
@@ -911,9 +911,9 @@
         $('#uNam').empty()
         $('#uNam')
                 .append($("<option></option>")
-                .attr("value",uid)
-                .text(usname))  
-                document.forms["taskForm"]["incurredBy"].value = ui;
+                .attr("value",'')
+                .text('None'))  
+                //document.forms["taskForm"]["incurredBy"].value = uid;
        function additionalEditFunctionality()
         {
         $(".expIdEditMode").on('click', function(event){
