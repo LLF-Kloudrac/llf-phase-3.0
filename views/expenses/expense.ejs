@@ -898,10 +898,10 @@
    console.log('userId '+uid+'  nm '+usname);
   // alert('uid '+JSON.stringify(uid));
  //  $('#uNam').attr("value",uid);
- var ui = JSON.stringify(uid);
+ /* var ui = JSON.stringify(uid);
  var un =JSON.stringify(usname);
   console.log('jckjnc '+ui+'  dds'+ un);
-  
+   */
    $('#proj').empty()
    $('#proj')
                 .append($("<option></option>")
@@ -911,8 +911,8 @@
         $('#uNam').empty()
         $('#uNam')
                 .append($("<option></option>")
-                .attr("value",ui)
-                .text(un))  
+                .attr("value",uid)
+                .text(usname))  
                 document.forms["taskForm"]["incurredBy"].value = ui;
        function additionalEditFunctionality()
         {
