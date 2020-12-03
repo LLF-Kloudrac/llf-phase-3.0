@@ -2,6 +2,7 @@
 <% include ../partials/messages %>
 <% include ../partials/footer %>
 <p id="uid"><%= objUser.sfid %> </p>
+<p id="usname"><%= objUser.name %> </p>
 <!DOCTYPE html>
 <html>
 <head>
@@ -709,6 +710,7 @@
       
       $(document).ready(function(){
         $('#uid').hide();
+        $('#usname').hide();
         $('#success').hide();
         $('#spinner').hide();
         $('#editExpenseSpinner').hide();
@@ -892,10 +894,11 @@
    $('#createExpenseModal').modal('show');
    
    var uid = document.getElementById('uid').innerHTML;
+   var usname =document.getElementById('usname').innerHTML;
   // alert('uid '+JSON.stringify(uid));
  //  $('#uNam').attr("value",uid);
  // console.log('jckjnc '+uid);
-  document.forms["taskForm"]["incurredBy"].value = uid;
+  
    $('#proj').empty()
    $('#proj')
                 .append($("<option></option>")
@@ -905,9 +908,9 @@
         $('#uNam').empty()
         $('#uNam')
                 .append($("<option></option>")
-                .attr("value",'')
-                .text('None'))  
-
+                .attr("value",uid)
+                .text(usname))  
+                document.forms["taskForm"]["incurredBy"].value = uid;
        function additionalEditFunctionality()
         {
         $(".expIdEditMode").on('click', function(event){
