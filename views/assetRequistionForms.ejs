@@ -1553,12 +1553,13 @@ function accountsApprovalFunctionality(){
       console.log('procurement roter ');
       $('#createAssetRequisitionForm').modal('show');
       console.log('After Show Edit Modal ');
-      let select = document.getElementById("act");
+      /* let select = document.getElementById("act");
            let length = select.options.length;
            for (i = length-1; i > 0; i--) {
              console.log('aa');
              select.options[i] = null;
-            }
+            } */
+            $('#act')[0].reset()
       let lstActivityCodes = [];
 
          $.ajax({
