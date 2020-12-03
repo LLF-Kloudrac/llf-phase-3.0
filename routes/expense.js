@@ -232,6 +232,19 @@ router.get('/expenseAllRecords',verify, async (request, response) => {
 
 })
 
+router.get('/userid',verify,(request,response)=>
+{
+  console.log('hello i am inside Expense userId');
+  console.log('Expense request.userId '+JSON.stringify(request.user));
+  var userId = request.user.sfid;
+  var userName = request.user.name;
+  var us ={};
+  us.uid=userId;
+  us.uname=userName;
+  console.log('user Data '+JSON.stringify(us));
+  response.send(us);
+})
+
 router.get('/fetchProjectforCreateNew', verify ,(request, response) => 
 {
 
