@@ -258,7 +258,7 @@
             let taskRecord = res[0];
             let htmlTable = '';
                               htmlTable += '<tr>';
-                                  htmlTable += '<td><strong>Project Task Name</strong></td>';
+                                  htmlTable += '<td><strong>Task Description</strong></td>';
                                   htmlTable += '<td>'+taskRecord.tskname+'</td>';
                                   htmlTable += '<td><strong>Project</strong></td>';
                                   htmlTable += '<td>'+taskRecord.projname+'</td>';
@@ -270,7 +270,7 @@
                                   htmlTable += '<td>'+taskRecord.categoname+'</td>';
                               htmlTable += '</tr>';
                               htmlTable += '<tr>';
-                                htmlTable += '<td><strong>Assigned Resource</strong></td>';
+                                htmlTable += '<td><strong>Assigned Heroku Resource</strong></td>';
                                 htmlTable += '<td>'+taskRecord.contname+'</td>';
                                   htmlTable += '<td><strong>DeadLine Type</strong></td>';
                                   htmlTable += '<td>'+taskRecord.deadline_type__c+'</td>';
@@ -290,16 +290,16 @@
                             htmlTable += '</tr>';
 
                             htmlTable += '<tr>';
-                                htmlTable += '<td><strong>Planned start date</strong></td>';
+                                htmlTable += '<td><strong>Planned Task Date</strong></td>';
                                 htmlTable += '<td>'+taskRecord.start_date__c.split('T')[0]+'</td>';
                                 htmlTable += '<td><strong>Planned Hours</strong></td>';
                               htmlTable += '<td>'+taskRecord.planned_hours__c+'</td>';
                             htmlTable += '</tr>';
 
                             htmlTable += '<tr>';
-                              htmlTable += '<td><strong>Start Time</strong></td>';
+                              htmlTable += '<td><strong>Planned Start Time</strong></td>';
                               htmlTable += '<td>'+taskRecord.start_time__c+'</td>';
-                              htmlTable += '<td><strong> End Time</strong></td>';
+                              htmlTable += '<td><strong>Planned End Time</strong></td>';
                               htmlTable += '<td>'+taskRecord.end_time__c+'</td>';
                           htmlTable += '</tr>';
 
