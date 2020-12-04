@@ -1770,7 +1770,7 @@ router.post('/saveItemDescription',(request,response)=>{
     if(gst == null || gst == '' )
     {
          schema=joi.object({
-             cont:joi.number().min(10).max(10).required().label('Contact Number Should be Exactly 10 Digit'),
+             cont:joi.number().integer().min(1000000000).max(9999999999).required().label('Contact Number Should be Exactly 10 Digit'),
             state:joi.string().required().label('Please Choose State'),
             district:joi.string().required().label('Please Choose District'),
             name:joi.string().min(3).max(80).required().label('Please Fill Vendor Name'),
@@ -1780,7 +1780,7 @@ router.post('/saveItemDescription',(request,response)=>{
             reason:joi.string().min(1).max(255).required().label('Please Fill Reason for not providing GST no.'),
             
               })
-        result = schema.validate({state:state,district:district,name:name,bankkDet:bankkDet,accNo:accNo,ifsc:ifsc,reason:reason});
+        result = schema.validate({cont:cont,state:state,district:district,name:name,bankkDet:bankkDet,accNo:accNo,ifsc:ifsc,reason:reason});
         
     }
 
