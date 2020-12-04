@@ -723,7 +723,7 @@
           editButton : 'Action',
           name: 'Expense Name',
           projectName: 'Project Name',
-          approvalStatus: 'Reporting Manager Status',
+          approvalStatus: 'Manager approval Status',
           totalAmount: 'Total Amount',
           /* pettyCashAmount: 'Petty Cash Amount',
           conveyanceVoucherAmount: 'Conveyance Voucher Amount' ,
@@ -1109,7 +1109,7 @@
               expenseTableRows += '<td>'+expenseRecord.conveyance_employee_category_band__c+'</td>';
             else
             expenseTableRows += '<td> </td>';
-            expenseTableRows += '<td><strong>Reporting Manager Status<strong></td>';
+            expenseTableRows += '<td><strong>Manager Approval Status<strong></td>';
             if(expenseRecord.approval_status__c != null)
               expenseTableRows += '<td>'+expenseRecord.approval_status__c+'</td>';
             else 
@@ -1437,7 +1437,7 @@ $('.printexp').on('click', function(event){
     expenseTableRows += '<td>'+expenseRecord.conveyance_employee_category_band__c+'</td>';
   else
   expenseTableRows += '<td> </td>';
-  expenseTableRows += '<td><strong>Reporting Manager Status<strong></td>';
+  expenseTableRows += '<td><strong>Manager Approval Status<strong></td>';
   if(expenseRecord.approval_status__c != null)
     expenseTableRows += '<td>'+expenseRecord.approval_status__c+'</td>';
   else 
