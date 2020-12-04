@@ -1770,10 +1770,10 @@ router.post('/saveItemDescription',(request,response)=>{
     if(gst == null || gst == '' )
     {
          schema=joi.object({
-             cont:joi.number().integer().min(1000000000).max(9999999999).required().label('Contact Number Should be Exactly 10 Digit'),
-            state:joi.string().required().label('Please Choose State'),
+             state:joi.string().required().label('Please Choose State'),
             district:joi.string().required().label('Please Choose District'),
             name:joi.string().min(3).max(80).required().label('Please Fill Vendor Name'),
+            cont:joi.number().integer().min(1000000000).max(9999999999).required().label('Contact Number Should be Exactly 10 Digit'),
             bankkDet:joi.string().min(3).max(255).required().label('Please Fill Bank Details'),
             accNo:joi.string().min(3).required().label('Please Fill Bank Account Number'),
             ifsc:joi.string().min(3).max(20).required().label('Please Fill Bank IFSC Code.'),
@@ -1791,11 +1791,12 @@ router.post('/saveItemDescription',(request,response)=>{
             state:joi.string().required().label('Please Choose State'),
             district:joi.string().required().label('Please Choose District'),
             name:joi.string().min(1).max(80).required().label('Please Fill Vendor Name'),
+            cont:joi.number().integer().min(1000000000).max(9999999999).required().label('Contact Number Should be Exactly 10 Digit'),
             bankkDet:joi.string().min(1).max(255).required().label('Please Fill Bank Details'),
             accNo:joi.string().required().label('Please Fill Bank Account Number'),
             ifsc:joi.string().min(1).max(20).required().label('Please Fill Bank IFSC Code.'),
               })
-         result = schema.validate({state:state,district:district,name:name,bankkDet:bankkDet,accNo:accNo,ifsc:ifsc});
+         result = schema.validate({cont:cont,state:state,district:district,name:name,bankkDet:bankkDet,accNo:accNo,ifsc:ifsc});
      }
   
     
