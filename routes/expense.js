@@ -1101,7 +1101,7 @@ router.post('/conveyanceform',(request,response) => {
             modeofconveyance: joi.string().required().label('Please enter Mode of Conveyance'),
             mode:joi.string().min(3).required().label('Please enter Mode of Conveyance'),
             modeof: joi.string().max(255).required().label('Please enter Mode of Conveyance, ranging from 1-255 Characters'),
-            kmtravelled:joi.number().required().label('Please enter Km. Travelled'),
+            kmtravelled:joi.number().min(1).required().label('Please enter Km. Travelled'),
             km:joi.number().min(0).label('Km. Travelled cannot be negative.'),
             amount:joi.number().required().label('Please enter Amount'), 
             amt:joi.number().min(0).label('Amount cannot be negative.'),
