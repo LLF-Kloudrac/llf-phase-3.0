@@ -881,7 +881,22 @@
           .text(eachProject.name))
           }); 
           }
-          $.ajax({
+
+  })
+  .fail((jqXHR,text,err) => {
+      console.log('text  '+text + '  err '+err);
+      console.log('jqXHR '+JSON.stringify(jqXHR));
+      let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+ jqXHR.responseText+
+      '<button type="button" class="close" data-dismiss="alert-danger" aria-label="Close">'+
+      '<span aria-hidden="true">&times;</span>'+
+      '</button>'+
+      '</div>';
+      $('#errorMessages').empty();
+      $('#errorMessages').append(errorHtml); 
+
+  })
+
+  $.ajax({
             url : '/expense/userid',
            data : {
          
@@ -904,19 +919,6 @@
   .fail((jqXHR,text,err) => {
     console.log('text  '+text + '  err '+err);
       console.log('jqXHR '+JSON.stringify(jqXHR));
-  })
-  })
-  .fail((jqXHR,text,err) => {
-      console.log('text  '+text + '  err '+err);
-      console.log('jqXHR '+JSON.stringify(jqXHR));
-      let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+ jqXHR.responseText+
-      '<button type="button" class="close" data-dismiss="alert-danger" aria-label="Close">'+
-      '<span aria-hidden="true">&times;</span>'+
-      '</button>'+
-      '</div>';
-      $('#errorMessages').empty();
-      $('#errorMessages').append(errorHtml); 
-
   })
    $('#createExpenseModal').modal('show');
    
