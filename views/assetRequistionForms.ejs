@@ -1663,6 +1663,40 @@ function accountsApprovalFunctionality(){
         })
 
       });
+      
+      $.ajax({
+            url : '/expense/userid',
+           data : {
+         
+      },
+      dataType : 'json',
+      type : 'get'
+  })
+  .done((response) => {
+    console.log('resp '+JSON.stringify(response));
+    let uid=response.uid;
+    let uname=response.uname;
+    console.log('uid '+uid);
+    console.log('uname'+uname);
+    document.forms["assetRequisitionForm"]["submittedBy"].value=uid;
+    /* $('#uNam')
+          .append($("<option></option>")
+          .attr("value",uid)
+          .text(uname)) */
+  })
+  .fail((jqXHR,text,err) => {
+    console.log('text  '+text + '  err '+err);
+      console.log('jqXHR '+JSON.stringify(jqXHR));
+  })
+
+
+
+
+
+
+
+
+
 
       $('#createAssetRequisitionForm').modal('show');
       $('#assetRequisitionSubmitbutton').on('click',function(event){
