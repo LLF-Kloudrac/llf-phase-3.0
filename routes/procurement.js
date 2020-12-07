@@ -1937,7 +1937,7 @@ router.post('/sendProcurementApproval',(request, response) => {
         response.send('Error occured while sending approval !');
     })  */
     const schema=joi.object({
-        comment:joi.string().required().label('Please Fill Comment'),
+        comment:joi.string().min(4).required().label('Please Fill Comment'),
 
 
     })
