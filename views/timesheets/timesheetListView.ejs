@@ -250,19 +250,19 @@
             let taskRecord = res[0];
             let htmlTable = '';
                               htmlTable += '<tr>';
-                                  htmlTable += '<td><strong>Project</strong></td>';
+                                  htmlTable += '<td><strong>Project Name</strong></td>';
                                   htmlTable += '<td>'+taskRecord.projname+'</td>';
                                   htmlTable += '<td><strong>Project Task</strong></td>';
                                   htmlTable += '<td>'+taskRecord.taskname+'</td>';
                               htmlTable += '</tr>';
                               htmlTable += '<tr>';
-                                htmlTable += '<td><strong>Description</strong></td>';
+                                htmlTable += '<td><strong>task Description</strong></td>';
                                 htmlTable += '<td>'+taskRecord.description__c+'</td>';
                                   htmlTable += '<td><strong>Incurred By</strong></td>';
                                   htmlTable += '<td>'+taskRecord.usrname+'</td>';
                               htmlTable += '</tr>';
                               htmlTable += '<tr>';
-                                htmlTable += '<td><strong>Related Task Status</strong></td>';
+                                htmlTable += '<td><strong>Task Status</strong></td>';
                                 htmlTable += '<td>'+taskRecord.related_task_status__c+'</td>';
                                   htmlTable += '<td><strong>Representative</strong></td>';
                                   htmlTable += '<td>'+taskRecord.contname+'</td>';
@@ -280,9 +280,9 @@
                                 htmlTable += '<td>'+taskRecord.calculated_hours__c+'</td>';
                             htmlTable += '</tr>';
                               htmlTable += '<tr>';
-                                htmlTable += '<td><strong>Start Time</strong></td>';
+                                htmlTable += '<td><strong>Actual Start Time</strong></td>';
                                 htmlTable += '<td>'+taskRecord.start_time__c+'</td>';
-                                htmlTable += '<td><strong>End Time</strong></td>';
+                                htmlTable += '<td><strong>Actual End Time</strong></td>';
                                 htmlTable += '<td>'+taskRecord.end_time__c+'</td>';
                             htmlTable += '</tr>';
                            
