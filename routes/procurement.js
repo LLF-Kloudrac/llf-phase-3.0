@@ -550,6 +550,7 @@ router.post('/updateasset',(request,response)=>{
     } 
 
     console.log('goodsDate'+goodsDate);
+
     let updateQuerry = 'UPDATE salesforce.Asset_Requisition_Form__c SET '+
     'Name = \''+assetName+'\', '+
     'Requested_Closure_Plan_Date__c = \''+closurePlanDate+'\', '+
@@ -648,11 +649,33 @@ router.post('/updateasset',(request,response)=>{
             if(payPass=='true' || payPass=='false'){
                 console.log('@@@@@1111');
                 if(quant == 'true'){
-                    pool.query(updateQuerry,[assetsfid])
+
+
+
+
+
+
+                    const schema=joi.object({
+                        assetRequisitionName:joi.string().min(5).required().label('Please Fill Asset Requisition Name'),
+                    })
+                    let result=schema.validate({assetName});
+                    if(result.error){
+                        console.log('fd'+result.error);
+                        response.send(result.error.details[0].context.label);    
+                    }
+                    else{
+                        pool.query(updateQuerry,[assetsfid])
                     .then((queryResultUpdate)=>{
                     console.log('queryResultUpdate '+JSON.stringify(queryResultUpdate));
                     response.send('Successfully Updated!');
-                    }).catch((eroor)=>{console.log(JSON.stringify(eroor.stack))})   
+                    }).catch((eroor)=>{console.log(JSON.stringify(eroor.stack))})  
+                    
+
+                    }
+
+        
+                    
+
                 }
                 else{
                     response.send('Received Quantity(Goods) should not be negative.')

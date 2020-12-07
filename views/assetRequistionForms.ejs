@@ -225,6 +225,7 @@
   </div>
   
   <div class="modal-body" id="editModalBody" >
+    <div id="errorMessages1"></div>
   <form name="editAssetForm" id="editAssetForm" >
   <div class="form-group">
   <div class="row">
@@ -1421,7 +1422,15 @@ $('#editassetForm').on('click',function(event){
  $('#assetRequisitionEditModal').modal('hide');
  }
  else{
+  let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+ jqXHR.responseText+
+      '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+      '<span aria-hidden="true">&times;</span>'+
+      '</button>'+
+      '</div>';
+      $('#errorMessages1').empty();
+      $('#errorMessages1').append(errorHtml); 
  alert('Error :'+jqXHR.responseText);
+
  }
  
  }) 
