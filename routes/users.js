@@ -112,7 +112,7 @@ router.post('/login', async (request,response)=>{
   pool
   .query('SELECT Id, sfid, Name, email,PM_email__c FROM salesforce.Contact WHERE email = $1 AND password2__c = $2',[email,password])
   .then((loginResult) => {
-        console.log('loginResult.rows[0]  '+JSON.stringify(loginResult.rows[0]));
+        console.log('loginResult.rows[0]  '+JSON.stringify(loginResult.rows));
         if(loginResult.rowCount > 0)
         {
           userId = loginResult.rows[0].sfid;

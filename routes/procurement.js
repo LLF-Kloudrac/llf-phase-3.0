@@ -631,13 +631,31 @@ router.post('/updateasset',(request,response)=>{
 
     if(attachment==null || attachment=='' ){  
         if(payPass=='true' || payPass=='false'){
-        console.log('******');
+
+            const schema=joi.object({
+                assetName:joi.string().min(5).required().label('Please Fill Asset Requisition Name'),
+            })
+            let result=schema.validate({assetName});
+            if(result.error){
+                console.log('fd'+result.error);
+                response.send(result.error.details[0].context.label);    
+            }
+            else{
+                console.log('******');
         pool.query(updateQuerry,[assetsfid])
         .then((queryResultUpdate)=>{
          console.log('queryResultUpdate '+JSON.stringify(queryResultUpdate));
          response.send('Successfully Updated!');
         }).catch((eroor)=>{console.log(JSON.stringify(eroor.stack))})
+
+            }
+
+
+        
      }
+
+
+
      else{
          response.send('Final Payment Status can be chosen as Closed only when Final Payment Status is Released.')
      }
@@ -656,7 +674,7 @@ router.post('/updateasset',(request,response)=>{
 
 
                     const schema=joi.object({
-                        assetRequisitionName:joi.string().min(5).required().label('Please Fill Asset Requisition Name'),
+                        assetName:joi.string().min(5).required().label('Please Fill Asset Requisition Name'),
                     })
                     let result=schema.validate({assetName});
                     if(result.error){
