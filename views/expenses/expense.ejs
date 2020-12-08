@@ -1256,8 +1256,11 @@
                 customApprovalTableRows += '<td>'+customApprovalList[i].custcomm+'</td>';
                 customApprovalTableRows += '</tr>';
             }
-            customApprovalTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/getExpenseApproval?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
-            $('#customApprovalTable').empty();
+            if(customApprovalListLength>0){
+              customApprovalTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/getExpenseApproval?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
+          
+            }
+             $('#customApprovalTable').empty();
             $('#customApprovalTable').html(customApprovalTableRows);
             
         })
