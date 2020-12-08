@@ -298,13 +298,11 @@ router.get('/getApprovalDetail',verify, async(request,response)=>{
         var approvalFormAndRelatedRecords = {};
     
          let qry ='SELECT app.sfid as appsdif ,app.name as appname , app.Approval_Type__c, app.comment__c,app.Reporting_Manager_Comment__c, app.Submitter_Heroku__c, '+
-          'app.Project_Manager_Comment__c, app.Status__c,  app.Approver_RM__c,con.name as conname,usr.name as usname, '+
+          'app.Project_Manager_Comment__c, app.Status__c,  app.Approver_RM__c,con.name as conname, '+
           'app.Amount__c,app.createddate, app.Expense__c,app.Assign_To_PM__c,app.Project_Manager_Approval_Status__c, app.Project_Manager_Comment__c, app.Approver_PM__c '+
           'FROM salesforce.Custom_Approval__c app '+
           'INNER JOIN salesforce.Contact con '+
           'ON app.Approver_RM__c=con.sfid '+
-          'INNER JOIN salesforce.User usr '+
-          'ON app.Approver_PM__c = usr.sfid '+ 
           'where app.sfid = $1 '; 
 
            /*  let qry ='SELECT app.sfid as appsfid, app.name as appname, app.Approval_Type__c, app.comment__c, app.Reporting_Manager_Comment__c, app.Submitter_Heroku__c, cont.name as contname, '+
