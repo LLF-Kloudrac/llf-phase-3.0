@@ -1172,7 +1172,10 @@
               pettyCashTableRows += '<td>'+strDate+'</td>';
               pettyCashTableRows += '</tr>';
             }
-            pettyCashTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/pettycashlistview?expenseId='+expenseId+'" >View All</a></center></td></tr>';
+            if(lengthOfPettyCashList>0){
+              pettyCashTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/pettycashlistview?expenseId='+expenseId+'" >View All</a></center></td></tr>';
+            }
+          
             $('#pettyCashTable').empty();
             $('#pettyCashTable').html(pettyCashTableRows);
           
@@ -1199,7 +1202,10 @@
               conveyanceVoucherTableRows += '<td>'+strDate+'</td>';
               conveyanceVoucherTableRows += '</tr>';
             }
-            conveyanceVoucherTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/ConveyanceListView?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
+            if(conveyanceVoucherListLength>0){
+              conveyanceVoucherTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/ConveyanceListView?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
+           
+            }
             $('#conveyanceVoucherTable').empty();
             $('#conveyanceVoucherTable').html(conveyanceVoucherTableRows);
             
@@ -1223,7 +1229,10 @@
               tourBillClaimTableRows += '<td>'+tourBillClaimList[i].grand__c+'</td>';
               tourBillClaimTableRows += '</tr>';
             }
-            tourBillClaimTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/tourBillClaimListview?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
+            if(tourBillClaimListLength>0){
+              tourBillClaimTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/tourBillClaimListview?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
+            
+            }
             $('#tourBillClaimTable').empty();
             $('#tourBillClaimTable').html(tourBillClaimTableRows);
             let customApprovalList = expenseRelatedData.customApproval;
