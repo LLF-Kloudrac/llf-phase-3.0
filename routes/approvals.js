@@ -288,7 +288,7 @@ router.get('/getApprovalDetail',verify, async(request,response)=>{
       })
 
 
-      router.get('/getExpenseApprovalDetail',verify, async(request,response)=>{
+router.get('/getExpenseApprovalDetail',verify, async(request,response)=>{
  
         let approvalId=request.query.approvalId;
         let conId ='';
@@ -298,11 +298,13 @@ router.get('/getApprovalDetail',verify, async(request,response)=>{
         var approvalFormAndRelatedRecords = {};
     
          let qry ='SELECT app.sfid as appsdif ,app.name as appname , app.Approval_Type__c, app.comment__c,app.Reporting_Manager_Comment__c, app.Submitter_Heroku__c, '+
-          'app.Project_Manager_Comment__c, app.Status__c,  app.Approver_RM__c,con.name as conname, '+
+          'app.Project_Manager_Comment__c, app.Status__c,  app.Approver_RM__c,con.name as conname,exp.name as expname, '+
           'app.Amount__c,app.createddate, app.Expense__c,app.Assign_To_PM__c,app.Project_Manager_Approval_Status__c, app.Project_Manager_Comment__c, app.Approver_PM__c '+
           'FROM salesforce.Custom_Approval__c app '+
           'INNER JOIN salesforce.Contact con '+
           'ON app.Approver_RM__c=con.sfid '+
+          'INNER JOIN salesforce.Milestone1_Expense__c exp '+
+          'ON app.Expense__c = exp.sfid '+
           'where app.sfid = $1 '; 
 
            /*  let qry ='SELECT app.sfid as appsfid, app.name as appname, app.Approval_Type__c, app.comment__c, app.Reporting_Manager_Comment__c, app.Submitter_Heroku__c, cont.name as contname, '+
@@ -325,11 +327,11 @@ router.get('/getApprovalDetail',verify, async(request,response)=>{
                 console.log('testttt '+JSON.stringify(querryResult.rows));
                 if(querryResult.rowCount > 0)
                 {
-                    console.log('querryResult  '+querryResult.rows);
-                    let approver_pm = querryResult.rows[0].approver_pm__c;
-                    console.log('approver_pm '+approver_pm);
+                    console.log('querryResult  '+JSON.stringify(querryResult.rows));
+                   // let approver_pm = querryResult.rows[0].approver_pm__c;
+                   // console.log('approver_pm '+approver_pm);
                     approvalFormAndRelatedRecords.approvalFormDetails = querryResult.rows;
-                     
+                    response.send(approvalFormAndRelatedRecords);
                 }
                 else
                 {
@@ -369,7 +371,7 @@ router.get('/getApprovalDetail',verify, async(request,response)=>{
                 console.log('relatedHistroryError  '+relatedHistroryError.stack);
                 approvalFormAndRelatedRecords.relatedHistrory = [];
             })*/
-            response.send(approvalFormAndRelatedRecords);
+            
     
           })
     
