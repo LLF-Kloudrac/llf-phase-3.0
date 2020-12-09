@@ -1281,6 +1281,7 @@
           document.getElementById('expenseId').setAttribute('value',selectedExpenseId);
           $('#submitForApproval').on('click',function(event){
 
+
                
         let comment  = document.getElementById('commentTextarea').value;
         let expenseID = document.getElementById('expenseId').value;
@@ -1311,6 +1312,7 @@
         $('#approvalerrorMessages').append(errorHtml);
         $("#submitForApproval").attr("disabled", false);
       //  $("#approvalCommentModal").modal('hide');
+        window.location.reload()
         }
         else
         {

@@ -1834,7 +1834,7 @@ router.post('/saveItemDescription',(request,response)=>{
             name:joi.string().min(1).max(80).required().label('Please Fill Vendor Name'),
             cont:joi.number().integer().min(1000000000).max(9999999999).required().label('Contact Number Should be Exactly 10 Digit'),
             bankkDet:joi.string().min(1).max(255).required().label('Please Fill Bank Details'),
-            accNo:joi.string().required().label('Please Fill Bank Account Number'),
+            accNo:joi.number().required().label('Please Fill Bank Account Number'),
             ifsc:joi.string().min(1).max(20).required().label('Please Fill Bank IFSC Code.'),
               })
          result = schema.validate({cont:cont,state:state,district:district,name:name,bankkDet:bankkDet,accNo:accNo,ifsc:ifsc});

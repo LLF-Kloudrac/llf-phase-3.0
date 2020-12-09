@@ -1226,9 +1226,10 @@ router.post('/sendForApproval',verify, async(request, response) => {
     const schema=joi.object({
       comment:joi.string().required().label('Please Fill Comment'),
       comm:joi.string().min(6).required().label('Please Fill Comment'),
+      totalAmount:joi.number().min(1).required().label('Total Expense Amount should be greater than zero')
       
   })
-  let result=schema.validate({comment:comment, comm:comment});
+  let result=schema.validate({comment:comment, comm:comment,totalAmount});
   if(result.error){
       console.log('fd'+result.error);
       response.send(result.error.details[0].context.label);    
