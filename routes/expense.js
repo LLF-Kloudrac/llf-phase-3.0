@@ -752,7 +752,7 @@ router.get('/printdetails',async(request,response)=>{
            'WHERE Tour_Bill_Claim__c IN ('+ tourBillCaimParam.join(',')+ ')';
            // boardinglodgingQuery query  
            boardinglodgingQuery='SELECT board.sfid, board.Name as name,board.Stay_Option__c,board.Place_Journey__c,board.Correspondence_City__c,board.Activity_Code_Project__c,board.Own_Stay_Amount__c,board.From__c,board.To__c,'+
-           'board.No_of_Days__c,board.Daily_Allowance__c,board.Amount_of_B_L_as_per_policy__c,board.Total_time__c, board.Actual_Amount_for_boarding_and_lodging__c,board.Amount_for_boarding_and_lodging__c, '+
+           'board.Daily_Allowance__c,board.Amount_of_B_L_as_per_policy__c, board.Actual_Amount_for_boarding_and_lodging__c,board.Amount_for_boarding_and_lodging__c, '+
            'board.Total_Amount__c,board.Extra_Amount__c,board.Total_Allowance__c, act.name as actname,tour.name as tourname '+
            'FROM salesforce.Boarding_Lodging__c board '+
            'INNER JOIN salesforce.Activity_Code__c act ON board.Activity_Code_Project__c = act.sfid '+
