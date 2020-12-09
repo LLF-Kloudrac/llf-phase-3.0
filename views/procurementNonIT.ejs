@@ -174,7 +174,7 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
         $('#state'+cnt).on('change',function(){
            let state =this.value;
            sts=state;
-        //   alert("selcted"+sts);
+          // alert("selcted"+sts);
            let select = document.getElementById("district"+cnt);
            let length = select.options.length;
            for (i = length-1; i > 0; i--) {
@@ -183,12 +183,12 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
          //  alert('You Choose'+state);
          if(state=='Andaman Nicobar')
         {
-         $('#district').attr("readonly",false);
-       //  alert('You Choose=> '+state);
-         $('#district')
+         $('#district'+cnt).attr("readonly",false);
+         alert('You Choose=> '+state);
+         $('#district'+cnt)
           for(let i=0; i <dstrAN.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrAN[i])
            .text(dstrAN[i]))
@@ -197,11 +197,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
          else if(state=='Andhra Pradesh')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrAP.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrAP[i])
            .text(dstrAP[i]))
@@ -210,11 +210,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	 else if(state=='Arunachal Pradesh')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrARP.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrARP[i])
            .text(dstrARP[i]))
@@ -223,11 +223,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	 else if(state=='Assam')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrAS.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrAS[i])
            .text(dstrAS[i]))
@@ -236,11 +236,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	 else if(state=='Bihar')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrBh.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrBh[i])
            .text(dstrBh[i]))
@@ -249,11 +249,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	 else if(state=='Chandigarh')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrCHD.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrCHD[i])
            .text(dstrCHD[i]))
@@ -262,11 +262,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	 else if(state=='Chhattisgarh')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrCHG.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrCHG[i])
            .text(dstrCHG[i]))
@@ -275,11 +275,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	 else if(state=='Dadra Nagar Haveli')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrDNH.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrDNH[i])
            .text(dstrDNH[i]))
@@ -288,11 +288,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	 else if(state=='Daman Diu')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrDD.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrDD[i])
            .text(dstrDD[i]))
@@ -301,11 +301,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	 else if(state=='Delhi')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrDEL.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrDEL[i])
            .text(dstrDEL[i]))
@@ -314,11 +314,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	 else if(state=='Goa')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrGOA.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrGOA[i])
            .text(dstrGOA[i]))
@@ -327,11 +327,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	 else if(state=='Gujarat')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrGJ.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrGJ[i])
            .text(dstrGJ[i]))
@@ -340,11 +340,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	 else if(state=='Haryana')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrHR.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrHR[i])
            .text(dstrHR[i]))
@@ -353,11 +353,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	 else if(state=='Himachal Pradesh')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrHP.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrHP[i])
            .text(dstrHP[i]))
@@ -366,11 +366,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	 else if(state=='Jammu Kashmir')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrJK.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrJK[i])
            .text(dstrJK[i]))
@@ -379,11 +379,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	 else if(state=='Jharkhand')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrJHK.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrJHK[i])
            .text(dstrJHK[i]))
@@ -392,11 +392,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	 else if(state=='Karnataka')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrKTK.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrKTK[i])
            .text(dstrKTK[i]))
@@ -405,11 +405,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	 else if(state=='Kerala')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrKR.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrKR[i])
            .text(dstrKR[i]))
@@ -418,11 +418,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	 else if(state=='Lakshadweep')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrLKS.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrLKS[i])
            .text(dstrLKS[i]))
@@ -431,11 +431,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	 else if(state=='Ladakh')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrLDK.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrLDK[i])
            .text(dstrLDK[i]))
@@ -444,11 +444,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	 else if(state=='Madhya Pradesh')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrMP.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrMP[i])
            .text(dstrMP[i]))
@@ -457,11 +457,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
  else if(state=='Maharashtra')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrMH.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrMH[i])
            .text(dstrMH[i]))
@@ -470,11 +470,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
  else if(state=='Manipur')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrMNP.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrMNP[i])
            .text(dstrMNP[i]))
@@ -483,11 +483,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
  else if(state=='Meghalaya')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrMGH.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrMGH[i])
            .text(dstrMGH[i]))
@@ -496,11 +496,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
  else if(state=='Mizoram')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrMZ.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrMZ[i])
            .text(dstrMZ[i]))
@@ -509,11 +509,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
  else if(state=='Nagaland')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrNL.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrNL[i])
            .text(dstrNL[i]))
@@ -522,11 +522,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
  else if(state=='Odisha')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrOD.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrOD[i])
            .text(dstrOD[i]))
@@ -535,11 +535,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	 else if(state=='Puducherry')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrPUD.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrPUD[i])
            .text(dstrPUD[i]))
@@ -548,11 +548,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	 else if(state=='Punjab')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrPB.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrPB[i])
            .text(dstrPB[i]))
@@ -561,11 +561,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	 else if(state=='Rajasthan')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrRJ.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrRJ[i])
            .text(dstrRJ[i]))
@@ -574,11 +574,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	 else if(state=='Sikkim')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrSK.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrSK[i])
            .text(dstrSK[i]))
@@ -587,11 +587,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	 else if(state=='Tamil Nadu')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrTN.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrTN[i])
            .text(dstrTN[i]))
@@ -600,11 +600,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	else if(state=='Telangana')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrTEL.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrTEL[i])
            .text(dstrTEL[i]))
@@ -613,11 +613,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 	else if(state=='Tripura')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrTP.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrTP[i])
            .text(dstrTP[i]))
@@ -626,11 +626,11 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 else if(state=='Uttar Pradesh')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrUP.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrUP[i])
            .text(dstrUP[i]))
@@ -639,11 +639,11 @@ else if(state=='Uttar Pradesh')
 else if(state=='Uttarakhand')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrUK.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrUK[i])
            .text(dstrUK[i]))
@@ -652,11 +652,11 @@ else if(state=='Uttarakhand')
 	else if(state=='West Bengal')
         {
      //    alert('You Choose=> '+state);
-         $('#district').attr("readonly",false);
-         $('#district').clearQueue();
+         $('#district'+cnt).attr("readonly",false);
+         $('#district'+cnt).clearQueue();
           for(let i=0; i <dstrWB.length; i++)
           {
-           $('#district')
+           $('#district'+cnt)
            .append($("<option></option>")
            .attr("value",dstrWB[i])
            .text(dstrWB[i]))
