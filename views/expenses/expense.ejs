@@ -1155,14 +1155,18 @@
             console.log('pettyCashList  '+JSON.stringify(pettyCashList));
             let lengthOfPettyCashList = pettyCashList.length < 3 ? pettyCashList.length : 3;
             console.log('lengthOfPettyCashList : '+lengthOfPettyCashList);
-            let pettyCashTableRows = '<thead><tr>';
+            let pettyCashTableRows ='' ;
+            for(let i= 0 ; i < lengthOfPettyCashList ; i++)
+            {
+              if(i==0){
+            pettyCashTableRows = '<thead><tr>';
             pettyCashTableRows += '<th>Name</th>';
             pettyCashTableRows += '<th>Total Amount</th>';
             pettyCashTableRows += '<th>Nature Of Expense</th>';
             pettyCashTableRows += '<th>Created Date</th>';
             pettyCashTableRows += '</tr></thead>';
-            for(let i= 0 ; i < lengthOfPettyCashList ; i++)
-            {
+
+              }
               var strDate = pettyCashList[i].bill_date__c.toString().split('T')[0];
               pettyCashTableRows += '<tr>';
               pettyCashTableRows += '<td>'+pettyCashList[i].name+'</td>';

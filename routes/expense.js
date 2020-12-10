@@ -1301,7 +1301,7 @@ router.post('/sendForApproval',verify, async(request, response) => {
                                 await
                                 pool.query('INSERT INTO salesforce.Custom_Approval__c (Approval_Type__c,Submitter_Heroku__c, Assign_To_PM__c ,Expense__c, Comment__c, Status__c, Record_Name__c,amount__c) values($1, $2, $3, $4, $5, $6, $7, $8) ',['Expense',objUser.sfid, projectManagerId, expenseId, comment, 'Pending', expenseName, totalAmount ])
                                 .then((customApprovalQueryResult) => {
-                                        console.log('customApprovalQueryResult  '+JSON.stringify(customApprovalQueryResult));
+                                        console.log('customApprovalQueryResult  '+JSON.stringify(customApprovalQueryResult.rows));
                                 })
                             .catch((customApprovalQueryError) => {
                                     console.log('customApprovalQueryError  '+customApprovalQueryError.stack);

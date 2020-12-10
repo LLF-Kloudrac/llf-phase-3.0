@@ -292,15 +292,19 @@
               console.log('pettyCashList  '+JSON.stringify(pettyCashList));
               let lengthOfPettyCashList = pettyCashList.length < 3 ? pettyCashList.length : 3;
               console.log('lengthOfPettyCashList : '+lengthOfPettyCashList);
-              let pettyCashTableRows = '<thead><tr>';
+              let pettyCashTableRows='';
+
+              for(let i= 0 ; i < lengthOfPettyCashList ; i++)
+              {
+                if(i==0){
+                  pettyCashTableRows = '<thead><tr>';
               pettyCashTableRows += '<th>Name</th>';
               pettyCashTableRows += '<th>Total Amount</th>';
               pettyCashTableRows += '<th>Nature Of Expense</th>';
               pettyCashTableRows += '<th>Created Date</th>';
               pettyCashTableRows += '</tr></thead>';
 
-              for(let i= 0 ; i < lengthOfPettyCashList ; i++)
-              {
+                }
                 var strDate = pettyCashList[i].bill_date__c.toString().split('T')[0];
                 pettyCashTableRows += '<tr>';
                 pettyCashTableRows += '<td>'+pettyCashList[i].name+'</td>';
@@ -310,8 +314,11 @@
                 pettyCashTableRows += '<td>'+strDate+'</td>';
                 pettyCashTableRows += '</tr>';
               }
-              pettyCashTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/pettycashlistview?expenseId='+expenseId+'" >View All</a></center></td></tr>';
-              $('#pettyCashTable').empty();
+              if(lengthOfPettyCashList>0){
+                pettyCashTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/pettycashlistview?expenseId='+expenseId+'" >View All</a></center></td></tr>';
+
+              }
+                $('#pettyCashTable').empty();
               $('#pettyCashTable').html(pettyCashTableRows);
               let conveyanceVoucherList =  expenseRelatedData.Conveyance;
               console.log('conveyanceVoucherList  '+JSON.stringify(conveyanceVoucherList));
@@ -338,7 +345,10 @@
                 conveyanceVoucherTableRows += '<td>'+strDate+'</td>';
                 conveyanceVoucherTableRows += '</tr>';
               }
-              conveyanceVoucherTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/ConveyanceListView?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
+              if(conveyanceVoucherList>0){
+                conveyanceVoucherTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/ConveyanceListView?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
+              
+              }
               $('#conveyanceVoucherTable').empty();
               $('#conveyanceVoucherTable').html(conveyanceVoucherTableRows);
               
@@ -363,7 +373,10 @@
                 tourBillClaimTableRows += '<td>'+tourBillClaimList[i].grand__c+'</td>';
                 tourBillClaimTableRows += '</tr>';
               }
-              tourBillClaimTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/tourBillClaimListview?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
+              if(tourBillClaimList>0){
+                tourBillClaimTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/tourBillClaimListview?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
+             
+              }
               $('#tourBillClaimTable').empty();
               $('#tourBillClaimTable').html(tourBillClaimTableRows);
 
@@ -390,7 +403,10 @@
 
                   customApprovalTableRows += '</tr>';
               }
-              customApprovalTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/getExpenseApproval?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
+              if(customApprovalListLength>0){
+                customApprovalTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/getExpenseApproval?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
+              
+              }
               $('#customApprovalTable').empty();
               $('#customApprovalTable').html(customApprovalTableRows);
               
