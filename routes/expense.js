@@ -1225,7 +1225,7 @@ router.post('/sendForApproval',verify, async(request, response) => {
     let approvalStatus = 'Pending';
     const schema=joi.object({
       comment:joi.string().required().label('Please Fill Comment'),
-      comm:joi.string().min(6).required().label('Please Fill Comment'),
+      comm:joi.string().min(3).required().label('Please Fill Comment'),
       totalAmount:joi.number().min(1).required().label('Total Expense Amount should be greater than zero')
       
   })
