@@ -1814,7 +1814,7 @@ router.post('/saveItemDescription',(request,response)=>{
              state:joi.string().required().label('Please Choose State'),
             district:joi.string().required().label('Please Choose District'),
             name:joi.string().min(3).max(80).required().label('Please Fill Vendor Name'),
-            cont:joi.number().integer().min(1000000000).max(9999999999).required().label('Contact Number Should be Exactly 10 Digit'),
+            cont:joi.number().integer().min(1000000000).max(9999999999).required().label('Contact number should have exact 10 digits'),
             bankkDet:joi.string().min(3).max(255).required().label('Please Fill Bank Details'),
             accNo:joi.string().min(3).required().label('Please Fill Bank Account Number'),
             ifsc:joi.string().min(3).max(20).required().label('Please Fill Bank IFSC Code.'),
