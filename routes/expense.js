@@ -1028,7 +1028,19 @@ router.get('/conveyanceVoucher/:parentExpenseId',verify,(request, response) => {
 
   response.render('expenses/conveyanceVoucher/conveyanceVoucher',{objUser, parentExpenseId: parentExpenseId });
 
-});
+}); 
+router.get('/tourBillNewPage/:parentExpenseId',verify,(request, response) => {
+
+  var parentExpenseId = request.params.parentExpenseId;
+  console.log('conveyanceVoucher parentExpenseId '+parentExpenseId);
+  console.log('Expense request.user '+JSON.stringify(request.user));
+  var userId = request.user.sfid; 
+  var objUser = request.user;
+  console.log('Expense userId : '+userId);
+
+  response.render('expenses/tourBillClaims/TourBillclaimNew',{objUser, parentExpenseId: parentExpenseId });
+
+}); 
 
 router.post('/conveyanceform',(request,response) => {  
   let body = request.body;

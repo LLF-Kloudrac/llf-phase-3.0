@@ -1235,6 +1235,7 @@
             }
             if(tourBillClaimListLength>0){
               tourBillClaimTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/tourBillClaimListview?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
+ 
             
             }
             $('#tourBillClaimTable').empty();
@@ -1347,7 +1348,12 @@
 
              /***** Creating Tour Bill Claim ****/
              $("a.tourBillClaim").click(function(){
-              $('#createTourBillClaimModal').modal('show');
+              var expenseId = document.getElementById('expenseIdpTag').innerHTML;
+              console.log('Inside conveyanceVoucherButton Anchor Tag expenseId  '+expenseId);
+          // location.assign('/expense/conveyanceVoucher/'+expenseId);
+              window.open('/expense/tourBillNewPage/'+expenseId,'_blank');
+
+            /*  // $('#createTourBillClaimModal').modal('show');
               $('#tourBillClaimSubmitbutton').on('click',function(event){
                 event.stopImmediatePropagation();
                 event.stopPropagation();
@@ -1401,7 +1407,7 @@
                           
                       })
                     })
-              })
+              }) */
           })  
 
 
