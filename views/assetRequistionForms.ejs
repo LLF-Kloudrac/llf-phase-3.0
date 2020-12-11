@@ -1239,6 +1239,29 @@
     function(assetDetailsRecord){
     //console.log('Edit assetDetails : '+JSON.stringify(assetDetailsRecord));
     let assetRecord = assetDetailsRecord.asset[0];
+    console.log('nckjnckj');
+    if((assetRecord.manager_approval__c=='Pending' || assetRecord.manager_approval__c=='Approved') || (assetRecord.Procurement_Head_Approval__c=='Pending' ||assetRecord.Procurement_Head_Approval__c=='Approved') || (assetRecord.procurement_committee_approval__c=='Pending' || assetRecord.procurement_committee_approval__c=='Approved') || (assetRecord.Management_Approval__c=='Pending' || assetRecord.management_approval__c=='Approved') || (assetRecord.chairperson_approval__c=='Pending' || assetRecord.chairperson_approval__c=='Approved' ))                                                        
+    {
+      console.log('hdjsj');
+      
+      
+        console.log('Validation pqass');
+        $('#assetName').attr("readonly",true);
+        $('#closurePlanDate').attr("readonly",true);
+        $('#activityCode').attr("readonly",true);
+        $('#quotations').attr("disabled",true);
+      $('#reason').attr("readonly",true);
+      $('#pricing').attr("readonly",true);
+      $('#deliveryPlace').attr("readonly",true);
+      $('#deliveryTime').attr("readonly",true);
+      $('#deliveryCost').attr("readonly",true);
+    
+
+    }
+
+
+
+
     if(assetRecord.total_amount__c==0){
       $('#quotations').attr("disabled",true);
       $('#reason').attr("disabled",true);
