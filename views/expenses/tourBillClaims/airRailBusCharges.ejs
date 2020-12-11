@@ -5,7 +5,11 @@
   @media (max-width: 768px){
 .mb-mobile{margin-bottom: 10px;}
 }
-
+.table {
+    width: 150%;
+    margin-bottom: 1rem;
+    color: #212529;
+}
 </style>
 
  <!--  <div class="container"> -->
@@ -27,9 +31,9 @@
     <% include ../../partials/messages %>
     <div id="errorMessages"></div>
    <form method="post" action="/insertprecash" id="formdata"  enctype="multipart/form-data">
-    <div class="table-responsive">
+    <div class="table-responsive" style="overflow-y: auto;">
      <span id="error"></span>
-     <table class="table table-bordered"  id="item_table">    
+     <table class="table table-bordered" style="overflow-x: auto;" id="item_table">    
       <tr>
        <th>SR. NO</th>
        <th>ARRIVAL DATE</th>
@@ -50,7 +54,7 @@
    </form>
    </div>
   </div>
-  </div>
+</div>
 </div>
 
 
@@ -120,7 +124,7 @@ $(document).ready(function(){
     html += '<td><input type="text" name="arrival_Station" class="form-control" /></td>';
     html += '<td><input type="text" name="departure_Station" class="form-control" /></td>';
     html += '<td><input type="number" name="amount" class="form-control" /></td>';
-    html += '<td><input type="file" onChange="chkFile(this,'+cnt+')" name="fileprety" id="fileprety" class="form-control" /><input type="hidden" value="demo" name="imgpath" id="file_'+cnt+'"></td>';
+    html += '<td colspan="8"><input type="file" onChange="chkFile(this,'+cnt+')" name="fileprety" id="fileprety" class="form-control" /><input type="hidden" value="demo" name="imgpath" id="file_'+cnt+'"></td>';
     html += '<td style="display:none;"><input  type="hidden" name="parentTourBillId" value="<%= parentTourBillId %>" class="form-control" /></td>';
     html += '<td style="display:none;"><input  type="hidden" id="projectTask'+cnt+'" name="activity_code"   class="form-control" /></td>';
     html += '<td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="glyphicon glyphicon-minus">Delete</span></button></td></tr>';
