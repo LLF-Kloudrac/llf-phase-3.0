@@ -101,7 +101,7 @@ $(document).ready(function(){
       html += '<td style="display:none;" ><input type="hidden" id="policyamtForBL'+cnt+'" name="policyamtForBL"  class="form-control" /></td>';
       html += '<td><input type="number" id="ownStayAmount'+cnt+'" name="ownStayAmount" class="form-control" /></td>';
       html += '<td><input type="file" onChange="chkFile(this,'+cnt+')" name="fileprety" id="fileprety" class="form-control" /><input type="hidden" value="demo" name="imgpath" id="file_'+cnt+'"></td>';
-      html += '<td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="glyphicon glyphicon-minus"></span></button></td></tr>';
+      html += '<td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="glyphicon glyphicon-minus">Delete</span></button></td></tr>';
       html += '<td style="display:none;"><input  type="hidden" id="projectTask'+cnt+'" name="activity_code"   class="form-control" /></td>';
       html += '<td style="display:none;"><input  type="hidden" name="parentTourBillId" value="<%= parentTourBillId %>" class="form-control" /></td>';
       $('#item_table').append(html);
