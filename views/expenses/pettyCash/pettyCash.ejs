@@ -45,7 +45,7 @@
             <table class="table table-bordered" id="item_table">
               <tr>
               <th>SLIP NO</th>
-              <th>BILL NO.</th>
+              <th colspan="6">BILL NO.</th>
               <th>BILL DATE</th>
               <th>ACTIVITY CODE</th>
               <th>DESCRIPTION OF ACTIVITY EXPENSES</th>
@@ -97,7 +97,7 @@ $(document).ready(function(){
     var html = '';
     html += '<tr>';
     html += '<td>'+cnt+'</td>';
-    html += '<td><input type="text" name="bill_no" class="form-control" value=" " /></td>';
+    html += '<td colspan="6"><input type="text" name="bill_no" class="form-control" value=" " /></td>';
     html += '<td><input type="date" name="bill_date" class="form-control " /></td>';
     html += '<td><select id="activity_code'+cnt+'"  name="projectTask"  class="form-control item_unit"></select></td>';
     html += '<td><textarea  name="desc" class="form-control"></textarea></td>';

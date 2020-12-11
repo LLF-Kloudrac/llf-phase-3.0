@@ -722,8 +722,13 @@
 
 
           $('#tourBillClaimButton').on('click',function(){
-                $('#createTourBillClaimModal').modal('show');
+              //  $('#createTourBillClaimModal').modal('show');
+                var expenseId = document.getElementById('expenseId').innerHTML;
+                console.log('Inside tourBillnewCreate  '+expenseId);
+                // location.assign('/expense/conveyanceVoucher/'+expenseId);
+              window.open('/expense/tourBillNewPage/'+expenseId,'_blank');
 
+/* 
                 $('#tourBillClaimSubmitbutton').on('click',function(){
                     $('#tourBillClaimForm').submit(function(e){
                       $("#tourBillClaimSubmitbutton").attr("disabled", true);
@@ -777,7 +782,7 @@
                       })
                 })
 
-          });
+ */          });
 
 
     })
