@@ -1032,14 +1032,23 @@ router.get('/conveyanceVoucher/:parentExpenseId',verify,(request, response) => {
 router.get('/tourBillNewPage/:parentExpenseId',verify,(request, response) => {
 
   var parentExpenseId = request.params.parentExpenseId;
-  console.log('conveyanceVoucher parentExpenseId '+parentExpenseId);
+  console.log(' parentExpenseId '+parentExpenseId);
   console.log('Expense request.user '+JSON.stringify(request.user));
   var userId = request.user.sfid; 
   var objUser = request.user;
   console.log('Expense userId : '+userId);
+  pool
+  .query('SELECT sfid, name from salesforce.Tour_Bill_Claim__c WHERE expense__c = $1',[parentExpenseId])
+  .then((querryResult) => {
+    console.log('tourbillquerryResult :  '+JSON.stringify(querryResult.rows));
+    response.render('expenses/tourBillClaims/TourBillclaimNew',{objUser, parentExpenseId: parentExpenseId,tourbillId:querryResult.rows[0].sfid });
+})
+.catch((conveyanceQueryError) => {
+  console.log('conveyanceQueryError  '+conveyanceQueryError);
+  response.send('Error in new Page')
+})
 
-  response.render('expenses/tourBillClaims/TourBillclaimNew',{objUser, parentExpenseId: parentExpenseId });
-
+ 
 }); 
 
 router.post('/conveyanceform',(request,response) => {  
