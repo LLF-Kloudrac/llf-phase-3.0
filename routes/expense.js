@@ -1306,9 +1306,9 @@ router.post('/sendForApproval',verify, async(request, response) => {
                         managerId = teamManagerQueryResult.rows[0].manager__c;
                         console.log('managerId +++ '+managerId);
 
-                        if(managerId == null || managerId == '')
+                        if(!objUser.isManager)
                         {
-             
+                          console('Rp user Condition true')
                           await
                           pool.query('SELECT sfid, Project_Manager__c FROM salesforce.Milestone1_Project__c WHERE  sfid = $1',[projectId])
                           .then((projectManagerQueryResult) => 
@@ -1338,13 +1338,28 @@ router.post('/sendForApproval',verify, async(request, response) => {
       
                           else
                           {
-                            pool.query('INSERT INTO salesforce.Custom_Approval__c (Approval_Type__c,Submitter_Heroku__c, Approver_RM__c ,Expense__c, Comment__c, Status__c, Record_Name__c,amount__c) values($1, $2, $3, $4, $5, $6, $7, $8) ',['Expense',objUser.sfid, managerId, expenseId, comment, 'Pending', expenseName, totalAmount ])
-                            .then((customApprovalQueryResult) => {
-                                    console.log('customApprovalQueryResult  '+JSON.stringify(customApprovalQueryResult));
+                            console.log('manager approval true');
+                            console.log('projectid Id => '+projectId);
+                            pool.query('SELECT sfid, Project_Manager__c FROM salesforce.Milestone1_Project__c WHERE  sfid = $1',[projectId])
+                            .then((projectManagerQueryResult)=>{
+                              console.log('projectManagerQueryResult '+JSON.stringify(projectManagerQueryResult.rows));
+                              if(projectManagerQueryResult.rowCount>0){
+                                let projectManagerId = projectManagerQueryResult.rows[0].project_manager__c;
+                                
+                                pool.query('INSERT INTO salesforce.Custom_Approval__c (Approval_Type__c,Submitter_Heroku__c, Approver_PM__c ,Expense__c, Comment__c, Project_Manager_Approval_Status__c, Record_Name__c,amount__c) values($1, $2, $3, $4, $5, $6, $7, $8) ',['Expense',objUser.sfid, projectManagerId, expenseId, comment, 'Pending', expenseName, totalAmount ])
+                                .then((customApprovalQueryResult) => {
+                                        console.log('customApprovalQueryResult  '+JSON.stringify(customApprovalQueryResult));
+                                })
+                                .catch((customApprovalQueryError) => {
+                                        console.log('customApprovalQueryError  '+customApprovalQueryError.stack);
+                                      })
+                              }
                             })
-                            .catch((customApprovalQueryError) => {
-                                    console.log('customApprovalQueryError  '+customApprovalQueryError.stack);
-                                  })
+                            .catch((Error)=>{
+                              console.log('ProjectManagerWueryyError'+Error.stack);
+                            })
+
+                                                      
                           }
                         }
                    
