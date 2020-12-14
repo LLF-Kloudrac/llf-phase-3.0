@@ -168,7 +168,7 @@ router.get('/expenseAllRecords',verify, async (request, response) => {
   console.log('objUser   : '+JSON.stringify(objUser));
 
   pool
-  .query('SELECT exp.id, exp.sfid, exp.Name ,exp.Accounts_Status__c, exp.isHerokuEditButtonDisabled__c, exp.Project_Name__c, exp.Approval_Status__c, exp.Amount_Claimed__c, exp.petty_cash_amount__c, exp.Conveyance_Amount__c, exp.createddate, pro.sfid as prosfid, pro.name as proname FROM salesforce.Milestone1_Expense__c as exp JOIN salesforce.Milestone1_Project__c as pro ON exp.Project_name__c = pro.sfid WHERE exp.Incurred_By_Heroku_User__c = $1 AND exp.sfid != \'\'',[objUser.sfid])
+  .query('SELECT exp.id, exp.sfid, exp.Name,exp.Project_Manager_Status__c ,exp.Accounts_Status__c, exp.isHerokuEditButtonDisabled__c, exp.Project_Name__c, exp.Approval_Status__c, exp.Amount_Claimed__c, exp.petty_cash_amount__c, exp.Conveyance_Amount__c, exp.createddate, pro.sfid as prosfid, pro.name as proname FROM salesforce.Milestone1_Expense__c as exp JOIN salesforce.Milestone1_Project__c as pro ON exp.Project_name__c = pro.sfid WHERE exp.Incurred_By_Heroku_User__c = $1 AND exp.sfid != \'\'',[objUser.sfid])
   .then((expenseQueryResult) => {
       console.log('expenseQueryResult   : '+JSON.stringify(expenseQueryResult.rows));
           if(expenseQueryResult.rowCount > 0)
@@ -193,11 +193,13 @@ router.get('/expenseAllRecords',verify, async (request, response) => {
                 obj.sequence = i+1;
                 obj.name = '<a href="'+expenseQueryResult.rows[i].sfid+'" data-toggle="modal" data-target="#popup" class="expId" id="name'+expenseQueryResult.rows[i].sfid+'"  >'+expenseQueryResult.rows[i].name+'</a>';
                 obj.projectName = expenseQueryResult.rows[i].proname;
-                obj.approvalStatus = expenseQueryResult.rows[i].approval_status__c;
+               // obj.approvalStatus = expenseQueryResult.rows[i].approval_status__c;
                 obj.totalAmount = '<span id="amount'+expenseQueryResult.rows[i].sfid+'" >'+expenseQueryResult.rows[i].amount_claimed__c+'</span>';
                 obj.pettyCashAmount = expenseQueryResult.rows[i].petty_cash_amount__c;
                 obj.conveyanceVoucherAmount = expenseQueryResult.rows[i].conveyance_amount__c;
                 obj.accStatus=expenseQueryResult.rows[i].accounts_status__c;
+                obj.projManagerStatus=expenseQueryResult.rows[i].project_manager_status__c;
+                obj.reportManagerstatus=expenseQueryResult.rows[i].approval_status__c;
                 obj.createdDate = strDate;
                 obj.print='<button    data-toggle="modal" data-target="#popupPrint" class="btn btn-primary printexp" id="print'+expenseQueryResult.rows[i].sfid+'" >Print</button>';
                   obj.editButton = '<button    data-toggle="modal" data-target="#popupEdit" class="btn btn-primary expIdEditMode"   id="edit'+expenseQueryResult.rows[i].sfid+'" >Edit</button>';
