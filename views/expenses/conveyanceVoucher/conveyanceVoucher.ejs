@@ -100,7 +100,7 @@ $(document).ready(function(){
   html += '<td><input type="text" name="modeofconveyance" class="form-control" /></td>';
   html += '<td><input type="number" name="kmtravelled" class="form-control" /></td>';
   html += '<td><input type="number" name="amount" class="form-control" /></td>';
-  html += '<td><input type="file" onChange="chkFile(this,'+cnt+')" name="fileprety" id="fileprety" class="form-control" /><input type="hidden" value="demo" name="imgpath" id="file_'+cnt+'"></td>';
+  html += '<td><input type="file" onChange="chkFile(this,'+cnt+')" name="fileprety" id="fileprety" style="overflow:hidden" class="form-control" /><input type="hidden" value="demo" name="imgpath" id="file_'+cnt+'"></td>';
   html += '<td style="display:none;"><input  type="hidden" name="parentExpenseId" value="<%= parentExpenseId %>" class="form-control" /></td>';
   html += '<td style="display:none;"><input  type="hidden" id="projectTask'+cnt+'"  name="activity_code"  class="form-control" /></td>';
   html += '<td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="glyphicon glyphicon-minus">Delete</span></button></td></tr>';
@@ -149,7 +149,7 @@ $(document).ready(function(){
   html += '<td><input type="text" name="modeofconveyance" class="form-control" /></td>';
   html += '<td><input type="number" name="kmtravelled" class="form-control" /></td>';
   html += '<td><input type="number" name="amount" class="form-control" /></td>';
-  html += '<td><input type="file" onChange="chkFile(this,'+cnt+')" name="fileprety" id="fileprety" class="form-control" /><input type="hidden" value="demo" name="imgpath" id="file_'+cnt+'"></td>';
+  html += '<td><input type="file" onChange="chkFile(this,'+cnt+')" name="fileprety" id="fileprety" style="overflow:hidden" class="form-control" /><input type="hidden" value="demo" name="imgpath" id="file_'+cnt+'"></td>';
   html += '<td style="display:none;"><input  type="hidden" name="parentExpenseId" value="<%= parentExpenseId %>" class="form-control" /></td>';
   html += '<td style="display:none;"><input  type="hidden" id="projectTask'+cnt+'"  name="activity_code"  class="form-control" /></td>';
   html += '<td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="glyphicon glyphicon-minus">Delete</span></button></td></tr>';

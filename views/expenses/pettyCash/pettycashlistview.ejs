@@ -191,14 +191,14 @@
                                
                               htmlTable += '<tr>';
                               htmlTable += '<td><strong>Bill Number</strong></td>';
-                              htmlTable += '<td>'+pettyCashRecord.bill_no__c+'</td>';
+                              htmlTable += '<td style="word-break: break-all">'+pettyCashRecord.bill_no__c+'</td>';
                               htmlTable += '<td><strong>Bill Date</strong></td>';
                               htmlTable += '<td>'+strBillDate.split(',')[0]+'</td>';
                               htmlTable += '</tr>';
                               htmlTable += '<tr>';
-                                  htmlTable += '<td><strong>Nature Of Expense</strong></td>';
+                                  htmlTable += '<td ><strong>Nature Of Expense</strong></td>';
                                   if(pettyCashRecord.nature_of_exp__c != null)
-                                      htmlTable += '<td>'+pettyCashRecord.nature_of_exp__c+'</td>';
+                                      htmlTable += '<td style="word-break: break-all">'+pettyCashRecord.nature_of_exp__c+'</td>';
                                   else
                                       htmlTable += '<td></td>';
                                   htmlTable += '<td><strong>Amount</strong></td>';
@@ -208,7 +208,7 @@
                                 htmlTable += '<td><strong>Activity Code</strong></td>';
                                 htmlTable += '<td>'+pettyCashRecord.activitycode+'</td>';
                                 htmlTable += '<td><strong>Description</strong></td>';
-                                  htmlTable += '<td>'+pettyCashRecord.description_of_activity_expenses__c+'</td>';
+                                  htmlTable += '<td style="word-break: break-all">'+pettyCashRecord.description_of_activity_expenses__c+'</td>';
                             htmlTable += '</tr>';
 
                               htmlTable += '<tr>';

@@ -169,7 +169,7 @@
 
 
 <div id="tourBillModal" class="modal fade">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Approval Comment</h5>
@@ -182,7 +182,7 @@
           <div id="detailLoadingSpinner">
             <center> <img src="/spinner-gif-transparent-background-14.gif" />  </center>
         </div>
-        <table id="tourBillModalTable" class="table">
+        <table id="tourBillModalTable" class="table-responsive">
 
         </table>
         </div>
@@ -516,7 +516,7 @@
                   let tourBillClaimTableHtml = '';
                   tourBillClaimTableHtml += '<tr>';
                   tourBillClaimTableHtml += '<td>Name</td>';
-                  tourBillClaimTableHtml += '<td>'+tourBillClaim.name+'</td>';
+                  tourBillClaimTableHtml += '<td style="word-break: break-all">'+tourBillClaim.name+'</td>';
                   tourBillClaimTableHtml += '<td>Expense </td>';
                   tourBillClaimTableHtml += '<td>'+tourBillClaim.expname+'</td>';
                   tourBillClaimTableHtml += '</tr>'; 
