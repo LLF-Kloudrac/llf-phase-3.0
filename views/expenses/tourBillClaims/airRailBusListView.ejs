@@ -35,7 +35,7 @@
         </div>
  </div>
 
- <div id="AirRailBusTable" class="responsive ">
+ <div id="AirRailBusTable" class="table-responsive ">
 
  </div>
 
@@ -46,7 +46,7 @@
 
 
 <div id="airBusRail" class="modal fade">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">AirRailBus View</h5>
@@ -59,10 +59,12 @@
           <div id="detailLoadingSpinner">
             <center> <img src="/spinner-gif-transparent-background-14.gif" />  </center>
         </div>
-        <table id="airBusRailTable" class="table">
+        <div class="table-responsive">
+        <table id="airBusRailTable" class="table" style="overflow-y: auto;">
 
         </table>
-        </div>
+      </div>
+      </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         </div>
@@ -315,14 +317,14 @@
                               htmlTable += '</tr>';
                                
                               htmlTable += '<tr>';
-                              htmlTable += '<td><strong>Departure Station</strong></td>';
-                              htmlTable += '<td>'+airRailBusRecord.departure_station__c+'</td>';
+                              htmlTable += '<td ><strong>Departure Station</strong></td>';
+                              htmlTable += '<td style="word-break: break-all;">'+airRailBusRecord.departure_station__c+'</td>';
                               htmlTable += '<td><strong>Departure Date</strong></td>';
                               htmlTable += '<td>'+strDepartureDate.split(',')[0]+'</td>';
                               htmlTable += '</tr>';
                               htmlTable += '<tr>';
-                                  htmlTable += '<td><strong>Arrival Station</strong></td>';
-                                  htmlTable += '<td>'+airRailBusRecord.arrival_station__c+'</td>';
+                                  htmlTable += '<td ><strong>Arrival Station</strong></td>';
+                                  htmlTable += '<td style="word-break: break-all;">'+airRailBusRecord.arrival_station__c+'</td>';
                                   htmlTable += '<td><strong>Arrival Date</strong></td>';
                                   htmlTable += '<td>'+strArrivalDate.split(',')[0]+'</td>';
                               htmlTable += '</tr>';
