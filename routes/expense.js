@@ -1040,8 +1040,16 @@ router.get('/tourBillNewPage/:parentExpenseId',verify,(request, response) => {
   pool
   .query('SELECT sfid, name from salesforce.Tour_Bill_Claim__c WHERE expense__c = $1',[parentExpenseId])
   .then((querryResult) => {
+
+
     console.log('tourbillquerryResult :  '+JSON.stringify(querryResult.rows));
-    response.render('expenses/tourBillClaims/TourBillclaimNew',{objUser, parentExpenseId: parentExpenseId,tourbillId:querryResult.rows[0].sfid });
+    if(querryResult.rowCount>0){
+      response.render('expenses/tourBillClaims/TourBillclaimNew',{objUser, parentExpenseId: parentExpenseId,tourbillId:querryResult.rows[0].sfid });
+    }
+    else{
+      response.render('expenses/tourBillClaims/TourBillclaimNew',{objUser, parentExpenseId: parentExpenseId ,tourbillId:'true'});
+    }
+    
 })
 .catch((conveyanceQueryError) => {
   console.log('conveyanceQueryError  '+conveyanceQueryError);
