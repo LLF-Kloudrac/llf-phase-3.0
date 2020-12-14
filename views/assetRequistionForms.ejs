@@ -663,9 +663,7 @@
                     <div class="card-body" style="overflow-y: auto;">
                       <table id="approvalTable" class="table table-hover striped">
                       <thead>
-                      <th>Name</th>
-                      <th>Type</th>
-                      <th>Date</th>
+                      
                       
                       </thead>
                     </table>
@@ -1138,6 +1136,7 @@
                     if(assetDetails.approvals.length > 0)
                     {
                         let approvalHtml = '';
+                        
                         approvalHtml+='<thead><th>Name </th><th>Type</th> <th>Status</th> <th>Approver Emails</th></thead>';
                         assetDetails.approvals.forEach((eachApproval)=> {
                             approvalHtml += '<tr><td>'+eachApproval.name +'</td>';
