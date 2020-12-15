@@ -251,7 +251,7 @@ let schema,result ;
 if(deadline == undefined || deadline == '')
 {
    schema=joi.object({
-    taskname:joi.string().required().label('Please enter Task Description!'),
+    taskname:joi.string().min(3).required().label('Please enter Task Description!'),
     task:joi.string().invalid(' ').required().label('Please enter Task Description!'),
     taskn:joi.string().min(1).max(80).required().label(' Task Description too long.'),
     projectname:joi.string().required().label('Please select Project !'),
@@ -277,7 +277,7 @@ else if(deadline == 'Select')
 else if(deadline == 'Deadlines')
 {
   schema=joi.object({
-    taskname:joi.string().required().label('Please enter Task Description!'),
+    taskname:joi.string().min(3).required().label('Please enter Task Description!'),
     task:joi.string().min(5).required().label('Please enter Task Description!'),
     taskn:joi.string().min(1).max(80).required().label(' Task Description too long.'),
     projectname:joi.string().required().label('Please select Project !'),
@@ -294,7 +294,7 @@ else if(deadline == 'Deadlines')
 else if(deadline == 'Block Time')
 {
   schema=joi.object({
-    taskname:joi.string().required().label('Please enter Task Description!'),
+    taskname:joi.string().min(3).required().label('Please enter Task Description!'),
     task:joi.string().min(5).required().label('Please enter Task Description!'),
     taskn:joi.string().min(1).max(80).required().label(' Task Description too long.'),
     projectname:joi.string().required().label('Please select Project !'),
@@ -421,7 +421,7 @@ router.post('/fillactuals',(request, response) => {
       actualEndTimeTimesheet:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select Actual End Time !'),
      // actual:joi.string().required().less(joi.ref('actualStartTimeTimesheet')).label('Planned Start time should be less than Planned End time. !'),
       descriptionTimesheet:joi.string().required().label('Please enter Description !'),
-      descriptionTimesheets:joi.string().min(4).required().label('Please enter Description !'),
+      descriptionTimesheets:joi.string().min(3).required().label('Please enter Description !'),
       description:joi.string().invalid('').required().label('Please enter Description !'),
       descr:joi.string().min(1).max(80).required().label('Description too long. !'),
    

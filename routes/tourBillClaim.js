@@ -547,14 +547,15 @@ router.post('/conveyanceCharges',verify, (request, response) => {
           const schema = joi.object({
           dated:joi.date().required().label('Please select Date'),
           date:joi.date().max('now').required().label('Date must be less than or equal to Today'),
-          place:joi.string().required().label('Please enter Place'), 
+          place:joi.string().required().min(3).label('Please enter Place'), 
           projectTask:joi.string().required().label('Please select Activity Code'),
+          remarks:joi.string().min(3).label('Please Enter Remarks'),
           amount:joi.number().required().label('Please enter Amount'),
           amt:joi.number().min(0).label('Amount cannot be negative.'),
           imgpath:joi.string().invalid('demo').required().label('Please Upload File/Attachment'),
         //  activity_code:joi.required,
             })
-            let result= schema.validate({projectTask:bodyResult.projectTask[i],dated:bodyResult.date[i],date:bodyResult.date[i],place:bodyResult.place[i],imgpath:bodyResult.imgpath[i],amount:bodyResult.amount[i],amt:bodyResult.amount[i]});
+            let result= schema.validate({remarks:bodyResult.remarks,projectTask:bodyResult.projectTask[i],dated:bodyResult.date[i],date:bodyResult.date[i],place:bodyResult.place[i],imgpath:bodyResult.imgpath[i],amount:bodyResult.amount[i],amt:bodyResult.amount[i]});
             if(result.error)
             {
                 console.log('fd'+result.error)
@@ -590,15 +591,16 @@ router.post('/conveyanceCharges',verify, (request, response) => {
         const schema = joi.object({
           dated:joi.date().required().label('Please select Date'),
           date:joi.date().max('now').required().label('Date must be less than or equal to Today'),
-          place:joi.string().required().label('Please enter Place'), 
+          place:joi.string().min(3).required().label('Please enter Place'), 
           projectTask:joi.string().required().label('Please select Activity Code'),
+          remarks:joi.string().min(3).label('Plaese Enter Remarks'),
           amount:joi.number().required().label('Please enter Amount'),
           amt:joi.number().min(0).label('Amount cannot be negative.'),
           imgpath:joi.string().invalid('demo').required().label('Please Upload File/Attachment'),
         //  activity_code:joi.required,
       })
           
-          let result= schema.validate({projectTask:bodyResult.projectTask,dated:bodyResult.date,date:bodyResult.date,place:bodyResult.place,imgpath:bodyResult.imgpath,amount:bodyResult.amount,amt:bodyResult.amount});
+          let result= schema.validate({remarks:bodyResult.remarks,projectTask:bodyResult.projectTask,dated:bodyResult.date,date:bodyResult.date,place:bodyResult.place,imgpath:bodyResult.imgpath,amount:bodyResult.amount,amt:bodyResult.amount});
       if(result.error)
       {
           console.log('fd'+result.error)
@@ -1374,11 +1376,13 @@ router.get('/telephoneFood/:parentTourBillId',verify, (request, response) => {
               famt:joi.number().min(0).label('Fooding Expense cannot be negative.'),
               laundryExpenses:joi.number().required().label('Please enter Laundry Expense (If no Laundry Expense then enter "0")'),
               lamt:joi.number().min(0).label('Laundry Expense cannot be negative.'),
+               
               projectTask:joi.string().required().label('Please select Activity Code. '),
+              remarks:joi.string().min(3).label('Please Enter Remark'),
               imgpath:joi.string().invalid('demo').label('Please Upload File/Attachments.').required(),
               })   // .or('foodingExpenses','laundryExpenses')
       
-            let result= schema.validate({projectTask:request.body.projectTask, foodingExpenses:request.body.foodingExpenses,famt:request.body.foodingExpenses,laundryExpenses:request.body.laundryExpenses,lamt:request.body.laundryExpenses,imgpath:request.body.imgpath});
+            let result= schema.validate({remarks:request.body.remarks,projectTask:request.body.projectTask, foodingExpenses:request.body.foodingExpenses,famt:request.body.foodingExpenses,laundryExpenses:request.body.laundryExpenses,lamt:request.body.laundryExpenses,imgpath:request.body.imgpath});
                     if(result.error)
                       {
                         console.log('Vladtion '+JSON.stringify(result.error));
@@ -1407,10 +1411,11 @@ router.get('/telephoneFood/:parentTourBillId',verify, (request, response) => {
                   laundryExpenses:joi.number().required().label('Please enter Laundry Expense (If no Laundry Expense then enter "0")'),
                   lamt:joi.number().min(0).label('Laundry Expense cannot be negative.'),
                   projectTask:joi.string().required().label('Please select Activity Code. '),
+                  remarks:joi.string().min(3).label('Please Enter Remark'),                  
                   imgpath:joi.string().invalid('demo').label('Please Upload File/Attachments.').required(),
                   })   // .or('foodingExpenses','laundryExpenses')
           
-                let result= schema.validate({projectTask:request.body.projectTask[i],foodingExpenses:request.body.foodingExpenses[i],famt:request.body.foodingExpenses[i],laundryExpenses:request.body.laundryExpenses[i],lamt:request.body.laundryExpenses[i],imgpath:request.body.imgpath[i]});
+                let result= schema.validate({remarks:request.body.remarks,projectTask:request.body.projectTask[i],foodingExpenses:request.body.foodingExpenses[i],famt:request.body.foodingExpenses[i],laundryExpenses:request.body.laundryExpenses[i],lamt:request.body.laundryExpenses[i],imgpath:request.body.imgpath[i]});
                         if(result.error)
                           {
                             console.log('Vladtion '+JSON.stringify(result.error));
@@ -1749,13 +1754,14 @@ router.get('/miscellaneousCharge',verify,(request,response)=>{
           const schema =joi.object({
             dated:joi.date().required().label('Please enter date'),
             date:joi.date().max('now').required().label('Date must be less than or equals to today'),
-            particulars_mode:joi.string().required().label('Please enter Particulars(Mode)'),
+            particulars_mode:joi.string().min(3).required().label('Please enter Particulars(Mode)'),
             projectTask:joi.string().label('Please select Activity Code '),
+            remarks:joi.string().required().min(3).label('Please enter remark'),
             amount:joi.number().required().label('Please enter Amount'),
             amt:joi.number().min(0).label('Amount cannot be negative.'),
             imgpath:joi.string().invalid('demo').required().label('Please Upload File/Attachment'),
         })
-        let result = schema.validate({projectTask:request.body.projectTask,dated:request.body.date,date:request.body.date,amount:request.body.amount,amt:request.body.amount,particulars_mode:request.body.particulars_mode ,imgpath:request.body.imgpath})
+        let result = schema.validate({remarks:request.body.remarks,projectTask:request.body.projectTask,dated:request.body.date,date:request.body.date,amount:request.body.amount,amt:request.body.amount,particulars_mode:request.body.particulars_mode ,imgpath:request.body.imgpath})
         console.log('validation '+JSON.stringify(result));
         if(result.error)
         {
@@ -1784,13 +1790,14 @@ router.get('/miscellaneousCharge',verify,(request,response)=>{
                const schema =joi.object({
                 dated:joi.date().required().label('Please enter date'),
                 date:joi.date().max('now').required().label('Date must be less than or equals to today'),
-                particulars_mode:joi.string().required().label('Please enter Particulars(Mode)'),
+                particulars_mode:joi.string().min(3).required().label('Please enter Particulars(Mode)'),
                 projectTask:joi.string().label('Please select Activity Code '),
+                remarks:joi.string().required().min(3).label('Please enter remark'),
                 amount:joi.number().required().label('Please enter Amount'),
                 amt:joi.number().min(0).label('Amount cannot be negative.'),
                 imgpath:joi.string().invalid('demo').required().label('Please Upload File/Attachment'),
              })
-            let result = schema.validate({projectTask:request.body.projectTask[i],dated:request.body.date[i],date:request.body.date[i],amount:request.body.amount[i],amt:request.body.amount[i],particulars_mode:request.body.particulars_mode[i],imgpath:request.body.imgpath[i]})
+            let result = schema.validate({remarks:request.body.remarks,projectTask:request.body.projectTask[i],dated:request.body.date[i],date:request.body.date[i],amount:request.body.amount[i],amt:request.body.amount[i],particulars_mode:request.body.particulars_mode[i],imgpath:request.body.imgpath[i]})
             console.log('validation '+JSON.stringify(result));
             if(result.error)
             {

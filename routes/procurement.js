@@ -499,7 +499,7 @@ router.post('/insertAsssetForm',(request,response)=>{
    }
   
 const schema=joi.object({
-    assetRequisitionName:joi.string().min(5).required().label('Please Fill Asset Requisition Name'),
+    assetRequisitionName:joi.string().min(3).required().label('Please Fill Asset Requisition Name'),
     asset: joi.string().max(255).required().label('Asset Requisition Name is too long'),
     project:joi.string().required().label('Please choose Project/Department'),
     planDate:joi.string().required().label('Please fill Target Date of Receiving'),
@@ -645,7 +645,7 @@ router.post('/updateasset',(request,response)=>{
         if(payPass=='true' || payPass=='false'){
 
             const schema=joi.object({
-                assetName:joi.string().min(5).required().label('Please Fill Asset Requisition Name'),
+                assetName:joi.string().min(3).required().label('Please Fill Asset Requisition Name'),
             })
             let result=schema.validate({assetName});
             if(result.error){
@@ -686,7 +686,7 @@ router.post('/updateasset',(request,response)=>{
 
 
                     const schema=joi.object({
-                        assetName:joi.string().min(5).required().label('Please Fill Asset Requisition Name'),
+                        assetName:joi.string().min(3).required().label('Please Fill Asset Requisition Name'),
                     })
                     let result=schema.validate({assetName});
                     if(result.error){
@@ -1765,9 +1765,9 @@ router.post('/saveItemDescription',(request,response)=>{
     {
         schema=joi.object({
             category:joi.string().required().label('Please Choose Item Category'),
-            unit:joi.string().required().label('Please Fill Unit'),
+            unit:joi.string().min(2).required().label('Please Fill Unit'),
             items:joi.string().required().label('Please Select Items'),
-            cost:joi.string().required().label('Please Fill Per Unit Cost'),
+            cost:joi.string().min(1).required().label('Please Fill Per Unit Cost'),
             other:joi.string().min(1).max(255).required().label('Please Fill Others as you have choosen other Items'),
               })
         result = schema.validate({category:category,unit:unit,items:items,cost:cost,other:other});
@@ -1778,9 +1778,9 @@ router.post('/saveItemDescription',(request,response)=>{
     {
         schema=joi.object({
             category:joi.string().required().label('Please Choose Item Category'),
-            unit:joi.string().required().label('Please Fill Unit'),
+            unit:joi.string().min(2).required().label('Please Fill Unit'),
             items:joi.string().required().label('Please Select Items'),
-            cost:joi.string().required().label('Please Fill Per Unit Cost'),
+            cost:joi.string().min(1).required().label('Please Fill Per Unit Cost'),
               })
         result = schema.validate({category:category,unit:unit,items:items,cost:cost});
     }
@@ -1833,7 +1833,7 @@ router.post('/saveItemDescription',(request,response)=>{
             bankkDet:joi.string().min(3).max(255).required().label('Please Fill Bank Details'),
             accNo:joi.string().min(3).required().label('Please Fill Bank Account Number'),
             ifsc:joi.string().min(3).max(20).required().label('Please Fill Bank IFSC Code.'),
-            reason:joi.string().min(1).max(255).required().label('Please Fill Reason for not providing GST no.'),
+            reason:joi.string().min(3).max(255).required().label('Please Fill Reason for not providing GST no.'),
             
               })
         result = schema.validate({conta:cont,cont:cont,state:state,district:district,name:name,bankkDet:bankkDet,accNo:accNo,ifsc:ifsc,reason:reason});
@@ -1846,12 +1846,12 @@ router.post('/saveItemDescription',(request,response)=>{
          schema=joi.object({
             state:joi.string().required().label('Please Choose State'),
             district:joi.string().required().label('Please Choose District'),
-            name:joi.string().min(1).max(80).required().label('Please Fill Vendor Name'),
+            name:joi.string().min(3).max(80).required().label('Please Fill Vendor Name'),
             conta:joi.string().required().label('Please Enter Contact Number'),
             cont:joi.number().integer().min(1000000000).max(9999999999).required().label('Contact number should have exact 10 digits'),
-            bankkDet:joi.string().min(1).max(255).required().label('Please Fill Bank Details'),
+            bankkDet:joi.string().min(3).max(255).required().label('Please Fill Bank Details'),
             accNo:joi.number().required().label('Please Fill Bank Account Number'),
-            ifsc:joi.string().min(1).max(20).required().label('Please Fill Bank IFSC Code.'),
+            ifsc:joi.string().min(3).max(20).required().label('Please Fill Bank IFSC Code.'),
               })
          result = schema.validate({conta:cont,cont:cont,state:state,district:district,name:name,bankkDet:bankkDet,accNo:accNo,ifsc:ifsc});
      }
@@ -2117,7 +2117,7 @@ router.post('/updateVendor',(request,response)=>{
             bankDetail:joi.string().min(3).max(255).required().label('Please Fill Bank Details'),
             aacc:joi.string().min(3).required().label('Please Fill Bank Account Number'),
             ifsc:joi.string().min(3).max(20).required().label('Please Fill Bank IFSC Code.'),
-            reason:joi.string().min(1).max(255).required().label('Please Fill Reason for not providing GST no.'),
+            reason:joi.string().min(3).max(255).required().label('Please Fill Reason for not providing GST no.'),
             
               })
         result = schema.validate({state:state,district:district,name:name,bankDetail:bankDetail,aacc:aacc,ifsc:ifsc,reason:reason});
@@ -2129,10 +2129,10 @@ router.post('/updateVendor',(request,response)=>{
         schema=joi.object({
            state:joi.string().required().label('Please Choose State'),
            district:joi.string().required().label('Please Choose District'),
-           name:joi.string().min(1).max(80).required().label('Please Fill Vendor Name'),
-           bankDetail:joi.string().min(1).max(255).required().label('Please Fill Bank Details'),
-           aacc:joi.string().required().label('Please Fill Bank Account Number'),
-           ifsc:joi.string().min(1).max(20).required().label('Please Fill Bank IFSC Code.'),
+           name:joi.string().min(3).max(80).required().label('Please Fill Vendor Name'),
+           bankDetail:joi.string().min(3).max(255).required().label('Please Fill Bank Details'),
+           aacc:joi.string().required(3).label('Please Fill Bank Account Number'),
+           ifsc:joi.string().min(3).max(20).required().label('Please Fill Bank IFSC Code.'),
              })
         result = schema.validate({state:state,district:district,name:name,bankDetail:bankDetail,aacc:aacc,ifsc:ifsc});
     }
