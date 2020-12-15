@@ -1415,7 +1415,7 @@ router.get('/getpettycashlist',verify,(request, response) => {
   let expenseId = request.query.expenseId;
   console.log('expenseId  '+expenseId);
   pool
-  .query('SELECT sfid, name, bill_no__c, Bill_Date__c ,Nature_of_exp__c ,createddate from salesforce.Petty_Cash_Expense__c WHERE expense__c = $1',[expenseId])
+  .query('SELECT sfid, name, bill_no__c, Bill_Date__c,amount__c ,Nature_of_exp__c ,createddate from salesforce.Petty_Cash_Expense__c WHERE expense__c = $1',[expenseId])
   .then((pettyCashQueryResult) => {
         console.log('pettyCashQueryResult  '+JSON.stringify(pettyCashQueryResult.rows));
           if(pettyCashQueryResult.rowCount > 0)
@@ -1434,6 +1434,7 @@ router.get('/getpettycashlist',verify,(request, response) => {
                 obj.name = '<a href="#" class="pettyCashTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
                 obj.billNo = eachRecord.bill_no__c;
                 obj.natureOfExpense = eachRecord.nature_of_exp__c;
+                obj.total=eachRecord.amount__c;
                 obj.billDate = strBillDate.split(',')[0];
                 obj.createDdate = strDate;
                 obj.deleteAction = '<button href="#" class="btn btn-primary deletePetty" id="'+eachRecord.sfid+'" >Delete</button>'
