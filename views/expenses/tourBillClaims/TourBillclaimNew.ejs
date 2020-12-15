@@ -1,5 +1,8 @@
 <% include ../../partials/navbar %>
 <% include ../../partials/footer %>
+
+<p id='ExpId'><%= parentExpenseId %></p>
+
 <div>
   <br>
 </div>
@@ -116,6 +119,7 @@
                           if(jqXHR.responseText== "Saved Successfully !")
                              {
                                   alert('Successfully Inserted!');
+                                  window.open('/expense/tourBillClaim/tourBillClaimListview?expenseId='+assetId,'_blank');
                                 $('#tourBillClaimForm')[0].reset()
                                 let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+jqXHR.responseText+
                                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
