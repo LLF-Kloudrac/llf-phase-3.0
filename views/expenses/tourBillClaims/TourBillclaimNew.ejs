@@ -1,7 +1,7 @@
 <% include ../../partials/navbar %>
 <% include ../../partials/footer %>
 
-<p id='ExpId'><%= parentExpenseId %></p>
+<p id='expenseId'><%= parentExpenseId %></p>
 
 <div>
   <br>
@@ -91,6 +91,10 @@
   
 <script>
      $(document).ready(function(){
+
+      $('#expenseId').hide();
+        let expenseId = document.getElementById('expenseId').innerHTML;
+
         $('#createTourBillClaimModal').modal('show');
         $('#tourBillClaimSubmitbutton').on('click',function(event){
                 event.stopImmediatePropagation();
@@ -119,7 +123,7 @@
                           if(jqXHR.responseText== "Saved Successfully !")
                              {
                                   alert('Successfully Inserted!');
-                                  window.open('/expense/tourBillClaim/tourBillClaimListview?expenseId='+assetId,'_blank');
+                                  window.open('/expense/tourBillClaim/tourBillClaimListview?expenseId='+expenseId,'_blank');
                                 $('#tourBillClaimForm')[0].reset()
                                 let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+jqXHR.responseText+
                                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
