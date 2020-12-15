@@ -16,18 +16,20 @@ router.get('/',verify,(request, response)=> {
 });
 
 router.get('/assetDetails',verify,(request, response)=> {
-    console.log('inside asset details');
+    console.log('inside asset details zz');
     console.log('Asset request.user '+JSON.stringify(request.user));
     var userId = request.user.sfid;
     var objUser = request.user;
     console.log('Asset userId : '+userId);
-    let qry ='SELECT asset.sfid, asset.isHerokuApprovalButtonDisabled__c,asset.Name, proj.name as projname, proj.sfid as projId,'+
-            'asset.Manager_Approval__c, asset.Procurement_Head_Approval__c, asset.Procurement_Committee_Approval__c, '+
+    let qry ='SELECT asset.sfid, asset.isHerokuApprovalButtonDisabled__c,asset.Activity_Code_project__c,asset.accounts_approval__c,asset.Requested_Closure_Plan_Date__c,asset.Status__c,asset.Name, proj.name as projname, proj.sfid as projId,'+
+            'asset.Manager_Approval__c, asset.Procurement_Head_Approval__c, asset.Procurement_Committee_Approval__c,act.Name as actName, '+
             'asset.Procurement_Comt_Approval_for_fortnight__c, asset.Management_Approval__c, asset.Chairperson_Approval__c, asset.Management_Approval_less_than_3_quotes__c, '+
             'asset.Management_Approval_for_fortnight_limit__c, asset.Management_Approval_Activity_Code__c, asset.createddate, '+
              'asset.Number_Of_IT_Product__c, asset.Number_Of_Non_IT_Product__c, asset.Procurement_IT_total_amount__c, asset.Procurement_Non_IT_total_amount__c, asset.Total_amount__c FROM  salesforce.Asset_Requisition_Form__c asset '+
              'INNER JOIN salesforce.Milestone1_Project__c proj '+
              'ON asset.project_department__c =  proj.sfid '+
+             'INNER JOIN salesforce.Activity_Code__c act '+
+             'ON asset.Activity_Code_project__c =  act.sfid '+
              ' WHERE asset.Submitted_By_Heroku_User__c = $1 AND asset.sfid IS NOT NULL';
 
     pool
@@ -45,6 +47,12 @@ router.get('/assetDetails',verify,(request, response)=> {
                 crDate.setHours(crDate.getHours() + 5);
                 crDate.setMinutes(crDate.getMinutes() + 30);
                 let strDate = crDate.toLocaleString();
+
+                let targetDate = new Date(assetQueryResult.rows[i].requested_closure_plan_date__c);
+                targetDate.setHours(targetDate.getHours()+5);
+                targetDate.setMinutes(targetDate.getMinutes() + 30);
+                let strDateOfRecev = targetDate.toLocaleString();
+
               obj.sequence = i+1;
              // obj.editbutton = '<button    data-toggle="modal" data-target="#assetRequisitionEditModal" class="btn btn-primary assetRequisitionEditModalButton"   id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
               
@@ -55,6 +63,10 @@ router.get('/assetDetails',verify,(request, response)=> {
               obj.itamount = assetQueryResult.rows[i].procurement_it_total_amount__c;
               obj.nonitamount = assetQueryResult.rows[i].procurement_non_it_total_amount__c;
               obj.totalamount = assetQueryResult.rows[i].total_amount__c;
+              obj.dateofRec = strDateOfRecev;
+              obj.actCode = assetQueryResult.rows[i].actname;
+              obj.accAppStatus=assetQueryResult.rows[i].accounts_approval__c;
+              obj.status = assetQueryResult.rows[i].status__c
               if(assetQueryResult.rows[i].manager_approval__c == 'Pending' || assetQueryResult.rows[i].procurement_head_approval__c == 'Pending' ||
                  assetQueryResult.rows[i].procurement_committee_approval__c == 'Pending' || assetQueryResult.rows[i].procurement_comt_approval_for_fortnight__c == 'Pending' || 
                  assetQueryResult.rows[i].management_approval__c == 'Pending' || assetQueryResult.rows[i].chairperson_approval__c == 'Pending' ||
@@ -1643,7 +1655,7 @@ router.get('/getVendorListView',verify,(request,response)=>{
 })
 
 router.get('/getVendorsList',(request,response)=>{
-    let qry ='select sfid ,name,vendor_Name__c ,address__c,createddate,GST_No__c,Reason_for_not_providing_GST_no__c,Bank_IFSC_Code__c ,Bank_Account_No__c,State__c,District__c '+
+    let qry ='select sfid ,name,vendor_Name__c ,Contact_No__c,name_of_signing_authority__c,address__c,createddate,GST_No__c,Reason_for_not_providing_GST_no__c,Bank_IFSC_Code__c ,Bank_Account_No__c,State__c,District__c '+
      'FROM salesforce.Impaneled_Vendor__c WHERE sfid IS NOT NULL';
      console.log('qry  =>'+qry)
      pool.query(qry)
@@ -1664,6 +1676,8 @@ router.get('/getVendorsList',(request,response)=>{
               obj.vendorname = eachRecord.vendor_name__c;
               obj.state = eachRecord.state__c;
               obj.district = eachRecord.district__c;
+              obj.signAuthority=eachRecord.name_of_signing_authority__c;
+              obj.contact =eachRecord.contact_no__c;
               obj.add = eachRecord.address__c;
               obj.createdDate = strDate;
               i= i+1;

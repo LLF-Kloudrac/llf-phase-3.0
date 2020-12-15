@@ -1508,7 +1508,7 @@ router.get('/getconveyancelist' ,verify,(request,response) => {
   let expenseId = request.query.expenseId;
   console.log('expenseId conveyance '+expenseId);
   pool
-  .query('SELECT sfid, name, Mode_of_Conveyance__c, Purpose_of_Travel__c ,createddate from salesforce.Conveyance_Voucher__c WHERE expense__c = $1 AND sfid IS NOT NULL',[expenseId])
+  .query('SELECT sfid, name, Mode_of_Conveyance__c,Amount__c	, Purpose_of_Travel__c ,createddate from salesforce.Conveyance_Voucher__c WHERE expense__c = $1 AND sfid IS NOT NULL',[expenseId])
   .then((conveyanceQueryResult)=>{
     console.log('conveyanceQueryResult :'+conveyanceQueryResult.rowCount);
     console.log('conveyanceQueryResult :'+JSON.stringify(conveyanceQueryResult.rows));
@@ -1526,6 +1526,7 @@ router.get('/getconveyancelist' ,verify,(request,response) => {
         obj.name = '<a href="#" class="conveyanceTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
         obj.TravellingPurpose = eachRecord.purpose_of_travel__c;
         obj.createDdate = strDate;
+        obj.BillAmt=eachRecord.amount__c;
         obj.modeOfTravel = eachRecord.mode_of_conveyance__c;
         obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" id="'+eachRecord.sfid+'" >Delete</button>'
 
