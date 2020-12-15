@@ -503,8 +503,9 @@ const schema=joi.object({
     asset: joi.string().max(255).required().label('Asset Requisition Name is too long'),
     project:joi.string().required().label('Please choose Project/Department'),
     planDate:joi.string().required().label('Please fill Target Date of Receiving'),
+    act:joi.string().required().label('Pleasse Chose Activity'),
 })
-let result=schema.validate({assetRequisitionName,project,planDate,asset:assetRequisitionName});
+let result=schema.validate({act,assetRequisitionName,project,planDate,asset:assetRequisitionName});
 if(result.error){
     console.log('fd'+result.error);
     response.send(result.error.details[0].context.label);    
