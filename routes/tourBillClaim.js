@@ -583,8 +583,24 @@ router.post('/conveyanceCharges',verify, (request, response) => {
   let bodyResult =  request.body;
   console.log('conveyanceCharges bodyResult  : '+JSON.stringify(bodyResult));
   console.log('typeof(request.body.date)   : '+typeof(request.body.date));
-
-  let numberOfRows ;  let lstConveyanceCharges = [];
+  let parentTourBillId = bodyResult.parentTourBillId;
+  console.log('parentTourBillId conveyanceCharge '+parentTourBillId);
+  pool
+  .query('Select sfid , name,expense__c from salesforce.Tour_Bill_Claim__c where sfid =$1',[parentTourBillId])
+  .then((tourBillQueryResult)=>{
+    console.log('tourBillQueryResult => '+JSON.stringify(tourBillQueryResult.rows));
+    let expenseId =tourBillQueryResult.rows[0].expense__c;
+    console.log('expense ID for Validation  = '+expenseId);
+    pool.
+    query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId ])
+    .then((ExpenseQuerryResult)=>{
+      console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
+      if(ExpenseQuerryResult.rows[0].approval_status__c=='Approved' || ExpenseQuerryResult.rows[0].approval_status__c=='Pending'){
+        console.log('sddjs');
+        response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
+      }
+      else{
+        let numberOfRows ;  let lstConveyanceCharges = [];
   if(typeof(request.body.date) == 'object')
   {
       numberOfRows = request.body.date.length;
@@ -681,7 +697,19 @@ router.post('/conveyanceCharges',verify, (request, response) => {
       console.log('conveyanceChargesQueryError   '+conveyanceChargesQueryError.stack);
       response.send('Error Occured !');
   });
-  
+
+      }  
+
+    })
+    .catch((Error)=>{
+      console.log('Error in Expense validation in TourBill Claim'+JSON.stringify(Error.stack));
+    })            
+
+})
+    .catch((Error)=>{
+      console.log('Error in Expense validation in TourBill Claim'+JSON.stringify(Error.stack));
+    })            
+
 });
 
  router.get('/conveyanceChargesListView',verify,(request,response)=>{
@@ -890,10 +918,12 @@ router.post('/boardingLodgingCharges',verify, (request, response) => {
 let objUser = request.user;
 var startTime,endTime;
 var arrStartTime = [], arrEndTime = [];
+let parentTourBillId =request.body.parentTourBillId;
+console.log('parentTourBillId BordingLodging => '+parentTourBillId);
 console.log('body Boarding Charges '+JSON.stringify(request.body));
 
 console.log('typeof(request.body.date)   : '+typeof(request.body.stayOption));
-const {stayOption,projectTask,placeJourney,tier3City,fromDate ,fromTime,toDate,toTime,totalOwnStay,totalAllowances,dailyAllowances, amtForBL,actualAMTForBL,policyamtForBL, ownStayAmount,activity_code,imgpath ,parentTourBillId} =request.body;
+const {stayOption,projectTask,placeJourney,tier3City,fromDate ,fromTime,toDate,toTime,totalOwnStay,totalAllowances,dailyAllowances, amtForBL,actualAMTForBL,policyamtForBL, ownStayAmount,activity_code,imgpath} =request.body;
 console.log('ulploadFile '+imgpath);
 console.log('From stayOption '+stayOption );
 console.log('projectTask '+projectTask );
@@ -912,309 +942,345 @@ console.log(' actualAMTForBL '+actualAMTForBL );
 console.log(' ownStayAmount '+ownStayAmount );
 console.log(' activity_code '+activity_code );
 
-
-    let numberOfRows ;  var lstBoarding = [] , parentTourBillTemp ='';
-    if(typeof(request.body.stayOption) == 'object')
-    {
-       numberOfRows = request.body.stayOption.length;
-        console.log('numberOfRows  '+numberOfRows); 
-        for(let i=0; i < numberOfRows ;i++)
-      { 
-        let schema,result ; 
-
-        if((stayOption[i] ==  null) || (stayOption[i] ==  '' ))
-        {
-           schema =joi.object({
-            stayOption:joi.string().required().label('Please select Stay Option'),
-         
-          })
-          result=schema.validate({stayOption:stayOption[i]});
-          }    
-        else if(stayOption[i] == 'Stay')
-          {
-           schema =joi.object({
-         //   stayOption:joi.string().required().label('Please select Stay Option'),
-            projectTask:joi.string().required().label('Please select Activity Code.'),
-          placeJourney: joi.string().required().label('Please select Place of Journey.'),
-          fromDated:joi.date().required().label('Please select FROM(Departure Time from Residence)'),
-           fromDat:joi.date().max('now').required().label('Please select FROM(Departure Time from Residence) less than or equals to Today'),
-           fromTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select FROM(Departure Time from Residence) Time'),
-           toDated:joi.date().required().label('Please select TO(Arrival Time to Residence)'),
-           toDate:joi.date().max('now').required().label('TO(Arrival Time to Residence must be less than or equals to Today'),
-           fromDate:joi.date().required().less(joi.ref('toDate')).label('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)'),
-           toTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select TO (Arrival Time to Residence)Time'),
-           actualAMTForBL:joi.number().required().label('Please enter Actual Boarding lodging Amount'),
-           amt:joi.number().min(0).label('Actual Boarding lodging Amount cannot be negative.'),
-           imgpath:joi.string().invalid('demo').label('Please Upload File/Attachments').required(),
-          })
-
-          result=schema.validate({projectTask:projectTask[i],fromDated:fromDate[i],fromDat:fromDate[i],fromTimes:fromTime[i],placeJourney:placeJourney[i], fromDate:fromDate[i],toDated:toDate[i],toDate:toDate[i],toTimes:toTime[i],actualAMTForBL:actualAMTForBL[i],amt:actualAMTForBL[i],imgpath:imgpath[i]});
-        }
-        else if(stayOption[i] == 'Own Stay')
-        {
-
-           schema =joi.object({
-         //   stayOption:joi.string().required().label('Please Choose Stay Option'),
-         projectTask:joi.string().required().label('Please select Activity Code.'),
-         placeJourney: joi.string().required().label('Please select Place of Journey.'),
-         fromDated:joi.date().required().label('Please select FROM(Departure Time from Residence)'),
-          fromDat:joi.date().max('now').required().label('Please select FROM(Departure Time from Residence) less than or equals to Today'),
-          fromTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select FROM(Departure Time from Residence) Time'),
-          toDated:joi.date().required().label('Please select TO(Arrival Time to Residence)'),
-          toDate:joi.date().max('now').required().label('TO(Arrival Time to Residence must be less than or equals to Today'),
-          fromDate:joi.date().required().less(joi.ref('toDate')).label('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)'),
-          toTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select TO (Arrival Time to Residence)Time'),
-           // imgpath:joi.string().invalid('demo').label('Please Upload File/Attachments').required(),
-          })
-
-          result=schema.validate({projectTask:projectTask[i],fromDated:fromDate[i],fromDat:fromDate[i],fromTimes:fromTime[i],placeJourney:placeJourney[i], fromDate:fromDate[i],toDated:toDate[i],toDate:toDate[i],toTimes:toTime[i]});
-        }
-       
-      //  result=schema.validate({stayOption:stayOption[i],projectTask:projectTask[i],placeJourney:placeJourney[i], toDate:toDate[i],fromDate:fromDate[i],actualAMTForBL:actualAMTForBL[i],imgpath:imgpath[i]});
-        console.log('Validations'+JSON.stringify(result));
-        if(result.error)
-        {
-          console.log('fd'+result.error)
-          response.send(result.error.details[0].context.label);
-        }
-        else
-        {
-        var lstcharges=[];
-            lstcharges.push(stayOption[i]);
-            console.log('.....1 =>'+ lstcharges);
-            lstcharges.push(placeJourney[i]);
-            lstcharges.push(tier3City[i]);
-            lstcharges.push(projectTask[i]);
-            console.log('.....2 =>'+ lstcharges);
-          
-         /*   let fromDateTime = fromDate[i]+'T'+fromTime[i]+':00';
-            lstcharges.push(fromDateTime[i]);      
-            let toDateTime = toDate[i]+'T'+toTime[i]+':00';
-            lstcharges.push(toDateTime[i]);
-            
-*/
-            var starthours = Number(fromTime[i].match(/^(\d+)/)[1]);
-            var startminutes = Number(fromTime[i].match(/:(\d+)/)[1]);
-            var endhours = Number(toTime[i].match(/^(\d+)/)[1]);
-            var endminutes = Number(toTime[i].match(/:(\d+)/)[1]);
-            console.log('starthours '+starthours);
-            console.log('startminutes '+startminutes);
-            console.log('endhours '+endhours);
-            console.log('endminutes '+endminutes);
-            
-            arrStartTime[i] = (starthours > 12) ? (starthours-12 + ':' + startminutes + ':00'+' PM') : (starthours + ':' + startminutes + ':00' +' AM');
-            arrEndTime[i] = (endhours > 12) ? (endhours-12 + ':' + endminutes + ':00'+' PM') : (endhours + ':' + endminutes + ':00'+' AM');
-
-            console.log('startTime '+arrStartTime[i]);
-            console.log('endTime '+arrEndTime[i]);
-
-
-
-
-            let fromDateTime = fromDate[i]+' '+fromTime[i]+':00';
-            console.log('fromDateTime  : '+fromDateTime);
-
-            let strDate = new Date(fromDateTime);
-            console.log('strDate  : '+strDate);
-
-            strDate.setHours(strDate.getHours() + 1);
-            strDate.setMinutes(strDate.getMinutes() - 60);
-            let strartDate = strDate.toUTCString();
-            console.log('fromDateTime  : '+fromDateTime);
-            console.log('strartDate  : '+strartDate);
-
-            lstcharges.push(strartDate);   
-
-            let toDateTime = toDate[i]+' '+toTime[i]+':00';
-            console.log('toDateTime  : '+toDateTime);
-
-            let endDate = new Date(toDateTime);
-            console.log('endDate  : '+endDate);
-
-            endDate.setHours(endDate.getHours() + 1);
-            endDate.setMinutes(endDate.getMinutes() - 60);
-            let enDate = endDate.toUTCString();
-
-            console.log('endDate  : '+endDate);
-            console.log('enDate  : '+enDate);
-            lstcharges.push(enDate);
-            
-
-            lstcharges.push(totalOwnStay[i]); 
-            lstcharges.push(totalAllowances[i]);  
-           
-            lstcharges.push(dailyAllowances[i]);
-
-            lstcharges.push(amtForBL[i]);
-            lstcharges.push(actualAMTForBL[i]);
-            
-            lstcharges.push(ownStayAmount[i]);
-
-            console.log('.....4 =>'+ lstcharges);
-            if(typeof(imgpath[i] != 'undefined'))
-            lstcharges.push(imgpath[i]);
-            else
-            lstcharges.push('');
-            lstcharges.push(parentTourBillId[i]);
-           
-         
-           console.log('.. '+lstcharges);
-
-           parentTourBillTemp = parentTourBillId[i];
-           lstBoarding.push(lstcharges);
-        }
-      }console.log(' jsdkjasdkjad'+lstBoarding);
-    }
-    else{
-
-      let schema, result;
-
-      if(stayOption == null || stayOption == '' )
-      {
-         schema =joi.object({
-          stayOption:joi.string().required().label('Please select Stay Option'),
-       
-        })
-        result=schema.validate({stayOption:stayOption});
-        }    
-      else if(stayOption == 'Stay')
-      {
-          schema=joi.object({
-         // stayOption:joi.string().required().label('Please Choose Stay Option'),
-          projectTask:joi.string().required().label('Please select Activity Code.'),
-          placeJourney: joi.string().required().label('Please select Place of Journey.'),
-          fromDated:joi.date().required().label('Please select FROM(Departure Time from Residence)'),
-           fromDat:joi.date().max('now').required().label('Please select FROM(Departure Time from Residence) less than or equals to Today'),
-           fromTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select FROM(Departure Time from Residence) Time'),
-           toDated:joi.date().required().label('Please select TO(Arrival Time to Residence)'),
-           toDate:joi.date().max('now').required().label('TO(Arrival Time to Residence must be less than or equals to Today'),
-           fromDate:joi.date().required().less(joi.ref('toDate')).label('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)'),
-           toTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select TO (Arrival Time to Residence)Time'),
-           actualAMTForBL:joi.number().required().label('Please enter Actual Boarding lodging Amount'),
-           amt:joi.number().min(0).label('Actual Boarding lodging Amount cannot be negative.'),
-           imgpath:joi.string().invalid('demo').label('Please Upload File/Attachments').required(),
-          
-        })
-         result=schema.validate({projectTask:projectTask,placeJourney:placeJourney,fromDated:fromDate,fromDat:fromDate,toDated:toDate,fromDate:fromDate,fromTimes:fromTime,toDate:toDate,toTimes:toTime,actualAMTForBL:actualAMTForBL,amt:actualAMTForBL,imgpath:imgpath});
-
-      }
-      else if(stayOption == 'Own Stay')
-      {
-         schema=joi.object({
-        //  stayOption:joi.string().required().label('Please Choose Stay Option'),
-          projectTask:joi.string().required().label('Please select Activity Code.'),
-          placeJourney: joi.string().required().label('Please select Place of journey.'),
-          fromDated:joi.date().required().label('Please select FROM(Departure Time from Residence)'),
-          fromDat:joi.date().max('now').required().label('Please select FROM(Departure Time from Residence) less than or equals to Today'),
-          fromTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select FROM(Departure Time from Residence) Time'),
-          toDated:joi.date().required().label('Please select TO(Arrival Time to Residence)'),
-          toDate:joi.date().max('now').required().label('TO(Arrival Time to Residence must be less than or equals to Today'),
-          fromDate:joi.date().required().less(joi.ref('toDate')).label('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)'),
-          toTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select TO (Arrival Time to Residence)Time'),
-          
-        })
-         result=schema.validate({projectTask:projectTask,placeJourney:placeJourney,fromDated:fromDate,fromDat:fromDate,fromTimes:fromTime,toDated:toDate,fromDate:fromDate,toDate:toDate,toTimes:toTime});
-
-      }
-      
-     // let result=schema.validate({stayOption,projectTask,placeJourney, toDate,fromDate,actualAMTForBL});
-      console.log('Validations'+JSON.stringify(result));
-      if(result.error)
-      {
-        console.log('fd'+result.error)
-              response.send(result.error.details[0].context.label);
+pool
+  .query('Select sfid , name,expense__c from salesforce.Tour_Bill_Claim__c where sfid =$1',[parentTourBillId])
+  .then((tourBillQueryResult)=>{
+    console.log('tourBillQueryResult => '+JSON.stringify(tourBillQueryResult.rows));
+    let expenseId =tourBillQueryResult.rows[0].expense__c;
+    console.log('expense ID for Validation  = '+expenseId);
+pool.
+    query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId ])
+    .then((ExpenseQuerryResult)=>{
+      console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
+      if(ExpenseQuerryResult.rows[0].approval_status__c=='Approved' || ExpenseQuerryResult.rows[0].approval_status__c=='Pending'){
+        console.log('sddjs');
+        response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
       }
       else{
-      var lstcharges=[];
-      //   lstcharges.empty();
-                lstcharges.push(stayOption);
-                lstcharges.push(placeJourney);
-                lstcharges.push(tier3City);
-                lstcharges.push(projectTask);
-
-
-                var starthours = Number(fromTime.match(/^(\d+)/)[1]);
-                var startminutes = Number(fromTime.match(/:(\d+)/)[1]);
-                var endhours = Number(toTime.match(/^(\d+)/)[1]);
-                var endminutes = Number(toTime.match(/:(\d+)/)[1]);
+        let numberOfRows ;  var lstBoarding = [] , parentTourBillTemp ='';
+        if(typeof(request.body.stayOption) == 'object')
+        {
+           numberOfRows = request.body.stayOption.length;
+            console.log('numberOfRows  '+numberOfRows); 
+            for(let i=0; i < numberOfRows ;i++)
+          { 
+            let schema,result ; 
+    
+            if((stayOption[i] ==  null) || (stayOption[i] ==  '' ))
+            {
+               schema =joi.object({
+                stayOption:joi.string().required().label('Please select Stay Option'),
+             
+              })
+              result=schema.validate({stayOption:stayOption[i]});
+              }    
+            else if(stayOption[i] == 'Stay')
+              {
+               schema =joi.object({
+             //   stayOption:joi.string().required().label('Please select Stay Option'),
+                projectTask:joi.string().required().label('Please select Activity Code.'),
+              placeJourney: joi.string().required().label('Please select Place of Journey.'),
+              fromDated:joi.date().required().label('Please select FROM(Departure Time from Residence)'),
+               fromDat:joi.date().max('now').required().label('Please select FROM(Departure Time from Residence) less than or equals to Today'),
+               fromTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select FROM(Departure Time from Residence) Time'),
+               toDated:joi.date().required().label('Please select TO(Arrival Time to Residence)'),
+               toDate:joi.date().max('now').required().label('TO(Arrival Time to Residence must be less than or equals to Today'),
+               fromDate:joi.date().required().less(joi.ref('toDate')).label('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)'),
+               toTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select TO (Arrival Time to Residence)Time'),
+               actualAMTForBL:joi.number().required().label('Please enter Actual Boarding lodging Amount'),
+               amt:joi.number().min(0).label('Actual Boarding lodging Amount cannot be negative.'),
+               imgpath:joi.string().invalid('demo').label('Please Upload File/Attachments').required(),
+              })
+    
+              result=schema.validate({projectTask:projectTask[i],fromDated:fromDate[i],fromDat:fromDate[i],fromTimes:fromTime[i],placeJourney:placeJourney[i], fromDate:fromDate[i],toDated:toDate[i],toDate:toDate[i],toTimes:toTime[i],actualAMTForBL:actualAMTForBL[i],amt:actualAMTForBL[i],imgpath:imgpath[i]});
+            }
+            else if(stayOption[i] == 'Own Stay')
+            {
+    
+               schema =joi.object({
+             //   stayOption:joi.string().required().label('Please Choose Stay Option'),
+             projectTask:joi.string().required().label('Please select Activity Code.'),
+             placeJourney: joi.string().required().label('Please select Place of Journey.'),
+             fromDated:joi.date().required().label('Please select FROM(Departure Time from Residence)'),
+              fromDat:joi.date().max('now').required().label('Please select FROM(Departure Time from Residence) less than or equals to Today'),
+              fromTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select FROM(Departure Time from Residence) Time'),
+              toDated:joi.date().required().label('Please select TO(Arrival Time to Residence)'),
+              toDate:joi.date().max('now').required().label('TO(Arrival Time to Residence must be less than or equals to Today'),
+              fromDate:joi.date().required().less(joi.ref('toDate')).label('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)'),
+              toTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select TO (Arrival Time to Residence)Time'),
+               // imgpath:joi.string().invalid('demo').label('Please Upload File/Attachments').required(),
+              })
+    
+              result=schema.validate({projectTask:projectTask[i],fromDated:fromDate[i],fromDat:fromDate[i],fromTimes:fromTime[i],placeJourney:placeJourney[i], fromDate:fromDate[i],toDated:toDate[i],toDate:toDate[i],toTimes:toTime[i]});
+            }
+           
+          //  result=schema.validate({stayOption:stayOption[i],projectTask:projectTask[i],placeJourney:placeJourney[i], toDate:toDate[i],fromDate:fromDate[i],actualAMTForBL:actualAMTForBL[i],imgpath:imgpath[i]});
+            console.log('Validations'+JSON.stringify(result));
+            if(result.error)
+            {
+              console.log('fd'+result.error)
+              response.send(result.error.details[0].context.label);
+            }
+            else
+            {
+            var lstcharges=[];
+                lstcharges.push(stayOption[i]);
+                console.log('.....1 =>'+ lstcharges);
+                lstcharges.push(placeJourney[i]);
+                lstcharges.push(tier3City[i]);
+                lstcharges.push(projectTask[i]);
+                console.log('.....2 =>'+ lstcharges);
+              
+             /*   let fromDateTime = fromDate[i]+'T'+fromTime[i]+':00';
+                lstcharges.push(fromDateTime[i]);      
+                let toDateTime = toDate[i]+'T'+toTime[i]+':00';
+                lstcharges.push(toDateTime[i]);
+                
+    */
+                var starthours = Number(fromTime[i].match(/^(\d+)/)[1]);
+                var startminutes = Number(fromTime[i].match(/:(\d+)/)[1]);
+                var endhours = Number(toTime[i].match(/^(\d+)/)[1]);
+                var endminutes = Number(toTime[i].match(/:(\d+)/)[1]);
                 console.log('starthours '+starthours);
                 console.log('startminutes '+startminutes);
                 console.log('endhours '+endhours);
                 console.log('endminutes '+endminutes);
                 
-                startTime = (starthours > 12) ? (starthours-12 + ':' + startminutes + ':00'+' PM') : (starthours + ':' + startminutes + ':00' +' AM');
-                endTime = (endhours > 12) ? (endhours-12 + ':' + endminutes + ':00'+' PM') : (endhours + ':' + endminutes + ':00'+' AM');
+                arrStartTime[i] = (starthours > 12) ? (starthours-12 + ':' + startminutes + ':00'+' PM') : (starthours + ':' + startminutes + ':00' +' AM');
+                arrEndTime[i] = (endhours > 12) ? (endhours-12 + ':' + endminutes + ':00'+' PM') : (endhours + ':' + endminutes + ':00'+' AM');
     
-                console.log('startTime '+startTime);
-                console.log('endTime '+endTime);
+                console.log('startTime '+arrStartTime[i]);
+                console.log('endTime '+arrEndTime[i]);
     
-              
-                let fromDateTime = fromDate+' '+startTime;
-
+    
+    
+    
+                let fromDateTime = fromDate[i]+' '+fromTime[i]+':00';
+                console.log('fromDateTime  : '+fromDateTime);
+    
                 let strDate = new Date(fromDateTime);
                 console.log('strDate  : '+strDate);
-
+    
                 strDate.setHours(strDate.getHours() + 1);
                 strDate.setMinutes(strDate.getMinutes() - 60);
                 let strartDate = strDate.toUTCString();
                 console.log('fromDateTime  : '+fromDateTime);
                 console.log('strartDate  : '+strartDate);
-                lstcharges.push(strartDate);     
-
-                let toDateTime = toDate+' '+endTime;
-
+    
+                lstcharges.push(strartDate);   
+    
+                let toDateTime = toDate[i]+' '+toTime[i]+':00';
+                console.log('toDateTime  : '+toDateTime);
+    
                 let endDate = new Date(toDateTime);
                 console.log('endDate  : '+endDate);
-
+    
                 endDate.setHours(endDate.getHours() + 1);
                 endDate.setMinutes(endDate.getMinutes() - 60);
                 let enDate = endDate.toUTCString();
-
+    
                 console.log('endDate  : '+endDate);
                 console.log('enDate  : '+enDate);
-
-              
-                console.log('toDateTime  : '+enDate);
                 lstcharges.push(enDate);
-
-                lstcharges.push(totalOwnStay); 
-                lstcharges.push(totalAllowances);
-                lstcharges.push(dailyAllowances);
-                lstcharges.push(amtForBL);
-
-                if(actualAMTForBL != 0)
-                {
-                  lstcharges.push(actualAMTForBL);
-                }
-                else{
-                 var amtForBL1= 0;
-                  lstcharges.push(amtForBL1);
-                }
+                
+    
+                lstcharges.push(totalOwnStay[i]); 
+                lstcharges.push(totalAllowances[i]);  
+               
+                lstcharges.push(dailyAllowances[i]);
+    
+                lstcharges.push(amtForBL[i]);
+                lstcharges.push(actualAMTForBL[i]);
+                
+                lstcharges.push(ownStayAmount[i]);
+    
+                console.log('.....4 =>'+ lstcharges);
+                if(typeof(imgpath[i] != 'undefined'))
+                lstcharges.push(imgpath[i]);
+                else
+                lstcharges.push('');
+                lstcharges.push(parentTourBillId[i]);
+               
+             
+               console.log('.. '+lstcharges);
+    
+               parentTourBillTemp = parentTourBillId[i];
+               lstBoarding.push(lstcharges);
+            }
+          }console.log(' jsdkjasdkjad'+lstBoarding);
+        }
+        else{
+    
+          let schema, result;
+    
+          if(stayOption == null || stayOption == '' )
+          {
+             schema =joi.object({
+              stayOption:joi.string().required().label('Please select Stay Option'),
+           
+            })
+            result=schema.validate({stayOption:stayOption});
+            }    
+          else if(stayOption == 'Stay')
+          {
+              schema=joi.object({
+             // stayOption:joi.string().required().label('Please Choose Stay Option'),
+              projectTask:joi.string().required().label('Please select Activity Code.'),
+              placeJourney: joi.string().required().label('Please select Place of Journey.'),
+              fromDated:joi.date().required().label('Please select FROM(Departure Time from Residence)'),
+               fromDat:joi.date().max('now').required().label('Please select FROM(Departure Time from Residence) less than or equals to Today'),
+               fromTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select FROM(Departure Time from Residence) Time'),
+               toDated:joi.date().required().label('Please select TO(Arrival Time to Residence)'),
+               toDate:joi.date().max('now').required().label('TO(Arrival Time to Residence must be less than or equals to Today'),
+               fromDate:joi.date().required().less(joi.ref('toDate')).label('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)'),
+               toTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select TO (Arrival Time to Residence)Time'),
+               actualAMTForBL:joi.number().required().label('Please enter Actual Boarding lodging Amount'),
+               amt:joi.number().min(0).label('Actual Boarding lodging Amount cannot be negative.'),
+               imgpath:joi.string().invalid('demo').label('Please Upload File/Attachments').required(),
               
-                lstcharges.push(ownStayAmount);
-                lstcharges.push(imgpath);
-                lstcharges.push(parentTourBillId);
-                console.log(JSON.stringify(lstcharges));
-                parentTourBillTemp = parentTourBillId;
-                lstBoarding.push(lstcharges);
-      }
-}
-   console.log('lstBoarding' +lstBoarding);
+            })
+             result=schema.validate({projectTask:projectTask,placeJourney:placeJourney,fromDated:fromDate,fromDat:fromDate,toDated:toDate,fromDate:fromDate,fromTimes:fromTime,toDate:toDate,toTimes:toTime,actualAMTForBL:actualAMTForBL,amt:actualAMTForBL,imgpath:imgpath});
+    
+          }
+          else if(stayOption == 'Own Stay')
+          {
+             schema=joi.object({
+            //  stayOption:joi.string().required().label('Please Choose Stay Option'),
+              projectTask:joi.string().required().label('Please select Activity Code.'),
+              placeJourney: joi.string().required().label('Please select Place of journey.'),
+              fromDated:joi.date().required().label('Please select FROM(Departure Time from Residence)'),
+              fromDat:joi.date().max('now').required().label('Please select FROM(Departure Time from Residence) less than or equals to Today'),
+              fromTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select FROM(Departure Time from Residence) Time'),
+              toDated:joi.date().required().label('Please select TO(Arrival Time to Residence)'),
+              toDate:joi.date().max('now').required().label('TO(Arrival Time to Residence must be less than or equals to Today'),
+              fromDate:joi.date().required().less(joi.ref('toDate')).label('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)'),
+              toTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select TO (Arrival Time to Residence)Time'),
+              
+            })
+             result=schema.validate({projectTask:projectTask,placeJourney:placeJourney,fromDated:fromDate,fromDat:fromDate,fromTimes:fromTime,toDated:toDate,fromDate:fromDate,toDate:toDate,toTimes:toTime});
+    
+          }
+          
+         // let result=schema.validate({stayOption,projectTask,placeJourney, toDate,fromDate,actualAMTForBL});
+          console.log('Validations'+JSON.stringify(result));
+          if(result.error)
+          {
+            console.log('fd'+result.error)
+                  response.send(result.error.details[0].context.label);
+          }
+          else{
+          var lstcharges=[];
+          //   lstcharges.empty();
+                    lstcharges.push(stayOption);
+                    lstcharges.push(placeJourney);
+                    lstcharges.push(tier3City);
+                    lstcharges.push(projectTask);
+    
+    
+                    var starthours = Number(fromTime.match(/^(\d+)/)[1]);
+                    var startminutes = Number(fromTime.match(/:(\d+)/)[1]);
+                    var endhours = Number(toTime.match(/^(\d+)/)[1]);
+                    var endminutes = Number(toTime.match(/:(\d+)/)[1]);
+                    console.log('starthours '+starthours);
+                    console.log('startminutes '+startminutes);
+                    console.log('endhours '+endhours);
+                    console.log('endminutes '+endminutes);
+                    
+                    startTime = (starthours > 12) ? (starthours-12 + ':' + startminutes + ':00'+' PM') : (starthours + ':' + startminutes + ':00' +' AM');
+                    endTime = (endhours > 12) ? (endhours-12 + ':' + endminutes + ':00'+' PM') : (endhours + ':' + endminutes + ':00'+' AM');
+        
+                    console.log('startTime '+startTime);
+                    console.log('endTime '+endTime);
+        
+                  
+                    let fromDateTime = fromDate+' '+startTime;
+    
+                    let strDate = new Date(fromDateTime);
+                    console.log('strDate  : '+strDate);
+    
+                    strDate.setHours(strDate.getHours() + 1);
+                    strDate.setMinutes(strDate.getMinutes() - 60);
+                    let strartDate = strDate.toUTCString();
+                    console.log('fromDateTime  : '+fromDateTime);
+                    console.log('strartDate  : '+strartDate);
+                    lstcharges.push(strartDate);     
+    
+                    let toDateTime = toDate+' '+endTime;
+    
+                    let endDate = new Date(toDateTime);
+                    console.log('endDate  : '+endDate);
+    
+                    endDate.setHours(endDate.getHours() + 1);
+                    endDate.setMinutes(endDate.getMinutes() - 60);
+                    let enDate = endDate.toUTCString();
+    
+                    console.log('endDate  : '+endDate);
+                    console.log('enDate  : '+enDate);
+    
+                  
+                    console.log('toDateTime  : '+enDate);
+                    lstcharges.push(enDate);
+    
+                    lstcharges.push(totalOwnStay); 
+                    lstcharges.push(totalAllowances);
+                    lstcharges.push(dailyAllowances);
+                    lstcharges.push(amtForBL);
+    
+                    if(actualAMTForBL != 0)
+                    {
+                      lstcharges.push(actualAMTForBL);
+                    }
+                    else{
+                     var amtForBL1= 0;
+                      lstcharges.push(amtForBL1);
+                    }
+                  
+                    lstcharges.push(ownStayAmount);
+                    lstcharges.push(imgpath);
+                    lstcharges.push(parentTourBillId);
+                    console.log(JSON.stringify(lstcharges));
+                    parentTourBillTemp = parentTourBillId;
+                    lstBoarding.push(lstcharges);
+          }
+    }
+       console.log('lstBoarding' +lstBoarding);
+    
+        let lodgingboarding = format('INSERT INTO salesforce.Boarding_Lodging__c (Stay_Option__c, Place_Journey__c,Correspondence_City__c,Activity_Code_Project__c, From__c, To__c,Total_Own_Stay_Amount__c,Total_Allowance__c,Daily_Allowance__c,Amount_for_boarding_and_lodging__c, Actual_Amount_for_boarding_and_lodging__c	,Own_Stay_Amount__c,Heroku_Image_URL__c,Tour_Bill_Claim__c) VALUES %L returning id',lstBoarding);
+        console.log('qyyy '+lodgingboarding);
+        pool
+        .query(lodgingboarding)
+        .then((queryResult)=>{
+          console.log('QuerryResult '+JSON.stringify(queryResult.rows));
+          response.send('BoardingLodging Form Saved Successfully !');
+          
+        })
+        .catch((error)=>{
+          console.log('Error '+error.stack);
+          response.send(error);
+        })
+    
 
-    let lodgingboarding = format('INSERT INTO salesforce.Boarding_Lodging__c (Stay_Option__c, Place_Journey__c,Correspondence_City__c,Activity_Code_Project__c, From__c, To__c,Total_Own_Stay_Amount__c,Total_Allowance__c,Daily_Allowance__c,Amount_for_boarding_and_lodging__c, Actual_Amount_for_boarding_and_lodging__c	,Own_Stay_Amount__c,Heroku_Image_URL__c,Tour_Bill_Claim__c) VALUES %L returning id',lstBoarding);
-    console.log('qyyy '+lodgingboarding);
-    pool
-    .query(lodgingboarding)
-    .then((queryResult)=>{
-      console.log('QuerryResult '+JSON.stringify(queryResult.rows));
-      response.send('BoardingLodging Form Saved Successfully !');
-      
-    })
-    .catch((error)=>{
-      console.log('Error '+error.stack);
-      response.send(error);
-    })
+      }  
 
+    })
+    .catch((Error)=>{
+      console.log('Error in Expense validation in TourBill Claim'+JSON.stringify(Error.stack));
+    })            
+
+})
+    .catch((Error)=>{
+      console.log('Error in Expense validation in TourBill Claim'+JSON.stringify(Error.stack));
+    })            
+
+
+
+
+
+
+
+
+
+   
 });
 
 router.get('/boardingLodgingListView',verify,(request,response)=>{
@@ -1405,6 +1471,117 @@ router.get('/telephoneFood/:parentTourBillId',verify, (request, response) => {
 
     let body = request.body;
       console.log('request.body  :  '+JSON.stringify(body));
+      let parentTourBillId =body.parentTourBillId;
+      console.log('parentTourBillId telphone '+parentTourBillId);
+
+      pool
+  .query('Select sfid , name,expense__c from salesforce.Tour_Bill_Claim__c where sfid =$1',[parentTourBillId])
+  .then((tourBillQueryResult)=>{
+    console.log('tourBillQueryResult => '+JSON.stringify(tourBillQueryResult.rows));
+    let expenseId =tourBillQueryResult.rows[0].expense__c;
+    console.log('expense ID for Validation  = '+expenseId);
+pool.
+    query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId ])
+    .then((ExpenseQuerryResult)=>{
+      console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
+      if(ExpenseQuerryResult.rows[0].approval_status__c=='Approved' || ExpenseQuerryResult.rows[0].approval_status__c=='Pending'){
+        console.log('sddjs');
+        response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
+      }
+      else{
+        let numberOfRows, lstTelephoneFood = [];
+        if(typeof(request.body.foodingExpenses) != 'object')
+        {
+          const schema= joi.object({
+            foodingExpenses:joi.number().required().label('Please enter Fooding Expense (If no Fooding Expense then enter "0")'),
+            famt:joi.number().min(0).label('Fooding Expense cannot be negative.'),
+            laundryExpenses:joi.number().required().label('Please enter Laundry Expense (If no Laundry Expense then enter "0")'),
+            lamt:joi.number().min(0).label('Laundry Expense cannot be negative.'),
+             
+            projectTask:joi.string().required().label('Please select Activity Code. '),
+            remarks:joi.string().min(3).label('Please Enter Remark'),
+            imgpath:joi.string().invalid('demo').label('Please Upload File/Attachments.').required(),
+            })   // .or('foodingExpenses','laundryExpenses')
+    
+          let result= schema.validate({remarks:request.body.remarks,projectTask:request.body.projectTask, foodingExpenses:request.body.foodingExpenses,famt:request.body.foodingExpenses,laundryExpenses:request.body.laundryExpenses,lamt:request.body.laundryExpenses,imgpath:request.body.imgpath});
+                  if(result.error)
+                    {
+                      console.log('Vladtion '+JSON.stringify(result.error));
+                      response.send(result.error.details[0].context.label);
+                     } 
+                     else{
+                      numberOfRows = 1;
+                       let singleTelephoneFoodRecord = [];
+                        singleTelephoneFoodRecord.push(request.body.foodingExpenses);
+                        singleTelephoneFoodRecord.push(request.body.laundryExpenses);
+                        singleTelephoneFoodRecord.push(request.body.projectTask);
+                        singleTelephoneFoodRecord.push(request.body.remarks);
+                        singleTelephoneFoodRecord.push(request.body.imgpath);
+                        singleTelephoneFoodRecord.push(request.body.parentTourBillId);
+                       lstTelephoneFood.push(singleTelephoneFoodRecord);
+                      }
+        } 
+        else
+        {
+            numberOfRows = request.body.foodingExpenses.length;
+            for(let i=0; i< numberOfRows ; i++)
+            {
+              const schema= joi.object({
+                foodingExpenses:joi.number().required().label('Please enter Fooding Expense (If no Fooding Expense then enter "0")'),
+                famt:joi.number().min(0).label('Fooding Expense cannot be negative.'),
+                laundryExpenses:joi.number().required().label('Please enter Laundry Expense (If no Laundry Expense then enter "0")'),
+                lamt:joi.number().min(0).label('Laundry Expense cannot be negative.'),
+                projectTask:joi.string().required().label('Please select Activity Code. '),
+                remarks:joi.string().min(3).label('Please Enter Remark'),                  
+                imgpath:joi.string().invalid('demo').label('Please Upload File/Attachments.').required(),
+                })   // .or('foodingExpenses','laundryExpenses')
+        
+              let result= schema.validate({remarks:request.body.remarks,projectTask:request.body.projectTask[i],foodingExpenses:request.body.foodingExpenses[i],famt:request.body.foodingExpenses[i],laundryExpenses:request.body.laundryExpenses[i],lamt:request.body.laundryExpenses[i],imgpath:request.body.imgpath[i]});
+                      if(result.error)
+                        {
+                          console.log('Vladtion '+JSON.stringify(result.error));
+                          response.send(result.error.details[0].context.label);
+                         } 
+                         else{
+                          let singleTelephoneFoodRecord = [];
+                          singleTelephoneFoodRecord.push(request.body.foodingExpenses[i]);
+                          singleTelephoneFoodRecord.push(request.body.laundryExpenses[i]);
+                          singleTelephoneFoodRecord.push(request.body.projectTask[i]);
+                          singleTelephoneFoodRecord.push(request.body.remarks[i]);
+                          singleTelephoneFoodRecord.push(request.body.imgpath[i]);
+                          singleTelephoneFoodRecord.push(request.body.parentTourBillId[i]);
+                          lstTelephoneFood.push(singleTelephoneFoodRecord);
+                         }
+             }
+         }
+        console.log('lstTelephoneFood  '+JSON.stringify(lstTelephoneFood));
+        let telephoneFoodInsertQuery = format('INSERT INTO salesforce.Telephone_Fooding_Laundry_Expenses__c (Fooding_Expense__c, Laundry_Expense__c, Activity_Code_Project__c,Remarks__c,heroku_image_url__c, Tour_Bill_Claim__c) VALUES %L returning id',lstTelephoneFood);
+    
+        pool.query(telephoneFoodInsertQuery)
+        .then((telephoneFoodInsertQueryResult) => {
+            console.log('telephoneFoodInsertQueryResult  '+JSON.stringify(telephoneFoodInsertQueryResult.rows));
+            response.send('Telephone & Food Form Saved Successfully !');
+        })
+        .catch((telephoneFoodInsertQueryError) => {
+            console.log('telephoneFoodInsertQueryError  '+telephoneFoodInsertQueryError.stack);
+            response.send('Error Occured !');
+        })
+
+      }  
+
+    })
+    .catch((Error)=>{
+      console.log('Error in Expense validation in TourBill Claim'+JSON.stringify(Error.stack));
+    })            
+
+})
+    .catch((Error)=>{
+      console.log('Error in Expense validation in TourBill Claim'+JSON.stringify(Error.stack));
+    })            
+
+
+
+
      /*  const schema= joi.object({
           foodingExpenses:joi.number().required().label('Choose "0" if No Fooding Expense' ),
           laundryExpenses:joi.number().required().label('choose "0" if No Laundry Expense'),
@@ -1416,83 +1593,7 @@ router.get('/telephoneFood/:parentTourBillId',verify, (request, response) => {
           console.log('Vladtion '+JSON.stringify(result.error));
           response.send(result.error.details[0].context.label);
       } */
-          let numberOfRows, lstTelephoneFood = [];
-          if(typeof(request.body.foodingExpenses) != 'object')
-          {
-            const schema= joi.object({
-              foodingExpenses:joi.number().required().label('Please enter Fooding Expense (If no Fooding Expense then enter "0")'),
-              famt:joi.number().min(0).label('Fooding Expense cannot be negative.'),
-              laundryExpenses:joi.number().required().label('Please enter Laundry Expense (If no Laundry Expense then enter "0")'),
-              lamt:joi.number().min(0).label('Laundry Expense cannot be negative.'),
-               
-              projectTask:joi.string().required().label('Please select Activity Code. '),
-              remarks:joi.string().min(3).label('Please Enter Remark'),
-              imgpath:joi.string().invalid('demo').label('Please Upload File/Attachments.').required(),
-              })   // .or('foodingExpenses','laundryExpenses')
-      
-            let result= schema.validate({remarks:request.body.remarks,projectTask:request.body.projectTask, foodingExpenses:request.body.foodingExpenses,famt:request.body.foodingExpenses,laundryExpenses:request.body.laundryExpenses,lamt:request.body.laundryExpenses,imgpath:request.body.imgpath});
-                    if(result.error)
-                      {
-                        console.log('Vladtion '+JSON.stringify(result.error));
-                        response.send(result.error.details[0].context.label);
-                       } 
-                       else{
-                        numberOfRows = 1;
-                         let singleTelephoneFoodRecord = [];
-                          singleTelephoneFoodRecord.push(request.body.foodingExpenses);
-                          singleTelephoneFoodRecord.push(request.body.laundryExpenses);
-                          singleTelephoneFoodRecord.push(request.body.projectTask);
-                          singleTelephoneFoodRecord.push(request.body.remarks);
-                          singleTelephoneFoodRecord.push(request.body.imgpath);
-                          singleTelephoneFoodRecord.push(request.body.parentTourBillId);
-                         lstTelephoneFood.push(singleTelephoneFoodRecord);
-                        }
-          } 
-          else
-          {
-              numberOfRows = request.body.foodingExpenses.length;
-              for(let i=0; i< numberOfRows ; i++)
-              {
-                const schema= joi.object({
-                  foodingExpenses:joi.number().required().label('Please enter Fooding Expense (If no Fooding Expense then enter "0")'),
-                  famt:joi.number().min(0).label('Fooding Expense cannot be negative.'),
-                  laundryExpenses:joi.number().required().label('Please enter Laundry Expense (If no Laundry Expense then enter "0")'),
-                  lamt:joi.number().min(0).label('Laundry Expense cannot be negative.'),
-                  projectTask:joi.string().required().label('Please select Activity Code. '),
-                  remarks:joi.string().min(3).label('Please Enter Remark'),                  
-                  imgpath:joi.string().invalid('demo').label('Please Upload File/Attachments.').required(),
-                  })   // .or('foodingExpenses','laundryExpenses')
-          
-                let result= schema.validate({remarks:request.body.remarks,projectTask:request.body.projectTask[i],foodingExpenses:request.body.foodingExpenses[i],famt:request.body.foodingExpenses[i],laundryExpenses:request.body.laundryExpenses[i],lamt:request.body.laundryExpenses[i],imgpath:request.body.imgpath[i]});
-                        if(result.error)
-                          {
-                            console.log('Vladtion '+JSON.stringify(result.error));
-                            response.send(result.error.details[0].context.label);
-                           } 
-                           else{
-                            let singleTelephoneFoodRecord = [];
-                            singleTelephoneFoodRecord.push(request.body.foodingExpenses[i]);
-                            singleTelephoneFoodRecord.push(request.body.laundryExpenses[i]);
-                            singleTelephoneFoodRecord.push(request.body.projectTask[i]);
-                            singleTelephoneFoodRecord.push(request.body.remarks[i]);
-                            singleTelephoneFoodRecord.push(request.body.imgpath[i]);
-                            singleTelephoneFoodRecord.push(request.body.parentTourBillId[i]);
-                            lstTelephoneFood.push(singleTelephoneFoodRecord);
-                           }
-               }
-           }
-          console.log('lstTelephoneFood  '+JSON.stringify(lstTelephoneFood));
-          let telephoneFoodInsertQuery = format('INSERT INTO salesforce.Telephone_Fooding_Laundry_Expenses__c (Fooding_Expense__c, Laundry_Expense__c, Activity_Code_Project__c,Remarks__c,heroku_image_url__c, Tour_Bill_Claim__c) VALUES %L returning id',lstTelephoneFood);
-      
-          pool.query(telephoneFoodInsertQuery)
-          .then((telephoneFoodInsertQueryResult) => {
-              console.log('telephoneFoodInsertQueryResult  '+JSON.stringify(telephoneFoodInsertQueryResult.rows));
-              response.send('Telephone & Food Form Saved Successfully !');
-          })
-          .catch((telephoneFoodInsertQueryError) => {
-              console.log('telephoneFoodInsertQueryError  '+telephoneFoodInsertQueryError.stack);
-              response.send('Error Occured !');
-          })  
+         
   });
   
   
@@ -1784,17 +1885,23 @@ router.get('/miscellaneousCharge',verify,(request,response)=>{
   router.post('/miscellenousCharges',verify, (request, response) => {
 
     console.log('miscellaneous Expenses Body '+JSON.stringify(request.body));
-   /*  const schema =joi.object({
-        date:joi.date().max('now').required().label('Date must be less than Today'),
-     //   particulars_mode:joi.string().required(),
-        amount:joi.number().required(),
-    })
-    let result = schema.validate({date:request.body.date,amount:request.body.amount,particulars_mode:request.body.particulars_mode})
-    console.log('validation '+JSON.stringify(result));
-    if(result.error)
-    {
-        response.send(result.error.details[0].context.label);
-    } */
+    let parentTourBillId = request.body.parentTourBillId;
+    console.log('parentTourBillId miscellaneous '+parentTourBillId);
+    pool
+  .query('Select sfid , name,expense__c from salesforce.Tour_Bill_Claim__c where sfid =$1',[parentTourBillId])
+  .then((tourBillQueryResult)=>{
+    console.log('tourBillQueryResult => '+JSON.stringify(tourBillQueryResult.rows));
+    let expenseId =tourBillQueryResult.rows[0].expense__c;
+    console.log('expense ID for Validation  = '+expenseId);
+pool.
+    query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId ])
+    .then((ExpenseQuerryResult)=>{
+      console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
+      if(ExpenseQuerryResult.rows[0].approval_status__c=='Approved' || ExpenseQuerryResult.rows[0].approval_status__c=='Pending'){
+        console.log('sddjs');
+        response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
+      }
+      else{
         let numberOfRows, lstMiscellaneousCharges = [];
         if(typeof(request.body.date) != 'object')
         {
@@ -1881,6 +1988,31 @@ router.get('/miscellaneousCharge',verify,(request,response)=>{
             response.send('Error Occurred !');
         })
     
+
+      }  
+
+    })
+    .catch((Error)=>{
+      console.log('Error in Expense validation in TourBill Claim'+JSON.stringify(Error.stack));
+    })            
+
+})
+    .catch((Error)=>{
+      console.log('Error in Expense validation in TourBill Claim'+JSON.stringify(Error.stack));
+    })            
+
+   /*  const schema =joi.object({
+        date:joi.date().max('now').required().label('Date must be less than Today'),
+     //   particulars_mode:joi.string().required(),
+        amount:joi.number().required(),
+    })
+    let result = schema.validate({date:request.body.date,amount:request.body.amount,particulars_mode:request.body.particulars_mode})
+    console.log('validation '+JSON.stringify(result));
+    if(result.error)
+    {
+        response.send(result.error.details[0].context.label);
+    } */
+       
 });
  
       router.get('/deletemiscellaneous/:parentId',(request,response)=>{
