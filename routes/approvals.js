@@ -4,6 +4,7 @@ const verify = require('../config/verifyToken');
 const format = require('pg-format');
 const Router = require('express-promise-router');
 const joi = require('@hapi/joi');
+const { query } = require('express');
 
 const router = new Router();
 
@@ -296,17 +297,39 @@ router.get('/getExpenseApprovalDetail',verify, async(request,response)=>{
         console.log('getApprovalDetail Id='+approvalId);
         
         var approvalFormAndRelatedRecords = {};
-    
-         let qry ='SELECT app.sfid as appsdif ,app.name as appname , app.Approval_Type__c, app.comment__c,app.Reporting_Manager_Comment__c, app.Submitter_Heroku__c, '+
-          'app.Project_Manager_Comment__c, app.Status__c,  app.Approver_RM__c,con.name as conname,exp.name as expname, '+
+
+         let qryTest='SELECT sfid ,name,Approver_PM__c,Approver_RM__c FROM salesforce.Custom_Approval__c app where app.sfid = $1 '; 
+              
+         let qryRM ='SELECT app.sfid as appsdif ,app.name as appname , app.Approval_Type__c, app.comment__c,app.Reporting_Manager_Comment__c, app.Submitter_Heroku__c, '+
+          'app.Project_Manager_Comment__c, app.Status__c,  app.Approver_RM__c,con.name as conname,exp.name as expname,con2.name as submitter, '+
           'app.Amount__c,app.createddate, app.Expense__c,app.Assign_To_PM__c,app.Project_Manager_Approval_Status__c, app.Project_Manager_Comment__c, app.Approver_PM__c '+
           'FROM salesforce.Custom_Approval__c app '+
-          'INNER JOIN salesforce.Contact con '+
-          'ON app.Approver_RM__c=con.sfid '+
+          'INNER JOIN salesforce.Contact con ON app.Approver_RM__c=con.sfid '+
+          'INNER JOIN salesforce.Contact con2 ON app.submitter_heroku__c=con2.sfid '+
           'INNER JOIN salesforce.Milestone1_Expense__c exp '+
           'ON app.Expense__c = exp.sfid '+
           'where app.sfid = $1 '; 
 
+          let qryPM ='SELECT app.sfid as appsdif ,app.name as appname , app.Approval_Type__c, app.comment__c,app.Reporting_Manager_Comment__c, app.Submitter_Heroku__c, '+
+          'app.Project_Manager_Comment__c, app.Status__c,  app.Approver_RM__c,userpm.name as conname,exp.name as expname,con2.name as submitter, '+
+          'app.Amount__c,app.createddate, app.Expense__c,app.Assign_To_PM__c,app.Project_Manager_Approval_Status__c, app.Project_Manager_Comment__c, app.Approver_PM__c '+
+          'FROM salesforce.Custom_Approval__c app '+
+          'INNER JOIN salesforce.User userpm ON app.Approver_PM__c=userpm.sfid '+
+          'INNER JOIN salesforce.Contact con2 ON app.submitter_heroku__c=con2.sfid '+
+          'INNER JOIN salesforce.Milestone1_Expense__c exp '+
+          'ON app.Expense__c = exp.sfid '+
+          'where app.sfid = $1 '; 
+          
+          let qryPMRM ='SELECT app.sfid as appsdif ,app.name as appname , app.Approval_Type__c, app.comment__c,app.Reporting_Manager_Comment__c, app.Submitter_Heroku__c, '+
+          'app.Project_Manager_Comment__c, app.Status__c,  app.Approver_RM__c,userrm.name as connamerm,userpm.name as conname,exp.name as expname,con2.name as submitter, '+
+          'app.Amount__c,app.createddate, app.Expense__c,app.Assign_To_PM__c,app.Project_Manager_Approval_Status__c, app.Project_Manager_Comment__c, app.Approver_PM__c '+
+          'FROM salesforce.Custom_Approval__c app '+
+          'INNER JOIN salesforce.User userpm ON app.Approver_PM__c=userpm.sfid '+
+          'INNER JOIN salesforce.User userrm ON app.Approver_PM__c=userrm.sfid '+
+          'INNER JOIN salesforce.Contact con2 ON app.submitter_heroku__c=con2.sfid '+
+          'INNER JOIN salesforce.Milestone1_Expense__c exp '+
+          'ON app.Expense__c = exp.sfid '+
+          'where app.sfid = $1 '; 
            /*  let qry ='SELECT app.sfid as appsfid, app.name as appname, app.Approval_Type__c, app.comment__c, app.Reporting_Manager_Comment__c, app.Submitter_Heroku__c, cont.name as contname, '+
           'app.Project_Manager_Comment__c, app.Status__c, con.name as conname, exp.name as expname, exp.sfid as expsfid, app.Approver_RM__c, usr.name as username, '+
           'app.Amount__c,app.createddate, app.Expense__c, app.Assign_To_PM__c, app.Project_Manager_Approval_Status__c, app.Project_Manager_Comment__c, app.Approver_PM__c '+
@@ -320,18 +343,66 @@ router.get('/getExpenseApprovalDetail',verify, async(request,response)=>{
          'WHERE app.sfid = $1 ';  */ 
         // let qry ='Select sfid ,name as appname ,Approval_Type__c, Approver_RM__c FROM salesforce.Custom_Approval__c WHERE sfid = $1 ';
         
-          console.log('qry '+qry);
+          console.log('qry '+qryRM);
           pool
-            .query(qry,[approvalId])
+            .query(qryTest,[approvalId])
             .then((querryResult)=>{
                 console.log('testttt '+JSON.stringify(querryResult.rows));
                 if(querryResult.rowCount > 0)
                 {
-                    console.log('querryResult  '+JSON.stringify(querryResult.rows));
+
+                    if(querryResult.rows[0].approver_pm__c!=null && querryResult.rows[0].approver_rm__c!=null){
+                        pool
+                        .query(qryPMRM,[approvalId])
+                        .then((querryResult)=>{
+                            console.log('querryResult RMPM '+JSON.stringify(querryResult.rows));
+                            approvalFormAndRelatedRecords.approvalFormDetails = querryResult.rows;
+                            response.send(approvalFormAndRelatedRecords); 
+                             
+                         })
+                         .catch((error)=>{
+                             console.log('Error in PM Querryy '+error.stack);
+                         })
+                    }
+                    else{
+                        if(querryResult.rows[0].approver_rm__c!=null){
+                            pool
+                            .query(qryRM,[approvalId])
+                            .then((querryResult)=>{
+                                console.log('querryResult Rm '+JSON.stringify(querryResult.rows));
+                                approvalFormAndRelatedRecords.approvalFormDetails = querryResult.rows;
+                                response.send(approvalFormAndRelatedRecords); 
+                                 
+                             })
+                             .catch((error)=>{
+                                 console.log('Error in RM Querryy '+error.stack);
+                             })
+                        }
+    
+                        if(querryResult.rows[0].approver_pm__c!=null){
+                            pool
+                            .query(qryPM,[approvalId])
+                            .then((querryResult)=>{
+                                console.log('querryResult PM '+JSON.stringify(querryResult.rows));
+                                approvalFormAndRelatedRecords.approvalFormDetails = querryResult.rows;
+                                response.send(approvalFormAndRelatedRecords); 
+                                 
+                             })
+                             .catch((error)=>{
+                                 console.log('Error in PM Querryy '+error.stack);
+                             })
+                        }
+    
+                    }
+
+                                
+
+
+                  /*   console.log('querryResult  '+JSON.stringify(querryResult.rows));
                    // let approver_pm = querryResult.rows[0].approver_pm__c;
                    // console.log('approver_pm '+approver_pm);
                     approvalFormAndRelatedRecords.approvalFormDetails = querryResult.rows;
-                    response.send(approvalFormAndRelatedRecords);
+                    response.send(approvalFormAndRelatedRecords); */
                 }
                 else
                 {
