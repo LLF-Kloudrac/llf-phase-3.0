@@ -1335,27 +1335,23 @@ router.post('/sendForApproval',verify, async(request, response) => {
 
                         if(!objUser.isManager)
                         {
-                          console('Rp user Condition true')
-                          await
+                          console.log('Rp user Condition true')
                           pool.query('SELECT sfid, Project_Manager__c FROM salesforce.Milestone1_Project__c WHERE  sfid = $1',[projectId])
                           .then((projectManagerQueryResult) => 
                           {
                           console.log('projectManagerQueryResult :' +JSON.stringify(projectManagerQueryResult.rows));
                             if(projectManagerQueryResult.rowCount > 0)
                               {
-                                projectManagerId = projectManagerQueryResult.rows[0].Project_Manager__c;
+                                projectManagerId = projectManagerQueryResult.rows[0].project_manager__c;
                                 console.log('Inside projectManagerQueryResult  : '+projectManagerId);
-          
-                                await
-                                pool.query('INSERT INTO salesforce.Custom_Approval__c (Approval_Type__c,Submitter_Heroku__c, Assign_To_PM__c ,Expense__c, Comment__c, Status__c, Record_Name__c,amount__c) values($1, $2, $3, $4, $5, $6, $7, $8) ',['Expense',objUser.sfid, projectManagerId, expenseId, comment, 'Pending', expenseName, totalAmount ])
+                                pool.query('INSERT INTO salesforce.Custom_Approval__c (Approval_Type__c,Submitter_Heroku__c, Approver_RM__c ,Expense__c, Comment__c, Status__c, Record_Name__c,amount__c) values($1, $2, $3, $4, $5, $6, $7, $8) ',['Expense',objUser.sfid, managerId, expenseId, comment, 'Pending', expenseName, totalAmount ])
                                 .then((customApprovalQueryResult) => {
-                                        console.log('customApprovalQueryResult  '+JSON.stringify(customApprovalQueryResult.rows));
+                                       console.log('After Ciustom Approval C querryy ');
+                                        console.log('customApprovalQueryResult  '+JSON.stringify(customApprovalQueryResult));
                                 })
                             .catch((customApprovalQueryError) => {
                                     console.log('customApprovalQueryError  '+customApprovalQueryError.stack);
                                   })
-        
-      
                              }
                           })
                           .catch((projectQueryError) => {
