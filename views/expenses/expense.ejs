@@ -231,7 +231,8 @@
                                                               <i class="fa fa-angle-double-right mr-3"></i>Petty Cash
                                                           </button>
                                                             <!-- <button class="btn btn-primary float-right" id="pettyCashButton" >New</button> -->
-                                                          <a href="#" class="btn btn-primary float-right pettyCashButton" id="" style="color:white;" >New</a>
+                                                            
+                                                          <a href="#" class="btn btn-primary float-right pettyCashButton" id="pettyCashNewButton" style="color:white;" >New</a>
                                                       </h5>
                                                   </div>
 
@@ -1091,6 +1092,7 @@
               }
           })
           .done((expenseRelatedData) => {
+            $("#pettyCashNewButton").attr("disabled", true);
             
             let expenseRecord = expenseRelatedData.Expense[0];
             console.log('expenseList  '+JSON.stringify(expenseRecord));

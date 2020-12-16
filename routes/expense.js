@@ -879,10 +879,22 @@ router.post('/savePettyCashForm', (request, response) => {
   console.log('Body Result '+JSON.stringify(request.body));  
   console.log('Now For Each   lllllllllLoop !');
   console.log('Hello Work done !');
-  const{bill_no,bill_date,projectTask,desc,nature_exp,amount,imgpath}=request.body;
 
-  let numberOfRows,lstPettyCash = [];
-  if(typeof(request.body.bill_no) == 'object')
+  const{bill_no,bill_date,projectTask,desc,nature_exp,amount,parentExpenseId,imgpath}=request.body;
+  console.log('parentExpenseId pettyCash '+parentExpenseId);
+    pool.
+    query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[parentExpenseId])
+    .then((ExpenseQuerryResult)=>{
+      console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
+      if(ExpenseQuerryResult.rows[0].approval_status__c=='Approved' || ExpenseQuerryResult.rows[0].approval_status__c=='Pending'){
+        console.log('sddjs');
+        response.send('The record cannot be created as the Expense status is in PENDING/APPROVED');
+      }
+      
+      else {
+    
+         let numberOfRows,lstPettyCash = [];
+        if(typeof(request.body.bill_no) == 'object')
   {
        numberOfRows = request.body.bill_no.length;           
         for(let i=0; i< numberOfRows ; i++)
@@ -926,8 +938,8 @@ router.post('/savePettyCashForm', (request, response) => {
              }
           }    
           console.log('lstPettyCash  '+JSON.stringify(lstPettyCash));
-    }
-    else
+         }
+         else
     { 
       const schema = joi.object({
         //   bill_no:joi.string().required().label('Please provode Bill NO'),
@@ -979,7 +991,7 @@ router.post('/savePettyCashForm', (request, response) => {
        }    
       
         console.log('lstPettyCash  '+JSON.stringify(lstPettyCash));
-    }
+         }
     
     
     let pettyCashInsertQuery = format('INSERT INTO salesforce.Petty_Cash_Expense__c (bill_no__c, bill_date__c,Activity_Code_Project__c,description_of_activity_expenses__c,nature_of_exp__c,amount__c,heroku_image_url__c,expense__c) VALUES %L returning id', lstPettyCash);
@@ -994,7 +1006,11 @@ router.post('/savePettyCashForm', (request, response) => {
       console.log('pettyCashQueryError  '+pettyCashQueryError.stack);
       response.send('Error Occured !');
     })
-  
+  }
+})
+.catch((error)=>{
+  console.log('Error in Expense Validation Querry '+JSON.stringify(error.stack));
+})
 });
 
 router.post('/uploadImage',upload.any(),async (request, response) => {
