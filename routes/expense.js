@@ -888,7 +888,7 @@ router.post('/savePettyCashForm', (request, response) => {
       console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
       if(ExpenseQuerryResult.rows[0].approval_status__c=='Approved' || ExpenseQuerryResult.rows[0].approval_status__c=='Pending'){
         console.log('sddjs');
-        response.send('The record cannot be created as the Expense status is in PENDING/APPROVED');
+        response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
       }
       
       else {
@@ -1080,121 +1080,141 @@ router.get('/tourBillNewPage/:parentExpenseId',verify,(request, response) => {
 
 router.post('/conveyanceform',(request,response) => {  
   let body = request.body;
+  let parentExpenseId =body.parentExpenseId;
+  console.log('parentExpenseId conveyance '+parentExpenseId);
     console.log('conveyanceform Body Result  : '+JSON.stringify(request.body));
-    let numberOfRows ,lstConveyance = [];
-    if(typeof(request.body.from) == 'object')
-    {
-        numberOfRows = request.body.from.length;
-        console.log('number of rows'+numberOfRows)
-        for(let i=0; i<numberOfRows ; i++)
-        {
-          const schema = joi.object({
-            
-            fromBlank:joi.date().required().label('Please enter From Date'),
-            fromdate:joi.date().max('now').label('From Date must be less than or equals to today'),
-            toBlank:joi.date().required().label('Please enter To Date'),
-            to:joi.date().max('now').label('To date must be less than or equals to today'),
-            from:joi.date().max(joi.ref('to')).label('From Date must be less than or equals to To Date'),
-            projectTask: joi.string().required().label('Please select Activity Code'),
-            purposeoftravel:joi.string().required().label('Please enter Purpose of Travel'),
-            purpose:joi.string().min(3).required().label('Please enter Purpose of Travel'),
-            purposeof: joi.string().max(255).required().label('Please enter Purpose of Travel, ranging from 1-255 Characters'),
-            modeofconveyance: joi.string().required().label('Please enter Mode of Conveyance'),
-            mode:joi.string().min(3).required().label('Please enter Mode of Conveyance'),
-            modeof: joi.string().max(255).required().label('Please enter Mode of Conveyance, ranging from 1-255 Characters'),
-            kmtravelled:joi.number().required().label('Please enter Km. Travelled'),
-            km:joi.number().min(0).label('Km. Travelled cannot be negative.'),
-            amount:joi.number().required().label('Please enter Amount'), 
-            amt:joi.number().min(0).label('Amount cannot be negative.'),
-            imgpath:joi.string().invalid('demo').required().label('Please Upload File/Attachment '),
-           })
-           let result = schema.validate({toBlank:body.to[i] ,fromdate:body.from[i] ,to:body.to[i],fromBlank:body.from[i], from:body.from[i], projectTask: body.projectTask[i], purposeoftravel:body.purposeoftravel[i], purpose:body.purposeoftravel[i], purposeof:body.purposeoftravel[i], modeofconveyance: body.modeofconveyance[i], mode: body.modeofconveyance[i],  modeof: body.modeofconveyance[i], kmtravelled:body.kmtravelled[i], km:body.kmtravelled[i], amount:body.amount[i],amt:body.amount[i],imgpath:body.imgpath[i]});
-           console.log('sdjabsdjb'+JSON.stringify(result));
-           if(result.error)
-           {
-            console.log(' VAlidation'+JSON.stringify(result.error));
-            response.send(result.error.details[0].context.label);
-            return;
-           } 
-           else{
 
-            let conveyanceValues = [];
-            conveyanceValues.push(request.body.from[i]);
-            conveyanceValues.push(request.body.to[i]);
-            conveyanceValues.push(request.body.projectTask[i]);
-            conveyanceValues.push(request.body.purposeoftravel[i]);
-            conveyanceValues.push(request.body.modeofconveyance[i]);
-            conveyanceValues.push(request.body.kmtravelled[i]);
-            conveyanceValues.push(request.body.amount[i]);
-            conveyanceValues.push(request.body.imgpath[i]);
-            conveyanceValues.push(request.body.parentExpenseId[i]);
-            lstConveyance.push(conveyanceValues);
-           }
-        }   
-        console.log('lstConveyance   : '+lstConveyance);
-    }
-    else
-    {
-          const schema=joi.object({
-            
-            fromBlank:joi.date().required().label('Please enter From Date'),
-            fromdate:joi.date().max('now').label('From Date must be less than or equals to today'),
-            toBlank:joi.date().required().label('Please enter To Date'),
-            to:joi.date().max('now').label('To date must be less than or equals to today'),
-            from:joi.date().max(joi.ref('to')).label('From Date must be less than or equals to To Date'),
-            projectTask: joi.string().required().label('Please select Activity Code'),
-            purposeoftravel:joi.string().required().label('Please enter Purpose of Travel'),
-            purpose:joi.string().min(3).required().label('Please enter Purpose of Travel'),
-            purposeof: joi.string().max(255).required().label('Please enter Purpose of Travel, ranging from 1-255 Characters'),
-            modeofconveyance: joi.string().required().label('Please enter Mode of Conveyance'),
-            mode:joi.string().min(3).required().label('Please enter Mode of Conveyance'),
-            modeof: joi.string().max(255).required().label('Please enter Mode of Conveyance, ranging from 1-255 Characters'),
-            kmtravelled:joi.number().required().label('Please enter Km. Travelled'),
-            km:joi.number().min(0).label('Km. Travelled cannot be negative.'),
-            amount:joi.number().required().label('Please enter Amount'), 
-            amt:joi.number().min(0).label('Amount cannot be negative.'),
-            imgpath:joi.string().invalid('demo').required().label('Please Upload File/Attachment '),
-           })
-           let result = schema.validate({toBlank:body.to,to:body.to,fromBlank:body.from,fromdate:body.from, from:body.from,projectTask:body.projectTask, purposeoftravel:body.purposeoftravel,purpose:body.purposeoftravel, purposeof:body.purposeoftravel, modeofconveyance:body.modeofconveyance,mode:body.modeofconveyance,modeof:body.modeofconveyance,amount:body.amount,amt:body.amount,kmtravelled:body.kmtravelled,km:body.kmtravelled,imgpath:body.imgpath});
-           console.log('sdjabsdjb'+JSON.stringify(result));
-           if(result.error)
-           {
-            console.log(' VAlidation'+JSON.stringify(result.error));
-            response.send(result.error.details[0].context.label);
-            return;
-           } 
-           else{
-            numberOfRows = 1;
+    pool.
+    query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[parentExpenseId])
+    .then((ExpenseQuerryResult)=>{
+      console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
+      if(ExpenseQuerryResult.rows[0].approval_status__c=='Approved' || ExpenseQuerryResult.rows[0].approval_status__c=='Pending'){
+        console.log('sddjs');
+        response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
+      } 
+      else{
+        let numberOfRows ,lstConveyance = [];
+        if(typeof(request.body.from) == 'object')
+        {
+            numberOfRows = request.body.from.length;
+            console.log('number of rows'+numberOfRows)
             for(let i=0; i<numberOfRows ; i++)
-            {    
-            let conveyanceValues = [];
-            conveyanceValues.push(request.body.from);
-            conveyanceValues.push(request.body.to);
-            conveyanceValues.push(request.body.projectTask);
-            conveyanceValues.push(request.body.purposeoftravel);
-            conveyanceValues.push(request.body.modeofconveyance);
-            conveyanceValues.push(request.body.kmtravelled);
-            conveyanceValues.push(request.body.amount);
-            conveyanceValues.push(request.body.imgpath);
-            conveyanceValues.push(request.body.parentExpenseId);
-            lstConveyance.push(conveyanceValues);
-            
-           }
-        }   
-        console.log('lstConveyance   : '+lstConveyance);
-    }
+            {
+              const schema = joi.object({
+                
+                fromBlank:joi.date().required().label('Please enter From Date'),
+                fromdate:joi.date().max('now').label('From Date must be less than or equals to today'),
+                toBlank:joi.date().required().label('Please enter To Date'),
+                to:joi.date().max('now').label('To date must be less than or equals to today'),
+                from:joi.date().max(joi.ref('to')).label('From Date must be less than or equals to To Date'),
+                projectTask: joi.string().required().label('Please select Activity Code'),
+                purposeoftravel:joi.string().required().label('Please enter Purpose of Travel'),
+                purpose:joi.string().min(3).required().label('Please enter Purpose of Travel'),
+                purposeof: joi.string().max(255).required().label('Please enter Purpose of Travel, ranging from 1-255 Characters'),
+                modeofconveyance: joi.string().required().label('Please enter Mode of Conveyance'),
+                mode:joi.string().min(3).required().label('Please enter Mode of Conveyance'),
+                modeof: joi.string().max(255).required().label('Please enter Mode of Conveyance, ranging from 1-255 Characters'),
+                kmtravelled:joi.number().required().label('Please enter Km. Travelled'),
+                km:joi.number().min(0).label('Km. Travelled cannot be negative.'),
+                amount:joi.number().required().label('Please enter Amount'), 
+                amt:joi.number().min(0).label('Amount cannot be negative.'),
+                imgpath:joi.string().invalid('demo').required().label('Please Upload File/Attachment '),
+               })
+               let result = schema.validate({toBlank:body.to[i] ,fromdate:body.from[i] ,to:body.to[i],fromBlank:body.from[i], from:body.from[i], projectTask: body.projectTask[i], purposeoftravel:body.purposeoftravel[i], purpose:body.purposeoftravel[i], purposeof:body.purposeoftravel[i], modeofconveyance: body.modeofconveyance[i], mode: body.modeofconveyance[i],  modeof: body.modeofconveyance[i], kmtravelled:body.kmtravelled[i], km:body.kmtravelled[i], amount:body.amount[i],amt:body.amount[i],imgpath:body.imgpath[i]});
+               console.log('sdjabsdjb'+JSON.stringify(result));
+               if(result.error)
+               {
+                console.log(' VAlidation'+JSON.stringify(result.error));
+                response.send(result.error.details[0].context.label);
+                return;
+               } 
+               else{
     
-    let conveyanceVoucherInsertQuery = format('INSERT INTO salesforce.Conveyance_Voucher__c (From__c, To__c,Activity_Code_Project__c,Purpose_of_Travel__c,Mode_of_Conveyance__c,Kms_Travelled__c,amount__c,heroku_image_url__c,expense__c) VALUES %L returning id', lstConveyance);
-    console.log('conveyanceVoucherInsertQuery   '+conveyanceVoucherInsertQuery);
-    pool.query(conveyanceVoucherInsertQuery)
-    .then((conveyanceQueryResult) => {
-        console.log('conveyanceQueryResult :  '+JSON.stringify(conveyanceQueryResult.rows));
-        response.send('Conveyance Saved Successfully !');
+                let conveyanceValues = [];
+                conveyanceValues.push(request.body.from[i]);
+                conveyanceValues.push(request.body.to[i]);
+                conveyanceValues.push(request.body.projectTask[i]);
+                conveyanceValues.push(request.body.purposeoftravel[i]);
+                conveyanceValues.push(request.body.modeofconveyance[i]);
+                conveyanceValues.push(request.body.kmtravelled[i]);
+                conveyanceValues.push(request.body.amount[i]);
+                conveyanceValues.push(request.body.imgpath[i]);
+                conveyanceValues.push(request.body.parentExpenseId[i]);
+                lstConveyance.push(conveyanceValues);
+               }
+            }   
+            console.log('lstConveyance   : '+lstConveyance);
+        }
+        else
+        {
+              const schema=joi.object({
+                
+                fromBlank:joi.date().required().label('Please enter From Date'),
+                fromdate:joi.date().max('now').label('From Date must be less than or equals to today'),
+                toBlank:joi.date().required().label('Please enter To Date'),
+                to:joi.date().max('now').label('To date must be less than or equals to today'),
+                from:joi.date().max(joi.ref('to')).label('From Date must be less than or equals to To Date'),
+                projectTask: joi.string().required().label('Please select Activity Code'),
+                purposeoftravel:joi.string().required().label('Please enter Purpose of Travel'),
+                purpose:joi.string().min(3).required().label('Please enter Purpose of Travel'),
+                purposeof: joi.string().max(255).required().label('Please enter Purpose of Travel, ranging from 1-255 Characters'),
+                modeofconveyance: joi.string().required().label('Please enter Mode of Conveyance'),
+                mode:joi.string().min(3).required().label('Please enter Mode of Conveyance'),
+                modeof: joi.string().max(255).required().label('Please enter Mode of Conveyance, ranging from 1-255 Characters'),
+                kmtravelled:joi.number().required().label('Please enter Km. Travelled'),
+                km:joi.number().min(0).label('Km. Travelled cannot be negative.'),
+                amount:joi.number().required().label('Please enter Amount'), 
+                amt:joi.number().min(0).label('Amount cannot be negative.'),
+                imgpath:joi.string().invalid('demo').required().label('Please Upload File/Attachment '),
+               })
+               let result = schema.validate({toBlank:body.to,to:body.to,fromBlank:body.from,fromdate:body.from, from:body.from,projectTask:body.projectTask, purposeoftravel:body.purposeoftravel,purpose:body.purposeoftravel, purposeof:body.purposeoftravel, modeofconveyance:body.modeofconveyance,mode:body.modeofconveyance,modeof:body.modeofconveyance,amount:body.amount,amt:body.amount,kmtravelled:body.kmtravelled,km:body.kmtravelled,imgpath:body.imgpath});
+               console.log('sdjabsdjb'+JSON.stringify(result));
+               if(result.error)
+               {
+                console.log(' VAlidation'+JSON.stringify(result.error));
+                response.send(result.error.details[0].context.label);
+                return;
+               } 
+               else{
+                numberOfRows = 1;
+                for(let i=0; i<numberOfRows ; i++)
+                {    
+                let conveyanceValues = [];
+                conveyanceValues.push(request.body.from);
+                conveyanceValues.push(request.body.to);
+                conveyanceValues.push(request.body.projectTask);
+                conveyanceValues.push(request.body.purposeoftravel);
+                conveyanceValues.push(request.body.modeofconveyance);
+                conveyanceValues.push(request.body.kmtravelled);
+                conveyanceValues.push(request.body.amount);
+                conveyanceValues.push(request.body.imgpath);
+                conveyanceValues.push(request.body.parentExpenseId);
+                lstConveyance.push(conveyanceValues);
+                
+               }
+            }   
+            console.log('lstConveyance   : '+lstConveyance);
+        }
+        
+        let conveyanceVoucherInsertQuery = format('INSERT INTO salesforce.Conveyance_Voucher__c (From__c, To__c,Activity_Code_Project__c,Purpose_of_Travel__c,Mode_of_Conveyance__c,Kms_Travelled__c,amount__c,heroku_image_url__c,expense__c) VALUES %L returning id', lstConveyance);
+        console.log('conveyanceVoucherInsertQuery   '+conveyanceVoucherInsertQuery);
+        pool.query(conveyanceVoucherInsertQuery)
+        .then((conveyanceQueryResult) => {
+            console.log('conveyanceQueryResult :  '+JSON.stringify(conveyanceQueryResult.rows));
+            response.send('Conveyance Saved Successfully !');
+        })
+        .catch((conveyanceQueryError) => {
+          console.log('conveyanceQueryError  '+conveyanceQueryError);
+          response.send('Error Occured !');
+        })
+
+
+      }
     })
-    .catch((conveyanceQueryError) => {
-      console.log('conveyanceQueryError  '+conveyanceQueryError);
-      response.send('Error Occured !');
+    .catch((error)=>{
+      console.log('Error in Expense Validation In Conveyance '+JSON.stringify(error.stack));
     })
+
 });
 
 
