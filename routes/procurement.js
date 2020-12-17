@@ -798,8 +798,17 @@ router.post('/nonItProducts', (request,response) => {
    let nonItFormResult = request.body;
 
    console.log('nonItFormResult  '+JSON.stringify(nonItFormResult));
-   let parentProcurementId = nonItFormResult.parentProcurementId;
+   let parentProcurementId = '';
    console.log('parent Id Asset Requisition Form '+parentProcurementId);
+
+   if(typeof(request.body.parentProcurementId)!='object'){
+    parentProcurementId =request.body.parentProcurementId;
+    console.log('parentProcurementId '+parentProcurementId);
+ }
+ else{
+    parentProcurementId = request.body.parentProcurementId[0];
+   console.log('parentProcurementId '+parentProcurementId);
+ }
   /*  let img1=request.body.imgpath1;
    console.log('=>>'+img1);
    let img2=request.body.imgpath2;
@@ -1014,9 +1023,17 @@ router.post('/itProducts', (request,response) => {
     console.log('Inside ItProducts Post Method');
     let itFormResult = request.body;
     const{state,items,district,vendor,itemCategory,unitCost,unit,itemSpecification,quantity,budget,justification}=request.body;
-    let parentProcurementId = itFormResult.parentProcurementId;
-    console.log('parentProcurementId => '+parentProcurementId);
+    let parentProcurementId = '';
+  
     console.log('itFormResult  '+JSON.stringify(itFormResult));
+    if(typeof(request.body.parentProcurementId)!='object'){
+        parentProcurementId =request.body.parentProcurementId;
+        console.log('parentProcurementId '+parentProcurementId);
+     }
+     else{
+        parentProcurementId = request.body.parentProcurementId[0];
+       console.log('parentProcurementId '+parentProcurementId);
+     }
 
     let numberOfRows, lstItProducts= [];
 
