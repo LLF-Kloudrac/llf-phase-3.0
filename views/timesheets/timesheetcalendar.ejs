@@ -207,7 +207,7 @@
               type: 'GET',
               url: '/users/geteventsTeams',
               data : {
-                  'date': today
+                  'date': selecteddate
               },
               dataType: 'json'
           })
@@ -230,7 +230,7 @@
               url: '/users/geteventsProj',
               data : {
                   'projectid': selectProj,
-                  'date': today
+                  'date': selecteddate
               },
               dataType: 'json'
           })
@@ -270,7 +270,7 @@
               url: '/users/geteventsProjteam',
               data : {
                   'projectid': selectProj,
-                  'date': today
+                  'date': selecteddate
               },
               dataType: 'json'
           })

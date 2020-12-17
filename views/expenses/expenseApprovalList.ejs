@@ -269,8 +269,14 @@ function anchorClickFunctionalities(){
                                 htmlTable += '</tr>';
 
                                 htmlTable += '<tr>';
-                                  htmlTable += '<td><strong>Project Manager Comment</strong></td>';
-                                htmlTable += '<td>'+record.project_manager_comment__c+'</td>';
+                                 
+                                htmlTable += '<td><strong>Approver (PM)</strong></td>';
+                                if(record.connamerm!=null){
+                                  htmlTable += '<td>'+record.connamerm+'</td>';
+                                }
+                                else
+                                htmlTable += '<td>'+''+'</td>';
+                                                      
                                 //htmlTable += '<td><strong>Assign To (PM))</strong></td>';
                                 //htmlTable += '<td>'+record.assign_to_pm__c+'</td>';
                                 htmlTable += '<td><strong>Project Manager Approval Status</strong></td>';
@@ -278,13 +284,8 @@ function anchorClickFunctionalities(){
                                 htmlTable += '</tr>';
 
                                 htmlTable += '<tr>';
-                                htmlTable += '<td><strong>Approver (PM)</strong></td>';
-                                if(record.connamerm!=null){
-                                  htmlTable += '<td>'+record.connamerm+'</td>';
-                                }
-                                else
-                                htmlTable += '<td>'+''+'</td>';
-                                                                
+                                  htmlTable += '<td><strong>Project Manager Comment</strong></td>';
+                                htmlTable += '<td>'+record.project_manager_comment__c+'</td>';
                                 htmlTable += '</tr>';
                         
                           $('#approvalTable').empty();
