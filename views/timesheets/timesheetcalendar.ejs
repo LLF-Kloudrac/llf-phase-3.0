@@ -38,11 +38,9 @@
 </div>
 
 <div >
+  <br>
   <h2 style="text-align: center;" id = "calMonth"></h2><h2 style="text-align: center;" id = "calYear"></h2>
-  
-  
-  
-  
+    
   </div>
 
 <body>
@@ -175,13 +173,18 @@
          $('#Selectview').on('change',function(){
           selectedView=this.value;
           console.log('selected' +selectedView);
+          let selecteddate = document.getElementById('calMonth').innerHTML;
+          console.log('slected months '+selecteddate);
+
+
           if(selectProj=='allproject' && selectedView=='currentuser')
           {
+
         $.ajax({ 
             type: 'GET',
             url: '/users/getevents',
             data : {
-                'date': today
+                'date': selecteddate
             },
             dataType: 'json'
         })
