@@ -402,9 +402,17 @@ router.post('/airRailBusCharges',verify, (request, response) => {
 
   var bdy = request.body;
   var bodyResult = request.body;  
-  let parentTourBillId = bodyResult.parentTourBillId;
+  let parentTourBillId = '';
   console.log('airRailBusCharges Body'+JSON.stringify(bodyResult));
-  console.log('parentTourBillId '+parentTourBillId);
+  if(typeof(request.body.parentTourBillId)!='object'){
+    parentTourBillId =request.body.parentTourBillId;
+    console.log('parentTourBillId '+parentTourBillId);
+ }
+ else{
+  parentTourBillId = request.body.parentTourBillId[0];
+   console.log('parentTourBillId '+parentTourBillId);
+ }
+
 
   pool
   .query('Select sfid , name,expense__c from salesforce.Tour_Bill_Claim__c where sfid =$1',[parentTourBillId])
@@ -591,8 +599,22 @@ router.post('/conveyanceCharges',verify, (request, response) => {
   let bodyResult =  request.body;
   console.log('conveyanceCharges bodyResult  : '+JSON.stringify(bodyResult));
   console.log('typeof(request.body.date)   : '+typeof(request.body.date));
-  let parentTourBillId = bodyResult.parentTourBillId;
-  console.log('parentTourBillId conveyanceCharge '+parentTourBillId);
+  let parentTourBillId = '';
+ // console.log('parentTourBillId conveyanceCharge '+parentTourBillId);
+
+  if(typeof(request.body.parentTourBillId)!='object'){
+    parentTourBillId =request.body.parentTourBillId;
+    console.log('parentTourBillId '+parentTourBillId);
+ }
+ else{
+  parentTourBillId = request.body.parentTourBillId[0];
+   console.log('parentTourBillId '+parentTourBillId);
+ }
+
+
+
+
+
   pool
   .query('Select sfid , name,expense__c from salesforce.Tour_Bill_Claim__c where sfid =$1',[parentTourBillId])
   .then((tourBillQueryResult)=>{
@@ -627,7 +649,7 @@ router.post('/conveyanceCharges',verify, (request, response) => {
           imgpath:joi.string().invalid('demo').required().label('Please Upload File/Attachment'),
         //  activity_code:joi.required,
             })
-            let result= schema.validate({remarks:bodyResult.remarks,projectTask:bodyResult.projectTask[i],dated:bodyResult.date[i],date:bodyResult.date[i],place:bodyResult.place[i],imgpath:bodyResult.imgpath[i],amount:bodyResult.amount[i],amt:bodyResult.amount[i]});
+            let result= schema.validate({remarks:bodyResult.remarks[i],projectTask:bodyResult.projectTask[i],dated:bodyResult.date[i],date:bodyResult.date[i],place:bodyResult.place[i],imgpath:bodyResult.imgpath[i],amount:bodyResult.amount[i],amt:bodyResult.amount[i]});
             if(result.error)
             {
                 console.log('fd'+result.error)
@@ -641,8 +663,8 @@ router.post('/conveyanceCharges',verify, (request, response) => {
               console.log('index : '+i+'  bodyResult.date[i]  '+bodyResult.date[i]);
               singleConveyanceRecord.push(bodyResult.place[i]);
               console.log('index : '+i+'  bodyResult.place[i]  '+bodyResult.place[i]);
-              singleConveyanceRecord.push(bodyResult.activity_code[i]);
-              console.log('index : '+i+'  bodyResult.activity_code[i] '+bodyResult.activity_code[i]);
+              singleConveyanceRecord.push(bodyResult.projectTask[i]);
+              console.log('index : '+i+'  bodyResult.activity_code[i] '+bodyResult.projectTask[i]);
               singleConveyanceRecord.push(bodyResult.remarks[i]);
               console.log('index : '+i+'  bodyResult.remarks[i]  '+bodyResult.remarks[i]);
               singleConveyanceRecord.push(bodyResult.amount[i]);
@@ -926,9 +948,17 @@ router.post('/boardingLodgingCharges',verify, (request, response) => {
 let objUser = request.user;
 var startTime,endTime;
 var arrStartTime = [], arrEndTime = [];
-let parentTourBillId =request.body.parentTourBillId;
-console.log('parentTourBillId BordingLodging => '+parentTourBillId);
+let parentTourBillId ='';;
 console.log('body Boarding Charges '+JSON.stringify(request.body));
+
+if(typeof(request.body.parentTourBillId)!='object'){
+  parentTourBillId =request.body.parentTourBillId;
+  console.log('parentTourBillId '+parentTourBillId);
+}
+else{
+parentTourBillId = request.body.parentTourBillId[0];
+ console.log('parentTourBillId '+parentTourBillId);
+}
 
 console.log('typeof(request.body.date)   : '+typeof(request.body.stayOption));
 const {stayOption,projectTask,placeJourney,tier3City,fromDate ,fromTime,toDate,toTime,totalOwnStay,totalAllowances,dailyAllowances, amtForBL,actualAMTForBL,policyamtForBL, ownStayAmount,activity_code,imgpath} =request.body;
@@ -1479,8 +1509,17 @@ router.get('/telephoneFood/:parentTourBillId',verify, (request, response) => {
 
     let body = request.body;
       console.log('request.body  :  '+JSON.stringify(body));
-      let parentTourBillId =body.parentTourBillId;
-      console.log('parentTourBillId telphone '+parentTourBillId);
+      let parentTourBillId ='';
+     
+      if(typeof(request.body.parentTourBillId)!='object'){
+        parentTourBillId =request.body.parentTourBillId;
+        console.log('parentTourBillId '+parentTourBillId);
+     }
+     else{
+      parentTourBillId = request.body.parentTourBillId[0];
+       console.log('parentTourBillId '+parentTourBillId);
+     }
+
 
       pool
   .query('Select sfid , name,expense__c from salesforce.Tour_Bill_Claim__c where sfid =$1',[parentTourBillId])
@@ -1893,8 +1932,18 @@ router.get('/miscellaneousCharge',verify,(request,response)=>{
   router.post('/miscellenousCharges',verify, (request, response) => {
 
     console.log('miscellaneous Expenses Body '+JSON.stringify(request.body));
-    let parentTourBillId = request.body.parentTourBillId;
-    console.log('parentTourBillId miscellaneous '+parentTourBillId);
+    let parentTourBillId ='';
+   
+
+    if(typeof(request.body.parentTourBillId)!='object'){
+      parentTourBillId =request.body.parentTourBillId;
+      console.log('parentTourBillId '+parentTourBillId);
+   }
+   else{
+    parentTourBillId = request.body.parentTourBillId[0];
+     console.log('parentTourBillId '+parentTourBillId);
+   }
+
     pool
   .query('Select sfid , name,expense__c from salesforce.Tour_Bill_Claim__c where sfid =$1',[parentTourBillId])
   .then((tourBillQueryResult)=>{
