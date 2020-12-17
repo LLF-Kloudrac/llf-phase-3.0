@@ -974,8 +974,19 @@ router.post('/savePettyCashForm', (request, response) => {
   console.log('Body Result '+JSON.stringify(request.body));  
   console.log('Now For Each   lllllllllLoop !');
   console.log('Hello Work done !');
+  let parentExpenseId='';
 
-  const{bill_no,bill_date,projectTask,desc,nature_exp,amount,parentExpenseId,imgpath}=request.body;
+
+  const{bill_no,bill_date,projectTask,desc,nature_exp,amount,imgpath}=request.body;
+  if(typeof(request.body.parentExpenseId)!='object'){
+    console.log('inside single record');
+     parentExpenseId =request.body.parentExpenseId;
+  }
+  else{
+    parentExpenseId = request.body.parentExpenseId[0];
+    console.log('parentExpenseId '+parentExpenseId);
+  }
+  
   console.log('parentExpenseId pettyCash '+parentExpenseId);
     pool.
     query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[parentExpenseId])
@@ -1175,9 +1186,17 @@ router.get('/tourBillNewPage/:parentExpenseId',verify,(request, response) => {
 
 router.post('/conveyanceform',(request,response) => {  
   let body = request.body;
-  let parentExpenseId =body.parentExpenseId;
+  let parentExpenseId ='';
   console.log('parentExpenseId conveyance '+parentExpenseId);
     console.log('conveyanceform Body Result  : '+JSON.stringify(request.body));
+    if(typeof(request.body.parentExpenseId)!='object'){
+      parentExpenseId =request.body.parentExpenseId;
+   }
+   else{
+     parentExpenseId = request.body.parentExpenseId[0];
+     console.log('parentExpenseId '+parentExpenseId);
+   }
+   
 
     pool.
     query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[parentExpenseId])
