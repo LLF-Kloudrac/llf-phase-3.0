@@ -250,6 +250,7 @@ console.log('deadline '+deadline);
 let schema,result ; 
 if(deadline == undefined || deadline == '')
 {
+  console.log('deadline Null/undefine');
    schema=joi.object({
     taskname:joi.string().min(3).required().label('Please enter Task Description!'),
     task:joi.string().invalid(' ').required().label('Please enter Task Description!'),
@@ -267,18 +268,29 @@ if(deadline == undefined || deadline == '')
 
 else if(deadline == 'Select')
 {
+  console.log('select');
   schema=joi.object({
+    taskname:joi.string().min(3).required().label('Please enter Task Description!'),
+    task:joi.string().invalid(' ').required().label('Please enter Task Description!'),
+    taskn:joi.string().min(1).max(80).required().label(' Task Description too long.'),
+    projectname:joi.string().required().label('Please select Project !'),
+    type:joi.string().required().label('Please select Task Type !'),
+    status:joi.string().invalid('None').required().label('Please choose Status'),
+    assignedresource:joi.string().invalid('None').required().label('Please Assign Resource!'),
+
     deadline:joi.string().invalid('Select').required().label('Please select Deadline Type!'),
 
   })
+  result=schema.validate({deadline:deadline,taskname:taskname,task:taskname,taskn:taskname,type:tasktype,projectname:projectname,status:request.body.status,assignedresource:assignedresource});
 
-  result=schema.validate({deadline:deadline});
+ // result=schema.validate({deadline:deadline});
 }
 else if(deadline == 'Deadlines')
 {
+  console.log('Deadlines');
   schema=joi.object({
     taskname:joi.string().min(3).required().label('Please enter Task Description!'),
-    task:joi.string().min(5).required().label('Please enter Task Description!'),
+    task:joi.string().min(3).required().label('Please enter Task Description!'),
     taskn:joi.string().min(1).max(80).required().label(' Task Description too long.'),
     projectname:joi.string().required().label('Please select Project !'),
     type:joi.string().required().label('Please select Task Type !'),
@@ -295,7 +307,7 @@ else if(deadline == 'Block Time')
 {
   schema=joi.object({
     taskname:joi.string().min(3).required().label('Please enter Task Description!'),
-    task:joi.string().min(5).required().label('Please enter Task Description!'),
+    task:joi.string().min(3).required().label('Please enter Task Description!'),
     taskn:joi.string().min(1).max(80).required().label(' Task Description too long.'),
     projectname:joi.string().required().label('Please select Project !'),
     type:joi.string().required().label('Please select Task Type !'),
@@ -366,7 +378,7 @@ pool.query('SELECT Id,sfid, Name,project__c FROM salesforce.Milestone1_Milestone
           pool
             .query('INSERT INTO salesforce.Milestone1_Task__c (Name, project_milestone__c, RecordTypeId, Task_Stage__c, Project_Name__c, Start_Date__c, Assigned_Manager__c,Task_Type__c ,Start_Time__c,End_Time__c,DeadLine_Type__c) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *',[taskname,timesheetMilestoneId ,'0122y00000005mMAAQ',status,projectname,taskdate,assignedresource,tasktype,startTime,endTime,deadline])
             .then((saveTaskResult) => {
-                    console.log('saveTaskResult =====>>>>>>>>>>>>  : '+JSON.stringify(saveTaskResult.rows[0]));
+                    console.log('saveTaskResult =====>>>>>>>>>>>>  : '+JSON.stringify(saveTaskResult.rows));
     //  response.send('savedInserted');
   //  console.log('inserted Id '+saveTaskResult.rows[0]);
                response.send('Task saved Successfully');

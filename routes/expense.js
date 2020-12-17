@@ -252,89 +252,184 @@ router.get('/fetchProjectforCreateNew', verify ,(request, response) =>
 {
 
       console.log('hello i am inside Expense Project');
+      
       console.log('Expense request.user '+JSON.stringify(request.user));
       var userId = request.user.sfid; 
-      var projectName =''; 
-      pool
-      .query('SELECT sfid, Name FROM salesforce.Contact  WHERE sfid = $1;',[userId])
-      .then(contactResult => 
-        {
-          console.log('Name of Contact  :: '+contactResult.rows[0].name+' sfid'+contactResult.rows[0].sfid);
-          var contactId = contactResult.rows[0].sfid;                 
-          pool
-          .query('SELECT sfid, Name, Team__c FROM salesforce.Team_Member__c WHERE Representative__c = $1 ;',[contactId])
-          .then(teamMemberResult => 
-            {
-              console.log('Name of TeamMemberId  : '+teamMemberResult.rows[0].name+'   sfid :'+teamMemberResult.rows[0].sfid);
-              console.log('Team Id  : '+teamMemberResult.rows[0].team__c);
-              console.log('Number of Team Member '+teamMemberResult.rows.length);
-                var projectTeamparams = [], lstTeamId = [];
-                for(var i = 1; i <= teamMemberResult.rows.length; i++) 
-                 {
-                   projectTeamparams.push('$' + i);
-                  lstTeamId.push(teamMemberResult.rows[i-1].team__c);
-                  } 
-                var projectTeamQueryText = 'SELECT sfid, Name, Project__c FROM salesforce.Project_Team__c WHERE Team__c IN (' + projectTeamparams.join(',') + ')';
-                console.log('projectTeamQueryText '+projectTeamQueryText);
-                        
-                 pool
-                .query(projectTeamQueryText,lstTeamId)
-                .then((projectTeamResult) => 
+      var objUser =request.user;
+      console.log('Obj user => '+JSON.stringify(objUser));
+      var projectName ='';
+      if(objUser.isManager){
+        console.log('manager login ... ');
+        pool
+        .query('SELECT sfid, Name FROM salesforce.Contact  WHERE sfid = $1;',[userId])
+        .then(contactResult => 
+          {
+            console.log('Name of Contact  :: '+contactResult.rows[0].name+' sfid='+contactResult.rows[0].sfid);
+            var contactId = contactResult.rows[0].sfid;                 
+            pool
+            .query('SELECT sfid, Name FROM salesforce.team__c WHERE manager__c = $1 ;',[contactId])
+            .then(teamcResult => 
+              {
+                console.log('teamcResult  '+JSON.stringify(teamcResult.rows));
+               /*  console.log('Name of TeamMemberId  : '+teamMemberResult.rows[0].name+'   sfid :'+teamMemberResult.rows[0].sfid);
+                console.log('Team Id  : '+teamMemberResult.rows[0].team__c);
+                console.log('Number of Team Member '+teamMemberResult.rows.length); */
+                  var projectTeamparams = [], lstTeamId = [];
+                  for(var i = 1; i <= teamcResult.rows.length; i++) 
                    {
-                     console.log('projectTeam Reocrds Length '+projectTeamResult.rows.length);
-                      console.log('projectTeam Name '+projectTeamResult.rows[0].name);
-                
-                      var projectParams = [], lstProjectId = [];
-                      for(var i = 1; i <= projectTeamResult.rows.length; i++) 
-                        {
-                      projectParams.push('$' + i);
-                      lstProjectId.push(projectTeamResult.rows[i-1].project__c);
-                        } 
-                      console.log('lstProjectId  : '+lstProjectId);
-                      var projetQueryText = 'SELECT sfid, Name FROM salesforce.Milestone1_Project__c WHERE sfid IN ('+ projectParams.join(',')+ ')';
-                
-                        pool.
-                        query(projetQueryText, lstProjectId)
-                       .then((projectQueryResult) => 
-                         { 
-                          console.log('Number of Projects '+projectQueryResult.rows.length);
-                          console.log('Project sfid '+projectQueryResult.rows[0].sfid+ 'Project Name '+projectQueryResult.rows[0].name);
-                          var projectList = projectQueryResult.rows;
-                          var lstProjectId = [], projectParams = [];
-                          var j = 1;
-                          projectList.forEach((eachProject) => 
-                           {
-                            console.log('eachProject sfid : '+eachProject.sfid);
-                           lstProjectId.push(eachProject.sfid);
-                           projectParams.push('$'+ j);
-                           console.log('eachProject name : '+eachProject.name);
-                           j++;
-                            })
-                            response.send(projectQueryResult.rows);
-                          })
-                              .catch((projectQueryError) => 
-                               {
-                                console.log('projectQueryError '+projectQueryError.stack);
-                               })
-                             
-                          })
-                              .catch((projectTeamQueryError) =>
-                              {
-                                console.log('projectTeamQueryError : '+projectTeamQueryError.stack);
-                              })          
-                          })
-                              .catch((teamMemberQueryError) =>
-                              {
-                                 console.log('Error in team member query '+teamMemberQueryError.stack);
+                     projectTeamparams.push('$' + i);
+                    lstTeamId.push(teamcResult.rows[i-1].sfid);
+                    } 
+                  var projectTeamQueryText = 'SELECT sfid, Name, Project__c FROM salesforce.Project_Team__c WHERE Team__c IN (' + projectTeamparams.join(',') + ')';
+                  console.log('projectTeamQueryText '+projectTeamQueryText);
+                          
+                   pool
+                  .query(projectTeamQueryText,lstTeamId)
+                  .then((projectTeamResult) => 
+                     {
+                       console.log('projectTeam Reocrds Length '+projectTeamResult.rows.length);
+                        console.log('projectTeam Name '+projectTeamResult.rows[0].name);
+                  
+                        var projectParams = [], lstProjectId = [];
+                        for(var i = 1; i <= projectTeamResult.rows.length; i++) 
+                          {
+                        projectParams.push('$' + i);
+                        lstProjectId.push(projectTeamResult.rows[i-1].project__c);
+                          } 
+                        console.log('lstProjectId  : '+lstProjectId);
+                        var projetQueryText = 'SELECT sfid, Name FROM salesforce.Milestone1_Project__c WHERE sfid IN ('+ projectParams.join(',')+ ')';
+                  
+                          pool.
+                          query(projetQueryText, lstProjectId)
+                         .then((projectQueryResult) => 
+                           { 
+                            console.log('Number of Projects '+projectQueryResult.rows.length);
+                            console.log('Project sfid '+projectQueryResult.rows[0].sfid+ 'Project Name '+projectQueryResult.rows[0].name);
+                            var projectList = projectQueryResult.rows;
+                            var lstProjectId = [], projectParams = [];
+                            var j = 1;
+                            projectList.forEach((eachProject) => 
+                             {
+                              console.log('eachProject sfid : '+eachProject.sfid);
+                             lstProjectId.push(eachProject.sfid);
+                             projectParams.push('$'+ j);
+                             console.log('eachProject name : '+eachProject.name);
+                             j++;
                               })
+                              response.send(projectQueryResult.rows);
+                            })
+                                .catch((projectQueryError) => 
+                                 {
+                                  console.log('projectQueryError '+projectQueryError.stack);
+                                 })
+                               
+                            })
+                                .catch((projectTeamQueryError) =>
+                                {
+                                  console.log('projectTeamQueryError : '+projectTeamQueryError.stack);
+                                })          
+                            })
+                                .catch((teamMemberQueryError) =>
+                                {
+                                   console.log('Error in team member query '+teamMemberQueryError.stack);
+                                })
+                    
+                          }) 
+                    
+                          .catch((contactQueryError) => 
+                            { 
+                              console.error('Error executing contact query', contactQueryError.stack);
+                            })
+      }
+      else{
+
+        pool
+        .query('SELECT sfid, Name FROM salesforce.Contact  WHERE sfid = $1;',[userId])
+        .then(contactResult => 
+          {
+            console.log('Name of Contact  :: '+contactResult.rows[0].name+' sfid'+contactResult.rows[0].sfid);
+            var contactId = contactResult.rows[0].sfid;                 
+            pool
+            .query('SELECT sfid, Name, Team__c FROM salesforce.Team_Member__c WHERE Representative__c = $1 ;',[contactId])
+            .then(teamMemberResult => 
+              {
+                console.log('Name of TeamMemberId  : '+teamMemberResult.rows[0].name+'   sfid :'+teamMemberResult.rows[0].sfid);
+                console.log('Team Id  : '+teamMemberResult.rows[0].team__c);
+                console.log('Number of Team Member '+teamMemberResult.rows.length);
+                  var projectTeamparams = [], lstTeamId = [];
+                  for(var i = 1; i <= teamMemberResult.rows.length; i++) 
+                   {
+                     projectTeamparams.push('$' + i);
+                    lstTeamId.push(teamMemberResult.rows[i-1].team__c);
+                    } 
+                  var projectTeamQueryText = 'SELECT sfid, Name, Project__c FROM salesforce.Project_Team__c WHERE Team__c IN (' + projectTeamparams.join(',') + ')';
+                  console.log('projectTeamQueryText '+projectTeamQueryText);
+                          
+                   pool
+                  .query(projectTeamQueryText,lstTeamId)
+                  .then((projectTeamResult) => 
+                     {
+                       console.log('projectTeam Reocrds Length '+projectTeamResult.rows.length);
+                        console.log('projectTeam Name '+projectTeamResult.rows[0].name);
                   
-                        }) 
+                        var projectParams = [], lstProjectId = [];
+                        for(var i = 1; i <= projectTeamResult.rows.length; i++) 
+                          {
+                        projectParams.push('$' + i);
+                        lstProjectId.push(projectTeamResult.rows[i-1].project__c);
+                          } 
+                        console.log('lstProjectId  : '+lstProjectId);
+                        var projetQueryText = 'SELECT sfid, Name FROM salesforce.Milestone1_Project__c WHERE sfid IN ('+ projectParams.join(',')+ ')';
                   
-                        .catch((contactQueryError) => 
-                          { 
-                            console.error('Error executing contact query', contactQueryError.stack);
-                          })
-                        });
+                          pool.
+                          query(projetQueryText, lstProjectId)
+                         .then((projectQueryResult) => 
+                           { 
+                            console.log('Number of Projects '+projectQueryResult.rows.length);
+                            console.log('Project sfid '+projectQueryResult.rows[0].sfid+ 'Project Name '+projectQueryResult.rows[0].name);
+                            var projectList = projectQueryResult.rows;
+                            var lstProjectId = [], projectParams = [];
+                            var j = 1;
+                            projectList.forEach((eachProject) => 
+                             {
+                              console.log('eachProject sfid : '+eachProject.sfid);
+                             lstProjectId.push(eachProject.sfid);
+                             projectParams.push('$'+ j);
+                             console.log('eachProject name : '+eachProject.name);
+                             j++;
+                              })
+                              response.send(projectQueryResult.rows);
+                            })
+                                .catch((projectQueryError) => 
+                                 {
+                                  console.log('projectQueryError '+projectQueryError.stack);
+                                 })
+                               
+                            })
+                                .catch((projectTeamQueryError) =>
+                                {
+                                  console.log('projectTeamQueryError : '+projectTeamQueryError.stack);
+                                })          
+                            })
+                                .catch((teamMemberQueryError) =>
+                                {
+                                   console.log('Error in team member query '+teamMemberQueryError.stack);
+                                })
+                    
+                          }) 
+                    
+                          .catch((contactQueryError) => 
+                            { 
+                              console.error('Error executing contact query', contactQueryError.stack);
+                            })
+  
+
+
+      }
+
+
+       
+  });
                    
                   
       
