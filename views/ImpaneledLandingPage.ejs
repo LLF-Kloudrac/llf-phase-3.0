@@ -77,7 +77,7 @@
      $(document).ready(function(){
            $('#vendorId').hide();
             let vendorId = document.getElementById('vendorId').innerHTML;
-           // alert('vendorId  : '+vendorId);
+           // alert('vendorId  : '+vendorId);x`
           $("#popup").modal("show"); 
           $.ajax({
                 type : 'GET',
@@ -185,7 +185,7 @@
                     })
                     itemDescription+=  '<td colspan="6"><center><a target="_blank" href="/procurement/ItemDescriptionListView?vendorId='+vendorId+'">View All</a></centre></td>';
                    
-                   console.log('iddd'+data.VendorDetail.sfid);
+                   console.log('iddd'+data.VendorDetail[0].sfid);
                         $('#ItemDescriptionTable').empty();
                     $('#ItemDescriptionTable').append(itemDescription);
                 }
@@ -198,15 +198,16 @@
         $('a.newVendor').click(() => {
             console.log('newVendor anchor tag ');
             //var assetId = document.getElementById('assetId').innerHTML;
-            console.log('vendorId  : '+vendorId);
-            window.open('/procurement/ItemDescription/'+vendorId,'_blank');
+            var vendorId1 = document.getElementById('vendorId').innerHTML;
+            console.log(vendorId1+'  ' + 'vendorId  : '+JSON.stringify(vendorId));
+            window.open('/procurement/ItemDescription/'+vendorId1,'_blank');
             //location.assign('/procurement/ItemDescription/'+vendorIDS);           
         })
         $('a.itemDescTag').click(() => {
             console.log('ItemDescription view List anchor tag ');
-            //var assetId = document.getElementById('assetId').innerHTML;
+           // var assetId = document.getElementById('assetId').value;
             console.log('vendorId  : '+vendorId);
-            window.open('/procurement/ItemDescription/'+vendorId,'_blank');
+           // window.open('/procurement/ItemDescription/'+vendorId,'_blank');
           //  location.assign('/procurement/ItemDescription/'+vendorIDS);           
         })
     
