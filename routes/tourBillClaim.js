@@ -71,10 +71,18 @@ router.get('/gettourbillclaim',verify,(request,response)=>{
 
 router.post('/saveTourBillClaim',(request, response) => {
 
-    console.log('okok');
-    let {tourBillClaimName, parentExpenseId } = request.body;
-    console.log('tourBillClaimName  '+tourBillClaimName+ ' parentExpenseId : '+parentExpenseId);
+    console.log('okok' + JSON.stringify(request.body));
+    let tourBillClaimName = request.body.tourBillClaimName;
+    let parentExpenseId ='';
+    console.log('tourBillClaimName  '+tourBillClaimName);
     console.log('tourBillClaimFormData  '+JSON.stringify(request.body));
+    if(typeof(request.body.parentExpenseId)!='object'){
+      parentExpenseId =request.body.parentExpenseId;
+   }
+   else{
+     parentExpenseId = request.body.parentExpenseId[0];
+     console.log('parentExpenseId '+parentExpenseId);
+   }
 
     pool.
     query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[parentExpenseId])
