@@ -87,7 +87,7 @@
             billDate: 'Bill Date',
             total:'Total Amount',
            // natureOfExpense: 'Nature Of Expense',
-           // createDdate: 'Created Date',
+            createDdate: 'Created Date',
         }
       
       var table = $('#pettyCashExpenseTable').tableSortable({
@@ -213,8 +213,8 @@
                             htmlTable += '</tr>';
 
                               htmlTable += '<tr>';
-                                  htmlTable += '<td><strong>Created Date</strong></td>';
-                                  htmlTable += '<td>'+strDate+'</td>';
+                                  /* htmlTable += '<td><strong>Created Date</strong></td>';
+                                  htmlTable += '<td>'+strDate+'</td>'; */
                              
                                 htmlTable += '<td><strong>View Image</strong></td>';
                                 if(pettyCashRecord.heroku_image_url__c != null && pettyCashRecord.heroku_image_url__c != '')
