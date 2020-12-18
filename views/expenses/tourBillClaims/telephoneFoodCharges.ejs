@@ -6,8 +6,11 @@
 .mb-mobile{margin-bottom: 10px;}
 }
 
+.form-control{
+  width: auto;
+}
+
 </style>
-<div style="overflow-y: auto;">
 <div class="container-fluid">
   <br />
   
@@ -23,7 +26,7 @@
       <% include ../../partials/messages %>
     <div id="errorMessages"></div>
    <form method="post" action="/insertprecash" id="formdata"  enctype="multipart/form-data">
-    <div class="table-repsonsive">
+    <div class="table-repsonsive" style="overflow-y:auto ;">
      <span id="error"></span>
      <table class="table table-bordered" id="item_table">
       <tr>
@@ -46,7 +49,7 @@
    </form>
    </div>
   </div>
-</div>
+
 
 
 <script>
