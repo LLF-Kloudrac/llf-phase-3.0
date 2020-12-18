@@ -572,13 +572,15 @@
                   {
                     let conveyanceChargesHtml = '<thead>';
                     conveyanceChargesHtml += '<th>ConveyanceCharges</th>';
-                    conveyanceChargesHtml += '<th>Amount</th>';
+                    conveyanceChargesHtml += '<th>Place</th>';
                     conveyanceChargesHtml += '<th>Date</th>';
+                    conveyanceChargesHtml += '<th>Amount</th>';
                     conveyanceChargesHtml += '</thead><tbody>';
                     conveyanceCharges.forEach((eachConveyanceCharge) => {
                       let strDate = eachConveyanceCharge.date__c.toString().split('T')[0]; 
                       conveyanceChargesHtml += '<tr>';
                       conveyanceChargesHtml += '<td>'+eachConveyanceCharge.name+'</td>';
+                      conveyanceChargesHtml += '<td>'+eachConveyanceCharge.place__c+'</td>';
                       conveyanceChargesHtml += '<td>'+strDate+'</td>';
                       conveyanceChargesHtml += '<td>'+eachConveyanceCharge.amount__c+'</td>';  
                       conveyanceChargesHtml += '</tr>';
@@ -598,14 +600,16 @@
                   {
                     let boardingLodgingChargesHtml = '<thead>';
                         boardingLodgingChargesHtml += '<th>Boarding Lodging  Number</th>';
-                        boardingLodgingChargesHtml += '<th>Amount for Boarding & Lodging</th>';
                         boardingLodgingChargesHtml += '<th>Place Journey</th>';
+                        boardingLodgingChargesHtml += '<th>From(Dep. Time from Residence)</th>';
+                        boardingLodgingChargesHtml += '<th>Amount for Boarding & Lodging</th>';
                         boardingLodgingChargesHtml += '</thead><tbody>';
                       boardingLodgingCharges.forEach((eachBoardingLodging) => {
                         boardingLodgingChargesHtml += '<tr>';
-                        boardingLodgingChargesHtml += '<td>'+eachBoardingLodging.name+'</td>';
-                        boardingLodgingChargesHtml += '<td>'+eachBoardingLodging.total_amount__c+'</td>';
-                        boardingLodgingChargesHtml += '<td>'+eachBoardingLodging.place_journey__c+'</td>';  
+                          boardingLodgingChargesHtml += '<td>'+eachBoardingLodging.name+'</td>';
+                          boardingLodgingChargesHtml += '<td>'+eachBoardingLodging.place_journey__c+'</td>';
+                        boardingLodgingChargesHtml += '<td>'+eachBoardingLodging.from__c.toString().split('T')[0]+'</td>';
+                        boardingLodgingChargesHtml += '<td>'+eachBoardingLodging.total_amount__c+'</td>';  
                         boardingLodgingChargesHtml += '</tr>';
                     });
                     boardingLodgingChargesHtml+='<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/boardingLodgingListView?tourBillClaimId='+tourBillClaimId+'" >View All</a></center></td></tr>';

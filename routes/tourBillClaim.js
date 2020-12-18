@@ -158,7 +158,7 @@ router.get('/getRelatedTourBillClaimDetails/:tourBillClaimId', async (request, r
 
     var airRailBusQuery = 'SELECT sfid, Name, Departure_Date__c, Arrival_Date__c, Departure_Station__c,'+ 
     'Arrival_Station__c, Amount__c, Tour_Bill_Claim__c '+
-    'FROM salesforce.Air_Rail_Bus_Fare__c WHERE Tour_Bill_Claim__c = $1';
+    'FROM salesforce.Air_Rail_Bus_Fare__c WHERE sfid != \'\' AND Tour_Bill_Claim__c = $1 ';
     await 
     pool
     .query(airRailBusQuery,[tourBillClaimId])
@@ -179,7 +179,7 @@ router.get('/getRelatedTourBillClaimDetails/:tourBillClaimId', async (request, r
 
     var conveyanceChargesQuery = 'SELECT sfid, Name, Date__c, Amount__c, Place__c,'+ 
                           'Remarks__c, Tour_Bill_Claim__c, Heroku_Image_URL__c  '+
-                          'FROM salesforce.Conveyance_Charges__c WHERE Tour_Bill_Claim__c = $1';
+                          'FROM salesforce.Conveyance_Charges__c WHERE sfid != \'\' AND Tour_Bill_Claim__c = $1';
     await
     pool
     .query(conveyanceChargesQuery,[tourBillClaimId])
