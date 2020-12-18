@@ -144,18 +144,44 @@ $(document).ready(function(){
       .text(activityCodes[i].name));	
     }
     $('#activity_code'+cnt).on('change',function(){
+    let taskId = this.value;
+    console.log('Task=> '+taskId+'  cccc');
+
+    let selectedCode = activityCodes.filter((eachCode)=> {
+      if(eachCode.sfid == taskId)
+        return eachCode;
+    })
+    let label = selectedCode[0].name;
+    console.log('label'+label);
+    document.getElementById('projectTask'+cnt).value = label;
+    $('#projectTask'+cnt).value = label;
+    console.log('label  :'+label+' value : '+taskId);
+})
+   /* $('#activity_code'+cnt).on('change',function(){
+          let taskId = this.value;
+          let selectedCode = activityCodes.filter((eachCode)=> {
+            if(eachCode.sfid == taskId)
+              return eachCode;
+          })
+          let label = selectedCode[0].name;
+          document.getElementById('projectTask'+cnt).value = label;
+        //  $('#projectTask'+cnt).value = label;
+          console.log('label  :'+label+' value : '+taskId);
+      })*/
+   /*  $('#activity_code'+cnt).on('change',function(){
       let taskId = this.value;
       let value = this.value;	       
        let selectedCode = activityCodes.filter((eachCode)=> {
-      console.log('label  :'+label+' value'+value);	    
+     // console.log('label  :'+label+' value'+value);	    
             if(eachCode.sfid == taskId)
-          return eachCode;
+                return eachCode;
       })
       let label = selectedCode[0].activitycode;
-      document.getElementById('projectTask'+cnt).value = label;
+      console.log('label  :'+label+' value'+value);	
+      document.getElementById('projectTask'+cnt).value = value;
     //  $('#projectTask'+cnt).value = label;
       console.log('label  :'+label+' value : '+taskId);
-    })
+    }) */
  });
  
  $(document).on('click', '.remove', function(){
