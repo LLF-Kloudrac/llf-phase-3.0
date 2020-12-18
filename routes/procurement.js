@@ -45,7 +45,7 @@ router.get('/assetDetails',verify,(request, response)=> {
                 let obj = {};
                 let crDate = new Date(assetQueryResult.rows[i].createddate);
                 crDate.setHours(crDate.getHours() + 5);
-                crDate.setMinutes(crDate.getMinutes() + 30);
+                crDate.setMinutes(crDate.getMinutes() + 30);    
                 let strDate = crDate.toLocaleString();
 
                 let targetDate = new Date(assetQueryResult.rows[i].requested_closure_plan_date__c);
@@ -63,7 +63,7 @@ router.get('/assetDetails',verify,(request, response)=> {
               obj.itamount = assetQueryResult.rows[i].procurement_it_total_amount__c;
               obj.nonitamount = assetQueryResult.rows[i].procurement_non_it_total_amount__c;
               obj.totalamount = assetQueryResult.rows[i].total_amount__c;
-              obj.dateofRec = strDateOfRecev;
+              obj.dateofRec = strDateOfRecev.toLocaleString().split(',')[0];
               obj.actCode = assetQueryResult.rows[i].actname;
               obj.accAppStatus=assetQueryResult.rows[i].accounts_approval__c;
               obj.status = assetQueryResult.rows[i].status__c
@@ -502,10 +502,10 @@ const schema=joi.object({
     assetRequisitionName:joi.string().min(3).required().label('Please Fill Asset Requisition Name'),
     asset: joi.string().max(255).required().label('Asset Requisition Name is too long'),
     project:joi.string().required().label('Please choose Project/Department'),
-    planDate:joi.string().required().label('Please fill Target Date of Receiving'),
-    act:joi.string().required().label('Pleasse Chose Activity'),
+  //  planDate:joi.string().required().label('Please fill Target Date of Receiving'),
+   // act:joi.string().required().label('Pleasse Chose Activity'),
 })
-let result=schema.validate({act,assetRequisitionName,project,planDate,asset:assetRequisitionName});
+let result=schema.validate({assetRequisitionName,project,asset:assetRequisitionName});
 if(result.error){
     console.log('fd'+result.error);
     response.send(result.error.details[0].context.label);    
@@ -857,32 +857,44 @@ router.post('/nonItProducts', (request,response) => {
                  response.send(result.error.details[0].context.label);
              }
              else{
-                 if(nonItFormResult.quoteNum<3 && (nonItFormResult.justification==null || nonItFormResult.justification=="" || nonItFormResult.justification==' ' || nonItFormResult.justification=='  ')){
+                /*  if(nonItFormResult.quoteNum<3 && (nonItFormResult.justification==null || nonItFormResult.justification=="" || nonItFormResult.justification==' ' || nonItFormResult.justification=='  ')){
                          response.send('Please enter Justification because quote count is not equal to 3.');    
-                }
-                else{
-                 let singleRecordValues = [];
-                 singleRecordValues.push(nonItFormResult.itemsCategory);
-                 singleRecordValues.push(nonItFormResult.items);
-                 singleRecordValues.push(nonItFormResult.state);
-                 singleRecordValues.push(nonItFormResult.district);
-                 singleRecordValues.push(nonItFormResult.unitCost);
-                 singleRecordValues.push(nonItFormResult.unit);
-               //  singleRecordValues.push(nonItFormResult.otherItems);
-                 singleRecordValues.push(nonItFormResult.itemSpecification);
-                 singleRecordValues.push(nonItFormResult.quantity);
-                 singleRecordValues.push(nonItFormResult.budget);
-                 singleRecordValues.push(nonItFormResult.imgpath1);
-                 singleRecordValues.push(nonItFormResult.imgpath2);
-                 singleRecordValues.push(nonItFormResult.imgpath3);
-                 singleRecordValues.push(nonItFormResult.quoteNum    );
-                 singleRecordValues.push(nonItFormResult.justification);
-                 singleRecordValues.push(nonItFormResult.vendor);
-                 singleRecordValues.push(nonItFormResult.parentProcurementId);
-                 lstNonItProcurement.push(singleRecordValues);
-                 console.log('lstNOnIt'+lstNonItProcurement);
-                }
-           
+                } */
+                if(nonItFormResult.quoteNum<3){
+                    let schema=joi.object({
+                        just:joi.string().min(3).required().label('Please enter Justification because quote count is not equal to 3.'),
+                    })
+                    let result=schema.validate({just:nonItFormResult.justification});
+                    console.log('validation hsh '+JSON.stringify(result.error));
+                    if(result.error){
+                        console.log('fd'+result.error);
+                        response.send(result.error.details[0].context.label);
+                    }
+                    else{
+                        let singleRecordValues = [];
+                        singleRecordValues.push(nonItFormResult.itemsCategory);
+                        singleRecordValues.push(nonItFormResult.items);
+                        singleRecordValues.push(nonItFormResult.state);
+                        singleRecordValues.push(nonItFormResult.district);
+                        singleRecordValues.push(nonItFormResult.unitCost);
+                        singleRecordValues.push(nonItFormResult.unit);
+                      //  singleRecordValues.push(nonItFormResult.otherItems);
+                        singleRecordValues.push(nonItFormResult.itemSpecification);
+                        singleRecordValues.push(nonItFormResult.quantity);
+                        singleRecordValues.push(nonItFormResult.budget);
+                        singleRecordValues.push(nonItFormResult.imgpath1);
+                        singleRecordValues.push(nonItFormResult.imgpath2);
+                        singleRecordValues.push(nonItFormResult.imgpath3);
+                        singleRecordValues.push(nonItFormResult.quoteNum    );
+                        singleRecordValues.push(nonItFormResult.justification);
+                        singleRecordValues.push(nonItFormResult.vendor);
+                        singleRecordValues.push(nonItFormResult.parentProcurementId);
+                        lstNonItProcurement.push(singleRecordValues);
+                        console.log('lstNOnIt'+lstNonItProcurement);
+                       }
+
+
+                }        
      
              }      
         }

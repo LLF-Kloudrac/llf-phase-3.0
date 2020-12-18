@@ -193,11 +193,11 @@
     </div>
     <div class="modal-body">
       <div class="">
-        <div id="approvalerrorMessages">
-    <form name="approval" id="approvalpopup">
+        <div id="approvalerrorMessages"></div>
+    <form name="approval" id="approvalpopupform">
     <div class="form-group">
     <label for="commentTextarea">Comment</label>
-    <textarea class="form-control" id="commentTextarea" rows="3" autocomplete="off"></textarea>
+    <textarea class="form-control" id="commentTextarea" rows="3"></textarea>
     </div>
     <div class="form-group"> 
     <div class="row">
@@ -558,13 +558,13 @@
                     event.stopImmediatePropagation();
                     $('#approvalCommentModal').modal('show');
                 let selectedId =  this.id;
-               // alert(selectedId);
+                //alert(selectedId);
                 let type = selectedId.split('-')[0];
                 let mixedIds = selectedId.split('-')[1];
-             //   alert(mixedIds);
+                //alert(mixedIds);
                 let expenseId = mixedIds.split('@')[0];
                 let customApprovalId = mixedIds.split('@')[1];
-             //   alert('type  : '+type+' expenseId : '+expenseId+' customApprovalId : '+customApprovalId);
+                //alert('type  : '+type+' expenseId : '+expenseId+' customApprovalId : '+customApprovalId);
                // let assetRequisitionFormId = this.id;
                // $('#approvalCommentModal').modal('show');
                 $('#submitForApproval').on('click', function(e){
@@ -579,7 +579,7 @@
 
                  console.log('response : '+response);
                  let msg = response;
-                console.log('messageeee '+msg);
+                console.log('messageeee 111'+msg);
 
                  if(msg == 'Approved!')
                  {
@@ -590,7 +590,7 @@
                         '</div>';
                         $('#approvalerrorMessages').empty();
                         $('#approvalerrorMessages').append(errorHtml);
-                        $('#approvalpopup')[0].reset()
+                        document.getElementById("approvalpopupform").reset();
                         // document.getElementById("accountsapprovalpopup").reset()
                    }
                    else if(msg == 'Rejected!')
@@ -603,7 +603,8 @@
                         '</div>';
                         $('#approvalerrorMessages').empty();
                         $('#approvalerrorMessages').append(errorHtml);
-                        $('#approvalpopup')[0].reset()
+                        document.getElementById("approvalpopupform").reset();
+                        //$('#approvalpopupform')[0].reset()
                         // document.getElementById("accountsapprovalpopup").reset()
                    }
                     else
@@ -615,7 +616,8 @@
                     '</div>';
                         $('#approvalerrorMessages').empty();
                         $('#approvalerrorMessages').append(errorHtml);
-                        $('#approvalpopup')[0].reset()
+                        document.getElementById("approvalpopupform").reset();
+                       // $('#approvalpopupform')[0].reset()
                     }
                 })
 

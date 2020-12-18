@@ -456,7 +456,7 @@ router.get('/getExpenseApprovalDetail',verify, async(request,response)=>{
             console.log('comment +++  '+comm);
 
             const schema=joi.object({
-                comm:joi.string().required().label('Please Fill Comment'),
+                comm:joi.string().min(3).required().label('Please Fill Comment'),
                 
             })
             let result=schema.validate({comm:comm});
