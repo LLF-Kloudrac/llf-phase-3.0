@@ -925,32 +925,51 @@ router.post('/nonItProducts', (request,response) => {
                      response.send(result.error.details[0].context.label);
                  }
                  else{
-                     if(nonItFormResult.quoteNum[i]<3 &&(nonItFormResult.justification[i]==null || nonItFormResult.justification[i]=="" || nonItFormResult.justification[i]== ' ')){               
+/*                      if(nonItFormResult.quoteNum[i]<3 &&(nonItFormResult.justification[i]==null || nonItFormResult.justification[i]=="" || nonItFormResult.justification[i]== ' ')){               
                              response.send('Please enter Justification because quote count is not equal to 3.');    
                      }
-                     else{
+*/
+
+                    for(let i=0; i< numberOfRows ; i++)
+                    { 
+                      if(nonItFormResult.quoteNum[i]<3){
+                       let schema=joi.object({
+                       just:joi.string().min(3).required().label('Please enter Justification because quote count is not equal to 3.'),
+                     })
+                    let result=schema.validate({just:nonItFormResult.justification[i]});
+                    console.log('validation hsh '+JSON.stringify(result.error));
+                    if(result.error){
+                        console.log('fd'+result.error);
+                        response.send(result.error.details[0].context.label);
+                    }
+
+                    else{
+                          
      
-                         let singleRecordValues = [];
-                         singleRecordValues.push(nonItFormResult.itemsCategory[i]);
-                         singleRecordValues.push(nonItFormResult.items[i]);
-                         singleRecordValues.push(nonItFormResult.state[i]);
-                         singleRecordValues.push(nonItFormResult.district[i]);
-                         singleRecordValues.push(nonItFormResult.unitCost[i]);
-                         singleRecordValues.push(nonItFormResult.unit[i]);
-                        // singleRecordValues.push(nonItFormResult.otherItems[i]);       
-                         singleRecordValues.push(nonItFormResult.itemSpecification[i]);
-                         singleRecordValues.push(nonItFormResult.quantity[i]);
-                         singleRecordValues.push(nonItFormResult.budget[i]);
-                         singleRecordValues.push(nonItFormResult.imgpath1[i]);
-                         singleRecordValues.push(nonItFormResult.imgpath2[i]);
-                         singleRecordValues.push(nonItFormResult.imgpath3[i]);
-                         singleRecordValues.push(nonItFormResult.quoteNum[i]);
-                         singleRecordValues.push(nonItFormResult.justification[i]);
-                         singleRecordValues.push(nonItFormResult.vendor[i]);
-                         singleRecordValues.push(nonItFormResult.parentProcurementId[i]);
-                         lstNonItProcurement.push(singleRecordValues);
-                         console.log('dj'+singleRecordValues);
-                     }
+                        let singleRecordValues = [];
+                        singleRecordValues.push(nonItFormResult.itemsCategory[i]);
+                        singleRecordValues.push(nonItFormResult.items[i]);
+                        singleRecordValues.push(nonItFormResult.state[i]);
+                        singleRecordValues.push(nonItFormResult.district[i]);
+                        singleRecordValues.push(nonItFormResult.unitCost[i]);
+                        singleRecordValues.push(nonItFormResult.unit[i]);
+                       // singleRecordValues.push(nonItFormResult.otherItems[i]);       
+                        singleRecordValues.push(nonItFormResult.itemSpecification[i]);
+                        singleRecordValues.push(nonItFormResult.quantity[i]);
+                        singleRecordValues.push(nonItFormResult.budget[i]);
+                        singleRecordValues.push(nonItFormResult.imgpath1[i]);
+                        singleRecordValues.push(nonItFormResult.imgpath2[i]);
+                        singleRecordValues.push(nonItFormResult.imgpath3[i]);
+                        singleRecordValues.push(nonItFormResult.quoteNum[i]);
+                        singleRecordValues.push(nonItFormResult.justification[i]);
+                        singleRecordValues.push(nonItFormResult.vendor[i]);
+                        singleRecordValues.push(nonItFormResult.parentProcurementId[i]);
+                        lstNonItProcurement.push(singleRecordValues);
+                        console.log('dj'+singleRecordValues);
+                    }
+                  }
+                }
+                      
                  }
      
             }
@@ -1917,45 +1936,94 @@ router.post('/saveItemDescription',(request,response)=>{
     console.log(name+authority+cont+bankkDet+ifsc+pan+gst+add+accNo+state+url+other+district+reason);
 
     if(gst == null || gst == '' )
-    {
-         schema=joi.object({
-             state:joi.string().required().label('Please Choose State'),
-            district:joi.string().required().label('Please Choose District'),
-            name:joi.string().min(3).max(80).required().label('Please Fill Vendor Name'),
-            conta:joi.string().required().label('Please Enter Contact Number'),
-            cont:joi.number().integer().min(1000000000).max(9999999999).required().label('Contact number should have exact 10 digits'),
-            bankkDet:joi.string().min(3).max(255).required().label('Please Fill Bank Details'),
-            accNo:joi.string().min(3).required().label('Please Fill Bank Account Number'),
-            ifsc:joi.string().min(3).max(20).required().label('Please Fill Bank IFSC Code.'),
-            reason:joi.string().min(3).max(255).required().label('Please Fill Reason for not providing GST no.'),
-            
-              })
-        result = schema.validate({conta:cont,cont:cont,state:state,district:district,name:name,bankkDet:bankkDet,accNo:accNo,ifsc:ifsc,reason:reason});
-        
+    {    
+        if(request.body.pan){
+            console.log('aaaaaaaaaaaaaaaa');
+            schema=joi.object({
+                state:joi.string().required().label('Please Choose State'),
+               district:joi.string().required().label('Please Choose District'),
+               name:joi.string().min(3).max(80).required().label('Please Fill Vendor Name'),
+               conta:joi.string().required().label('Please Enter Contact Number'),
+               cont:joi.number().integer().min(1000000000).max(9999999999).required().label('Contact number should have exact 10 digits'),
+               pan:joi.string().min(10).max(10).label('Pan Number Should be Exactly of 10 Digits'),
+               bankkDet:joi.string().min(3).max(255).required().label('Please Fill Bank Details'),
+               accNo:joi.string().min(3).required().label('Please Fill Bank Account Number'),
+               ifsc:joi.string().min(3).max(20).required().label('Please Fill Bank IFSC Code.'),
+               reason:joi.string().min(3).max(255).required().label('Please Fill Reason for not providing GST no.'),
+               
+                 })
+           result = schema.validate({pan:pan,conta:cont,cont:cont,state:state,district:district,name:name,bankkDet:bankkDet,accNo:accNo,ifsc:ifsc,reason:reason});
+           
+        }
+        else{
+
+            console.log('bbbbbbbbbbbbbbbbbbbb');
+            schema=joi.object({
+                state:joi.string().required().label('Please Choose State'),
+               district:joi.string().required().label('Please Choose District'),
+               name:joi.string().min(3).max(80).required().label('Please Fill Vendor Name'),
+               conta:joi.string().required().label('Please Enter Contact Number'),
+               cont:joi.number().integer().min(1000000000).max(9999999999).required().label('Contact number should have exact 10 digits'),
+              // pan:joi.string().min(10).max(10).label('Pan Number Should be Exactly of 10 Digits'),
+               bankkDet:joi.string().min(3).max(255).required().label('Please Fill Bank Details'),
+               accNo:joi.string().min(3).required().label('Please Fill Bank Account Number'),
+               ifsc:joi.string().min(3).max(20).required().label('Please Fill Bank IFSC Code.'),
+               reason:joi.string().min(3).max(255).required().label('Please Fill Reason for not providing GST no.'),
+               
+                 })
+             result = schema.validate({conta:cont,cont:cont,state:state,district:district,name:name,bankkDet:bankkDet,accNo:accNo,ifsc:ifsc,reason:reason});
+           
+
+        }
+       
     }
 
      else
-     {
+     {   
+         if(request.body.pan){
+             console.log('ccccccccccccccc');
+            schema=joi.object({
+                state:joi.string().required().label('Please Choose State'),
+                district:joi.string().required().label('Please Choose District'),
+                name:joi.string().min(3).max(80).required().label('Please Fill Vendor Name'),
+                conta:joi.string().required().label('Please Enter Contact Number'),
+                cont:joi.number().integer().min(1000000000).max(9999999999).required().label('Contact number should have exact 10 digits'),
+                bankkDet:joi.string().min(3).max(255).required().label('Please Fill Bank Details'),
+                pan:joi.string().min(10).max(10).label('Pan Number Should be Exactly of 10 Digits'),
+                accNo:joi.number().required().label('Please Fill Bank Account Number'),
+                ifsc:joi.string().min(3).max(20).required().label('Please Fill Bank IFSC Code.'),
+                  })
+             result = schema.validate({pan:pan,conta:cont,cont:cont,state:state,district:district,name:name,bankkDet:bankkDet,accNo:accNo,ifsc:ifsc});
 
-         schema=joi.object({
-            state:joi.string().required().label('Please Choose State'),
-            district:joi.string().required().label('Please Choose District'),
-            name:joi.string().min(3).max(80).required().label('Please Fill Vendor Name'),
-            conta:joi.string().required().label('Please Enter Contact Number'),
-            cont:joi.number().integer().min(1000000000).max(9999999999).required().label('Contact number should have exact 10 digits'),
-            bankkDet:joi.string().min(3).max(255).required().label('Please Fill Bank Details'),
-            accNo:joi.number().required().label('Please Fill Bank Account Number'),
-            ifsc:joi.string().min(3).max(20).required().label('Please Fill Bank IFSC Code.'),
-              })
-         result = schema.validate({conta:cont,cont:cont,state:state,district:district,name:name,bankkDet:bankkDet,accNo:accNo,ifsc:ifsc});
+         }
+         else{
+             console.log('dddddddddddddddddddddddddddd');
+            schema=joi.object({
+                state:joi.string().required().label('Please Choose State'),
+                district:joi.string().required().label('Please Choose District'),
+                name:joi.string().min(3).max(80).required().label('Please Fill Vendor Name'),
+                conta:joi.string().required().label('Please Enter Contact Number'),
+                cont:joi.number().integer().min(1000000000).max(9999999999).required().label('Contact number should have exact 10 digits'),
+                bankkDet:joi.string().min(3).max(255).required().label('Please Fill Bank Details'),
+              //  pan:joi.string().min(10).max(10).label('Pan Nuber Should be Exactly of 10 Digits'),
+                accNo:joi.number().required().label('Please Fill Bank Account Number'),
+                ifsc:joi.string().min(3).max(20).required().label('Please Fill Bank IFSC Code.'),
+                  })
+             result = schema.validate({conta:cont,cont:cont,state:state,district:district,name:name,bankkDet:bankkDet,accNo:accNo,ifsc:ifsc});
+
+
+         }
+
+        
      }
   
     
     if(result.error){
-        console.log('fd'+result.error);
+        console.log('fd  validaion eeror'+result.error);
         response.send(result.error.details[0].context.label);    
     }
       else{
+          
     
     let record = [];
     record.push(name);

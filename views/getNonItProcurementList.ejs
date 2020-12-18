@@ -258,7 +258,7 @@
                 budget:'Budget',
                // no:'Number of quotes',
                // vendor:'Impaneled Vendor',
-               // createdDate: 'Created Date',
+                createdDate: 'Created Date',
              
             }
           
@@ -359,8 +359,8 @@
                                 htmlTable += '<td>'+record.procname+'</td>';
                                 htmlTable += '<td><strong>Impaneled Vendor</strong></td>';
                               //  htmlTable += '<td>'+'<a href="#" class="vendorDetTag" id="'+record.impaneled_vendor__c+'" >'+record.vendorname+'</a>'+'</td>';
-                                htmlTable += '<td>'+'<a href="#" class="vendorDetTag" id="'+record.impaneled_vendor__c+'" >'+record.vendorname+'</a>'+'</td>';
-                         
+                              //  htmlTable += '<td>'+'<a href="#" class="vendorDetTag" id="'+record.impaneled_vendor__c+'" >'+record.vendorname+'</a>'+'</td>';
+                              htmlTable += '<td>'+record.vendorname+'</td>';
                                 htmlTable += '</tr>';
                             htmlTable += '<tr>';
                                 htmlTable += '<td><strong>Item Category</strong></td>';

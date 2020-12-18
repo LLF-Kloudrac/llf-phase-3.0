@@ -648,10 +648,10 @@ router.get('/details', async (request, response) => {
   var pettyCashQueryText = 'SELECT id, sfid, name, Bill_No__c, Bill_Date__c,Nature_of_exp__c, Amount__c FROM salesforce.Petty_Cash_Expense__c WHERE Expense__c = $1';
   var conveyanceQueryText = 'SELECT id, sfid, Name, Amount__c, Mode_of_Conveyance__c, From__c FROM salesforce.Conveyance_Voucher__c WHERE Expense__c = $1';
   var tourBillClaimQueryText = 'SELECT id, sfid, Name,Grand__c FROM salesforce.Tour_Bill_Claim__c WHERE Expense__c = $1 ';
-  var customApprovalText = 'SELECT cust.id, cust.sfid, cust.Name as custname, cust.Comment__c as custcomm,cust.Approver_PM__c,con.name as conname,cust.Approver_RM__c '+
+  var customApprovalText = 'SELECT cust.id, cust.sfid,cust.approval_type__c, cust.Name as custname, cust.Comment__c as custcomm,cust.Approver_PM__c,con.name as conname,cust.Approver_RM__c '+
   'FROM salesforce.Custom_Approval__c cust '+
   'INNER JOIN salesforce.Contact con '+
-  'ON cust.Approver_RM__c=con.sfid '+
+  'ON cust.submitter_heroku__c=con.sfid '+
   'WHERE cust.Expense__c = $1 ';
 
   var objData =  {};
@@ -717,20 +717,30 @@ router.get('/getExpenseApproval',verify,(request,response)=>{
 
 })
 
-router.get('/approvalList',(request,response)=>{
+router.get('/approvalList',verify,(request,response)=>{
 
   console.log('Your are inside the Approvel List Router method');
   let parentId = request.query.parentId;
   console.log('parentId '+parentId);
-
+   let objUser=request.body.user;
+   console.log('objUser '+JSON.stringify(objUser));
   console.log('Your are inside the Approvel List Router method');
   let qry ='SELECT app.sfid as appsfid, app.name as appname, app.Approval_Type__c,app.Comment__c, con.name as conname, exp.name as expname, exp.sfid as expsfid, app.Approver_RM__c , app.Amount__c,app.createddate, app.Expense__c, app.Assign_To_PM__c '+
+  ' FROM salesforce.Custom_Approval__c app '+
+ 'INNER JOIN salesforce.Contact con '+
+ 'ON app.submitter_heroku__c=con.sfid '+
+ 'INNER JOIN salesforce.Milestone1_Expense__c exp '+
+ 'ON app.Expense__c = exp.sfid '+
+ 'WHERE app.Expense__c = $1 ';
+  
+/*    qry ='SELECT app.sfid as appsfid, app.name as appname, app.Approval_Type__c,app.Comment__c, con.name as conname, exp.name as expname, exp.sfid as expsfid, app.Approver_RM__c , app.Amount__c,app.createddate, app.Expense__c, app.Assign_To_PM__c '+
    ' FROM salesforce.Custom_Approval__c app '+
   'INNER JOIN salesforce.Contact con '+
   'ON app.Approver_RM__c=con.sfid '+
   'INNER JOIN salesforce.Milestone1_Expense__c exp '+
   'ON app.Expense__c = exp.sfid '+
   'WHERE app.Expense__c = $1 ';
+ */
           console.log('qyer '+qry)
    pool
   .query(qry,[parentId])

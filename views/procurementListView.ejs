@@ -203,7 +203,7 @@
             budget:'Budget',
           //  no:'Number of quotes',
           //  vendor:'Impaneled Vendor',
-          //  createdDate:'Created Date',
+            createdDate:'Created Date',
           //  editAction:'Action',
         }
       
@@ -302,9 +302,10 @@
                               htmlTable += '<tr>';
                                 htmlTable += '<td><strong>Procurement- IT ID</strong></td>';
                                 htmlTable += '<td>'+record.procitname+'</td>';
-                                htmlTable += '<td><strong>ImpaneledVendor Name</strong></td>';
-                                htmlTable += '<td>'+'<a target="_blank" href="#" class="vendorDetTag" id="'+record.impaneled_vendor__c+'" >'+record.vendername+'</a>'+'</td>';
-                         
+                                htmlTable += '<td><strong>Vendor Name</strong></td>';
+                                //htmlTable += '<td>'+'<a target="_blank" href="#" class="vendorDetTag" id="'+record.impaneled_vendor__c+'" >'+record.vendername+'</a>'+'</td>';
+                                htmlTable += '<td>'+record.vendername+'</td>';
+                                
                             htmlTable += '</tr>';
                             htmlTable += '<tr>';
                                 htmlTable += '<td><strong>Items</strong></td>';

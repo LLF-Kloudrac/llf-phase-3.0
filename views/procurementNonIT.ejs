@@ -29,8 +29,8 @@
   <div class="">
  <div id="errorMessages"></div>
        <form method="post" action="/insertprecash" id="formdata"  enctype="multipart/form-data">
-        <div class="table-responsive">
-         <span id="error"></span>
+        <div class="table-responsive" style="overflow-y:auto">
+      
          <table class="table table-bordered" id="item_table">
           <tr>
             <th>SR. NO</th>
@@ -65,6 +65,8 @@
           <input type="submit" style="background-color:#2C3E50; align-content: center ;" id="submitButton" name="submit" class="btn btn-info" value="Submit" />
          </div>
          <br>
+         </div>
+         
        </form>
        </div>
       </div>
@@ -115,12 +117,12 @@ let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar",
 
 
     var itemsCategory = [ "Electrical", "Events", "Materials On Rent", "Miscellaneous","Printing","Stationery" ];
-    var Stationery = ["A4 Size Paper Rim","Books","Eraser","Files","Magnetic Board","Markers", "Others", "Pen", "Pencil","Sharpner","White", ];
-    var Printing = ["Binding","Brochures","Caps", "Certificates", "Leaflets","Others", "Posters", "Standees" ];
-    var Electrical = ["Battery", "Camera", "Extension Board", "Fan" , "Heater", "Inverter", "LCD Projector", "Lights", "Others", "Plasma", "Telephone", "UPS"  ];
-    var Events = ["Others", "Suggest Hotels"];
-    var MaterialsOnRent = [ "AV Systems", "Backdrop", "Hardware Peripherals", "Others" , "Projector"];
-    var Miscellaneous = ["Any Other Expense", "Maintenance"];
+    var Stationery = ["None","A4 Size Paper Rim","Books","Eraser","Files","Magnetic Board","Markers", "Others", "Pen", "Pencil","Sharpner","White", ];
+    var Printing = ["None","Binding","Brochures","Caps", "Certificates", "Leaflets","Others", "Posters", "Standees" ];
+    var Electrical = ["None","Battery", "Camera", "Extension Board", "Fan" , "Heater", "Inverter", "LCD Projector", "Lights", "Others", "Plasma", "Telephone", "UPS"  ];
+    var Events = ["None","Others", "Suggest Hotels"];
+    var MaterialsOnRent = ["None", "AV Systems", "Backdrop", "Hardware Peripherals", "Others" , "Projector"];
+    var Miscellaneous = ["None","Any Other Expense", "Maintenance"];
         
         var subListValue="";
         var sts='';

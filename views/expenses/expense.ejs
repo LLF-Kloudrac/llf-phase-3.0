@@ -390,8 +390,9 @@
             </div>
           </div>
         </div>
-      </div>
+        </div>
 </div>
+
 
     <!-- Create Expense Modal  End -->
 
@@ -494,33 +495,36 @@
             <center> <img src="/spinner-gif-transparent-background-14.gif" />  </center>
         </div>
         <div id='printExpensediv'>
-         <table id="printExpensetable" class="table-responsive">
+         <table id="printExpensetable" class="table">
          </table>
-         <table id="printpettycash" class="table-responsive">
+         <table id="printpettycash" class="table">
          </table>
-         <table id="printconveyance" class="table-responsive">
+         <table id="printconveyance" class="table">
          </table>
-         <table id="printairrailBus" class="table-responsive">
+         <table id="printairrailBus" class="table">
         </table>
-        <table id="printConveyanceCharge" class="table-responsive">
+        <table id="printConveyanceCharge" class="table">
         </table>
-        <table id="printboardinglodging" class="table-responsive">
+        <table id="printboardinglodging" class="table">
         </table>
-        <table id="printtelphoneFood" class="table-responsive">
+        <table id="printtelphoneFood" class="table">
         </table>
-        <table id="printmiscellaneous" class="table-responsive">
+        <table id="printmiscellaneous" class="table">
         </table>
   
         </div>
         </div>
+      
         <div class="modal-footer">
           <button type="button" value="Click to print!" id="print">click to Print</button>
           <button type="button" class="btn btn-danger" id="closePrint" data-dismiss="modal" aria-label="Close">Close</button>
-    
         </div>
       </div>
     </div>
   </div>
+</div>
+ 
+
   <!-- Popup PRINT modal END  -->
   <!-- Popup PRINT modal END  -->
 
@@ -1256,12 +1260,14 @@
               {
                 customApprovalTableRows += '<thead><tr>';
                 customApprovalTableRows += '<th>Expense Approval Name</th>';
-                customApprovalTableRows += '<th>Approver (RM)</th>';
+                customApprovalTableRows += '<th>Approval Type</th>';
+                customApprovalTableRows += '<th>Submitter</th>';
                 customApprovalTableRows += '<th>Comment</th>';
                 customApprovalTableRows += '</tr></thead><tbody>';
               }
               customApprovalTableRows += '<tr>';
                 customApprovalTableRows += '<td>'+customApprovalList[i].custname+'</td>';
+                customApprovalTableRows += '<td>'+customApprovalList[i].approval_type__c+'</td>';
                 customApprovalTableRows += '<td>'+customApprovalList[i].conname+'</td>';
                 customApprovalTableRows += '<td>'+customApprovalList[i].custcomm+'</td>';
                 customApprovalTableRows += '</tr>';
@@ -1736,7 +1742,7 @@ $('.printexp').on('click', function(event){
               telefoodTableRow += '<thead>';
                 telefoodTableRow += '<tr>';
                 telefoodTableRow += '<td colspan="7"  style="background-color:#d3d3d3;padding:5px;"><h5 style="padding-left:5px;">Telephone & Fooding Information</h5></td>';    
-                telefoodTableRow += '</tr>';
+                telefoodTableRow += '</tr><br>';
                 telefoodTableRow += '<tr><th>Telephone Fooding & Laundry Expenses Number</th>';
                 telefoodTableRow += '<th>Laundry Expense</th>';
                 telefoodTableRow += '<th>Fooding Expense</th>';
@@ -1901,7 +1907,7 @@ $('.printexp').on('click', function(event){
       {
 
         var w = window.open();
-        var html = $("#toNewWindow").html();
+        var html = $("#printExpensediv").html();
         $(w.document.body).html(html);
         w.print();
         }
