@@ -5,9 +5,11 @@
   @media (max-width: 768px){
 .mb-mobile{margin-bottom: 10px;}
 }
-
+.form-control{
+  width: auto;
+}
 </style>
-<div style="overflow-y: auto;">
+
 <div class="container-fluid">
   <br />
   
@@ -21,11 +23,12 @@
    <p id="tourbillId"><%= parentTourBillId %></p>
    <h4 align="center">Miscellaneous Expenses</h4>
    <br />
+  </div>
    <div class="">
       <% include ../../partials/messages %>
     <div id="errorMessages"></div>
    <form method="post" action="/insertprecash" id="formdata"  enctype="multipart/form-data">
-    <div class="table-repsonsive">
+    <div class="table-repsonsive" style="overflow-y: auto;">
      <span id="error"></span>
      <table class="table table-bordered" id="item_table">
       <tr>
@@ -48,8 +51,8 @@
     </div>
    </form>
    </div>
-  </div>
-</div>
+  
+
 </div>
 
 
@@ -73,6 +76,7 @@ $(document).ready(function(){
       html += '<td><input type="text" name="particulars_mode" class="form-control " /></td>';
       html += '<td><select id="activity_code'+cnt+'" name="projectTask" class="form-control item_unit"></select></td>';
       html += '<td><textarea  name="remarks" class="form-control"></textarea></td>';
+      
       html += '<td><input type="number" name="amount" class="form-control" /></td>';
       html += '<td><input type="file" onChange="chkFile(this,'+cnt+')" name="fileprety" id="fileprety" style="overflow:hidden;width:auto;" class="form-control" /><input type="hidden" value="demo" name="imgpath" id="file_'+cnt+'"></td>';
       html += '<td style="display:none;"><input  type="hidden" name="parentTourBillId" value="<%= parentTourBillId %>" class="form-control" /></td>';
