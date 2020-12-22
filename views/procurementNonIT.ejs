@@ -759,8 +759,11 @@ else if(state=='Uttarakhand')
 
               $('#'+cnt).on('change', function() {
                   itVal=this.value;
-                  if(itVal=='Other Items'){
+                  if(itVal=='Others'){
                     $('#other'+cnt).attr("readonly",false);
+                  }
+                  else{
+                    $('#other'+cnt).attr("readonly",true);
                   }
                    itemValue = this.value;
                   // alert('your Choose'+itemValue);

@@ -795,238 +795,174 @@ router.post('/updateasset',(request,response)=>{
 
 router.post('/nonItProducts', (request,response) => {
 
-   let nonItFormResult = request.body;
-
-   console.log('nonItFormResult  '+JSON.stringify(nonItFormResult));
-   let parentProcurementId = '';
-   console.log('parent Id Asset Requisition Form '+parentProcurementId);
-
-   if(typeof(request.body.parentProcurementId)!='object'){
-    parentProcurementId =request.body.parentProcurementId;
-    console.log('parentProcurementId '+parentProcurementId);
- }
- else{
-    parentProcurementId = request.body.parentProcurementId[0];
-   console.log('parentProcurementId '+parentProcurementId);
- }
-  /*  let img1=request.body.imgpath1;
-   console.log('=>>'+img1);
-   let img2=request.body.imgpath2;
-   console.log('=>>'+img2);
-   let img3=request.body.imgpath3;
-   console.log('=>>'+img3);
-   let justify=request.body.justification;
-   console.log('justified'+justify); */
-
-   const{state,district,unit,unitCost,vendor,itemsCategory,items,itemSpecification,quantity,budget}=request.body;
-   let numberOfRows,lstNonItProcurement = [];
-
-
-     pool
-     .query('SELECT sfid,Manager_Approval__c,Procurement_Head_Approval__c,Procurement_Committee_Approval__c,Management_Approval__c,Chairperson_Approval__c FROM salesforce.Asset_Requisition_Form__c WHERE  sfid = $1',[parentProcurementId])
-     .then((assetRequistionQueryResult)=>{
-       console.log('assetRequistionQueryResult => '+JSON.stringify(assetRequistionQueryResult.rows));
-       let str = assetRequistionQueryResult.rows[0];
-       console.log('str Asset Detail =>'+JSON.stringify(str));
-       if(str.manager_approval__c=='Approved' || str.manager_approval__c=='Pending' || str.procurement_head_approval__c=='Approved' ||  str.procurement_head_approval__c=='Pending' || str.Procurement_Committee_Approval__c=='Approved' || str.Procurement_Committee_Approval__c=='Pending' ||  str.Management_Approval__c=='Approved' || str.Management_Approval__c=='Pending' ||  str.Chairperson_Approval__c=='Approved' || str.Chairperson_Approval__c=='pending' )
-       {
-         console.log('inside validation');
-         response.send('The record cannot be created as the Asset Requisition Form status is PENDING/APPROVED');
-        }
-       else{
-        if(typeof(nonItFormResult.quantity) != 'object')
-        {
-     
+    let nonItFormResult = request.body;
+ 
+    console.log('nonItFormResult  '+JSON.stringify(nonItFormResult));
+    let parentProcurementId = nonItFormResult.parentProcurementId;
+    console.log('parent Id Asset Requisition Form '+parentProcurementId);
+   /*  let img1=request.body.imgpath1;
+    console.log('=>>'+img1);
+    let img2=request.body.imgpath2;
+    console.log('=>>'+img2);
+    let img3=request.body.imgpath3;
+    console.log('=>>'+img3);
+    let justify=request.body.justification;
+    console.log('justified'+justify); */
+ 
+    const{state,district,unit,unitCost,vendor,itemsCategory,items,itemSpecification,quantity,budget}=request.body;
+    let numberOfRows,lstNonItProcurement = [];
+   
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+    
+    if(typeof(nonItFormResult.quantity) != 'object')
+    {
+ 
+         let schema=joi.object({
+             state:joi.string().required().label('Please select State.'),
+              district:joi.string().required().label('Please select District.'),
+              itemsCategory:joi.string().required().label('Please select Item Category.'),
+              items:joi.string().invalid('None').required().label('Please fill Items'),
+              vendor:joi.string().required().label(' Please select Vendor from Vendor Picklist.'),
+             itemSpecification:joi.string().min(3).required().label('Please fill Item Specification.'),   
+             itemSpeci:joi.string().invalid(' ').label('Please fill Item Specification.'),          
+             quantity:joi.number().required().label('Please enter Quantity.'),
+             quanty:joi.number().min(0).label('The Quantity cannot be negative.'),
+             budget:joi.number().required().label('Please enter Budget.'),
+             budg:joi.number().min(0).label('The Budget cannot be negative.'),
+         })
+         let result=schema.validate({state:state,items:items,itemsCategory:itemsCategory,district:district,vendor:vendor,itemSpecification:itemSpecification,itemSpeci:itemSpecification,quantity:quantity,quanty:quantity,budget:budget,budg:budget});
+         console.log('validation hsh '+JSON.stringify(result.error));
+         if(result.error){
+             console.log('fd'+result.error);
+             response.send(result.error.details[0].context.label);
+         }
+         else{
+             if(nonItFormResult.quoteNum<3 && (nonItFormResult.justification==null || nonItFormResult.justification=="" || nonItFormResult.justification==' ')){
+                     response.send('Please enter Justification because quote count is not equal to 3.');    
+            }
+            else{
+             let singleRecordValues = [];
+             singleRecordValues.push(nonItFormResult.itemsCategory);
+             singleRecordValues.push(nonItFormResult.items);
+             singleRecordValues.push(nonItFormResult.state);
+             singleRecordValues.push(nonItFormResult.district);
+             singleRecordValues.push(nonItFormResult.unitCost);
+             singleRecordValues.push(nonItFormResult.unit);
+           //  singleRecordValues.push(nonItFormResult.otherItems);
+             singleRecordValues.push(nonItFormResult.itemSpecification);
+             singleRecordValues.push(nonItFormResult.quantity);
+             singleRecordValues.push(nonItFormResult.budget);
+             singleRecordValues.push(nonItFormResult.imgpath1);
+             singleRecordValues.push(nonItFormResult.imgpath2);
+             singleRecordValues.push(nonItFormResult.imgpath3);
+             singleRecordValues.push(nonItFormResult.quoteNum    );
+             singleRecordValues.push(nonItFormResult.justification);
+             singleRecordValues.push(nonItFormResult.vendor);
+             singleRecordValues.push(nonItFormResult.parentProcurementId);
+             lstNonItProcurement.push(singleRecordValues);
+             console.log('lstNOnIt'+lstNonItProcurement);
+            }
+       
+ 
+         }      
+    }
+    else
+    {
+         numberOfRows = nonItFormResult.quantity.length;
+         console.log('ROW COUnct'+numberOfRows);
+         for(let i=0; i< numberOfRows ; i++)
+         { 
              let schema=joi.object({
                  state:joi.string().required().label('Please select State.'),
-                  district:joi.string().required().label('Please select District.'),
-                  itemsCategory:joi.string().required().label('Please select Item Category.'),
-                  items:joi.string().invalid('None').required().label('Please fill Items'),
-                  vendor:joi.string().required().label(' Please select Vendor from Vendor Picklist.'),
-                 itemSpecification:joi.string().min(3).required().label('Please fill Item Specification.'),   
-                 itemSpeci:joi.string().invalid(' ').label('Please fill Item Specification.'),          
+                 district:joi.string().required().label('Please select District.'),
+                 itemsCategory:joi.string().required().label('Please select Item Category.'),
+                 items:joi.string().invalid('None').required().label('Please fill Items'),
+                 vendor:joi.string().required().label(' Please select Vendor from Vendor Picklist.'),
+                 itemSpecification:joi.string().min(3).required().label('Please fill Item Specification.'), 
+                 itemSpeci:joi.string().invalid(' ').label('Please fill Item Specification.'),            
                  quantity:joi.number().required().label('Please enter Quantity.'),
                  quanty:joi.number().min(0).label('The Quantity cannot be negative.'),
                  budget:joi.number().required().label('Please enter Budget.'),
                  budg:joi.number().min(0).label('The Budget cannot be negative.'),
+     
              })
-             let result=schema.validate({state:state,items:items,itemsCategory:itemsCategory,district:district,vendor:vendor,itemSpecification:itemSpecification,itemSpeci:itemSpecification,quantity:quantity,quanty:quantity,budget:budget,budg:budget});
-             console.log('validation hsh '+JSON.stringify(result.error));
+             let result=schema.validate({state:state[i],items:items[i],itemsCategory:itemsCategory[i],district:district[i],vendor:vendor[i],itemSpecification:itemSpecification[i],itemSpeci:itemSpecification[i],quantity:quantity[i],quanty:quantity[i],budget:budget[i],budg:budget[i]});
+             console.log('validation REsult mul'+JSON.stringify(result.error));
              if(result.error){
-                 console.log('fd'+result.error);
+                 console.log('Validation error'+result.error);
                  response.send(result.error.details[0].context.label);
              }
              else{
-                /*  if(nonItFormResult.quoteNum<3 && (nonItFormResult.justification==null || nonItFormResult.justification=="" || nonItFormResult.justification==' ' || nonItFormResult.justification=='  ')){
-                         response.send('Please enter Justification because quote count is not equal to 3.');    
-                } */
-                if(nonItFormResult.quoteNum<3){
-                    let schema=joi.object({
-                        just:joi.string().min(3).required().label('Please enter Justification because quote count is not equal to 3.'),
-                    })
-                    let result=schema.validate({just:nonItFormResult.justification});
-                    console.log('validation hsh '+JSON.stringify(result.error));
-                    if(result.error){
-                        console.log('fd'+result.error);
-                        response.send(result.error.details[0].context.label);
-                    }
-                    else{
-                        let singleRecordValues = [];
-                        singleRecordValues.push(nonItFormResult.itemsCategory);
-                        singleRecordValues.push(nonItFormResult.items);
-                        singleRecordValues.push(nonItFormResult.state);
-                        singleRecordValues.push(nonItFormResult.district);
-                        singleRecordValues.push(nonItFormResult.unitCost);
-                        singleRecordValues.push(nonItFormResult.unit);
-                      //  singleRecordValues.push(nonItFormResult.otherItems);
-                        singleRecordValues.push(nonItFormResult.itemSpecification);
-                        singleRecordValues.push(nonItFormResult.quantity);
-                        singleRecordValues.push(nonItFormResult.budget);
-                        singleRecordValues.push(nonItFormResult.imgpath1);
-                        singleRecordValues.push(nonItFormResult.imgpath2);
-                        singleRecordValues.push(nonItFormResult.imgpath3);
-                        singleRecordValues.push(nonItFormResult.quoteNum    );
-                        singleRecordValues.push(nonItFormResult.justification);
-                        singleRecordValues.push(nonItFormResult.vendor);
-                        singleRecordValues.push(nonItFormResult.parentProcurementId);
-                        lstNonItProcurement.push(singleRecordValues);
-                        console.log('lstNOnIt'+lstNonItProcurement);
-                       }
-
-
-                }        
-     
-             }      
-        }
-        else
-        {
-             numberOfRows = nonItFormResult.quantity.length;
-             console.log('ROW COUnct'+numberOfRows);
-             for(let i=0; i< numberOfRows ; i++)
-             { 
-                 let schema=joi.object({
-                     state:joi.string().required().label('Please select State.'),
-                     district:joi.string().required().label('Please select District.'),
-                     itemsCategory:joi.string().required().label('Please select Item Category.'),
-                     items:joi.string().invalid('None').required().label('Please fill Items'),
-                     vendor:joi.string().required().label(' Please select Vendor from Vendor Picklist.'),
-                     itemSpecification:joi.string().min(3).required().label('Please fill Item Specification.'), 
-                     itemSpeci:joi.string().invalid(' ').label('Please fill Item Specification.'),            
-                     quantity:joi.number().required().label('Please enter Quantity.'),
-                     quanty:joi.number().min(0).label('The Quantity cannot be negative.'),
-                     budget:joi.number().required().label('Please enter Budget.'),
-                     budg:joi.number().min(0).label('The Budget cannot be negative.'),
-         
-                 })
-                 let result=schema.validate({state:state[i],items:items[i],itemsCategory:itemsCategory[i],district:district[i],vendor:vendor[i],itemSpecification:itemSpecification[i],itemSpeci:itemSpecification[i],quantity:quantity[i],quanty:quantity[i],budget:budget[i],budg:budget[i]});
-                 console.log('validation REsult mul'+JSON.stringify(result.error));
-                 if(result.error){
-                     console.log('Validation error'+result.error);
-                     response.send(result.error.details[0].context.label);
+                // if(nonItFormResult.quoteNum[i]<3 &&(nonItFormResult.justification[i]==null || nonItFormResult.justification[i]=="" || nonItFormResult.justification[i]== ' ')){               
+                   if(nonItFormResult.quoteNum[i]<3 && nonItFormResult.justification[i].length <3){
+                    console.log('charter count '+nonItFormResult.justification[i].length);
+                    response.send('Please enter Justification because quote count is not equal to 3.');    
                  }
                  else{
-/*                      if(nonItFormResult.quoteNum[i]<3 &&(nonItFormResult.justification[i]==null || nonItFormResult.justification[i]=="" || nonItFormResult.justification[i]== ' ')){               
-                             response.send('Please enter Justification because quote count is not equal to 3.');    
-                     }
-*/
-
-                    for(let i=0; i< numberOfRows ; i++)
-                    { 
-                      if(nonItFormResult.quoteNum[i]<3){
-                       let schema=joi.object({
-                       just:joi.string().min(3).required().label('Please enter Justification because quote count is not equal to 3.'),
-                     })
-                    let result=schema.validate({just:nonItFormResult.justification[i]});
-                    console.log('validation hsh '+JSON.stringify(result.error));
-                    if(result.error){
-                        console.log('fd'+result.error);
-                        response.send(result.error.details[0].context.label);
-                    }
-
-                    else{
-                          
-     
-                        let singleRecordValues = [];
-                        singleRecordValues.push(nonItFormResult.itemsCategory[i]);
-                        singleRecordValues.push(nonItFormResult.items[i]);
-                        singleRecordValues.push(nonItFormResult.state[i]);
-                        singleRecordValues.push(nonItFormResult.district[i]);
-                        singleRecordValues.push(nonItFormResult.unitCost[i]);
-                        singleRecordValues.push(nonItFormResult.unit[i]);
-                       // singleRecordValues.push(nonItFormResult.otherItems[i]);       
-                        singleRecordValues.push(nonItFormResult.itemSpecification[i]);
-                        singleRecordValues.push(nonItFormResult.quantity[i]);
-                        singleRecordValues.push(nonItFormResult.budget[i]);
-                        singleRecordValues.push(nonItFormResult.imgpath1[i]);
-                        singleRecordValues.push(nonItFormResult.imgpath2[i]);
-                        singleRecordValues.push(nonItFormResult.imgpath3[i]);
-                        singleRecordValues.push(nonItFormResult.quoteNum[i]);
-                        singleRecordValues.push(nonItFormResult.justification[i]);
-                        singleRecordValues.push(nonItFormResult.vendor[i]);
-                        singleRecordValues.push(nonItFormResult.parentProcurementId[i]);
-                        lstNonItProcurement.push(singleRecordValues);
-                        console.log('dj'+singleRecordValues);
-                    }
-                  }
-                }
-                      
+ 
+                     let singleRecordValues = [];
+                     singleRecordValues.push(nonItFormResult.itemsCategory[i]);
+                     singleRecordValues.push(nonItFormResult.items[i]);
+                     singleRecordValues.push(nonItFormResult.state[i]);
+                     singleRecordValues.push(nonItFormResult.district[i]);
+                     singleRecordValues.push(nonItFormResult.unitCost[i]);
+                     singleRecordValues.push(nonItFormResult.unit[i]);
+                    // singleRecordValues.push(nonItFormResult.otherItems[i]);       
+                     singleRecordValues.push(nonItFormResult.itemSpecification[i]);
+                     singleRecordValues.push(nonItFormResult.quantity[i]);
+                     singleRecordValues.push(nonItFormResult.budget[i]);
+                     singleRecordValues.push(nonItFormResult.imgpath1[i]);
+                     singleRecordValues.push(nonItFormResult.imgpath2[i]);
+                     singleRecordValues.push(nonItFormResult.imgpath3[i]);
+                     singleRecordValues.push(nonItFormResult.quoteNum[i]);
+                     singleRecordValues.push(nonItFormResult.justification[i]);
+                     singleRecordValues.push(nonItFormResult.vendor[i]);
+                     singleRecordValues.push(nonItFormResult.parentProcurementId[i]);
+                     lstNonItProcurement.push(singleRecordValues);
+                     console.log('dj'+singleRecordValues);
                  }
-     
-            }
-        }
-        if(typeof(nonItFormResult.quantity) != 'object')
-        {
-         let nonItProductsInsertQuery = format('INSERT INTO salesforce.Product_Line_Item__c (Products_Services_Name__c, Items__c,State__c,District__c,Per_Unit_Cost__c,unit__c, Product_Service__c, Quantity__c, Budget__c, Quote1__c,Quote2__c	,Quote3__c,Number_of_quotes__c,justification__c,Impaneled_Vendor__c, Asset_Requisition_Form__c ) VALUES %L returning id',lstNonItProcurement);
-         console.log('nonItProductsInsertQuery '+nonItProductsInsertQuery);
-         pool.query(nonItProductsInsertQuery)
-         .then((nonItProductsInsertQueryResult) => {
-              console.log('nonItProductsInsertQueryResult  '+JSON.stringify(nonItProductsInsertQueryResult.rows));
-              response.send('Saved Successfully');
-         })
-         .catch((nonItProductsInsertQueryError) => {
-              console.log('nonItProductsInsertQueryError  '+nonItProductsInsertQueryError.stack);
-              response.send('Error Occured !');
-         })
-        }
-        else{
-         console.log('lstNonItProcurement:'+lstNonItProcurement.length+' number of rows :'+nonItFormResult.quantity.length);
-        if(lstNonItProcurement.length==nonItFormResult.quantity.length){
-         let nonItProductsInsertQuery = format('INSERT INTO salesforce.Product_Line_Item__c (Products_Services_Name__c, Items__c,State__c,District__c,Per_Unit_Cost__c,unit__c, Product_Service__c, Quantity__c, Budget__c, Quote1__c,Quote2__c	,Quote3__c,Number_of_quotes__c,justification__c,Impaneled_Vendor__c, Asset_Requisition_Form__c ) VALUES %L returning id',lstNonItProcurement);
-         console.log('nonItProductsInsertQuery '+nonItProductsInsertQuery);
-         pool.query(nonItProductsInsertQuery)
-         .then((nonItProductsInsertQueryResult) => {
-              console.log('nonItProductsInsertQueryResult  '+JSON.stringify(nonItProductsInsertQueryResult.rows));
-              response.send('Saved Successfully');
-         })
-         .catch((nonItProductsInsertQueryError) => {
-              console.log('nonItProductsInsertQueryError  '+nonItProductsInsertQueryError.stack);
-              response.send('Error Occured !');
-         })
-        }
-     }
+             }
  
-       }  
- 
+        }
+    }
+    if(typeof(nonItFormResult.quantity) != 'object')
+    {
+     let nonItProductsInsertQuery = format('INSERT INTO salesforce.Product_Line_Item__c (Products_Services_Name__c, Items__c,State__c,District__c,Per_Unit_Cost__c,unit__c, Product_Service__c, Quantity__c, Budget__c, Quote1__c,Quote2__c	,Quote3__c,Number_of_quotes__c,justification__c,Impaneled_Vendor__c, Asset_Requisition_Form__c ) VALUES %L returning id',lstNonItProcurement);
+     console.log('nonItProductsInsertQuery '+nonItProductsInsertQuery);
+     pool.query(nonItProductsInsertQuery)
+     .then((nonItProductsInsertQueryResult) => {
+          console.log('nonItProductsInsertQueryResult  '+JSON.stringify(nonItProductsInsertQueryResult.rows));
+          response.send('Saved Successfully');
      })
-     .catch((Error)=>{
-       console.log('Error in Asset Requisition Form validation '+JSON.stringify(Error.stack));
-     })            
+     .catch((nonItProductsInsertQueryError) => {
+          console.log('nonItProductsInsertQueryError  '+nonItProductsInsertQueryError.stack);
+          response.send('Error Occured !');
+     })
+    }
+    else{
+     console.log('lstNonItProcurement:'+lstNonItProcurement.length+' number of rows :'+nonItFormResult.quantity.length);
+    if(lstNonItProcurement.length==nonItFormResult.quantity.length){
+     let nonItProductsInsertQuery = format('INSERT INTO salesforce.Product_Line_Item__c (Products_Services_Name__c, Items__c,State__c,District__c,Per_Unit_Cost__c,unit__c, Product_Service__c, Quantity__c, Budget__c, Quote1__c,Quote2__c	,Quote3__c,Number_of_quotes__c,justification__c,Impaneled_Vendor__c, Asset_Requisition_Form__c ) VALUES %L returning id',lstNonItProcurement);
+     console.log('nonItProductsInsertQuery '+nonItProductsInsertQuery);
+     pool.query(nonItProductsInsertQuery)
+     .then((nonItProductsInsertQueryResult) => {
+          console.log('nonItProductsInsertQueryResult  '+JSON.stringify(nonItProductsInsertQueryResult.rows));
+          response.send('Saved Successfully');
+     })
+     .catch((nonItProductsInsertQueryError) => {
+          console.log('nonItProductsInsertQueryError  '+nonItProductsInsertQueryError.stack);
+          response.send('Error Occured !');
+     })
+    }
+ }
+ });
  
-
-
-
-
-
-
-
-
-
-
-
-   
- 
-});
-
 
 router.get('/itProducts/:parentAssetId',verify, (request,response) => {
 
@@ -1102,8 +1038,9 @@ router.post('/itProducts', (request,response) => {
                 response.send(result.error.details[0].context.label);
             }
             else{
-                if(itFormResult.quoteNum<3 &&(itFormResult.justification==null || itFormResult.justification=="" || itFormResult.justification==' ')){
-                        response.send('Please enter Justification because quote count is not equal to 3.');     
+               // if(itFormResult.quoteNum<3 &&(itFormResult.justification==null || itFormResult.justification=="" || itFormResult.justification==' ')){
+                  if(itFormResult.quoteNum<3 && itFormResult.justification.length < 3 ){
+                       response.send('Please enter Justification because quote count is not equal to 3.');     
                  }
                  else{
                     let singleItProductRecordValue = [];
@@ -1153,8 +1090,9 @@ router.post('/itProducts', (request,response) => {
                     response.send(result.error.details[0].context.label);
                 }
                 else{                
-                    if(itFormResult.quoteNum[i]<3 &&(itFormResult.justification[i]==null || itFormResult.justification[i]=="" || itFormResult.justification[i]== ' ' || itFormResult.justification=='  ')){
-                        response.send('Please enter Your Justificaton for Quote less than 3 in row number');     
+                   // if(itFormResult.quoteNum[i]<3 &&(itFormResult.justification[i]==null || itFormResult.justification[i]=="" || itFormResult.justification[i]== ' ' || itFormResult.justification=='  ')){
+                    if(itFormResult.quoteNum[i]<3 && itFormResult.justification[i].length<3){
+                       response.send('Please enter Your Justificaton for Quote less than 3 in row number');     
                  }
                  else{
                     let singleItProductRecordValue = [];
