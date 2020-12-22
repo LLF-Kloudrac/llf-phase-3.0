@@ -1583,7 +1583,7 @@ pool.
                 imgpath:joi.string().invalid('demo').label('Please Upload File/Attachments.').required(),
                 })   // .or('foodingExpenses','laundryExpenses')
         
-              let result= schema.validate({remarks:request.body.remarks,projectTask:request.body.projectTask[i],foodingExpenses:request.body.foodingExpenses[i],famt:request.body.foodingExpenses[i],laundryExpenses:request.body.laundryExpenses[i],lamt:request.body.laundryExpenses[i],imgpath:request.body.imgpath[i]});
+              let result= schema.validate({remarks:request.body.remarks[i],projectTask:request.body.projectTask[i],foodingExpenses:request.body.foodingExpenses[i],famt:request.body.foodingExpenses[i],laundryExpenses:request.body.laundryExpenses[i],lamt:request.body.laundryExpenses[i],imgpath:request.body.imgpath[i]});
                       if(result.error)
                         {
                           console.log('Vladtion '+JSON.stringify(result.error));
@@ -2009,7 +2009,7 @@ pool.
                 amt:joi.number().min(0).label('Amount cannot be negative.'),
                 imgpath:joi.string().invalid('demo').required().label('Please Upload File/Attachment'),
              })
-            let result = schema.validate({remarks:request.body.remarks,projectTask:request.body.projectTask[i],dated:request.body.date[i],date:request.body.date[i],amount:request.body.amount[i],amt:request.body.amount[i],particulars_mode:request.body.particulars_mode[i],imgpath:request.body.imgpath[i]})
+            let result = schema.validate({remarks:request.body.remarks[i],projectTask:request.body.projectTask[i],dated:request.body.date[i],date:request.body.date[i],amount:request.body.amount[i],amt:request.body.amount[i],particulars_mode:request.body.particulars_mode[i],imgpath:request.body.imgpath[i]})
             console.log('validation '+JSON.stringify(result));
             if(result.error)
             {
