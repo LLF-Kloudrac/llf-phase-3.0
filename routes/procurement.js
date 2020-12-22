@@ -22,14 +22,14 @@ router.get('/assetDetails',verify,(request, response)=> {
     var objUser = request.user;
     console.log('Asset userId : '+userId);
     let qry ='SELECT asset.sfid, asset.isHerokuApprovalButtonDisabled__c,asset.Activity_Code_project__c,asset.accounts_approval__c,asset.Requested_Closure_Plan_Date__c,asset.Status__c,asset.Name, proj.name as projname, proj.sfid as projId,'+
-            'asset.Manager_Approval__c, asset.Procurement_Head_Approval__c, asset.Procurement_Committee_Approval__c,act.Name as actName, '+
+            'asset.Manager_Approval__c, asset.Procurement_Head_Approval__c, asset.Procurement_Committee_Approval__c, '+
             'asset.Procurement_Comt_Approval_for_fortnight__c, asset.Management_Approval__c, asset.Chairperson_Approval__c, asset.Management_Approval_less_than_3_quotes__c, '+
             'asset.Management_Approval_for_fortnight_limit__c, asset.Management_Approval_Activity_Code__c, asset.createddate, '+
              'asset.Number_Of_IT_Product__c, asset.Number_Of_Non_IT_Product__c, asset.Procurement_IT_total_amount__c, asset.Procurement_Non_IT_total_amount__c, asset.Total_amount__c FROM  salesforce.Asset_Requisition_Form__c asset '+
              'INNER JOIN salesforce.Milestone1_Project__c proj '+
              'ON asset.project_department__c =  proj.sfid '+
-             'INNER JOIN salesforce.Activity_Code__c act '+
-             'ON asset.Activity_Code_project__c =  act.sfid '+
+            // 'INNER JOIN salesforce.Activity_Code__c act '+
+            // 'ON asset.Activity_Code_project__c =  act.sfid '+
              ' WHERE asset.Submitted_By_Heroku_User__c = $1 AND asset.sfid IS NOT NULL';
 
     pool
