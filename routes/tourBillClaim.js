@@ -948,16 +948,17 @@ router.post('/boardingLodgingCharges',verify, (request, response) => {
 let objUser = request.user;
 var startTime,endTime;
 var arrStartTime = [], arrEndTime = [];
-let parentTourBillId ='';;
+let parentTourBillId = request.body.parentTourBillId;
+let parentTourBillIdid ='';
 console.log('body Boarding Charges '+JSON.stringify(request.body));
 
 if(typeof(request.body.parentTourBillId)!='object'){
-  parentTourBillId =request.body.parentTourBillId;
-  console.log('parentTourBillId '+parentTourBillId);
+  parentTourBillIdid =request.body.parentTourBillId;
+  console.log('parentTourBillIdid '+parentTourBillIdid);
 }
 else{
-parentTourBillId = request.body.parentTourBillId[0];
- console.log('parentTourBillId '+parentTourBillId);
+  parentTourBillIdid = request.body.parentTourBillId[0];
+ console.log('parentTourBillId  object '+parentTourBillIdid);
 }
 
 console.log('typeof(request.body.date)   : '+typeof(request.body.stayOption));
@@ -981,7 +982,7 @@ console.log(' ownStayAmount '+ownStayAmount );
 console.log(' activity_code '+activity_code );
 
 pool
-  .query('Select sfid , name,expense__c from salesforce.Tour_Bill_Claim__c where sfid =$1',[parentTourBillId])
+  .query('Select sfid , name,expense__c from salesforce.Tour_Bill_Claim__c where sfid =$1',[parentTourBillIdid])
   .then((tourBillQueryResult)=>{
     console.log('tourBillQueryResult => '+JSON.stringify(tourBillQueryResult.rows));
     let expenseId =tourBillQueryResult.rows[0].expense__c;
