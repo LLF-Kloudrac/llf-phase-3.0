@@ -392,7 +392,7 @@ router.get('/details',verify, async(request, response) => {
    console.log('qry '+qyr);
     await
     pool
-    .query(qyr,[assetId])
+    .query(qyr1,[assetId])
     .then((assetQueryResult)=> {
         if(assetQueryResult.rowCount > 0)
         {
