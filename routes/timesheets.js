@@ -339,11 +339,12 @@ else{
   console.log('endhours '+endhours);
   console.log('endminutes '+endminutes);
    
-startTime = (starthours > 12) ? (starthours-12 + ':' + startminutes + ':00'+' PM') : (starthours + ':' + startminutes + ':00' +' AM');
-endTime = (endhours > 12) ? (endhours-12 + ':' + endminutes + ':00'+' PM') : (endhours + ':' + endminutes + ':00'+' AM');
+startTime = (starthours > 11) ? (starthours-12 + ':' + startminutes + ':00'+' PM') : (starthours + ':' + startminutes + ':00' +' AM');
+endTime = (endhours >= 11) ? (endhours-12 + ':' + endminutes + ':00'+' PM') : (endhours + ':' + endminutes + ':00'+' AM');
 
-console.log('startTime '+startTime);
-console.log('endTime '+endTime);
+console.log('startTime abc '+startTime);
+console.log('endTime xyz'+endTime);
+
 
  }
 else if(deadline == 'Deadlines')
