@@ -273,14 +273,16 @@
                               htmlTable += '<td>'+foodChargeRecord.total_amount__c+'</td>';
                           htmlTable += '</tr>';
 
-                          htmlTable += '<tr>';
-                              htmlTable += '<td><strong>Created Date</strong></td>';
-                              htmlTable += '<td>'+strCreatedDate+'</td>';
+                         /*  htmlTable += '<tr>';
+                               htmlTable += '<td><strong>Created Date</strong></td>';
+                              htmlTable += '<td>'+strCreatedDate+'</td>'; 
                               htmlTable += '<td><strong>Remarks</strong></td>';
                           htmlTable += '<td>'+foodChargeRecord.remarks__c+'</td>';
-                          htmlTable += '</tr>';
+                          htmlTable += '</tr>'; */
 
-                          htmlTable += '<tr>';       
+                          htmlTable += '<tr>'; 
+                            htmlTable += '<td><strong>Remarks</strong></td>';
+                          htmlTable += '<td>'+foodChargeRecord.remarks__c+'</td>';      
                           htmlTable += '<td><strong>View Image</strong></td>';
                           if(foodChargeRecord.heroku_image_url__c != null && foodChargeRecord.heroku_image_url__c != '')
                               htmlTable += '<td><a target="_blank" href="'+foodChargeRecord.heroku_image_url__c+'" >Click Here</a></td>';
