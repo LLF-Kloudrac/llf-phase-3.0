@@ -254,10 +254,11 @@
                           let createdDate = new Date(ChargeRecord.createddate);
                           createdDate.setHours(createdDate.getHours() + 5);
                           createdDate.setMinutes(createdDate.getMinutes() + 30);
+                          
 
                               let strRecordDate= recordDate.toLocaleString();
                               let strCreatedDate = createdDate.toLocaleString();
-
+                              console.log('hsjhisj '+strRecordDate);
                           htmlTable += '<tr>';
                               htmlTable += '<td><strong>Name</strong></td>';
                               htmlTable += '<td>'+ChargeRecord.chargegname+'</td>';
@@ -267,7 +268,7 @@
                            
                           htmlTable += '<tr>';
                             htmlTable += '<td><strong>Date </strong></td>';
-                          htmlTable += '<td>'+strRecordDate.slice(0, 10)+'</td>';
+                          htmlTable += '<td>'+strRecordDate.slice(0, 9)+'</td>';
                           htmlTable += '<td><strong>Amount </strong></td>';
                           htmlTable += '<td>'+ChargeRecord.amount__c+'</td>';
                           htmlTable += '</tr>';
@@ -286,21 +287,23 @@
                                   htmlTable += '<td>'+ChargeRecord.activitycode+'</td>';
                                   else
                                   htmlTable += '<td></td>';
-                                  htmlTable += '<td><strong>Date</strong></td>';
-                              htmlTable += '<td>'+strRecordDate.slice(0, 10)+'</td>';
-                              htmlTable += '</tr>';
 
-
-                              htmlTable += '<tr>';
-                             /*  htmlTable += '<td><strong>Created Date</strong></td>';
-                              htmlTable += '<td>'+strCreatedDate+'</td>'; */
-                               htmlTable += '<td><strong>View Image</strong></td>';
+                                  htmlTable += '<td><strong>View Image</strong></td>';
                                   if(ChargeRecord.heroku_image_url__c != null && ChargeRecord.heroku_image_url__c != '')
                                       htmlTable += '<td><a target="_blank" href="'+ChargeRecord.heroku_image_url__c+'" >Click Here</a></td>';
                                   else
                                       htmlTable += '<td></td>';
 
                                    htmlTable += '</tr>';
+                                /*   htmlTable += '<td><strong>Date</strong></td>';
+                              htmlTable += '<td>'+strRecordDate.slice(0, 10)+'</td>'; */
+                              htmlTable += '</tr>';
+
+
+                              htmlTable += '<tr>';
+                             /*  htmlTable += '<td><strong>Created Date</strong></td>';
+                              htmlTable += '<td>'+strCreatedDate+'</td>'; */
+                             
 
 
                           $('#miscellaneousChargeTable').empty();

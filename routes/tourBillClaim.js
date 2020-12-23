@@ -1848,7 +1848,7 @@ router.get('/miscellaneousCharge',verify,(request,response)=>{
           obj.mode=eachRecord.particulars_mode__c;
           obj.remarks=eachRecord.remarks__c;
           obj.createDdate = strDate;
-          obj.date=dated.slice(0, 10);
+          obj.date=dated.slice(0, 9);
           obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" id="'+eachRecord.sfid+'" >Delete</button>'
         //  obj.editAction = '<button href="#" class="btn btn-primary editMiscellanous" id="'+eachRecord.sfid+'" >Edit</button>'
       
