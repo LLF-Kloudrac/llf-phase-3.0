@@ -267,7 +267,7 @@
                           let strCreatedDate = createdDate.toLocaleString();
 
                           htmlTable += '<tr>';
-                              htmlTable += '<td><strong>Boarding Lodging Number</strong></td>';
+                              htmlTable += '<td><strong>Boarding & Lodging Number</strong></td>';
                               htmlTable += '<td>'+boardingRecord.boardingname+'</td>';
                               htmlTable += '<td><strong>Tour Bill Claim</strong></td>';
                               htmlTable += '<td>'+boardingRecord.tourbillname+'</td>';
@@ -302,7 +302,7 @@
                           if(boardingRecord.correspondence_city__c != null)
                             htmlTable += '<td>'+boardingRecord.correspondence_city__c+'</td>';
                             else
-                            htmlTable += '<td></td>';
+                            htmlTable += '<td>Null</td>';
                             
                             htmlTable += '<td><strong></strong></td>';
                             htmlTable += '<td></td>';
@@ -395,18 +395,11 @@
                             htmlTable += '<td></td>';
                             htmlTable += '</tr>';
 
-                            htmlTable += '<tr style="background-color:#d3d3d3";>';
-                                htmlTable += '<td><h5 >System Information:</h5></td>';
-                                htmlTable += '<td></td>';
-                                htmlTable += '<td></td>';
-                                htmlTable += '<td></td>';
-                            htmlTable += '</tr>';
+                            
                           
                              /*  htmlTable += '<td><strong>Created Date</strong></td>';
                               htmlTable += '<td>'+strCreatedDate+'</td>'; */
-                              htmlTable += '<td></td>';
-                                htmlTable += '<td></td>';
-                          htmlTable += '</tr>';
+                            
 
                           
     

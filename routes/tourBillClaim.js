@@ -278,7 +278,7 @@ router.get('/getAirBusListView',verify,(request,response)=>{
     let tourbillId = request.query.tourbillId;
     console.log('TourbillId'+tourbillId);
     pool
-    .query('SELECT sfid, name, Amount__c,Departure_Station__c,Arrival_Station__c , departure_date__c, arrival_date__c, createddate from salesforce.Air_Rail_Bus_Fare__c WHERE Tour_Bill_Claim__c = $1',[tourbillId])
+    .query('SELECT sfid, name, Amount__c,Departure_Station__c,Arrival_Station__c , departure_date__c, arrival_date__c, createddate from salesforce.Air_Rail_Bus_Fare__c WHERE Tour_Bill_Claim__c = $1 AND sfid IS NOT NULL',[tourbillId])
     .then((airBusQueryResult)=>{
       console.log('airBusQueryResult '+airBusQueryResult.rows);
       if(airBusQueryResult.rowCount>0)

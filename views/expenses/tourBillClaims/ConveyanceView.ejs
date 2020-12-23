@@ -44,7 +44,7 @@
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Conveyance Charges</h5>
+              <h5 class="modal-title">Conveyance Charges View</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -250,7 +250,7 @@
                               htmlTable += '<tr>';
                                   htmlTable += '<td><strong>Name</strong></td>';
                                   htmlTable += '<td>'+conveyanceRecord.conveyname+'</td>';
-                                  htmlTable += '<td><strong>TourBillClaim Name</strong></td>';
+                                  htmlTable += '<td><strong>Tour Bill Claim</strong></td>';
                                   htmlTable += '<td>'+conveyanceRecord.tourbillname+'</td>';
                               htmlTable += '</tr>';
                               htmlTable += '<tr>';
@@ -283,14 +283,8 @@
                                 /*   htmlTable += '<td><strong>Create Date</strong></td>';
                                 htmlTable += '<td>'+strCreatedDate+'</td>'; */
 
-                          htmlTable += '</tr>';
-                               htmlTable += '</tr>';
-                              htmlTable += '<tr>';  
+                          htmlTable += '</tr>'; 
                               
-                                                            
-                                  htmlTable += '<td><strong></strong></td>';
-                                  htmlTable += '<td></td>';
-                              htmlTable += '</tr>';
 
                               $('#conveyTable').empty();
                               $('#conveyTable').html(htmlTable);
