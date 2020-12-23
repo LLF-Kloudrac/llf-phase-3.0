@@ -420,7 +420,131 @@ $(document).ready(function(){
         cityAllowance(this.value,cnt);    
           
     });
+  
+
+  $('#fromDate'+cnt).on("change",function(){
+    alert('from date chahange')
+			totalAllowancesCalculation1();
+    });
+    $('#fromTime'+cnt).on("change",function(){
+			totalAllowancesCalculation1();
+    });
+    $('#toDate'+cnt).on("change",function(){
+			totalAllowancesCalculation1();
+    });
+    $('#toTime'+cnt).on("change",function(){
+			totalAllowancesCalculation1();
   });
+
+  function totalAllowancesCalculation1()
+	{
+			let fromDate = document.getElementById('fromDate'+cnt).value;
+      let fromTime = document.getElementById('fromTime'+cnt).value;
+      let toDate = document.getElementById('toDate'+cnt).value;
+      let toTime = document.getElementById('toTime'+cnt).value;
+      let fromHours = parseInt(fromTime.split(':')[0],10);
+      let fromMinutes = parseInt(fromTime.split(':')[1],10);
+      let toHours = parseInt(toTime.split(':')[0],10);
+      let toMinutes = parseInt(toTime.split(':')[1],10);
+      
+      let dailyAllowances = document.getElementById('dailyAllowances'+cnt).value;
+      let ownStayAmount = document.getElementById('ownStayAmount'+cnt).value;
+      let amtForBL = document.getElementById('amtForBL'+cnt).value;
+      console.log('fromDate   : '+fromDate);
+      console.log('typeof(fromDate)  '+typeof(fromDate));
+      console.log('fromTime   : '+typeof(fromTime));
+      console.log('toDate   : '+toDate);
+      console.log('toTime   : '+toTime);
+    
+      let stayType = document.getElementById('stay'+cnt).value;
+      console.log('stayType  '+stayType);
+      if(stayType == 'Stay')
+      {
+        var date1 = new Date(fromDate); 
+        var date2 = new Date(toDate); 
+          
+        var Difference_In_Time = date2.getTime() - date1.getTime(); 
+        var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24); 
+        console.log('Difference_In_Days  '+Difference_In_Days);
+        console.log('dailyAllowances  : '+dailyAllowances);
+        Difference_In_Days = Difference_In_Days - 1;
+        var totalAllowances = dailyAllowances * Difference_In_Days;
+        console.log('totalAllowances  : '+totalAllowances);
+        
+        if(fromHours > 0 && fromMinutes > 0 &&  (fromHours <= 11 && fromMinutes <= 59) || (fromHours <= 12 && fromMinutes == 00))
+        {
+          console.log('if from : '+dailyAllowances);
+          let dailyAllowanceValue = parseInt(dailyAllowances,10);
+          totalAllowances = parseInt(totalAllowances,10) + dailyAllowanceValue;
+        }
+        else if(fromHours >=12 && fromMinutes > 00)
+        {
+          console.log('else from : '+dailyAllowances/2);
+          let dailyAllowanceValue = parseInt(dailyAllowances/2,10);
+          totalAllowances = parseInt(totalAllowances,10) + dailyAllowanceValue;
+        }
+        if((toHours > 0 && toMinutes > 0) && (toHours <= 11 && toMinutes <= 59)   )
+        {
+          console.log('if to : '+dailyAllowances/2);
+          let dailyAllowanceValue = parseInt(dailyAllowances/2,10);
+          totalAllowances = parseInt(totalAllowances,10) + dailyAllowanceValue;
+        }
+        else if(toHours >=12 && toHours > 00)
+        {
+          console.log('else to : '+dailyAllowances);
+          let dailyAllowanceValue = parseInt(dailyAllowances,10);
+          totalAllowances = parseInt(totalAllowances,10) + dailyAllowanceValue;
+        }
+        document.getElementById('totalAllowances'+cnt).value = totalAllowances;
+        let policyamtForBL = amtForBL * Difference_In_Days;
+        document.getElementById('policyamtForBL'+cnt).value = policyamtForBL;
+      }
+
+      if(stayType != 'Stay')
+      {
+        var date1 = new Date(fromDate); 
+        var date2 = new Date(toDate); 
+          
+        var Difference_In_Time = date2.getTime() - date1.getTime(); 
+        var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24); 
+        console.log('Difference_In_Days  '+Difference_In_Days);
+        console.log('ownStayAmount  : '+ownStayAmount);
+        Difference_In_Days = Difference_In_Days - 1;
+        var totalOwnStay = ownStayAmount * Difference_In_Days;
+        console.log('totalAllowances  : '+totalOwnStay);
+        
+        if(fromHours > 0 && fromMinutes > 0 &&  (fromHours <= 11 && fromMinutes <= 59) || (fromHours <= 12 && fromMinutes == 00))
+        {
+          console.log('if from : '+ownStayAmount);
+          let dailyAllowanceValue = parseInt(ownStayAmount,10);
+          totalOwnStay = parseInt(totalOwnStay,10) + dailyAllowanceValue;
+        }
+        else if(fromHours >=12 && fromMinutes > 00)
+        {
+          console.log('else from : '+ownStayAmount/2);
+          let dailyAllowanceValue = parseInt(ownStayAmount/2,10);
+          totalOwnStay = parseInt(totalOwnStay,10) + dailyAllowanceValue;
+        }
+        if((toHours > 0 && toMinutes > 0) && (toHours <= 11 && toMinutes <= 59)   )
+        {
+          console.log('if to : '+ownStayAmount/2);
+          let dailyAllowanceValue = parseInt(ownStayAmount/2,10);
+          totalOwnStay = parseInt(totalOwnStay,10) + dailyAllowanceValue;
+        }
+        else if(toHours >=12 && toHours > 00)
+        {
+          console.log('else to : '+ownStayAmount);
+          let dailyAllowanceValue = parseInt(ownStayAmount,10);
+          totalOwnStay = parseInt(totalOwnStay,10) + dailyAllowanceValue;
+        }
+        document.getElementById('totalOwnStay'+cnt).value = totalOwnStay;
+        let policyamtForBL = amtForBL * Difference_In_Days;
+        document.getElementById('policyamtForBL'+cnt).value = policyamtForBL;
+      }
+		
+	}
+
+});
  
  $(document).on('click', '.remove', function(){
     $(this).closest('tr').remove();
@@ -499,7 +623,7 @@ function chkFile(file1,id) {
 function cityAllowance(name,cnt)
 {
   $.get('/expense/tourBillClaim/fetchAllowence',{name : name}, function(response){
-    console.log('response  : '+JSON.stringify(response));
+    console.log('response  : '+JSON.stringify(response.rows));
     let val=response[0];
    // alert(JSON.stringify(val.boarding_lodging__c));
     // $('#amtForBL'+cnt).attr("disabled",true);
