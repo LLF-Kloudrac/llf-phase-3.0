@@ -464,7 +464,21 @@ router.post('/airRailBusCharges',verify, (request, response) => {
                    let airRailBusSingleRecordValues = [];
                    airRailBusSingleRecordValues.push(bodyResult.arrival_Date[i]);
                    airRailBusSingleRecordValues.push(bodyResult.departure_Date[i]);
-                   airRailBusSingleRecordValues.push(bodyResult.projectTask[i]);
+                   if(i == 0){
+                    airRailBusSingleRecordValues.push(bodyResult.projectTask);
+                   }
+                   else{
+                         if(bodyResult.activityCode != 'object' ){
+
+                          airRailBusSingleRecordValues.push(bodyResult.activityCode);
+                         }
+                         else{
+                          airRailBusSingleRecordValues.push(bodyResult.activityCode[i-1]);
+                         }
+                    
+                   }
+                   
+
                    airRailBusSingleRecordValues.push(bodyResult.arrival_Station[i]);
                    airRailBusSingleRecordValues.push(bodyResult.departure_Station[i]);
                    airRailBusSingleRecordValues.push(bodyResult.amount[i]);
@@ -519,6 +533,10 @@ router.post('/airRailBusCharges',verify, (request, response) => {
             }
         }
         console.log('lstAirRailBus Final Result  '+JSON.stringify(lstAirRailBus));
+
+        if(request.body.arrival_Date.length == lstAirRailBus.length){
+          console.log('Inside AirRailBus Qwery');
+          
         let airRailBusInsertQuery = format('INSERT INTO salesforce.Air_Rail_Bus_Fare__c (Arrival_Date__c, Departure_Date__c,Activity_Code_Project__c,Arrival_Station__c,Departure_Station__c,Amount__c,heroku_image_url__c,Tour_Bill_Claim__c) VALUES %L returning id', lstAirRailBus);
     
         pool.query(airRailBusInsertQuery)
@@ -532,6 +550,10 @@ router.post('/airRailBusCharges',verify, (request, response) => {
                 console.log('airRailBusQueryError  '+airRailBusQueryError.stack);
                 response.send('Error Occured While Saving !');
         })
+
+        }
+
+
   
 
       }  
