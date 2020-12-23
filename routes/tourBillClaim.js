@@ -1283,7 +1283,12 @@ pool.
           }
     }
        console.log('lstBoarding' +lstBoarding);
-    
+       console.log('lstBoarding length' +lstBoarding.length+' Actual no of Row '+request.body.stayOption.length);
+
+
+
+       if(request.body.stayOption.length == lstBoarding.length){
+         console.log('Inside B&L insert Query');
         let lodgingboarding = format('INSERT INTO salesforce.Boarding_Lodging__c (Stay_Option__c, Place_Journey__c,Correspondence_City__c,Activity_Code_Project__c, From__c, To__c,Total_Own_Stay_Amount__c,Total_Allowance__c,Daily_Allowance__c,Amount_for_boarding_and_lodging__c, Actual_Amount_for_boarding_and_lodging__c	,Own_Stay_Amount__c,Heroku_Image_URL__c,Tour_Bill_Claim__c) VALUES %L returning id',lstBoarding);
         console.log('qyyy '+lodgingboarding);
         pool
@@ -1297,7 +1302,9 @@ pool.
           console.log('Error '+error.stack);
           response.send(error);
         })
-    
+
+       }
+      
 
       }  
 
@@ -1602,7 +1609,11 @@ pool.
                          }
              }
          }
-        console.log('lstTelephoneFood  '+JSON.stringify(lstTelephoneFood));
+         console.log('lstTelephoneFood  '+JSON.stringify(lstTelephoneFood));
+         console.log('lstTelephoneFood  '+JSON.stringify(lstTelephoneFood.length)+'actual No. of Row '+request.body.foodingExpenses.length);
+         if(request.body.foodingExpenses.length == lstTelephoneFood.length) {
+           console.log('Inside Telephone Queryy');
+           
         let telephoneFoodInsertQuery = format('INSERT INTO salesforce.Telephone_Fooding_Laundry_Expenses__c (Fooding_Expense__c, Laundry_Expense__c, Activity_Code_Project__c,Remarks__c,heroku_image_url__c, Tour_Bill_Claim__c) VALUES %L returning id',lstTelephoneFood);
     
         pool.query(telephoneFoodInsertQuery)
@@ -1615,6 +1626,8 @@ pool.
             response.send('Error Occured !');
         })
 
+
+         }
       }  
 
     })
@@ -2032,19 +2045,26 @@ pool.
              }
             }  
         }
-            console.log('listMIscellaneous'+JSON.stringify(lstMiscellaneousCharges));
+        console.log('listMIscellaneous'+JSON.stringify(lstMiscellaneousCharges.length));
+
+        console.log('listMIscellaneous'+JSON.stringify(lstMiscellaneousCharges));
  
-        let miscellenousChargesInsertQuery = format('INSERT INTO salesforce.Miscellaneous_Expenses__c (Date__c,Particulars_Mode__c,Activity_Code_Project__c,Remarks__c,Amount__c, Heroku_Image_URL__c, Tour_Bill_Claim__c) VALUES %L returning id', lstMiscellaneousCharges);
-        console.log('Querrrrrrrrrrrrrrrrrryyyyyyyyyyyyy'+miscellenousChargesInsertQuery);
-        pool.query(miscellenousChargesInsertQuery)
-        .then((miscellenousChargesInsertQueryResult) => {
-            console.log('miscellenousChargesInsertQueryResult  '+JSON.stringify(miscellenousChargesInsertQueryResult.rows));
-            response.send('Miscellenous Charges Form Saved Succesfully');
-        })
-        .catch((miscellenousChargesInsertQueryError) => {
-            console.log('miscellenousChargesInsertQueryError  '+miscellenousChargesInsertQueryError.stack);
-            response.send('Error Occurred !');
-        })
+        if(request.body.date.length == lstMiscellaneousCharges.length){
+          console.log('inside Run Queryy ');
+          let miscellenousChargesInsertQuery = format('INSERT INTO salesforce.Miscellaneous_Expenses__c (Date__c,Particulars_Mode__c,Activity_Code_Project__c,Remarks__c,Amount__c, Heroku_Image_URL__c, Tour_Bill_Claim__c) VALUES %L returning id', lstMiscellaneousCharges);
+          console.log('Querrrrrrrrrrrrrrrrrryyyyyyyyyyyyy'+miscellenousChargesInsertQuery);
+          pool.query(miscellenousChargesInsertQuery)
+          .then((miscellenousChargesInsertQueryResult) => {
+              console.log('miscellenousChargesInsertQueryResult  '+JSON.stringify(miscellenousChargesInsertQueryResult.rows));
+              response.send('Miscellenous Charges Form Saved Succesfully');
+          })
+          .catch((miscellenousChargesInsertQueryError) => {
+              console.log('miscellenousChargesInsertQueryError  '+miscellenousChargesInsertQueryError.stack);
+              response.send('Error Occurred !');
+          })
+        }
+
+       
     
 
       }  

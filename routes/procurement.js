@@ -1138,6 +1138,7 @@ router.post('/itProducts', (request,response) => {
             })
     
         }
+        console.log('Before Inserting Row Count '+request.body.state.length);
        if(lstItProducts.length==numberOfRows)
        {
         const itProductsInsertQuery = format('INSERT INTO salesforce.Product_Line_Item_IT__c (Items__c,Impaneled_Vendor__c,Product_Service_specification__c,State__c,District__c,Per_Unit_Cost__c,Unit__c, Quantity__c, Budget__c,Quote1__c,Quote2__c,Quote3__c,Number_of_quotes__c,justification__c ,Asset_Requisition_Form__c ) values %L returning id',lstItProducts);
