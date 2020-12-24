@@ -1627,7 +1627,7 @@ pool.
         pool.query(telephoneFoodInsertQuery)
         .then((telephoneFoodInsertQueryResult) => {
             console.log('telephoneFoodInsertQueryResult  '+JSON.stringify(telephoneFoodInsertQueryResult.rows));
-            response.send('Telephone & Food Form Saved Successfully !');
+            response.send('Fooding & Laundry Form Saved Successfully !');
         })
         .catch((telephoneFoodInsertQueryError) => {
             console.log('telephoneFoodInsertQueryError  '+telephoneFoodInsertQueryError.stack);

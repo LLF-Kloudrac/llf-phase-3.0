@@ -1113,7 +1113,7 @@
       if(assetDetails.nonItProducts.length > 0)
                     {
                         let nonItProductTable = '';
-                        nonItProductTable+='<thead>  <th>Procuremnet_Non-IT ID</th><th>Items</th><th>Quantity</th><th>Budget</th></thead>';
+                        nonItProductTable+='<thead>  <th>Procurement_Non-IT ID</th><th>Items</th><th>Quantity</th><th>Budget</th></thead>';
                         assetDetails.nonItProducts.forEach((eachNonIt) => {
                             nonItProductTable += '<tr><td>'+eachNonIt.name +'</td>';
                             nonItProductTable += '<td>'+eachNonIt.items__c +'</td>';
@@ -1127,7 +1127,7 @@
                     if(assetDetails.itProducts.length > 0)
                     {
                         let itProductTable = '';
-                        itProductTable+='<thead>  <th>ProcuremnetName</th><th>Items</th><th>Quantity</th><th>Budget</th></thead>';
+                        itProductTable+='<thead>  <th>Procurement IT ID</th><th>Items</th><th>Quantity</th><th>Budget</th></thead>';
                         assetDetails.itProducts.forEach((eachIt)=> {
                             console.log('chdc'+JSON.stringify(eachIt));
                             itProductTable += '<tr><td>'+eachIt.name +'</td>';
