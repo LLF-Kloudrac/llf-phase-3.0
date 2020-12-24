@@ -433,7 +433,16 @@
            window.open('/expense/conveyanceVoucher/'+expenseId,'_blank');
         });
 
-        $("a.tourBillClaim").click(function(){
+       
+          $("a.tourBillClaim").click(function(){
+              var expenseId = document.getElementById('expenseId').innerHTML;
+              console.log('Inside conveyanceVoucherButton Anchor Tag expenseId  '+expenseId);
+          // location.assign('/expense/conveyanceVoucher/'+expenseId);
+              window.open('/expense/tourBillNewPage/'+expenseId,'_blank');
+            })
+/*
+
+
             $("#popup").modal("hide");
 $('#createTourBillClaimModal').modal('show');
 
@@ -491,11 +500,10 @@ $('#tourBillClaimSubmitbutton').on('click',function(event){
                       })
       })
 })
+*/
 
-})
+ 
           
-
-
-        })
+    })
 
 </script>
