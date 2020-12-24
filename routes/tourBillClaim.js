@@ -959,15 +959,23 @@ var arrStartTime = [], arrEndTime = [];
 let parentTourBillId = request.body.parentTourBillId;
 let parentTourBillIdid ='';
 console.log('body Boarding Charges '+JSON.stringify(request.body));
+let actualrow =0;
 
 if(typeof(request.body.parentTourBillId)!='object'){
   parentTourBillIdid =request.body.parentTourBillId;
   console.log('parentTourBillIdid '+parentTourBillIdid);
+
+  actualrow=1;
+
+  console.log('parentTourBillIdid '+parentTourBillIdid);
+
 }
 else{
   parentTourBillIdid = request.body.parentTourBillId[0];
  console.log('parentTourBillId  object '+parentTourBillIdid);
+ actualrow=request.body.parentTourBillId.length;
 }
+console.log('actual Rows '+actualrow);
 
 console.log('typeof(request.body.date)   : '+typeof(request.body.stayOption));
 const {stayOption,projectTask,placeJourney,tier3City,fromDate ,fromTime,toDate,toTime,totalOwnStay,totalAllowances,dailyAllowances, amtForBL,actualAMTForBL,policyamtForBL, ownStayAmount,activity_code,imgpath} =request.body;
@@ -1291,11 +1299,12 @@ pool.
           }
     }
        console.log('lstBoarding' +lstBoarding);
-       console.log('lstBoarding length' +lstBoarding.length+' Actual no of Row '+request.body.stayOption.length);
+       console.log('lstBoarding length' +lstBoarding.length+' Actual no of Row '+actualrow);
 
 
 
-       if(request.body.stayOption.length == lstBoarding.length){
+
+       if(actualrow == lstBoarding.length){
          console.log('Inside B&L insert Query');
         let lodgingboarding = format('INSERT INTO salesforce.Boarding_Lodging__c (Stay_Option__c, Place_Journey__c,Correspondence_City__c,Activity_Code_Project__c, From__c, To__c,Total_Own_Stay_Amount__c,Total_Allowance__c,Daily_Allowance__c,Amount_for_boarding_and_lodging__c, Actual_Amount_for_boarding_and_lodging__c	,Own_Stay_Amount__c,Heroku_Image_URL__c,Tour_Bill_Claim__c) VALUES %L returning id',lstBoarding);
         console.log('qyyy '+lodgingboarding);
@@ -1356,7 +1365,7 @@ router.get('/boardingLodgingListView',verify,(request,response)=>{
     pool
     .query('SELECT sfid, name, Total_Amount__c,From__c,	To__c,Place_Journey__c ,createddate from salesforce.Boarding_Lodging__c WHERE Tour_Bill_Claim__c = $1',[tourbillId])
     .then((BoardingQueryResult)=>{
-      console.log('BoardingQueryResult '+BoardingQueryResult.rows);
+      console.log('BoardingQueryResult '+JSON.stringify(BoardingQueryResult.rows));
       if(BoardingQueryResult.rowCount>0)
       {
             let modifiedAirBuslList = [],i =1; 
