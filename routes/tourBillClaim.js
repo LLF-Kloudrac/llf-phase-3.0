@@ -1873,6 +1873,7 @@ router.get('/miscellaneousCharge',verify,(request,response)=>{
           let obj = {};
           let strDated = new Date(eachRecord.date__c);
           let dated = strDated.toLocaleString();
+          console.log('dfsd '+dated);
           let createdDate = new Date(eachRecord.createddate);
           createdDate.setHours(createdDate.getHours() + 5);
           createdDate.setMinutes(createdDate.getMinutes() + 30);
@@ -1883,7 +1884,7 @@ router.get('/miscellaneousCharge',verify,(request,response)=>{
           obj.mode=eachRecord.particulars_mode__c;
           obj.remarks=eachRecord.remarks__c;
           obj.createDdate = strDate;
-          obj.date=dated.slice(0, 9);
+          obj.date=strDated.toLocaleString().split(',')[0];
           obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" id="'+eachRecord.sfid+'" >Delete</button>'
         //  obj.editAction = '<button href="#" class="btn btn-primary editMiscellanous" id="'+eachRecord.sfid+'" >Edit</button>'
       
