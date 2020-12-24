@@ -464,21 +464,7 @@ router.post('/airRailBusCharges',verify, (request, response) => {
                    let airRailBusSingleRecordValues = [];
                    airRailBusSingleRecordValues.push(bodyResult.arrival_Date[i]);
                    airRailBusSingleRecordValues.push(bodyResult.departure_Date[i]);
-                   if(i == 0){
-                    airRailBusSingleRecordValues.push(bodyResult.projectTask);
-                   }
-                   else{
-                         if(bodyResult.activityCode != 'object' ){
-
-                          airRailBusSingleRecordValues.push(bodyResult.activityCode);
-                         }
-                         else{
-                          airRailBusSingleRecordValues.push(bodyResult.activityCode[i-1]);
-                         }
-                    
-                   }
-                   
-
+                    airRailBusSingleRecordValues.push(bodyResult.projectTask[i]);               
                    airRailBusSingleRecordValues.push(bodyResult.arrival_Station[i]);
                    airRailBusSingleRecordValues.push(bodyResult.departure_Station[i]);
                    airRailBusSingleRecordValues.push(bodyResult.amount[i]);
