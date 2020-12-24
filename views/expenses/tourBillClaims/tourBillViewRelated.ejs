@@ -240,7 +240,8 @@
                   if(conveyanceCharges.length > 0)
                   {
                     let conveyanceChargesHtml = '<thead>';
-                    conveyanceChargesHtml += '<th>ConveyanceCharges</th>';
+                        conveyanceChargesHtml += '<th>ConveyanceCharges</th>';
+                        conveyanceChargesHtml += '<th>Place</th>';
                     conveyanceChargesHtml += '<th>Amount</th>';
                     conveyanceChargesHtml += '<th>Date</th>';
                     conveyanceChargesHtml += '</thead><tbody>';
@@ -248,8 +249,10 @@
                       let strDate = eachConveyanceCharge.date__c.toString().split('T')[0]; 
                       conveyanceChargesHtml += '<tr>';
                       conveyanceChargesHtml += '<td>'+eachConveyanceCharge.name+'</td>';
-                      conveyanceChargesHtml += '<td>'+strDate+'</td>';
+                      conveyanceChargesHtml += '<td>'+eachConveyanceCharge.place__c+'</td>';
+                      
                       conveyanceChargesHtml += '<td>'+eachConveyanceCharge.amount__c+'</td>';  
+                      conveyanceChargesHtml += '<td>'+strDate+'</td>';
                       conveyanceChargesHtml += '</tr>';
                     });
                     conveyanceChargesHtml += '<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/conveyanceChargesListView?tourBillClaimId='+tourBillClaimId+'" >View All</a></center></td></tr>';

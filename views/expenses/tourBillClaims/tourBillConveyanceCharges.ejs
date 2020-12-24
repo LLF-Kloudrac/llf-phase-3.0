@@ -9,8 +9,13 @@
     margin-bottom: 1rem;
     color: #212529;
 }
+.form-control{
+  width: auto;
+}
+
+
 </style>
-<div style="overflow-y: auto;">
+
   <div class="row mt-5">
         
         <div class="col-md-10 m-auto">
@@ -20,6 +25,8 @@
           <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/tourBillClaim/expenseLanding/<%= parentTourBillId %>"  >Go To Expense</a>
         <br>
       </br>
+    </div>
+  </div>
    <p id="tourbillId"><%= parentTourBillId %></p>
    <h4 align="center">Conveyance Charge Expenses</h4>
    <br />
@@ -27,7 +34,7 @@
       <% include ../../partials/messages %>
     <div id="errorMessages"></div>
    <form method="post" action="/insertprecash" id="formdata"  enctype="multipart/form-data">
-    <div class="table-repsonsive">
+    <div class="table-repsonsive" style="overflow-y: auto;">
      <span id="error"></span>
      <table class="table table-bordered" id="item_table">
       <tr>
@@ -50,10 +57,7 @@
     </div>
    </form>
    </div>
-   </div>
-  </div>
-</div>
-
+  
 
 <script>
 $(document).ready(function(){

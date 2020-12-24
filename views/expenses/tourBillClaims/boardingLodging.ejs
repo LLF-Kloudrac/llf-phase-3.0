@@ -36,7 +36,7 @@
         </div>
     </div>
     
-    <div id="BoardingLodginTable" class="responsive " class="row mt-5 mb-3 align-items-center">
+    <div id="BoardingLodginTable" class="table-responsive " class="row mt-5 mb-3 align-items-center">
     
     </div>
     
@@ -51,19 +51,22 @@
               </button>
             </div>
             <div class="modal-body">
-              <div class="row">
-              <div class="col-12">
+              
               <div id="detailLoadingSpinner">
                 <center> <img src="/spinner-gif-transparent-background-14.gif" />  </center>
             </div>
-            <table id="boardingTable" class="table">
-    
-            </table>
+            
+            <div class="table-responsive">
+              <table id="boardingTable" class="table" style="overflow-y: auto;">
+      
+              </table>
             </div>
-            </div></div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          </div>
+            <br>
+            <div class="modal-footer" >
+              <button type="button" class="btn btn-danger"  data-dismiss="modal">Close</button>
             </div>
+          
           </div>
         </div>
       </div>

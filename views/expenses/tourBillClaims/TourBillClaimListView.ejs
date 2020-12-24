@@ -199,7 +199,7 @@
   <!-- Tour Bill Detail and Related Modal  Start -->
 
   <div class="modal fade" id="popupTourBillModal">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
 
             <!-- Modal Header -->
@@ -209,7 +209,7 @@
             </div>
 
             <!-- Modal body -->
-            <div class="modal-body">
+            <div class="modal-body" style="overflow-y: auto;">
                 <div class="row">
                     <div class="col-md-12">
                         <nav>
@@ -221,7 +221,7 @@
                         <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                                 <!-- Particular Expense Details -->
-                                <table id="tourBillClaimTable" class="table table-hover striped" style="overflow-x: auto;">
+                                <table id="tourBillClaimTable1" class="table table-hover striped" style="overflow-y:auto;">
                                     <!-- Inside code is handled by Jquery to add dyanamic Content -->
                                     <div id="tourBillClaimTableSpinner">
                                             <center> <img src="/spinner-gif-transparent-background-14.gif" />  </center>
@@ -232,8 +232,8 @@
                             <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                                 <div class="accordion" id="accordionExample">
 
-                                    <div class="card">
-                                        <div class="card-header" id="headingOne">
+                                    <div class="card" style="overflow-y: auto;">
+                                        <div class="card-header" id="headingOne" sty>
                                             <h5 class="mb-0">
                                             <button class="btn btn-link text-left collapsed" type="pettyCashButton"
                                                 data-toggle="collapse" data-target="#collapseOne"
@@ -247,9 +247,11 @@
                                         <div id="collapseOne" class="collapse  fade" aria-labelledby="headingOne" data-parent="#accordionExample">
                                             <div class="card-body">
                                                 <!-- Need to show Table -->
+                                                <div style="overflow-y: auto;">
                                                 <table id="airRailBusTable" class="table table-striped">
 
                                                 </table>
+                                              </div>
                                             </div>
                                         </div>
                                     </div>
@@ -269,9 +271,11 @@
                                         <div id="collapseTwo" class="collapse fade" aria-labelledby="headingTwo" data-parent="#accordionExample">
                                             <div class="card-body">
                                                 <!-- Need to show Table -->
+                                                <div style="overflow-y: auto;">
                                                 <table id="conveyanceChargesTable" class="table table-striped">
 
                                                 </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -292,9 +296,11 @@
                                         <div id="collapseThree" class="collapse  fade" aria-labelledby="headingThree" data-parent="#accordionExample">
                                             <div class="card-body">
                                                 <!-- Need to show Table -->
+                                                <div style="overflow-y: auto;">
                                                 <table id="boardingLodgingChargesTable" class="table table-striped">
-
+                                                  
                                                 </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -314,9 +320,11 @@
                                         <div id="collapseFour" class="collapse fade" aria-labelledby="headingFour" data-parent="#accordionExample">
                                             <div class="card-body">
                                                 <!-- Need to create table here -->
+                                                <div style="overflow-y: auto;">
                                                 <table id="telephoneFoodChargesTable" class="table table-striped">
 
                                                 </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -336,9 +344,11 @@
                                         <div id="collapseFive" class="collapse fade" aria-labelledby="headingFive" data-parent="#accordionExample">
                                             <div class="card-body">
                                                 <!-- Need to create table here -->
+                                                <div style="overflow-y: auto;">
                                                 <table id="miscellaneousChargesTable" class="table table-striped">
 
                                                 </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -372,7 +382,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" style="overflow-y: auto;">
           <div class="">
             <div id="errorMessages"></div>
           <form  id="tourBillClaimForm" class="needs-validation" novalidate >
@@ -529,7 +539,7 @@
                   tourBillClaimTableHtml += '</tr>';
 
                   
-                  $('#tourBillClaimTable').html(tourBillClaimTableHtml);
+                  $('#tourBillClaimTable1').html(tourBillClaimTableHtml);
     
     
                   let airBusRailFare = responseData.airBusRailFare;
