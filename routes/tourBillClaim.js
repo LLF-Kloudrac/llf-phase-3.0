@@ -1040,7 +1040,7 @@ pool.
                fromTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select FROM(Departure Time from Residence) Time'),
                toDated:joi.date().required().label('Please select TO(Arrival Time to Residence)'),
                toDate:joi.date().max('now').required().label('TO(Arrival Time to Residence must be less than or equals to Today'),
-               fromDate:joi.date().required().less(joi.ref('toDate')).label('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)'),
+               fromDate:joi.date().required().max(joi.ref('toDate')).label('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)'),
                toTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select TO (Arrival Time to Residence)Time'),
                actualAMTForBL:joi.number().required().label('Please enter Actual Boarding lodging Amount'),
                amt:joi.number().min(0).label('Actual Boarding lodging Amount cannot be negative.'),
@@ -1061,7 +1061,7 @@ pool.
               fromTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select FROM(Departure Time from Residence) Time'),
               toDated:joi.date().required().label('Please select TO(Arrival Time to Residence)'),
               toDate:joi.date().max('now').required().label('TO(Arrival Time to Residence must be less than or equals to Today'),
-              fromDate:joi.date().required().less(joi.ref('toDate')).label('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)'),
+              fromDate:joi.date().required().max(joi.ref('toDate')).label('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)'),
               toTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select TO (Arrival Time to Residence)Time'),
                // imgpath:joi.string().invalid('demo').label('Please Upload File/Attachments').required(),
               })
@@ -1187,7 +1187,7 @@ pool.
                fromTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select FROM(Departure Time from Residence) Time'),
                toDated:joi.date().required().label('Please select TO(Arrival Time to Residence)'),
                toDate:joi.date().max('now').required().label('TO(Arrival Time to Residence must be less than or equals to Today'),
-               fromDate:joi.date().required().less(joi.ref('toDate')).label('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)'),
+               fromDate:joi.date().required().max(joi.ref('toDate')).label('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)'),
                toTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select TO (Arrival Time to Residence)Time'),
                actualAMTForBL:joi.number().required().label('Please enter Actual Boarding lodging Amount'),
                amt:joi.number().min(0).label('Actual Boarding lodging Amount cannot be negative.'),
@@ -1208,7 +1208,7 @@ pool.
               fromTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select FROM(Departure Time from Residence) Time'),
               toDated:joi.date().required().label('Please select TO(Arrival Time to Residence)'),
               toDate:joi.date().max('now').required().label('TO(Arrival Time to Residence must be less than or equals to Today'),
-              fromDate:joi.date().required().less(joi.ref('toDate')).label('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)'),
+              fromDate:joi.date().required().max(joi.ref('toDate')).label('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)'),
               toTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select TO (Arrival Time to Residence)Time'),
               
             })
