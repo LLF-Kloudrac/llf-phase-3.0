@@ -311,7 +311,7 @@ router.get('/getExpenseApprovalDetail',verify, async(request,response)=>{
           'where app.sfid = $1 '; 
 
           let qryPM ='SELECT app.sfid as appsdif ,app.name as appname , app.Approval_Type__c, app.comment__c,app.Reporting_Manager_Comment__c, app.Submitter_Heroku__c, '+
-          'app.Project_Manager_Comment__c, app.Status__c,  app.Approver_RM__c,userpm.name as conname,exp.name as expname,con2.name as submitter, '+
+          'app.Project_Manager_Comment__c, app.Status__c,  app.Approver_RM__c,userpm.name as userpmname,exp.name as expname,con2.name as submitter, '+
           'app.Amount__c,app.createddate, app.Expense__c,app.Assign_To_PM__c,app.Project_Manager_Approval_Status__c, app.Project_Manager_Comment__c, app.Approver_PM__c '+
           'FROM salesforce.Custom_Approval__c app '+
           'INNER JOIN salesforce.User userpm ON app.Approver_PM__c=userpm.sfid '+
