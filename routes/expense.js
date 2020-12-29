@@ -1014,7 +1014,7 @@ router.post('/savePettyCashForm', (request, response) => {
     query('Select sfid,name,project_manager_status__c,accounts_status__c,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[parentExpenseId])
     .then((ExpenseQuerryResult)=>{
       console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
-      if((ExpenseQuerryResult.rows[0].approval_status__c == 'Pending' || ExpenseQuerryResult.rows[0].approval_status__c == 'Approved' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Pending' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Approved' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Pending' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Approved') && (ExpenseQuerryResult.rows[0].approval_status__c != 'Rejected' || ExpenseQuerryResult.rows[0].project_manager_status__c != 'Rejected' || ExpenseQuerryResult.rows[0].accounts_status__c != 'Rejected'))
+      if(ExpenseQuerryResult.rows[0].approval_status__c == 'Pending' || ExpenseQuerryResult.rows[0].approval_status__c == 'Approved' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Pending' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Approved' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Pending' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Approved')
       {
           console.log('sddjs');
           response.send('The record cannot be created as the Expense status is PENDING/APPROVED');

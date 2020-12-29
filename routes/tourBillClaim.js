@@ -520,7 +520,7 @@ router.post('/airRailBusCharges',verify, (request, response) => {
         }
         console.log('lstAirRailBus Final Result  '+JSON.stringify(lstAirRailBus));
 
-        if(request.body.arrival_Date.length == lstAirRailBus.length){
+        if(numberOfRows == lstAirRailBus.length){
           console.log('Inside AirRailBus Qwery');
           
         let airRailBusInsertQuery = format('INSERT INTO salesforce.Air_Rail_Bus_Fare__c (Arrival_Date__c, Departure_Date__c,Activity_Code_Project__c,Arrival_Station__c,Departure_Station__c,Amount__c,heroku_image_url__c,Tour_Bill_Claim__c) VALUES %L returning id', lstAirRailBus);
@@ -2067,7 +2067,7 @@ pool.
 
         console.log('listMIscellaneous'+JSON.stringify(lstMiscellaneousCharges));
  
-        if(request.body.date.length == lstMiscellaneousCharges.length){
+        if(numberOfRows == lstMiscellaneousCharges.length){
           console.log('inside Run Queryy ');
           let miscellenousChargesInsertQuery = format('INSERT INTO salesforce.Miscellaneous_Expenses__c (Date__c,Particulars_Mode__c,Activity_Code_Project__c,Remarks__c,Amount__c, Heroku_Image_URL__c, Tour_Bill_Claim__c) VALUES %L returning id', lstMiscellaneousCharges);
           console.log('Querrrrrrrrrrrrrrrrrryyyyyyyyyyyyy'+miscellenousChargesInsertQuery);
