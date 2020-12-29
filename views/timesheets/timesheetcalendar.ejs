@@ -5,6 +5,9 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.1/fullcalendar.min.css" type="text/css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.2/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.1/fullcalendar.min.js"></script>
+<div>
+  <a href="#" class="btn btn-primary float-right" style="margin-right: 3%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
+</div>
 <div class="form-group" style="overflow-y: auto;">
   <p id="objUser"><%= objUser %></p>
   <p id="objname"><%= objname %></p>
@@ -90,6 +93,9 @@
 
 <script>
     $(document).ready(function() { 
+      $('#ref').click(function() {
+       window.location.reload();
+        })
       $('#objUser').hide();
       $('#objname').hide();
       $('#objUserId').hide();

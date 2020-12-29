@@ -6,6 +6,9 @@
 
 <link rel="stylesheet" href="/stylesheets/table-sortable.css">
 <script src="/scripts/table-sortable.js" ></script>
+<div>
+  <a href="#" class="btn btn-primary float-right" style="margin-right: 3%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
+</div>
 
 <h4 style="text-align: center;">Approval Form</h4>
 <div class="container">
@@ -115,6 +118,9 @@
         let parentId=document.getElementById('parentId').innerHTML;
       //  alert('parentId '+parentId);
       /**************Table Sortable Start ***********/
+      $('#ref').click(function() {
+       window.location.reload();
+        })
   
           let columns ={
             name : 'Approval Name',

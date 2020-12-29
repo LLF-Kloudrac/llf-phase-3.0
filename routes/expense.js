@@ -204,15 +204,27 @@ router.get('/expenseAllRecords',verify, async (request, response) => {
                 obj.print='<button    data-toggle="modal" data-target="#popupPrint" class="btn btn-primary printexp" id="print'+expenseQueryResult.rows[i].sfid+'" >Print</button>';
                   obj.editButton = '<button    data-toggle="modal" data-target="#popupEdit" class="btn btn-primary expIdEditMode"   id="edit'+expenseQueryResult.rows[i].sfid+'" >Edit</button>';
                
-                  if(expenseQueryResult.rows[i].approval_status__c == 'Pending' || expenseQueryResult.rows[i].approval_status__c == 'Approved')
+                  if(expenseQueryResult.rows[i].approval_status__c == 'Pending' || expenseQueryResult.rows[i].approval_status__c == 'Approved' || expenseQueryResult.rows[i].project_manager_status__c == 'Pending' || expenseQueryResult.rows[i].project_manager_status__c == 'Approved' || expenseQueryResult.rows[i].accounts_status__c == 'Pending' || expenseQueryResult.rows[i].accounts_status__c == 'Approved')
                   {
+                    console.log('pending/approal');
+                    if(expenseQueryResult.rows[i].approval_status__c == 'Rejected' || expenseQueryResult.rows[i].project_manager_status__c == 'Rejected' || expenseQueryResult.rows[i].accounts_status__c == 'Rejected')
+                   {
+                    obj.editButton = '<button    data-toggle="modal" data-target="#popupEdit" class="btn btn-primary expIdEditMode" id="edit'+expenseQueryResult.rows[i].sfid+'" >Edit</button>';
+                    obj.approvalButton = '<button   class="btn btn-primary expIdApproval" style="color:white;" id="'+expenseQueryResult.rows[i].sfid+'" >Approval</button>';
+                     
+                   }
+                   else{
                     obj.editButton = '<button    data-toggle="modal" data-target="#popupEdit" class="btn btn-primary expIdEditMode" disabled = "true"  id="edit'+expenseQueryResult.rows[i].sfid+'" >Edit</button>';
                     obj.approvalButton = '<button   class="btn btn-primary expIdApproval" disabled = "true" style="color:white;" id="'+expenseQueryResult.rows[i].sfid+'" >Approval</button>';
+                       }
+
                   }
                  else
                  {
-                  obj.editButton = '<button    data-toggle="modal" data-target="#popupEdit" class="btn btn-primary expIdEditMode" id="edit'+expenseQueryResult.rows[i].sfid+'" >Edit</button>';
-                  obj.approvalButton = '<button   class="btn btn-primary expIdApproval" style="color:white;" id="'+expenseQueryResult.rows[i].sfid+'" >Approval</button>';
+                  console.log('Rejected');
+                    obj.editButton = '<button    data-toggle="modal" data-target="#popupEdit" class="btn btn-primary expIdEditMode" id="edit'+expenseQueryResult.rows[i].sfid+'" >Edit</button>';
+                    obj.approvalButton = '<button   class="btn btn-primary expIdApproval" style="color:white;" id="'+expenseQueryResult.rows[i].sfid+'" >Approval</button>';
+                    
                  }
                   expenseList.push(obj);
                 /* disabled="'+expenseQueryResult.rows[i].isherokueditbuttondisabled__c+'" */
@@ -999,12 +1011,13 @@ router.post('/savePettyCashForm', (request, response) => {
   
   console.log('parentExpenseId pettyCash '+parentExpenseId);
     pool.
-    query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[parentExpenseId])
+    query('Select sfid,name,project_manager_status__c,accounts_status__c,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[parentExpenseId])
     .then((ExpenseQuerryResult)=>{
       console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
-      if(ExpenseQuerryResult.rows[0].approval_status__c=='Approved' || ExpenseQuerryResult.rows[0].approval_status__c=='Pending'){
-        console.log('sddjs');
-        response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
+      if((ExpenseQuerryResult.rows[0].approval_status__c == 'Pending' || ExpenseQuerryResult.rows[0].approval_status__c == 'Approved' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Pending' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Approved' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Pending' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Approved') && (ExpenseQuerryResult.rows[0].approval_status__c != 'Rejected' || ExpenseQuerryResult.rows[0].project_manager_status__c != 'Rejected' || ExpenseQuerryResult.rows[0].accounts_status__c != 'Rejected'))
+      {
+          console.log('sddjs');
+          response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
       }
       
       else {
@@ -1209,12 +1222,14 @@ router.post('/conveyanceform',(request,response) => {
    
 
     pool.
-    query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[parentExpenseId])
+    query('Select sfid,name,project_manager_status__c,accounts_status__c,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[parentExpenseId])
     .then((ExpenseQuerryResult)=>{
+     
       console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
-      if(ExpenseQuerryResult.rows[0].approval_status__c=='Approved' || ExpenseQuerryResult.rows[0].approval_status__c=='Pending'){
-        console.log('sddjs');
-        response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
+      if(ExpenseQuerryResult.rows[0].approval_status__c == 'Pending' || ExpenseQuerryResult.rows[0].approval_status__c == 'Approved' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Pending' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Approved' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Pending' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Approved')
+      {
+            console.log('sddjs');
+            response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
       } 
       else{
         let numberOfRows ,lstConveyance = [];

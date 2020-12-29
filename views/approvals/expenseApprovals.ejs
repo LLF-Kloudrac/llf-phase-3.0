@@ -3,7 +3,9 @@
 
 <link rel="stylesheet" href="/stylesheets/table-sortable.css">
 <script src="/scripts/table-sortable.js" ></script>
-
+<div>
+  <a href="#" class="btn btn-primary float-right" style="margin-right: 3%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
+</div>
 
 <div class="row mt-5">
     <div class="col-md-9 m-auto">
@@ -228,6 +230,9 @@
 <script>
     $(document).ready(function(){
         $('#expenseDetailsSpinner').hide();
+        $('#ref').click(function() {
+       window.location.reload();
+        })
 
         let columns = {
             sequence: 'Sr No.',
