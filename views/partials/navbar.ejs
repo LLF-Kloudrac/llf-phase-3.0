@@ -1,3 +1,18 @@
+<style>
+.navbar-dark .navbar-nav .nav-link {
+    color: blue;
+}
+.bg-primary {
+    background-color: white!important;
+    font-weight: bolder;
+    font-size:larger;
+}
+.bg-primary .navbar-nav .active>.nav-link {
+    color: blue!important;
+}
+</style>
+
+<strong>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <!--   <a class="navbar-brand" href="#">LLF</a> -->
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +66,18 @@
           <form class="form my-2 my-lg-0">
           
               <ul class="my-2 my-sm-0 navbar-nav">
+
+                <li>
+       
+                    <a href="#" class="btn btn-primary float-right refId" style="color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">
+                        Refresh
+                       <!--  <i class="fa fa-refresh" aria-hidden="true"></i> -->
+                    </a>
+                   <!--  <button class="btn btn-primary btn-md bg-gray"  id="refresh"></button>  -->
+                </li>
+
+
+
                   <li class="nav-item dropdown" style="float:right">
                       <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown" aria-haspopup="true"
                       aria-expanded="false">
@@ -66,3 +93,18 @@
       
       </div>
       </nav>
+    </strong>
+
+
+<script>
+$(document).ready(function(){
+
+           $("a.refId").click(function(){
+              
+               window.location.reload();
+
+           })
+
+        })
+      </script>
+     
