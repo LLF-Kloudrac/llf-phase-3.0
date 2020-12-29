@@ -1,8 +1,10 @@
 <% include ../partials/navbar %>
 <% include ../partials/messages %>
 <% include ../partials/footer %>
+
  <!--  <p id="uid"><%= objUser.sfid %> </p> -->
 <!-- <p id="usname"><%= objUser.name %> </p>  --> 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -141,6 +143,10 @@
 }
     
   </style>
+  
+  <div>
+    <a href="#" class="btn btn-primary float-right" style="padding-right: 5%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
+  </div>
 </head>
 <body>
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -721,6 +727,10 @@
         $('#editExpenseSpinner').hide();
         $('#expenseDetailsSpinner').hide();
      //   $('#loaderSpin').hide();
+     $('#ref').click(function() {
+       window.location.reload();
+
+     })
 
 
         let columns = {

@@ -6,6 +6,10 @@
 <link rel="stylesheet" href="/stylesheets/table-sortable.css">
 <script src="/scripts/table-sortable.js" ></script>
 
+<div>
+  <a href="#" class="btn btn-primary float-right" style="margin-right: 3%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
+</div>
+
 <h3 style="text-align: center; margin-top: 20px;">Fooding & Laundry Charges</h3>
 <p1 id='tourbillId'><%=tourbillId%></p1>
 <div class="container">
@@ -143,6 +147,9 @@
         $('#tourbillId').hide();
         let tourbillId=document.getElementById('tourbillId').innerHTML;
      //   alert(tourbillId);
+     $('#ref').click(function() {
+       window.location.reload();
+        })
         let columns ={
             sequence : 'Sequence',
             deleteAction: 'Action',

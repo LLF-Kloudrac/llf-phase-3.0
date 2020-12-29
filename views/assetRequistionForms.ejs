@@ -12,6 +12,9 @@
 <link rel="stylesheet" href="/stylesheets/table-sortable.css">
 <script src="/scripts/table-sortable.js" ></script>
 <p id="expenseIdpTag"> </p>
+<div>
+  <a href="#" class="btn btn-primary float-right" style="margin-right: 3%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
+</div>
 <!-- 
 <script>
   
@@ -713,6 +716,9 @@
 
 <script>
     $(document).ready(function(){
+      $('#ref').click(function() {
+       window.location.reload();
+        })
         let columns ={
           sequence: 'Sr No.',
           editbutton : 'Action',

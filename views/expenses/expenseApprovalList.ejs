@@ -4,6 +4,9 @@
 <% include ../partials/footer %>
 
 <p id ="parentExpenseId"><%=parentExpenseId %></p>
+<div>
+  <a href="#" class="btn btn-primary float-right" style="margin-right: 3%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
+</div>
 
 
 <link rel="stylesheet" href="/stylesheets/table-sortable.css">
@@ -118,6 +121,9 @@
     $(document).ready(function(){
         $('#parentExpenseId').hide();
         let parentId=document.getElementById('parentExpenseId').innerHTML;
+        $('#ref').click(function() {
+       window.location.reload();
+        })
       //  alert('parentId '+parentId);
       /**************Table Sortable Start ***********/
   

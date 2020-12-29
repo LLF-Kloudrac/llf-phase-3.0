@@ -4,7 +4,9 @@
 <p id="vendorId"><%= vendorId %></p>
 <link rel="stylesheet" href="/stylesheets/table-sortable.css">
 <script src="/scripts/table-sortable.js" ></script>
-
+<div>
+  <a href="#" class="btn btn-primary float-right" style="margin-right: 3%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
+</div>
 <h3 style="text-align: center;">Item Description</h3>
 <div class="container">
     <div class="row mt-5 mb-3 align-items-center">
@@ -189,6 +191,9 @@
         $('#vendorId').hide();
         var id = document.getElementById('vendorId').innerHTML;
        // alert('id '+id);
+       $('#ref').click(function() {
+       window.location.reload();
+        })
 
         let columns ={
             sequence : 'Sequence',

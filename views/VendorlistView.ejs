@@ -6,6 +6,9 @@
 <script src="/scripts/table-sortable.js" ></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+<div>
+  <a href="#" class="btn btn-primary float-right" style="margin-right: 3%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
+</div>
 <h3 style="text-align: center; margin-top: 20px;">Vendor List</h3>
 <div class="container">
     <div class="row mt-5 mb-3 align-items-center">
@@ -264,6 +267,9 @@ let st =["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Go
     let dstrUK=["Almora","Bageshwar","Chamoli","Champawat","Dehradun","Haridwar","Nainital","Pauri Garhwal","Pithoragarh"];
     let dstrJK=["Ranchi"];
     $(document).ready(function(){
+      $('#ref').click(function() {
+       window.location.reload();
+        })
         let columns ={
             sequence : 'Sequence',
             editAction:'Action',

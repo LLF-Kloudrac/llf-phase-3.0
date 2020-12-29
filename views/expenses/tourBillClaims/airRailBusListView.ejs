@@ -6,6 +6,9 @@
 <script src="/scripts/table-sortable.js" ></script>
 
 <p1 id="tourbillId"><%= tourbillId %></p1>
+<div>
+  <a href="#" class="btn btn-primary float-right" style="margin-right: 3%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
+</div>
 
 <h3 style="text-align: center; margin-top: 20px;">Air/Rail/Bus Charges </h3>
 
@@ -189,6 +192,9 @@
 
         let tourbillId=document.getElementById('tourbillId').innerHTML;
       //  alert(tourbillId);
+      $('#ref').click(function() {
+       window.location.reload();
+        })
         let columns ={
             sequence : 'Sequence',
             deleteAction: 'Action',

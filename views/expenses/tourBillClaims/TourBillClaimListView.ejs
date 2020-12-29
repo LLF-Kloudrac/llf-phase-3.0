@@ -139,7 +139,9 @@
 
 <p id="expenseId"><%= expenseId %></p>
 <p id="tourBillId"></p>
-
+<div>
+  <a href="#" class="btn btn-primary float-right" style="margin-right: 3%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
+</div>
 <center><h3 style="text-align: center; margin-top: 20px;">Tour Bill Claim Expenses</h3></center>     
 <div class="container">
 <div class="row mt-5 mb-3 align-items-center">
@@ -423,6 +425,9 @@
         $('#tourBillId').hide();
         $('#tourBillClaimTableSpinner').hide();
         let expenseId =document.getElementById('expenseId').innerHTML;
+        $('#ref').click(function() {
+       window.location.reload();
+        })
       //  alert(expenseId);
 
         
