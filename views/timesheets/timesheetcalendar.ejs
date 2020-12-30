@@ -685,13 +685,15 @@
                      console.log('Selected view ++ '+selectedView);
                          // selectedView=this.value;
                         console.log('hii i m inside current user view');
-                        $('#assignedresource').val('');
+                       $('#assignedresource').empty();
+                       
+                       $('#assignedresource').val('');
 
                         if(selectedView == 'currentuser')
                         {
                           $('#assignedresource').attr("readonly","readonly");
                           $('#assignedresource')
-                          .append($("<option></option>")
+                          .append($("<option selected></option>")
                           .attr("value",objUserId)
                           .text(objUserName))                        
                         }
@@ -700,6 +702,10 @@
                         {
                           console.log('hii i m inside team view');
                           $('#assignedresource').attr("readonly",false);
+                          $('#assignedresource')
+                            .append($("<option></option>")
+                            .attr("value",'')
+                            .text('None'))
                           $.ajax({
                         url : '/users/getContact',
                         data : {
@@ -712,6 +718,7 @@
                         console.log('response  '+JSON.stringify(response));
                         if(response.length > 0)
                             {
+
                             response.forEach((eachContact) => {
                             console.log('eachContact.name '+eachContact.name);
                             $('#assignedresource')
