@@ -60,7 +60,7 @@
   </div>
  **/
  -->  <div class="" style="margin-top: 25px;margin-left: 30px;">
-    <div id="errorMessagesss"></div>
+    <div id="errorMessages"></div>
   <form  id="tourBillClaimForm" class="needs-validation" novalidate >
 
   <div class="form-group">  
@@ -122,7 +122,7 @@
 
                           if(jqXHR.responseText== "Saved Successfully !")
                              {
-                                  alert('Successfully Inserted!');
+                                 // alert('Successfully Inserted!');
                                   window.open('/expense/tourBillClaim/tourBillClaimListview?expenseId='+expenseId,'_blank');
                                 $('#tourBillClaimForm')[0].reset()
                                 let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+jqXHR.responseText+
@@ -137,7 +137,7 @@
                               else
                               {
                                 console.log('jqXHR   '+JSON.stringify(jqXHR));
-                                  alert('Error: '+jqXHR.responseText);
+                                 // alert('Error: '+jqXHR.responseText);
                                 let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+jqXHR.responseText+
                                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
                                 '<span aria-hidden="true">&times;</span>'+
