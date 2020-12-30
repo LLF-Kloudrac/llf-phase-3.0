@@ -997,7 +997,7 @@ router.post('/savePettyCashForm', (request, response) => {
   console.log('Now For Each   lllllllllLoop !');
   console.log('Hello Work done !');
   let parentExpenseId='';
-
+  let flag='false';
 
   const{bill_no,bill_date,projectTask,desc,nature_exp,amount,imgpath}=request.body;
   if(typeof(request.body.parentExpenseId)!='object'){
@@ -1014,7 +1014,13 @@ router.post('/savePettyCashForm', (request, response) => {
     query('Select sfid,name,project_manager_status__c,accounts_status__c,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[parentExpenseId])
     .then((ExpenseQuerryResult)=>{
       console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
-      if(ExpenseQuerryResult.rows[0].approval_status__c == 'Pending' || ExpenseQuerryResult.rows[0].approval_status__c == 'Approved' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Pending' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Approved' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Pending' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Approved')
+      if(ExpenseQuerryResult.rows[0].approval_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Rejected')
+      {
+        console.log('Flag  = > '+flag);
+        flag='true';
+        console.log('Flag  = > '+flag);
+      }
+      if((ExpenseQuerryResult.rows[0].approval_status__c == 'Pending' || ExpenseQuerryResult.rows[0].approval_status__c == 'Approved' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Pending' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Approved' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Pending' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Approved') && flag == 'false')
       {
           console.log('sddjs');
           response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
