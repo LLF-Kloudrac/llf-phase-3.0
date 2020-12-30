@@ -156,12 +156,12 @@
  <div class="form-group"> 
  <div class="row">
  <div class="col-md-6">
- <label for="assetRequisitionName">Asset Requisition Name</label>
+ <label for="assetRequisitionName">Asset Requisition Name</label><label style="color: red;" for="validationTooltip01">*</label>
  <input type="text" class="form-control" id="assetRequisitionName" placeholder="Asset Requisition Name" name="assetRequisitionName" required>
  </div>
 
  <div class="col-md-6">
- <label for="validationTooltip01">Project/Department</label>
+ <label for="validationTooltip01">Project/Department</label><label style="color: red;" for="validationTooltip01">*</label>
  <select id="project" class="form-control project" name="project">
   <option value="">None</option>
  </select>
@@ -235,12 +235,12 @@
   <div class="form-group">
   <div class="row">
   <div class="col-md-6">
-  <label for="assetName">Asset Requistion Name</label>
+  <label for="assetName">Asset Requistion Name</label><label style="color: red;">*</label>
   <input type="text" class="form-control" id="assetName" value="" name="assetName" required>
   </div>
   
   <div class="col-md-6">
-  <label for="projectName">Project Name</label>
+  <label for="projectName">Project Name<label style="color: red;">*</label></label>
   <input type="text" class="form-control" id="projectName" value="" name="projectName" readonly="true">
   </div>
   <div class="col-md-6">
@@ -1048,7 +1048,7 @@
     assetDetailsTableRows += '<td><strong>UTR Number/Transaction Details<strong></td>';
     assetDetailsTableRows += '<td>'+assetDetailsRecord.utr_number_transaction_details__c+'</td>';
     assetDetailsTableRows += '</tr>';
-    assetDetailsTableRows += '<tr>';
+    /* assetDetailsTableRows += '<tr>'; */
     assetDetailsTableRows += '<tr>';
     assetDetailsTableRows += '<td><strong>Advance Payment Status<strong></td>';
     assetDetailsTableRows += '<td>'+assetDetailsRecord.advance_payment_status__c+'</td>';
@@ -1056,7 +1056,7 @@
     assetDetailsTableRows += '<td>'+assetDetailsRecord.payment_status__c+'</td>';
     assetDetailsTableRows += '</tr>';
     assetDetailsTableRows += '<tr>';
-        assetDetailsTableRows += '<tr>';
+        /* assetDetailsTableRows += '<tr>'; */
     assetDetailsTableRows += '<td><strong>P.O Attachment<strong></td>';
     assetDetailsTableRows += '<td>'+assetDetailsRecord.p_o_attachment__c +'</td>';
     assetDetailsTableRows += '<td><strong>PO Attachment URL<strong></td>';
@@ -1068,6 +1068,7 @@
     else{
     assetDetailsTableRows +='<td></td>';
     }
+    assetDetailsTableRows += '<td></td>';
     assetDetailsTableRows += '</tr>'; 
     
     assetDetailsTableRows += '<tr>';
@@ -1078,9 +1079,11 @@
     }
     }
     else{
-    assetDetailsTableRows +='<td></td>';
+    assetDetailsTableRows +='<td>'+' '+'</td>';
     }
-    assetDetailsTableRows += '<td><strong><strong></td>';
+   
+    assetDetailsTableRows += '<td></td>';
+    assetDetailsTableRows += '<td></td>';
     assetDetailsTableRows += '<td></td>';
     assetDetailsTableRows += '</tr>'; 
     

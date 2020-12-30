@@ -985,12 +985,12 @@
         <div class="form-group">  
           <div class="row">
             <div class="col-md-6">
-              <label for="validationTooltip01">Task Description</label>
+              <label for="validationTooltip01">Task Description</label><label style="color: red;">*</label>
               <input type="text" class="form-control" id="validationTooltip01" placeholder=""  name="taskname" required>
             </div>
            
             <div class="col-md-6">
-              <label for="validationTooltip02">Task Type</label>
+              <label for="validationTooltip02">Task Type</label><label style="color: red;">*</label>
               <select class="custom-select custom-select-sm form-control" name="tasktype">
                   <option value=''>None</option>
                   <option value="Generic-Reflecting & Planning - Personal Time for official work">Generic-Reflecting & Planning - Personal Time for official work</option>
@@ -1053,7 +1053,7 @@
         <div class="form-group"> 
           <div class="row">
           <div class="col-md-6">
-            <label for="validationTooltip03">Project</label>
+            <label for="validationTooltip03">Project</label><label style="color: red;">*</label>
             <select class="custom-select custom-select-sm form-control" name="projectname">
               <option value="" >None</option>
               <% if(projectList.length != 0) { %>
@@ -1074,7 +1074,7 @@
         <div class="form-group">
           <div class="row">
             <div class="col-md-6">
-              <label for="validationTooltip02">Assign to Heroku user</label>
+              <label for="validationTooltip02">Assign to Heroku user</label><label style="color: red;"></label>
               <select class="custom-select custom-select-sm form-control" name="assignedresource" id="assignedresource">
                 <option value="">None</option>
                </select>
@@ -1083,7 +1083,7 @@
             </div>
 
             <div class="col-md-6">
-                <label for="validationTooltipUsername">Status</label>
+                <label for="validationTooltipUsername">Status</label><label style="color: red;">*</label>
                 <select class="custom-select custom-select-sm form-control" name="status" >
                      <option selected>None</option>
                      <option value="Started">Started</option>
@@ -1153,7 +1153,7 @@
         <div class="form-group">  
           <div class="row">
             <div class="col-md-6">
-              <label for="validationTooltip01">Project Name</label>
+              <label for="validationTooltip01">Project Name</label><label style="color: red;">*</label>
               <select class="custom-select custom-select-sm form-control" name="projectName" id="projectName">
                     <option selected>None</option>
                     <% if(projectList.length != 0) { %>
@@ -1175,13 +1175,13 @@
         <div class="form-group"> 
           <div class="row">
           <div class="col-md-6">
-            <label for="selectedTask">Task Description</label>
+            <label for="selectedTask">Task Description</label><label style="color: red;">*</label>
             <select class="custom-select custom-select-sm form-control" name="selectedTask" id="selectedTask" > 
                     <option value="None" selected>None</option>
            </select>
           </div>
           <div class="col-md-6">
-            <label for="validationTooltipUsername">Status</label>
+            <label for="validationTooltipUsername">Status</label><label style="color: red;">*</label>
              <select class="custom-select custom-select-sm form-control" name="statusTimesheet">
                   <option selected>None</option>
                   <option value="Started">Started</option>
@@ -1197,12 +1197,12 @@
         <div class="form-group">
           <div class="row">
             <div class="col-md-6">
-              <label for="validationTooltip02">Actual Start Time</label>
+              <label for="validationTooltip02">Actual Start Time</label><label style="color: red;">*</label>
               <input type="time" class="form-control" id="startTime" placeholder="Last name" value="Otto" name="plannedStartTimeTimesheet" required>
             </div>
             
             <div class="col-md-6">
-              <label for="validationTooltip02">Actual End Time</label>
+              <label for="validationTooltip02">Actual End Time</label><label style="color: red;">*</label>
               <input type="time" class="form-control" id="endTime" placeholder="Last name" value="Otto" name="plannedEndTimeTimesheet" required>
             </div>
           </div>  
@@ -1211,7 +1211,7 @@
         <div class="form-group">
           <div class="row">
             <div class="col-md-6">
-                  <label for="validationTooltip02">Description</label>
+                  <label for="validationTooltip02">Description</label><label style="color: red;">*</label>
                   <textarea class="form-control" id="descriptionTimesheet" rows="3" autocomplete="off" name="descriptionTimesheet"></textarea>
             </div>
 
