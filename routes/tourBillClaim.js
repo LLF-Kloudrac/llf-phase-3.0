@@ -87,7 +87,7 @@ router.post('/saveTourBillClaim',(request, response) => {
   
 
     pool.
-    query('Select sfid,name,Approval_Status__c,accounts_status__c,Project_Manager_Status__c,Accounts_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[parentExpenseId])
+    query('Select sfid,name,Approval_Status__c,accounts_status__c,Project_Manager_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[parentExpenseId])
     .then((ExpenseQuerryResult)=>{
       console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
       if(ExpenseQuerryResult.rows[0].approval_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Rejected')
@@ -96,7 +96,8 @@ router.post('/saveTourBillClaim',(request, response) => {
         flag='true';
         console.log('Flag  = > '+flag);
       }
-      if((ExpenseQuerryResult.approval_status__c == 'Pending' || ExpenseQuerryResult.approval_status__c == 'Approved' || ExpenseQuerryResult.project_manager_status__c == 'Pending' || ExpenseQuerryResult.project_manager_status__c == 'Approved' || ExpenseQuerryResult.accounts_status__c == 'Pending' || ExpenseQuerryResult.accounts_status__c == 'Approved') && flag == 'false')
+      console.log('Flag x = > '+flag);
+      if((ExpenseQuerryResult.rows[0].approval_status__c == 'Pending' || ExpenseQuerryResult.rows[0].approval_status__c == 'Approved' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Pending' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Approved' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Pending' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Approved') && flag == 'false')
       {
          console.log('sddjs');
         response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
@@ -440,7 +441,7 @@ router.post('/airRailBusCharges',verify, (request, response) => {
         flag='true';
         console.log('Flag  = > '+flag);
       }
-      if((ExpenseQuerryResult.approval_status__c == 'Pending' || ExpenseQuerryResult.approval_status__c == 'Approved' || ExpenseQuerryResult.project_manager_status__c == 'Pending' || ExpenseQuerryResult.project_manager_status__c == 'Approved' || ExpenseQuerryResult.accounts_status__c == 'Pending' || ExpenseQuerryResult.accounts_status__c == 'Approved') && flag == 'false')
+      if((ExpenseQuerryResult.rows[0].approval_status__c == 'Pending' || ExpenseQuerryResult.rows[0].approval_status__c == 'Approved' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Pending' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Approved' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Pending' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Approved') && flag == 'false')
       {
          console.log('sddjs');
         response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
@@ -1590,7 +1591,13 @@ pool.
     query('Select sfid,name,Approval_Status__c,Project_Manager_Status__c,Accounts_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId ])
     .then((ExpenseQuerryResult)=>{
       console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
-      if((ExpenseQuerryResult.approval_status__c == 'Pending' || ExpenseQuerryResult.approval_status__c == 'Approved' || ExpenseQuerryResult.project_manager_status__c == 'Pending' || ExpenseQuerryResult.project_manager_status__c == 'Approved' || ExpenseQuerryResult.accounts_status__c == 'Pending' || ExpenseQuerryResult.accounts_status__c == 'Approved') && flag == 'false')
+      if(ExpenseQuerryResult.rows[0].approval_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Rejected')
+      {
+        console.log('Flag  = > '+flag);
+        flag='true';
+        console.log('Flag  = > '+flag);
+      }
+      if((ExpenseQuerryResult.rows[0].approval_status__c == 'Pending' || ExpenseQuerryResult.rows[0].approval_status__c == 'Approved' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Pending' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Approved' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Pending' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Approved') && flag == 'false')
       {
          console.log('sddjs');
         response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
@@ -2022,7 +2029,13 @@ pool.
     query('Select sfid,name,Approval_Status__c,Project_Manager_Status__c,Accounts_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId ])
     .then((ExpenseQuerryResult)=>{
       console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
-      if((ExpenseQuerryResult.approval_status__c == 'Pending' || ExpenseQuerryResult.approval_status__c == 'Approved' || ExpenseQuerryResult.project_manager_status__c == 'Pending' || ExpenseQuerryResult.project_manager_status__c == 'Approved' || ExpenseQuerryResult.accounts_status__c == 'Pending' || ExpenseQuerryResult.accounts_status__c == 'Approved') && flag == 'false')
+      if(ExpenseQuerryResult.rows[0].approval_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Rejected')
+      {
+        console.log('Flag  = > '+flag);
+        flag='true';
+        console.log('Flag  = > '+flag);
+      }
+      if((ExpenseQuerryResult.rows[0].approval_status__c == 'Pending' || ExpenseQuerryResult.rows[0].approval_status__c == 'Approved' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Pending' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Approved' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Pending' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Approved') && flag == 'false')
       {
           console.log('sddjs');
         response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
