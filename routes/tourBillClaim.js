@@ -74,6 +74,7 @@ router.post('/saveTourBillClaim',(request, response) => {
     console.log('okok' + JSON.stringify(request.body));
     let tourBillClaimName = request.body.tourBillClaimName;
     let parentExpenseId ='';
+    let flag ='false';
     console.log('tourBillClaimName  '+tourBillClaimName);
     console.log('tourBillClaimFormData  '+JSON.stringify(request.body));
     if(typeof(request.body.parentExpenseId)!='object'){
@@ -83,13 +84,21 @@ router.post('/saveTourBillClaim',(request, response) => {
      parentExpenseId = request.body.parentExpenseId[0];
      console.log('parentExpenseId '+parentExpenseId);
    }
+  
 
     pool.
-    query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[parentExpenseId])
+    query('Select sfid,name,Approval_Status__c,accounts_status__c,Project_Manager_Status__c,Accounts_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[parentExpenseId])
     .then((ExpenseQuerryResult)=>{
       console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
-      if(ExpenseQuerryResult.rows[0].approval_status__c=='Approved' || ExpenseQuerryResult.rows[0].approval_status__c=='Pending'){
-        console.log('sddjs');
+      if(ExpenseQuerryResult.rows[0].approval_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Rejected')
+      {
+        console.log('Flag  = > '+flag);
+        flag='true';
+        console.log('Flag  = > '+flag);
+      }
+      if((ExpenseQuerryResult.approval_status__c == 'Pending' || ExpenseQuerryResult.approval_status__c == 'Approved' || ExpenseQuerryResult.project_manager_status__c == 'Pending' || ExpenseQuerryResult.project_manager_status__c == 'Approved' || ExpenseQuerryResult.accounts_status__c == 'Pending' || ExpenseQuerryResult.accounts_status__c == 'Approved') && flag == 'false')
+      {
+         console.log('sddjs');
         response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
       }
       else{
@@ -403,6 +412,7 @@ router.post('/airRailBusCharges',verify, (request, response) => {
   var bdy = request.body;
   var bodyResult = request.body;  
   let parentTourBillId = '';
+  let flag = 'false';
   console.log('airRailBusCharges Body'+JSON.stringify(bodyResult));
   if(typeof(request.body.parentTourBillId)!='object'){
     parentTourBillId =request.body.parentTourBillId;
@@ -421,11 +431,18 @@ router.post('/airRailBusCharges',verify, (request, response) => {
     let expenseId =tourBillQueryResult.rows[0].expense__c;
     console.log('expense ID for Validation  = '+expenseId);
     pool.
-    query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId])
+    query('Select sfid,name,Approval_Status__c,Project_Manager_Status__c,Accounts_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId])
     .then((ExpenseQuerryResult)=>{
       console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
-      if(ExpenseQuerryResult.rows[0].approval_status__c=='Approved' || ExpenseQuerryResult.rows[0].approval_status__c=='Pending'){
-        console.log('sddjs');
+      if(ExpenseQuerryResult.rows[0].approval_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Rejected')
+      {
+        console.log('Flag  = > '+flag);
+        flag='true';
+        console.log('Flag  = > '+flag);
+      }
+      if((ExpenseQuerryResult.approval_status__c == 'Pending' || ExpenseQuerryResult.approval_status__c == 'Approved' || ExpenseQuerryResult.project_manager_status__c == 'Pending' || ExpenseQuerryResult.project_manager_status__c == 'Approved' || ExpenseQuerryResult.accounts_status__c == 'Pending' || ExpenseQuerryResult.accounts_status__c == 'Approved') && flag == 'false')
+      {
+         console.log('sddjs');
         response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
       }
       else{
@@ -608,6 +625,7 @@ router.post('/conveyanceCharges',verify, (request, response) => {
   console.log('conveyanceCharges bodyResult  : '+JSON.stringify(bodyResult));
   console.log('typeof(request.body.date)   : '+typeof(request.body.date));
   let parentTourBillId = '';
+  let flag = 'false';
  // console.log('parentTourBillId conveyanceCharge '+parentTourBillId);
 
   if(typeof(request.body.parentTourBillId)!='object'){
@@ -630,11 +648,18 @@ router.post('/conveyanceCharges',verify, (request, response) => {
     let expenseId =tourBillQueryResult.rows[0].expense__c;
     console.log('expense ID for Validation  = '+expenseId);
     pool.
-    query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId ])
+    query('Select sfid,name,Approval_Status__c,Project_Manager_Status__c,Accounts_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId ])
     .then((ExpenseQuerryResult)=>{
       console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
-      if(ExpenseQuerryResult.rows[0].approval_status__c=='Approved' || ExpenseQuerryResult.rows[0].approval_status__c=='Pending'){
-        console.log('sddjs');
+      if(ExpenseQuerryResult.rows[0].approval_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Rejected')
+      {
+        console.log('Flag  = > '+flag);
+        flag='true';
+        console.log('Flag  = > '+flag);
+      }
+      if((ExpenseQuerryResult.rows[0].approval_status__c == 'Pending' || ExpenseQuerryResult.rows[0].approval_status__c == 'Approved' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Pending' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Approved' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Pending' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Approved') && flag == 'false')
+      {
+         console.log('sddjs');
         response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
       }
       else{
@@ -958,6 +983,7 @@ var startTime,endTime;
 var arrStartTime = [], arrEndTime = [];
 let parentTourBillId = request.body.parentTourBillId;
 let parentTourBillIdid ='';
+let flag = 'false';
 console.log('body Boarding Charges '+JSON.stringify(request.body));
 let actualrow =0;
 
@@ -1004,11 +1030,18 @@ pool
     let expenseId =tourBillQueryResult.rows[0].expense__c;
     console.log('expense ID for Validation  = '+expenseId);
 pool.
-    query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId ])
+    query('Select sfid,name,Approval_Status__c,project_manager_status__c ,accounts_status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId ])
     .then((ExpenseQuerryResult)=>{
       console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
-      if(ExpenseQuerryResult.rows[0].approval_status__c=='Approved' || ExpenseQuerryResult.rows[0].approval_status__c=='Pending'){
-        console.log('sddjs');
+      if(ExpenseQuerryResult.rows[0].approval_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Rejected')
+      {
+        console.log('Flag  = > '+flag);
+        flag='true';
+        console.log('Flag  = > '+flag);
+      }
+      if((ExpenseQuerryResult.rows[0].approval_status__c == 'Pending' || ExpenseQuerryResult.rows[0].approval_status__c == 'Approved' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Pending' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Approved' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Pending' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Approved') && flag == 'false')
+      {
+          console.log('sddjs');
         response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
       }
       else{
@@ -1535,6 +1568,7 @@ router.get('/telephoneFood/:parentTourBillId',verify, (request, response) => {
     let body = request.body;
       console.log('request.body  :  '+JSON.stringify(body));
       let parentTourBillId ='';
+      let flag ='false';
      
       if(typeof(request.body.parentTourBillId)!='object'){
         parentTourBillId =request.body.parentTourBillId;
@@ -1553,11 +1587,12 @@ router.get('/telephoneFood/:parentTourBillId',verify, (request, response) => {
     let expenseId =tourBillQueryResult.rows[0].expense__c;
     console.log('expense ID for Validation  = '+expenseId);
 pool.
-    query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId ])
+    query('Select sfid,name,Approval_Status__c,Project_Manager_Status__c,Accounts_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId ])
     .then((ExpenseQuerryResult)=>{
       console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
-      if(ExpenseQuerryResult.rows[0].approval_status__c=='Approved' || ExpenseQuerryResult.rows[0].approval_status__c=='Pending'){
-        console.log('sddjs');
+      if((ExpenseQuerryResult.approval_status__c == 'Pending' || ExpenseQuerryResult.approval_status__c == 'Approved' || ExpenseQuerryResult.project_manager_status__c == 'Pending' || ExpenseQuerryResult.project_manager_status__c == 'Approved' || ExpenseQuerryResult.accounts_status__c == 'Pending' || ExpenseQuerryResult.accounts_status__c == 'Approved') && flag == 'false')
+      {
+         console.log('sddjs');
         response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
       }
       else{
@@ -1965,6 +2000,7 @@ router.get('/miscellaneousCharge',verify,(request,response)=>{
 
     console.log('miscellaneous Expenses Body '+JSON.stringify(request.body));
     let parentTourBillId ='';
+    let flag = 'false';
    
 
     if(typeof(request.body.parentTourBillId)!='object'){
@@ -1983,11 +2019,12 @@ router.get('/miscellaneousCharge',verify,(request,response)=>{
     let expenseId =tourBillQueryResult.rows[0].expense__c;
     console.log('expense ID for Validation  = '+expenseId);
 pool.
-    query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId ])
+    query('Select sfid,name,Approval_Status__c,Project_Manager_Status__c,Accounts_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId ])
     .then((ExpenseQuerryResult)=>{
       console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
-      if(ExpenseQuerryResult.rows[0].approval_status__c=='Approved' || ExpenseQuerryResult.rows[0].approval_status__c=='Pending'){
-        console.log('sddjs');
+      if((ExpenseQuerryResult.approval_status__c == 'Pending' || ExpenseQuerryResult.approval_status__c == 'Approved' || ExpenseQuerryResult.project_manager_status__c == 'Pending' || ExpenseQuerryResult.project_manager_status__c == 'Approved' || ExpenseQuerryResult.accounts_status__c == 'Pending' || ExpenseQuerryResult.accounts_status__c == 'Approved') && flag == 'false')
+      {
+          console.log('sddjs');
         response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
       }
       else{
