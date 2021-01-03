@@ -20,7 +20,7 @@
                         <a class="btn btn-primary btn-md bg-gray" href="/expense/expenseViewRel/<%= expenseId %>" >Go To Expense </a>
                     </div>
                     <div class="col-md-3">
-                    <input type="text" class="form-control" placeholder="Search in table..." id="searchField" style="margin-top: 5px;">
+                    <input type="text" class="form-control" placeholder="Search Petty Cash Name" id="searchField" style="margin-top: 5px;">
                     </div>
                     <div class="col-md-2 text-right">
                     <span class="pr-2">Rows Per Page:</span>
@@ -207,7 +207,7 @@
                               htmlTable += '<tr>';
                                   htmlTable += '<td ><strong>Nature Of Expense</strong></td>';
                                   if(pettyCashRecord.nature_of_exp__c != null)
-                                      htmlTable += '<td style="word-break: break-all">'+pettyCashRecord.nature_of_exp__c+'</td>';
+                                      htmlTable += '<td>'+pettyCashRecord.nature_of_exp__c+'</td>';
                                   else
                                       htmlTable += '<td></td>';
                                   htmlTable += '<td><strong>Amount</strong></td>';

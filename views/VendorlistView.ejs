@@ -211,7 +211,8 @@
                         <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                       
                         <div class="table-responsive">
-                                <table id="vendorDetail" class="table table-hover striped">
+                          <table id="vendorDetail" class="table">
+                                <!-- <table id="vendorDetail" class="table table-hover striped"> -->
                                     <!-- Inside code is handled by Jquery to add dyanamic Content -->
                                 </table>
                             </div>
@@ -405,7 +406,7 @@ let st =["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Go
 
                                     vendorDetailRow += '<tr>';
                                         vendorDetailRow += '<td><strong>Bank Details(Name,Branch, etc)<strong></td>';
-                                        vendorDetailRow += '<td>'+eachRecord.bank_details__c+'</td>';
+                                        vendorDetailRow += '<td style="word-break:break-all;">'+eachRecord.bank_details__c+'</td>';
                                         vendorDetailRow += '<td><strong>Bank IFSC Code<strong></td>';
                                         vendorDetailRow += '<td>'+eachRecord.bank_ifsc_code__c+'</td>';
                                     vendorDetailRow += '</tr>';

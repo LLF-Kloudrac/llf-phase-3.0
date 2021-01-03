@@ -2082,7 +2082,7 @@ console.log(recordlist);
     })
     .catch((error) => {
         console.log('error  : '+error.stack);
-        response.send('Error Occurred !');
+        response.send('Sorry! Data exceeded in Fields');
     })
 }
 
