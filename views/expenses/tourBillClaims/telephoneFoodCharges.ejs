@@ -67,10 +67,10 @@ $(document).ready(function(){
       var html = '';
       html += '<tr>';
       html += '<td>'+cnt+'</td>';
-      html += '<td><input type="number" name="foodingExpenses" class="form-control" /></td>';
-      html += '<td><input type="number" name="laundryExpenses" class="form-control " /></td>';
+      html += '<td><input type="number" name="foodingExpenses" max="9999999999" class="form-control" /></td>';
+      html += '<td><input type="number" name="laundryExpenses" max="9999999999" class="form-control " /></td>';
       html += '<td><select id="activity_code'+cnt+'"  name="projectTask" class="form-control item_unit"></select></td>';
-      html += '<td><textarea  name="remarks" class="form-control"></textarea></td>';
+      html += '<td><textarea  name="remarks" maxlength="255" class="form-control"></textarea></td>';
       html += '<td><input type="file" onChange="chkFile(this,'+cnt+')" name="fileprety" id="fileprety" style="overflow:hidden;width:auto" class="form-control" /><input type="hidden" value="demo" name="imgpath" id="file_'+cnt+'"></td>';
       html += '<td style="display:none;"><input  type="hidden" name="parentTourBillId" value="<%= parentTourBillId %>" class="form-control" /></td>';
       html += '<td style="display:none;"><input  type="hidden" id="projectTask'+cnt+'" name="activity_code"   class="form-control" /></td>';
@@ -109,10 +109,10 @@ $(document).ready(function(){
     var html = '';
     html += '<tr>';
     html += '<td>'+cnt+'</td>';
-    html += '<td><input type="number" name="foodingExpenses" class="form-control" /></td>';
-    html += '<td><input type="number" name="laundryExpenses" class="form-control " /></td>';
+    html += '<td><input type="number" name="foodingExpenses" max="9999999999" class="form-control" /></td>';
+    html += '<td><input type="number" name="laundryExpenses" max="9999999999" class="form-control " /></td>';
     html += '<td><select id="activity_code'+cnt+'"  name="projectTask" class="form-control item_unit"></select></td>';
-    html += '<td><textarea  name="remarks" class="form-control"></textarea></td>';
+    html += '<td><textarea  name="remarks" maxlength="255" class="form-control"></textarea></td>';
     html += '<td><input type="file" onChange="chkFile(this,'+cnt+')" name="fileprety" id="fileprety" style="overflow:hidden;width:auto" class="form-control" /><input type="hidden" value="demo" name="imgpath" id="file_'+cnt+'"></td>';
     html += '<td style="display:none;"><input  type="hidden" name="parentTourBillId" value="<%= parentTourBillId %>" class="form-control" /></td>';
     html += '<td style="display:none;"><input  type="hidden" id="projectTask'+cnt+'" name="activity_code"   class="form-control" /></td>';
