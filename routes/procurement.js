@@ -832,7 +832,7 @@ router.post('/nonItProducts', (request,response) => {
              itemSpecification:joi.string().min(3).required().label('Please fill Item Specification.'),   
              itemSpeci:joi.string().invalid(' ').label('Please fill Item Specification.'),          
              quantity:joi.number().required().label('Please enter Quantity.'),
-             quanty:joi.number().min(0).label('The Quantity cannot be negative.'),
+             quanty:joi.number().min(1).label('The Quantity must be greater than 0'),
              budget:joi.number().required().label('Please enter Budget.'),
              budg:joi.number().min(0).label('The Budget cannot be negative.'),
          })
@@ -887,7 +887,7 @@ router.post('/nonItProducts', (request,response) => {
                  itemSpecification:joi.string().min(3).required().label('Please fill Item Specification.'), 
                  itemSpeci:joi.string().invalid(' ').label('Please fill Item Specification.'),            
                  quantity:joi.number().required().label('Please enter Quantity.'),
-                 quanty:joi.number().min(0).label('The Quantity cannot be negative.'),
+                 quanty:joi.number().min(1).label('The Quantity cannot be greater tha 0'),
                  budget:joi.number().required().label('Please enter Budget.'),
                  budg:joi.number().min(0).label('The Budget cannot be negative.'),
      
@@ -1028,7 +1028,8 @@ router.post('/itProducts', (request,response) => {
                  itemSpecification:joi.string().min(3).required().label('Please fill Item Specification.'),
                  itemSpeci:joi.string().invalid(' ').label('Please fill Item Specification.'),
                  quantity:joi.number().required().label('Please enter Quantity.'),
-                 quanty:joi.number().min(0).label('The Quantity cannot be negative.'),
+                // quanty:joi.number().min(1).label('The Quantity cannot be negative.'),
+                 quanty:joi.number().min(1).label('The Quantity must be greater than 0 '),
                  budget:joi.number().required().label('Please enter Budget.'),
                  budg:joi.number().min(0).label('The budget cannot be negative.'),
                 })
@@ -1080,7 +1081,8 @@ router.post('/itProducts', (request,response) => {
                     itemSpecification:joi.string().min(3).required().label('Please fill Item Specification.'),  
                     itemSpeci:joi.string().invalid(' ').label('Please fill Item Specification.'),        
                     quantity:joi.number().required().label('Please enter Quantity.'),
-                    quanty:joi.number().min(0).label('The Quantity cannot be negative.'),
+                   // quanty:joi.number().min(0).label('The Quantity cannot be negative.'),
+                    quanty:joi.number().min(1).label('The Quantity must be greater than 0'),
                     budget:joi.number().required().label('Please enter Budget.'),
                     budg:joi.number().min(0).label('The budget cannot be negative.'),
                 })

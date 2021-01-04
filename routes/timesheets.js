@@ -411,9 +411,11 @@ router.post('/fillactuals',(request, response) => {
         actualStartTimeTimesheet = fillActualsFormData.plannedStartTimeTimesheet,
         actualEndTimeTimesheet = fillActualsFormData.plannedEndTimeTimesheet,
         descriptionTimesheet = fillActualsFormData.descriptionTimesheet,
-        representative = fillActualsFormData.representative;
+        representative = fillActualsFormData.representative;        
 
-
+        var strtime = actualStartTimeTimesheet.split(':')[0]+actualStartTimeTimesheet.split(':')[1];
+        var endtime = actualEndTimeTimesheet.split(':')[0]+actualEndTimeTimesheet.split(':')[1];
+        console.log('actualEndTimeTimesheet + '+endtime + ' actualStartTimeTimesheet '+strtime);
     console.log('projectName  : '+projectName);
     console.log('dateIncurred   : '+dateIncurred);
     console.log('selectedTask   : '+selectedTask);
@@ -422,6 +424,7 @@ router.post('/fillactuals',(request, response) => {
     console.log('actualStartTimeTimesheet   : '+actualStartTimeTimesheet);
     console.log('actualEndTimeTimesheet  :  '+actualEndTimeTimesheet);
     console.log('descriptionTimesheet  :  '+descriptionTimesheet);
+
 
     const schema=joi.object({
       projectname:joi.string().required().label('Please select Project Name !'),
@@ -445,6 +448,9 @@ router.post('/fillactuals',(request, response) => {
   if(result.error){
       console.log('fd'+result.error);
       response.send(result.error.details[0].context.label);    
+  }
+  if(endtime == strtime){
+    response.send('Actual Start Time cannot be same as Actual End Time');
   }
     else{
     pool
