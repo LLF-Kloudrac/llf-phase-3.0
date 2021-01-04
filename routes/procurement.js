@@ -989,6 +989,7 @@ router.post('/itProducts', (request,response) => {
 
     console.log('Inside ItProducts Post Method');
     let itFormResult = request.body;
+    console.log('request.body It = '+JSON.stringify(request.body));
     const{state,items,district,vendor,itemCategory,unitCost,unit,itemSpecification,quantity,budget,justification}=request.body;
     let parentProcurementId = '';
   
@@ -1091,7 +1092,8 @@ router.post('/itProducts', (request,response) => {
                 }
                 else{                
                    // if(itFormResult.quoteNum[i]<3 &&(itFormResult.justification[i]==null || itFormResult.justification[i]=="" || itFormResult.justification[i]== ' ' || itFormResult.justification=='  ')){
-                    if(itFormResult.quoteNum[i]<3 && itFormResult.justification[i].length<3){
+                  console.log('itFormResult.justification[i].length => +'+itFormResult.justification[i]);
+                   if(itFormResult.quoteNum[i]<3 && itFormResult.justification[i].length<3){
                        response.send('Please enter Your Justificaton for Quote less than 3 in row number');     
                  }
                  else{
