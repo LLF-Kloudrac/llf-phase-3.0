@@ -439,7 +439,7 @@ router.post('/fillactuals',(request, response) => {
       descriptionTimesheet:joi.string().required().label('Please enter Description !'),
       descriptionTimesheets:joi.string().min(3).required().label('Please enter Description !'),
       description:joi.string().invalid('').required().label('Please enter Description !'),
-      descr:joi.string().min(1).max(80).required().label('Description too long. !'),
+      descr:joi.string().min(1).max(255).required().label('Description too long. !'),
    
   
      // depart:joi.string().min(1).max(255).required().label('Department value too long.'),
