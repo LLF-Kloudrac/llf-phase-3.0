@@ -497,15 +497,24 @@ router.post('/insertAsssetForm',(request,response)=>{
        console.log('dsjjd');
        planDate=null;      
    }
-  
+   var dt = new Date(planDate);
+   dt.setHours(dt.getHours()+24);
+   dt=new Date(dt);
+ /* var todayDate = new Date();
+ todayDate.getHours()-18.5;
+ var dt =new Date(todayDate);
+ 
+console.log('Date>>>' +JSON.stringify(dt));
+  dt = dt.toLocaleDateString.split('T')[0];*/
+  console.log('Date=====' +JSON.stringify(dt)); 
 const schema=joi.object({
     assetRequisitionName:joi.string().min(3).required().label('Please Fill Asset Requisition Name'),
     asset: joi.string().max(255).required().label('Asset Requisition Name is too long'),
     project:joi.string().required().label('Please choose Project/Department'),
-    planDate:joi.date().min("now").label('Date must not be less than Today'),
+    dt:joi.date().min("now").label('Date must not be less than Today'),
    // act:joi.string().required().label('Pleasse Chose Activity'),
 })
-let result=schema.validate({assetRequisitionName,project,asset:assetRequisitionName,planDate:planDate});
+let result=schema.validate({assetRequisitionName,project,asset:assetRequisitionName,dt:dt});
 if(result.error){
     console.log('fd'+result.error);
     response.send(result.error.details[0].context.label);    

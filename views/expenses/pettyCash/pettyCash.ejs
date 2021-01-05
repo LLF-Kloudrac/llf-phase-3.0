@@ -105,7 +105,7 @@ $(document).ready(function(){
     html += '<td><select id="activity_code'+cnt+'"  name="projectTask"  class="form-control item_unit"></select></td>';
     html += '<td><textarea  name="desc"  maxlength="255" class="form-control"></textarea></td>';
     html += '<td><input type="text"  maxlength="255" name="nature_exp" class="form-control" /></td>';
-    html += '<td><input type="number" max="9999999999" name="amount" class="form-control" /></td>';
+    html += '<td><input type="number" max="9999999999.99" name="amount" step="0.01" class="form-control" /></td>';
     html += '<td class="ow-break-word"><input type="file" onChange="chkFile(this,'+cnt+')" style="overflow:hidden;width:auto" name="fileprety" id="fileprety" class="form-control" /><input type="hidden" value="demo" name="imgpath" id="file_'+cnt+'"></td>';
     html += '<td style="display:none;"><input  type="hidden" name="parentExpenseId" value="<%= parentExpenseId %>" class="form-control" /></td>';
     html += '<td style="display:none;"><input  type="hidden" id="projectTask'+cnt+'"  name="activity_code"  class="form-control" /></td>';
@@ -154,7 +154,7 @@ $(document).ready(function(){
     html += '<td><select id="activity_code'+cnt+'"  name="projectTask"  class="form-control item_unit"></select></td>';
     html += '<td><textarea  name="desc" maxlength="255" class="form-control"></textarea></td>';
     html += '<td><input type="text" name="nature_exp" maxlength="255" class="form-control" /></td>';
-    html += '<td><input type="number" name="amount" max="9999999999"  class="form-control" /></td>';
+    html += '<td><input type="number" name="amount" max="9999999999" step="0.01" class="form-control" /></td>';
     html += '<td><input type="file" onChange="chkFile(this,'+cnt+')" name="fileprety" id="fileprety" style="overflow:hidden;width:auto;" class="form-control ow-break-word" /><input type="hidden" value="demo" name="imgpath" id="file_'+cnt+'"></td>';
     html += '<td style="display:none;"><input  type="hidden" name="parentExpenseId" value="<%= parentExpenseId %>" class="form-control" /></td>';
     html += '<td style="display:none;"><input  type="hidden" id="projectTask'+cnt+'"  name="activity_code"  class="form-control" /></td>';
@@ -266,6 +266,10 @@ function chkFile(file1,id) {
      
      }
   });
+}
+
+function valid(amt){
+
 }
 
 </script>
