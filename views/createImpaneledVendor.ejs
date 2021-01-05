@@ -28,11 +28,11 @@
         <div class="row">          
           <div class="col-md-6">
             <label for="name">Vendor Name </label><label style="color: red;">*</label>
-             <input type="text" class="form-control" id="name" maxlength="15" value=""   name="name" > 
+             <input type="text" maxlength="255" class="form-control" id="name" maxlength="15" value=""   name="name" > 
           </div>
           <div class="col-md-6">
             <label for="cont">Contact No. </label><label style="color: red;">*</label>
-            <input type="number"  class="form-control" id="cont" value=""   name="cont" >
+            <input type="number" max="9999999999" class="form-control" id="cont" value=""   name="cont" >
           </div>
         
         </div>
@@ -46,7 +46,7 @@
             </div>
             <div class="col-md-6">
               <label for="pan"> Pan Number </label>
-               <input type="text" class="form-control" id="pan" value=""   name="pan" > 
+               <input type="text" class="form-control" id="pan" maxlength="10" value=""   name="pan" > 
               </div>
        
         </div>
@@ -58,11 +58,11 @@
         <div class="row">
           <div class="col-md-6">
             <label for="accNo">Bank Account Number </label><label style="color: red;">*</label>
-            <input type="number"  class="form-control" id="accNo" name="accNo" >
+            <input type="number" max="9000000000000000" class="form-control" id="accNo" name="accNo" >
           </div>
             <div class="col-md-6">
             <label for="bankkDet"> Bank Details(Name,Branch, etc)</label><label style="color: red;">*</label>
-             <input type="text" class="form-control" id="bankkDet" value=""   name="bankkDet" > 
+             <input type="text" class="form-control" maxlength="100" id="bankkDet" value=""   name="bankkDet" >
             </div>  
         </div>
     </div>
@@ -75,7 +75,7 @@
           </div>
           <div class="col-md-6">
             <label for="ifsc">Bank IFSC Code </label><label style="color: red;">*</label>
-            <input type="text"  class="form-control" id="ifsc" value=""   name="ifsc" >
+            <input type="text" maxlength="11" class="form-control" id="ifsc" value=""   name="ifsc" >
           </div>
        
       </div>
@@ -86,11 +86,11 @@
            
             <div class="col-md-6">
               <label for="gst"> GST No.</label>
-              <input type="text"  class="form-control" id="gst" value=""   name="gst" >
+              <input type="text" maxlength="15"  class="form-control" id="gst" value=""   name="gst" >
             </div>
             <div class="col-md-6">
               <label for="other">Reason for not providing GST no.</label>
-                <input type="text" class="form-control" id="reason" value=""   name="reason" > 
+                <input type="text" maxlength="255" class="form-control" id="reason" value=""   name="reason" > 
               </div>
         </div>
     </div>

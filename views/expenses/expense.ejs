@@ -576,7 +576,7 @@
 <!-- Approval Comment Modal Start -->
 
 <div id="approvalCommentModal" class="modal fade bs-example-modal-lg" tabindex ="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title"  id="commentModalHeading"></h5>Approval Comment</h5>
@@ -590,9 +590,9 @@
             <form id="approvalpopup" class="needs-validation" novalidate>
               <div class="form-group">  
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-12">
                 <label for="commentTextarea">Comment</label>
-          <textarea class="form-control" id="commentTextarea" rows="3"></textarea>
+          <textarea class="form-control" id="commentTextarea" rows="3" autocomplete="off"></textarea>
         </div>
       </div>
     </div>

@@ -63,7 +63,7 @@
 
                     <div class="col-md-6">
                         <label for="name">Vendor Name </label><label style="color:red">*</label>
-                        <input type="text"  class="form-control" id="name" value=""   name="name" >
+                        <input type="text" maxlength="255" class="form-control" id="name" value=""   name="name" >
                       </div>
                 </div>
               </div>
@@ -86,7 +86,7 @@
                 <div class="row">
                   <div class="col-md-6">
                   <label for="aacc">Bank Account  No. </label><label style="color:red">*</label>
-                  <input type="number" class="form-control" id="aacc" value=""   name="aacc" >
+                  <input type="number" max="9000000000000000" class="form-control" id="aacc" value=""   name="aacc" >
                   </div>
                   <div class="col-md-6">
                     <label for="auth"> Name of Signing Authority from Vendor</label>
@@ -99,11 +99,11 @@
                 <div class="row">
                   <div class="col-md-6">
                   <label for="cont">Contact No. </label><label style="color:red">*</label>
-                    <input type="number" class="form-control" id="cont" value=""   name="cont" >
+                    <input type="number" max="9999999999" class="form-control" id="cont" value=""   name="cont" >
                   </div>
                   <div class="col-md-6">
                     <label for="bankDetail">Bank Details(Name,Branch, etc)</label><label style="color:red">*</label>
-                    <input type="text" class="form-control" id="bankDetail" value=""   name="bankDetail" >
+                    <input type="text" maxlength="255" class="form-control" id="bankDetail" value=""   name="bankDetail" >
                     </div>
                 </div>
             </div>
@@ -113,11 +113,11 @@
             <div class="row">
               <div class="col-md-6">
               <label for="ifsc">Bank IFSC Code </label><label style="color:red">*</label>
-                <input type="text" class="form-control" id="ifsc" value=""   name="ifsc" >
+                <input type="text" maxlength="11" class="form-control" id="ifsc" value=""   name="ifsc" >
               </div>
               <div class="col-md-6">
                 <label for="pan"> Pan Number </label>
-                <input type="text" class="form-control" id="pan" value=""   name="pan" >
+                <input type="text" class="form-control" id="pan" value="" maxlength="10"  name="pan" >
                 </div>
             </div>
         </div>
@@ -131,7 +131,7 @@
               </div>
               <div class="col-md-6">
                 <label for="gst">GST No. </label>
-                <input type="text" class="form-control" id="gst" value=""   name="gst" >
+                <input type="text" class="form-control" id="gst" value="" maxlength="15"  name="gst" >
                 </div>
             </div>
         </div>
@@ -155,7 +155,7 @@
             
               <div class="col-md-6">
                 <label for="quote">Reason for not providing GST no.</label>
-                <input type="text" class="form-control" id="reason" value=""   name="reason" >
+                <input type="text" class="form-control" id="reason" value="" maxlength="255" name="reason" >
                 </div>
             </div>
         </div>

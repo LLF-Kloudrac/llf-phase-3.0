@@ -502,10 +502,10 @@ const schema=joi.object({
     assetRequisitionName:joi.string().min(3).required().label('Please Fill Asset Requisition Name'),
     asset: joi.string().max(255).required().label('Asset Requisition Name is too long'),
     project:joi.string().required().label('Please choose Project/Department'),
-  //  planDate:joi.string().required().label('Please fill Target Date of Receiving'),
+    planDate:joi.date().min("now").label('Date must not be less than Today'),
    // act:joi.string().required().label('Pleasse Chose Activity'),
 })
-let result=schema.validate({assetRequisitionName,project,asset:assetRequisitionName});
+let result=schema.validate({assetRequisitionName,project,asset:assetRequisitionName,planDate:planDate});
 if(result.error){
     console.log('fd'+result.error);
     response.send(result.error.details[0].context.label);    
@@ -1965,7 +1965,8 @@ router.post('/saveItemDescription',(request,response)=>{
     let body = request.body;
     let schema, result;
     console.log('body  : '+JSON.stringify(body));
-    const{name,authority, cont,bankkDet,ifsc,pan,gst,add,accNo,state,url,other,district,reason}=request.body;
+    var bankkDet= request.body.bankkDet;
+    const{name,authority, cont,ifsc,pan,gst,add,accNo,state,url,other,district,reason}=request.body;
     console.log(name+authority+cont+bankkDet+ifsc+pan+gst+add+accNo+state+url+other+district+reason);
 
     if(gst == null || gst == '' )
@@ -1975,7 +1976,7 @@ router.post('/saveItemDescription',(request,response)=>{
             schema=joi.object({
                 state:joi.string().required().label('Please Choose State'),
                district:joi.string().required().label('Please Choose District'),
-               name:joi.string().min(3).max(80).required().label('Please Fill Vendor Name'),
+               name:joi.string().min(3).required().label('Please Fill Vendor Name'),
                conta:joi.string().required().label('Please Enter Contact Number'),
                cont:joi.number().integer().min(1000000000).max(9999999999).required().label('Contact number should have exact 10 digits'),
                pan:joi.string().min(10).max(10).label('Pan Number Should be Exactly of 10 Digits'),
@@ -1994,7 +1995,7 @@ router.post('/saveItemDescription',(request,response)=>{
             schema=joi.object({
                 state:joi.string().required().label('Please Choose State'),
                district:joi.string().required().label('Please Choose District'),
-               name:joi.string().min(3).max(80).required().label('Please Fill Vendor Name'),
+               name:joi.string().min(3).required().label('Please Fill Vendor Name'),
                conta:joi.string().required().label('Please Enter Contact Number'),
                cont:joi.number().integer().min(1000000000).max(9999999999).required().label('Contact number should have exact 10 digits'),
               // pan:joi.string().min(10).max(10).label('Pan Number Should be Exactly of 10 Digits'),
@@ -2018,7 +2019,7 @@ router.post('/saveItemDescription',(request,response)=>{
             schema=joi.object({
                 state:joi.string().required().label('Please Choose State'),
                 district:joi.string().required().label('Please Choose District'),
-                name:joi.string().min(3).max(80).required().label('Please Fill Vendor Name'),
+                name:joi.string().min(3).required().label('Please Fill Vendor Name'),
                 conta:joi.string().required().label('Please Enter Contact Number'),
                 cont:joi.number().integer().min(1000000000).max(9999999999).required().label('Contact number should have exact 10 digits'),
                 bankkDet:joi.string().min(3).max(255).required().label('Please Fill Bank Details'),
@@ -2034,7 +2035,7 @@ router.post('/saveItemDescription',(request,response)=>{
             schema=joi.object({
                 state:joi.string().required().label('Please Choose State'),
                 district:joi.string().required().label('Please Choose District'),
-                name:joi.string().min(3).max(80).required().label('Please Fill Vendor Name'),
+                name:joi.string().min(3).required().label('Please Fill Vendor Name'),
                 conta:joi.string().required().label('Please Enter Contact Number'),
                 cont:joi.number().integer().min(1000000000).max(9999999999).required().label('Contact number should have exact 10 digits'),
                 bankkDet:joi.string().min(3).max(255).required().label('Please Fill Bank Details'),
@@ -2308,7 +2309,7 @@ router.post('/updateVendor',(request,response)=>{
          schema=joi.object({
             state:joi.string().required().label('Please Choose State'),
             district:joi.string().required().label('Please Choose District'),
-            name:joi.string().min(3).max(80).required().label('Please Fill Vendor Name'),
+            name:joi.string().min(3).required().label('Please Fill Vendor Name'),
             bankDetail:joi.string().min(3).max(255).required().label('Please Fill Bank Details'),
             aacc:joi.string().min(3).required().label('Please Fill Bank Account Number'),
             ifsc:joi.string().min(3).max(20).required().label('Please Fill Bank IFSC Code.'),
@@ -2324,7 +2325,7 @@ router.post('/updateVendor',(request,response)=>{
         schema=joi.object({
            state:joi.string().required().label('Please Choose State'),
            district:joi.string().required().label('Please Choose District'),
-           name:joi.string().min(3).max(80).required().label('Please Fill Vendor Name'),
+           name:joi.string().min(3).required().label('Please Fill Vendor Name'),
            bankDetail:joi.string().min(3).max(255).required().label('Please Fill Bank Details'),
            aacc:joi.string().required(3).label('Please Fill Bank Account Number'),
            ifsc:joi.string().min(3).max(20).required().label('Please Fill Bank IFSC Code.'),
