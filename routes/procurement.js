@@ -852,7 +852,7 @@ router.post('/nonItProducts', (request,response) => {
              response.send(result.error.details[0].context.label);
          }
          else{
-             if(nonItFormResult.quoteNum<3 && (nonItFormResult.justification==null || nonItFormResult.justification=="" || nonItFormResult.justification==' ')){
+             if(nonItFormResult.quoteNum<3 && nonItFormResult.justification.length<3){
                      response.send('Please enter Justification because quote count is not equal to 3.');    
             }
             else{
