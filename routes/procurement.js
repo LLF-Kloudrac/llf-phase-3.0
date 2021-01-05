@@ -1920,7 +1920,7 @@ router.post('/saveItemDescription',(request,response)=>{
     {
         schema=joi.object({
             category:joi.string().required().label('Please Choose Item Category'),
-            unit:joi.string().min(2).required().label('Please Fill Unit'),
+            unit:joi.string().min(3).required().label('Please Fill Unit'),
             items:joi.string().required().label('Please Select Items'),
             cost:joi.string().min(1).required().label('Please Fill Per Unit Cost'),
             other:joi.string().min(1).max(255).required().label('Please Fill Others as you have choosen other Items'),
@@ -1933,7 +1933,7 @@ router.post('/saveItemDescription',(request,response)=>{
     {
         schema=joi.object({
             category:joi.string().required().label('Please Choose Item Category'),
-            unit:joi.string().min(2).required().label('Please Fill Unit'),
+            unit:joi.string().min(3).required().label('Please Fill Unit'),
             items:joi.string().required().label('Please Select Items'),
             cost:joi.string().min(1).required().label('Please Fill Per Unit Cost'),
               })
