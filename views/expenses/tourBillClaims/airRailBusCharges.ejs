@@ -83,7 +83,7 @@ $(document).ready(function(){
       html += '<td><select id="activity_code'+cnt+'" name="projectTask" class="form-control"></select></td>';
       html += '<td><input type="text" name="arrival_Station" maxlength="255" class="form-control" /></td>';
       html += '<td><input type="text" name="departure_Station" maxlength="255" class="form-control" /></td>';
-      html += '<td><input type="number" name="amount" max="9999999999" class="form-control" /></td>';
+      html += '<td><input type="number" name="amount" max="9999999999.99" step="0.01" class="form-control" /></td>';
       html += '<td><input type="file" onChange="chkFile(this,'+cnt+')" name="fileprety" id="fileprety" style="overflow:hidden;width:auto;" class="form-control" /><input type="hidden" value="demo" name="imgpath" id="file_'+cnt+'"></td>';
       html += '<td style="display:none;"><input  type="hidden" name="parentTourBillId" value="<%= parentTourBillId %>" class="form-control" /></td>';
       html += '<td style="display:none;"><input  type="hidden" id="projectTask'+cnt+'"  name="activity_code"  class="form-control" /></td>';
@@ -130,7 +130,7 @@ $(document).ready(function(){
     html += '<td><select id="activity_code'+cnt+'"  name="projectTask" class="form-control"></select></td>';
     html += '<td><input type="text" name="arrival_Station" maxlength="255" class="form-control" /></td>';
     html += '<td><input type="text" name="departure_Station" maxlength="255" class="form-control" /></td>';
-    html += '<td><input type="number" name="amount" max="9999999999" class="form-control" /></td>';
+    html += '<td><input type="number" name="amount" max="9999999999.99" step="0.01" class="form-control" /></td>';
     html += '<td><input type="file" onChange="chkFile(this,'+cnt+')" name="fileprety" id="fileprety" style="overflow:hidden;width:auto" class="form-control" /><input type="hidden" value="demo" name="imgpath" id="file_'+cnt+'"></td>';
     html += '<td style="display:none;"><input  type="hidden" name="parentTourBillId" value="<%= parentTourBillId %>" class="form-control" /></td>';
     html += '<td style="display:none;"><input  type="hidden" id="projectTask'+cnt+'" name="activity_code"   class="form-control" /></td>';
