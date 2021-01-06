@@ -689,12 +689,6 @@ router.post('/updateasset',(request,response)=>{
             if(payPass=='true' || payPass=='false'){
                 console.log('@@@@@1111');
                 if(quant == 'true'){
-
-
-
-
-
-
                     const schema=joi.object({
                         assetName:joi.string().min(3).required().label('Please Fill Asset Requisition Name'),
                     })

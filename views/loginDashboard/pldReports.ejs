@@ -1,6 +1,10 @@
 <% include ../partials/navbar %>
 <% include ../partials/footer %>
-<h3 style="text-align: center; margin-top: 20px;">M&E Forms</h3>
+
+<div>
+  <a href="#" class="btn btn-primary float-right" style="margin-right: 3%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
+</div>
+<h3 style="text-align: center; margin-top: 40px;">M&E Forms</h3>
 <% if(showExcelReport){ %>
   <div class="row mt-4">
         <div class="col-md-6 m-auto">
@@ -77,6 +81,10 @@
 <script>
     $(document).ready(function(){
 
+      $('#ref').click(function() {
+       window.location.reload();
+        })
+        
         $.get('/users/getProjectReportsAccessbility',function(response){
             console.log('getProjects response  '+JSON.stringify(response));
             if(response.length > 0)
