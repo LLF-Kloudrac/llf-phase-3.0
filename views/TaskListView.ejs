@@ -1,0 +1,1046 @@
+<% include ./partials/navbar %>
+    <% include ./partials/footer %>
+        <% include ./partials/messages %>
+            <link rel="stylesheet" href="/stylesheets/table-sortable.css">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <script src="/scripts/table-sortable.js"></script>
+            <link rel="stylesheet"
+                href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+            <h3 style="text-align: center; margin-top: 20px;">Tasks List</h3>
+            <div id="deleteErrorMessages" style="width: max-content;margin-left: 544px;"></div>
+            <div class="container">
+                <div class="row mt-5 mb-3 align-items-center">
+                    <div class="col-md-5">
+                        <button id="taskCreateModal" class="btn btn-primary createTask">Create New</button>
+                        <button class="btn btn-primary" id="deleteTaskListButton">Delete</button>
+                        <a href="/tasks/TaskListView" style="color: #555;" id="checkRef"><i class="fa fa-refresh"
+                                style="font-size:34px; margin-left: 10px; margin-top: 30px;"></i>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" placeholder="Search by Task Name " id="searchField"
+                            style="margin-top: 5px;">
+                    </div>
+                    <div class="col-md-2 text-right">
+                        <span class="pr-2">Rows Per Page:</span>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="d-flex justify-content-end">
+                            <select class="custom-select" name="rowsPerPage" id="changeRows">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="15" selected>15</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="taskListViewTable" class="responsive ">
+
+                </div>
+
+            </div>
+
+            <!-- Task create Modal  modal -->
+            <div id="createTaskModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
+                aria-labelledby="myLargeModalLabel">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="createTaskModal">Create New Task</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="">
+                                <div id="createErrorMessages"></div>
+                                <form id="createTask" class="needs-validation" novalidate>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="name"> Project Task Name<span
+                                                        style="color: red;">*</span></label>
+                                                <input type="text" maxlength="80" class="form-control" id="name"
+                                                    value="" name="name" onkeypress="return AvoidSpace(event)">
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="activityCodeName">Status </label>
+                                                <select id="statusCreate" name="statusCreate" class="form-control item_unit">
+                                                    <option value="Select">Select</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+
+                                            <div class="col-md-6">
+                                                <label for="projectDropdown">Project </label>
+                                                <select id="projectDropdown" name="projectDropdown"
+                                                    class="form-control item_unit" onChange="getActivityCodes(value)">
+                                                    <option value="">Select</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="expenseHead"> Activity Code </label>
+                                                <select id="activitycodes" name="activitycodes" class="form-control item_unit">
+                                                    <option value="">Select</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="description">Project Task Category </label>
+                                                <select id="projecttaskcategorycreate" name="projecttaskcategorycreate"
+                                                    class="form-control item_unit">
+                                                    <option value="">Select</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="actualexpenseonsalesforce">Planned Start Date <span
+                                                        style="color: red;">*</span></label>
+                                                <input type="date" class="form-control" id="StartDate" value=""
+                                                    name="StartDate">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="actualexpensefromtally">Planned End Date <span
+                                                        style="color: red;">*</span></label>
+                                                <input type="date" class="form-control" id="DueDate" value=""
+                                                    name="DueDate">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="estimatedexpensefromtasks">Description </label>
+                                                <textarea id="Description" maxlength="5000" name="Description" rows="4"
+                                                    cols="45" onkeypress="return AvoidSpace(event)"></textarea>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="estimatedexpensefromtasks">Actual Start Date </label>
+                                                <input type="date" class="form-control" id="Actual_Start_Date" value=""
+                                                    name="Actual_Start_Date">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="estimatedexpensefromtasks">Actual End Date </label>
+                                                <input type="date" class="form-control" id="Actual_End_Date" value=""
+                                                    name="Actual_End_Date">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="estimatedexpensefromtasks">Estimated Hours </label>
+                                                <input type="number" max="999999999" step="0.01" class="form-control"
+                                                    id="Estimated_Hours" value="" name="Estimated_Hours" min=0
+                                                    oninput="validity.valid||(value='');">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="estimatedexpensefromtasks">Estimated Expense </label>
+                                                <input type="number" max="999999999" step="0.01" class="form-control"
+                                                    id="Estimated_Expense" value="" name="Estimated_Expense"
+                                                    onkeypress="return AvoidSpace(event)" min=0
+                                                    oninput="validity.valid||(value='');">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary" id="createTaskButton">Save</button>
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- End of create taskmodal -->
+
+            <!-- Task edit Modal  modal -->
+            <div id="taskEditModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
+                aria-labelledby="myLargeModalLabel">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="taskEditModal">Tasks Edit Form</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="">
+                                <div id="errorMessages"></div>
+                                <form id="editTask" class="needs-validation" novalidate>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="name"> Project Task Name<span
+                                                        style="color: red;">*</span></label>
+                                                <input type="text" maxlength="80" class="form-control" id="name"
+                                                    value="" name="name" onkeypress="return AvoidSpace(event)">
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="activityCodeName">Status </label>
+                                                <select id="status" name="status" class="form-control item_unit">
+                                                    <option value="Select">Select</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+
+                                            <div class="col-md-6">
+                                                <label for="project">Project </label>
+                                                <input type="text" disabled class="form-control" id="project" value=""
+                                                    name="project">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="expenseHead"> Activity Code </label>
+                                                <input type="text" disabled class="form-control" id="activitycodes"
+                                                    value="" name="activitycodes">
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="description">Project Task Category </label>
+                                                <input type="text" disabled class="form-control" id="projecttaskcategory"
+                                                    value="" name="projecttaskcategory">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="actualexpenseonsalesforce">Planned Start Date <span
+                                                        style="color: red;">*</span></label>
+                                                <input type="date" class="form-control" id="StartDate" value=""
+                                                    name="StartDate">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="actualexpensefromtally">Planned End Date <span
+                                                        style="color: red;">*</span></label>
+                                                <input type="date" class="form-control" id="DueDate" value=""
+                                                    name="DueDate">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="estimatedexpensefromtasks">Pro-Rata Calculated Expense Per
+                                                    Day </label>
+                                                <input type="text" disabled class="form-control" id="ProRateAnalysis"
+                                                    value="" name="ProRateAnalysis">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="estimatedexpensefromtasks">Estimated expenditure till
+                                                    current date </label>
+                                                <input type="text" disabled class="form-control"
+                                                    id="Grant_Utilization_On_Pro_Rate_Basis" value=""
+                                                    name="Grant_Utilization_On_Pro_Rate_Basis">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="estimatedexpensefromtasks">Today’s Date </label>
+                                                <input type="date" disabled class="form-control" id="today_s_date"
+                                                    value="" name="today_s_date">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="estimatedexpensefromtasks">Description </label>
+                                                <textarea id="Description" maxlength="5000" name="Description" rows="4"
+                                                    cols="45" onkeypress="return AvoidSpace(event)"></textarea>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="estimatedexpensefromtasks">Actual Start Date </label>
+                                                <input type="date" class="form-control" id="Actual_Start_Date" value=""
+                                                    name="Actual_Start_Date">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="estimatedexpensefromtasks">Actual End Date </label>
+                                                <input type="date" class="form-control" id="Actual_End_Date" value=""
+                                                    name="Actual_End_Date">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="estimatedexpensefromtasks">Actual Hours </label>
+                                                <input type="number" disabled class="form-control" id="Actual_Hours"
+                                                    value="" name="Actual_Hours">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="estimatedexpensefromtasks">Estimated Hours </label>
+                                                <input type="number" max="999999999" step="0.01" class="form-control"
+                                                    id="Estimated_Hours" value="" name="Estimated_Hours" min=0
+                                                    oninput="validity.valid||(value='');">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="estimatedexpensefromtasks">Estimated Expense </label>
+                                                <input type="number" max="999999999" step="0.01" class="form-control"
+                                                    id="Estimated_Expense" value="" name="Estimated_Expense"
+                                                    onkeypress="return AvoidSpace(event)" min=0
+                                                    oninput="validity.valid||(value='');">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="fo
+                                    rm-group">
+                                        <div class="row">
+
+                                            <div class="col-md-6">
+                                                <input type="hidden" class="form-control" id="hide" value=""
+                                                    name="hide">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary" id="editTaskButton">Save</button>
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- End of Edi tmodal -->
+
+
+            <!-- Modal Popup For task Detail & Their Related data -->
+
+            <div class="modal fade" id="popup">
+
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"> Task Details</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <nav>
+                                        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab"
+                                                href="#nav-home" role="tab" aria-controls="nav-home"
+                                                aria-selected="true">Details</a>
+                                            <!-- <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab"
+                                                href="#nav-profile" role="tab" aria-controls="nav-profile"
+                                                aria-selected="false">Related</a> -->
+                                        </div>
+                                    </nav>
+                                    <div class="tab-content" id="nav-tabContent">
+                                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel"
+                                            aria-labelledby="nav-home-tab">
+
+                                            <div class="table-responsive">
+                                                <table id="taskDetail" class="table table-hover striped">
+                                                    <!-- Inside code is handled by Jquery to add dyanamic Content -->
+                                                </table>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="tab-pane fade" id="nav-profile" role="tabpanel"
+                                            aria-labelledby="nav-profile-tab">
+                                            <div class="accordion" id="accordionExample">
+
+                                                <div class="card">
+                                                    <div class="card-header" id="headingOne">
+                                                        <h5 class="mb-0">
+                                                            <button class="btn btn-link text-left"
+                                                                type="pettyCashButton" data-toggle="collapse"
+                                                                data-target="#collapseOne" aria-expanded="true"
+                                                                aria-controls="collapseOne">
+                                                                <i class="fa fa-angle-double-right mr-3"></i>Task
+                                                                Description
+                                                            </button>
+                                                            <!-- <button class="btn btn-primary float-right" id="pettyCashButton" >New</button> -->
+                                                            <a href="#" class="btn btn-primary float-right newVendor"
+                                                                id="newVendor" style="color:white;">New</a>
+                                                        </h5>
+                                                    </div>
+
+                                                    <div id="collapseOne" class="collapse show fade"
+                                                        aria-labelledby="headingOne" data-parent="#accordionExample">
+                                                        <div class="card-body">
+                                                            <table id="TaskDescriptionTable"
+                                                                class="table table-hover striped">
+
+                                                            </table>
+                                                            <!-- Feedback table code -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                var projectTaskCategory = ["Project Initiation", "Project Implementation", "Project Closure", "Content Development", "Trainings", "Monitoring & Evaluation"];
+                var TaskStatus = ['Started', 'On hold', 'Completed']
+                $(document).ready(function () {
+
+                    var taskScreen = window.location.href.split('/')[4];
+                    if (taskScreen != 'TaskListView') {
+                        $('#checkRef').hide()
+                    }
+                    let columns = {
+                        sequence: 'Sequence',
+                        selectAction: 'Delete',
+                        editAction: 'Action',
+                        name: ' Project Task Name',
+                        status: 'Status',
+                        project: 'Project',
+                        activityCode: 'Activity Code',
+                        projectTaskCategory: 'Project Task Category',
+                        createdDate: 'Created Date',
+                    }
+                    var table = $('#taskListViewTable').tableSortable({
+                        data: [],
+                        columns,
+                        searchField: '#searchField',
+                        sorting: true,
+                        rowsPerPage: 15,
+                        pagination: true,
+                        sorting: ['sequence', 'createdDate'],
+                        tableWillMount: () => {
+                            console.log('table will mount')
+
+                        },
+                        tableDidMount: () => {
+                            console.log('table did mount');
+
+                            $('#spinner').hide();
+                        },
+                        tableWillUpdate: () => {
+                            console.log('table will update')
+                            //  table.refresh();
+                            // onLoadTask();
+                        },
+                        tableDidUpdate: () => {
+                            console.log('table did update');
+                            anchorClickFunctionalities();
+                            additionalEditFunctionality();
+
+                        },
+                        tableWillUnmount: () => console.log('table will unmount'),
+                        tableDidUnmount: () => console.log('table did unmount'),
+                        onPaginationChange: function (nextPage, setPage) {
+                            setPage(nextPage);
+                        },
+
+                    });
+                    $('#changeRows').on('change', function () {
+                        table.updateRowsPerPage(parseInt($(this).val()));
+                    })
+
+                    $('#refresh').click(function () {
+                        table.refresh(true);
+                        onLoadTask();
+                    })
+                    let urlParams = new URLSearchParams(window.location.search);
+                    let myParam = urlParams.get('activityId');
+                    let activityCode =
+                        $.ajax({
+                            url: '/tasks/taskList',
+                            type: 'get',
+
+                            data: {
+                                'activityCode': myParam ? myParam : '',
+                            },
+                            dataType: 'json'
+                        })
+                            .done((response) => {
+                                console.log('response it : ' + JSON.stringify(response));
+                                table.setData(response, columns);
+                                anchorClickFunctionalities();
+
+
+                            })
+                            .fail((jqXHR, status, error) => {
+                                console.log('jqXHR  : ' + JSON.stringify(jqXHR));
+                                console.log('error  : ' + error);
+                            })
+                })
+                function AvoidSpace(event) {
+                    var k = event ? event.which : window.event.keyCode;
+                    if (k == 32 && event.target.selectionStart === 0) return false;
+                }
+                var vendorIDS;
+                function getActivityCodes(value){
+                    console.log('calleddddd activitycodess>>>>>>>>>>',value)
+                    //getActivityCode
+                    $.ajax({
+                        url: '/tasks/getActivityCode',
+                        type: 'get',
+                        data: {
+                            projectId: value
+                        },
+                        dataType: 'json',
+                        beforeSend: function () {
+                            $('#detailLoadingSpinner').show();
+                        }
+                    })
+                        .then((response) => {
+                            console.log('response from Edit Ajax +=' + JSON.stringify(response));
+                            console.log('rtecordDeatail ',response.ActivityCodeDetail);
+                            let activityCode = response.ActivityCodeDetail;
+                            //let activityCode = ['Test_activity17/03','test_today','test_activity_code17/03','tetsttst644646'] -->
+                            $('#activitycodes').empty();
+                            for(let i=0; i <activityCode.length; i++)
+                            {
+                                console.log('activityCode>>>>>>>>>>>',activityCode)
+                                $('#activitycodes')
+                                .append($("<option></option>")
+                                .attr("value",activityCode[i].sfid)
+                                .text(activityCode[i].name))
+                            }
+                        })
+                        .fail((jqXHR, status, error) => {
+                            $('#detailLoadingSpinner').show();
+                            console.log('jqXHR  : ' + JSON.stringify(jqXHR));
+                            console.log('error  : ' + error);
+                        })
+                }
+                function anchorClickFunctionalities() {
+                    $('a.ActivityTag').on('click', function (event) {
+                        event.stopImmediatePropagation();
+                        event.stopPropagation();
+                        vendorIDS = this.id;
+                        let vendorId = this.id;
+                        //  alert('vendorTag=>'+vendorId);
+                        $("#popup").modal("show");
+                        $.ajax({
+                            type: 'GET',
+                            url: '/tasks/getTaskDetails',
+                            data: {
+                                'taskCodeId': vendorId
+                            },
+                            dataType: 'json'
+                        })
+                            .done((data) => {
+                                let recordData = data[0];
+                                console.log('DATA DEtails=>' + JSON.stringify(data.ActivityCodeDetail));
+                                let record = data.ActivityCodeDetail;
+                                console.log('DATA record=>' + JSON.stringify(record));
+                                if (data.ActivityCodeDetail.length > 0) {
+                                    console.log('Inside Vendor Details');
+                                    let ActivityCodeDetailRow = '';
+                                    data.ActivityCodeDetail.forEach((eachRecord) => {
+                                        ActivityCodeDetailRow += '<tr>';
+                                        ActivityCodeDetailRow += '<td colspan="4" style="background-color:#d3d3d3;"><h5>Task Details</h5></td>';
+                                        ActivityCodeDetailRow += '</tr>';
+
+                                        ActivityCodeDetailRow += '<tr>';
+                                        ActivityCodeDetailRow += '<td><strong> Project Task Name<span style="color: red;">*</span><strong></td>';
+                                        ActivityCodeDetailRow += '<td>' + eachRecord.name + '</td>';
+                                        ActivityCodeDetailRow += '<td><strong>Status<strong></td>';
+                                        ActivityCodeDetailRow += '<td>' + eachRecord.task_stage__c + '</td>';
+                                        ActivityCodeDetailRow += '</tr>';
+
+                                        ActivityCodeDetailRow += '<tr>';
+                                        ActivityCodeDetailRow += '<td><strong>Project<strong></td>';
+                                        ActivityCodeDetailRow += '<td>' + eachRecord.project_name2__c + '</td>';
+                                        ActivityCodeDetailRow += '<td><strong> Activity Code<strong></td>';
+                                        ActivityCodeDetailRow += '<td>' + eachRecord.activity_code_name__c + '</td>';
+                                        ActivityCodeDetailRow += '</tr>';
+
+                                        ActivityCodeDetailRow += '<tr>';
+                                        ActivityCodeDetailRow += '<td><strong> Project Task Category<strong></td>';
+                                        ActivityCodeDetailRow += '<td>' + eachRecord.project_task_category_name__c + '</td>';
+                                        ActivityCodeDetailRow += '<td><strong> Planned Start Date<span style="color: red;">*</span><strong></td>';
+                                        ActivityCodeDetailRow += '<td>' + eachRecord.start_date__c + '</td>';
+                                        ActivityCodeDetailRow += '</tr>';
+
+                                        ActivityCodeDetailRow += '<tr>';
+                                        ActivityCodeDetailRow += '<td><strong> Planned End Date<span style="color: red;">*</span><strong></td>';
+                                        ActivityCodeDetailRow += '<td>' + eachRecord.due_date__c + '</td>';
+                                        ActivityCodeDetailRow += '<td><strong>Description<strong></td>';
+                                        ActivityCodeDetailRow += '<td>' + eachRecord.description__c + '</td>';
+                                        //ActivityCodeDetailRow += '<td><strong>Actual Expense On Salesforce<strong></td>';
+                                        ActivityCodeDetailRow += '</tr>';
+
+                                        ActivityCodeDetailRow += '<tr>';
+                                        ActivityCodeDetailRow += '<td><strong> Pro-Rata Calculated Expense Per Day<strong></td>';
+                                        var pro_rate_analysis = eachRecord.pro_rate_analysis__c != null ? eachRecord.pro_rate_analysis__c.toFixed(2) : eachRecord.pro_rate_analysis__c;
+                                        ActivityCodeDetailRow += '<td>' + pro_rate_analysis + '</td>';
+                                        ActivityCodeDetailRow += '<td><strong>Estimated expenditure till current date<strong></td>';
+                                        var grant_utilization_on_pro_rate_basis = eachRecord.grant_utilization_on_pro_rate_basis__c != null ? eachRecord.grant_utilization_on_pro_rate_basis__c.toFixed(2) : eachRecord.grant_utilization_on_pro_rate_basis__c;
+                                        ActivityCodeDetailRow += '<td>' + grant_utilization_on_pro_rate_basis + '</td>';
+
+                                        ActivityCodeDetailRow += '</tr>';
+                                        ActivityCodeDetailRow += '<tr>';
+                                        ActivityCodeDetailRow += '<td><strong> Actual Start Date<strong></td>';
+                                        ActivityCodeDetailRow += '<td>' + eachRecord.actual_start_date__c + '</td>';
+                                        ActivityCodeDetailRow += '<td><strong>Actual End Date<strong></td>';
+                                        ActivityCodeDetailRow += '<td>' + eachRecord.actual_end_date__c + '</td>';
+
+                                        ActivityCodeDetailRow += '</tr>';
+
+                                        ActivityCodeDetailRow += '</tr>';
+                                        ActivityCodeDetailRow += '<tr>';
+                                        ActivityCodeDetailRow += '<td><strong> Today’s Date<strong></td>';
+                                        ActivityCodeDetailRow += '<td>' + eachRecord.today_s_date__c + '</td>';
+                                        ActivityCodeDetailRow += '<td><strong>Actual Hours<strong></td>';
+                                        ActivityCodeDetailRow += '<td>' + eachRecord.actual_hours__c + '</td>';
+
+                                        ActivityCodeDetailRow += '</tr>';
+
+                                        ActivityCodeDetailRow += '</tr>';
+
+                                        ActivityCodeDetailRow += '</tr>';
+                                        ActivityCodeDetailRow += '<tr>';
+                                        ActivityCodeDetailRow += '<td><strong> Estimated Hours<strong></td>';
+                                        var estimated_hours = eachRecord.estimated_hours__c != null ? eachRecord.estimated_hours__c.toFixed(2) : eachRecord.estimated_hours__c
+                                        ActivityCodeDetailRow += '<td>' + estimated_hours + '</td>';
+                                        ActivityCodeDetailRow += '<td><strong>Estimated Expense<strong></td>';
+                                        var estimated_expense = eachRecord.estimated_expense__c != null ? eachRecord.estimated_expense__c.toFixed(2) : eachRecord.estimated_expense__c;
+                                        ActivityCodeDetailRow += '<td>' + estimated_expense + '</td>';
+
+                                        ActivityCodeDetailRow += '</tr>';
+
+
+                                        $('#taskDetail').html(ActivityCodeDetailRow);
+
+                                    })
+                                }
+                            })
+                            .fail((jqXHR, textStatus, err) => {
+                                console.log('textStatus  : ' + textStatus);
+                            })
+                    })
+                }
+
+                function additionalEditFunctionality() {
+                    //for create
+                    $('.createTask').on('click', function (event) {
+                        event.stopPropagation();
+                        event.stopImmediatePropagation();
+                        let taskCodeId = this.id;
+                        
+                        $('#createTaskModal').modal('show');
+                        $('#statusCreate').empty();
+                        for (let i = 0; i < TaskStatus.length; i++) {
+                            $('#statusCreate')
+                                .append($("<option></option>")
+                                    .attr("value", TaskStatus[i])
+                                    .text(TaskStatus[i]))
+                        }
+                        let activityCode = ['Test_activity17/03','test_today','test_activity_code17/03','tetsttst644646']
+                        $('#activitycodes').empty
+                        for(let i=0; i <activityCode.length; i++)
+                        {
+                            console.log('activityCode>>>>>>>>>>>',activityCode)
+                            $('#activitycodes')
+                            .append($("<option></option>")
+                            .attr("value",activityCode[i])
+                            .text(activityCode[i]))
+                        }
+                        $.ajax({
+                            url: '/activityCodes/getProjects',
+                            type: 'get',
+                            data: {
+                                type: "task"
+                            },
+                            dataType: 'json',
+                            beforeSend: function () {
+                                $('#detailLoadingSpinner').show();
+                            }
+                        })
+                            .then((response) => {
+                                console.log('response from Edit Ajax +=' + JSON.stringify(response));
+                                console.log('rtecordDeatail ',response.project);
+                                let project = response.project
+                                $('#projectDropdown').empty();
+                                for(let i=0; i <project.length; i++)
+                                {
+                                    console.log('project[i].project>>>>>>>>>>>>',project)
+                                    $('#projectDropdown')
+                                    .append($("<option></option>")
+                                    .attr("value",project[i].project__c)
+                                    .text(project[i].project_name__c))
+                                }
+                                $('#projecttaskcategorycreate').empty();
+                                for (let i = 0; i < projectTaskCategory.length; i++) {
+                                    $('#projecttaskcategorycreate')
+                                        .append($("<option></option>")
+                                            .attr("value", projectTaskCategory[i])
+                                            .text(projectTaskCategory[i]))
+                                }
+                            })
+                            .fail((jqXHR, status, error) => {
+                                $('#detailLoadingSpinner').show();
+                                console.log('jqXHR  : ' + JSON.stringify(jqXHR));
+                                console.log('error  : ' + error);
+                            })
+                    })
+
+                    //for edit the task
+                    $('.editTask').on('click', function (event) {
+                        event.stopPropagation();
+                        event.stopImmediatePropagation();
+                        $('#district').empty();
+                        let taskCodeId = this.id;
+                        let dist = '';
+
+
+                        //    alert('vendorEditId modal ID=>'+vendorId);
+                        $('#taskEditModal').modal('show');
+                        $.ajax({
+                            url: '/tasks/getTaskDetails',
+                            type: 'get',
+                            data: {
+                                taskCodeId: taskCodeId
+                            },
+                            dataType: 'json',
+                            beforeSend: function () {
+                                $('#detailLoadingSpinner').show();
+                            }
+                        })
+                            .then((response) => {
+                                console.log('response from Edit Ajax +=' + JSON.stringify(response));
+                                console.log('rtecordDeatail ' + response.ActivityCodeDetail[0].name);
+                                document.forms["editTask"]["name"].value = response.ActivityCodeDetail[0].name;
+                                $('#status').empty();
+                                for (let i = 0; i < TaskStatus.length; i++) {
+                                    $('#status')
+                                        .append($("<option></option>")
+                                            .attr("value", TaskStatus[i])
+                                            .text(TaskStatus[i]))
+                                }
+                                document.forms["editTask"]["status"].value = response.ActivityCodeDetail[0].task_stage__c;
+                                document.forms["editTask"]["project"].value = response.ActivityCodeDetail[0].project_name2__c;
+                                document.forms["editTask"]["activitycodes"].value = response.ActivityCodeDetail[0].activity_code_name__c;
+                                $('#projecttaskcategory').empty();
+                                for (let i = 0; i < projectTaskCategory.length; i++) {
+                                    $('#projecttaskcategory')
+                                        .append($("<option></option>")
+                                            .attr("value", projectTaskCategory[i])
+                                            .text(projectTaskCategory[i]))
+                                }
+                                document.forms["editTask"]["projecttaskcategory"].value = response.ActivityCodeDetail[0].project_task_category_name__c;
+                                document.forms["editTask"]["StartDate"].value = response.ActivityCodeDetail[0].start_date__c;
+                                document.forms["editTask"]["DueDate"].value = response.ActivityCodeDetail[0].due_date__c;
+                                document.forms["editTask"]["ProRateAnalysis"].value = response.ActivityCodeDetail[0].pro_rate_analysis__c != null ? response.ActivityCodeDetail[0].pro_rate_analysis__c.toFixed(2) : response.ActivityCodeDetail[0].pro_rate_analysis__c;
+                                document.forms["editTask"]["Grant_Utilization_On_Pro_Rate_Basis"].value = response.ActivityCodeDetail[0].grant_utilization_on_pro_rate_basis__c != null ? response.ActivityCodeDetail[0].grant_utilization_on_pro_rate_basis__c.toFixed(2) : response.ActivityCodeDetail[0].grant_utilization_on_pro_rate_basis__c;
+                                document.forms["editTask"]["Description"].value = response.ActivityCodeDetail[0].description__c;
+                                document.forms["editTask"]["Actual_Start_Date"].value = response.ActivityCodeDetail[0].actual_start_date__c;
+                                document.forms["editTask"]["Actual_End_Date"].value = response.ActivityCodeDetail[0].actual_end_date__c;
+                                document.forms["editTask"]["today_s_date"].value = response.ActivityCodeDetail[0].today_s_date__c;
+                                document.forms["editTask"]["Actual_Hours"].value = response.ActivityCodeDetail[0].actual_hours__c;
+                                document.forms["editTask"]["Estimated_Hours"].value = response.ActivityCodeDetail[0].estimated_hours__c;
+                                document.forms["editTask"]["Estimated_Expense"].value = response.ActivityCodeDetail[0].estimated_expense__c;
+
+                                document.forms["editTask"]["hide"].value = response.ActivityCodeDetail[0].sfid;
+                            })
+                            .fail((jqXHR, status, error) => {
+                                $('#detailLoadingSpinner').show();
+                                console.log('jqXHR  : ' + JSON.stringify(jqXHR));
+                                console.log('error  : ' + error);
+                            })
+                    })
+                    $('#deleteTaskListButton').on('click', function (event) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        event.stopImmediatePropagation();
+
+
+                        var taskListArray = []
+                        var checkboxes = document.querySelectorAll('input[type=checkbox]:checked')
+
+                        for (var i = 0; i < checkboxes.length; i++) {
+                            taskListArray.push(checkboxes[i].value)
+                        }
+                        console.log('arry of idd>>>>>>>>>>', taskListArray)
+                        let resp = 'please choose the records to delete'
+                        if (!taskListArray.length > 0) {
+                            $("#deleteTaskListButton").attr("disabled", false);
+                            let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' + resp +
+                                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                                '<span aria-hidden="true">&times;</span>' +
+                                '</button>' +
+                                '</div>';
+                            $('#deleteErrorMessages').empty();
+                            $('#deleteErrorMessages').append(errorHtml);
+                            setTimeout(function () {
+                                $('#deleteErrorMessages').empty()
+                            }, 5000);
+                        } else {
+                            if (confirm('Do you want to continue')) {
+                                $.ajax({
+                                    url: '/tasks/deleteAllTaskList',
+                                    type: 'post',
+                                    data: {
+                                        taskListArray
+                                    }
+
+                                })
+                                    .done((data) => {
+                                        console.log('data ' + JSON.stringify(data))
+                                        if (data == 'Success') {
+                                            $("#deleteTaskListButton").attr("disabled", false);
+                                            window.location.reload()
+                                        }
+                                        else {
+
+                                        }
+
+                                    })
+                                    .fail((jqXHR, status, error) => {
+                                        console.log('jqXHR  ' + JSON.stringify(jqXHR));
+
+                                    })
+                            } else {
+
+                            }
+                        }
+                    })
+                    function compareDate(startDate, endDate, dateType) {
+                        console.log('date inside mthod>>>', startDate, endDate, dateType)
+                        if (dateType == 'plannedDate' && (startDate == "" || endDate == "")) {
+                            return { 'blanPlannedDate': true };
+                        } else if (dateType == 'actualDate' && (startDate == "" || endDate == "")) {
+                            return { 'blankActualDate': true };
+                        } else if (dateType == 'plannedDate' || dateType == 'actualDate' && (startDate != "" && endDate != "")) {
+                            var g1 = new Date(startDate);
+                            // (YYYY-MM-DD) 
+                            var g2 = new Date(endDate);
+                            if (g1.getTime() < g2.getTime())
+                                return true;
+                            else
+                                return false;
+                        }
+                    }
+                    function compareCurrentDate(startDate, endDate) {
+                        var g1 = new Date(startDate);
+                        // (YYYY-MM-DD)
+                        var g2 = new Date(formatDate(endDate))
+                        if (g1.getTime() > g2.getTime())
+                            return false;
+                        else
+                            return true;
+                    }
+                    function formatDate(date) {
+                        var d = new Date(date),
+                            month = '' + (d.getMonth() + 1),
+                            day = '' + d.getDate(),
+                            year = d.getFullYear();
+ 
+                        if (month.length < 2)
+                            month = '0' + month;
+                        if (day.length < 2)
+                            day = '0' + day;
+
+                        return [year, month, day].join('-');
+                    }
+                    $('#editTaskButton').on('click', function (event) {
+                        $('#errorMessages').empty();
+                        event.preventDefault();
+                        event.stopPropagation();
+                        event.stopImmediatePropagation();
+                        var $inputs = $('#editTask :input');
+                        var values = {};
+                        $inputs.each(function () {
+                            values[this.name] = $(this).val();
+                            console.log('fomvalues=> ' + JSON.stringify(values));
+                        });
+                        console.log('fomvalues=> ' + JSON.stringify(values));
+                        console.log('valuess>>>>>', values)
+                        let checkPlannedDate = compareDate(values.StartDate, values.DueDate, 'plannedDate')
+                        let checkActualDate=true,checkActual_End_Date=true;
+                        if(values.Actual_Start_Date!="" && values.Actual_End_Date!=""){
+                            checkActualDate = compareDate(values.Actual_Start_Date, values.Actual_End_Date, 'actualDate')
+                            checkActual_End_Date = compareCurrentDate(values.Actual_End_Date, new Date())
+                        }
+                        let resp;
+                        if (typeof checkPlannedDate == 'object') {
+                            resp = 'Planned Start Date & Planned End Date  cannot be blank.'
+                        }
+                        else if (!checkPlannedDate) {
+                            resp = 'Planned Start Date must be less than Planned End Date.'
+                        } else if (typeof checkActualDate == 'object') {
+                            resp = 'please fill Actual start date/end date as these are mandatory field.'
+                        } else if (!checkActualDate) {
+                            resp = 'Actual Start Date must be less than Actual End Date.'
+                        }
+                        else if (!checkActual_End_Date) {
+                            resp = 'Actual End Date should not be of future date'
+
+                        }
+                        if (resp) {
+                            let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' + resp +
+                                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                                '<span aria-hidden="true">&times;</span>' +
+                                '</button>' +
+                                '</div>';
+                            $('#errorMessages').empty();
+                            $('#errorMessages').append(errorHtml);
+                            setTimeout(function () {
+                                $('#errorMessages').empty()
+                            }, 5000);
+                        } else if (checkPlannedDate && checkActualDate && checkActual_End_Date) {
+                            $("#editTaskButton").attr("disabled", true);
+                            console.log('values>>>>>>>>>>>>>before updatedd????>', values)
+                            if (values.Estimated_Expense == "") {
+                                values.Estimated_Expense = 0;
+                            }
+                            if (values.Estimated_Hours == "") {
+                                values.Estimated_Hours = 0;
+                            }
+                            console.log('after update blank', values)
+                            $.ajax({
+                                url: '/tasks/updateTask',
+                                type: 'post',
+                                data: values,
+                            })
+                                .done((data) => {
+                                    console.log('data ' + JSON.stringify(data))
+                                    let resp = JSON.stringify(data);
+                                    console.log('dataaaaa' + resp);
+                                    if (data == 'Success') {
+                                        // document.getElementById("taskForm").reset()
+                                        let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">' + resp +
+                                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                                            '<span aria-hidden="true">&times;</span>' +
+                                            '</button>' +
+                                            '</div>';
+                                        $('#errorMessages').empty();
+                                        $('#errorMessages').append(errorHtml);
+                                        $("#editTaskButton").attr("disabled", false);
+                                        //  $("#createTaskModal").modal("hide");
+                                        window.location.reload()
+                                    }
+                                    else {
+                                        //document.getElementById("taskForm").reset()
+                                        let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' + resp +
+                                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                                            '<span aria-hidden="true">&times;</span>' +
+                                            '</button>' +
+                                            '</div>';
+                                        $('#errorMessages').empty();
+                                        $('#errorMessages').append(errorHtml);
+                                        $("#editTaskButton").attr("disabled", false);
+                                        setTimeout(function () {
+                                            $('#errorMessages').empty()
+                                        }, 5000);
+
+                                    }
+
+                                })
+                                .fail((jqXHR, status, error) => {
+                                    console.log('jqXHR  ' + JSON.stringify(jqXHR));
+
+                                })
+                        }
+                    })
+                    //For create task 
+
+                    $('#createTaskButton').on('click', function (event) {
+                        $('#createErrorMessages').empty();
+                        event.preventDefault();
+                        event.stopPropagation();
+                        event.stopImmediatePropagation();
+                        var $inputs = $('#createTask :input');
+                        var values = {};
+                        $inputs.each(function () {
+                            values[this.name] = $(this).val();
+                            console.log('fomvalues=> ' + JSON.stringify(values));
+                        });
+                        console.log('fomvalues=> ' + JSON.stringify(values));
+                        console.log('valuess>>>>> in before create>>>>>>>>>', values)
+                        let checkPlannedDate = compareDate(values.StartDate, values.DueDate, 'plannedDate')
+                        let checkActualDate=true,checkActual_End_Date=true;
+                        if(values.Actual_Start_Date!="" && values.Actual_End_Date!=""){
+                            checkActualDate = compareDate(values.Actual_Start_Date, values.Actual_End_Date, 'actualDate')
+                            checkActual_End_Date = compareCurrentDate(values.Actual_End_Date, new Date())
+                        }
+                        let resp;
+                        if (typeof checkPlannedDate == 'object') {
+                            resp = 'Planned Start Date & Planned End Date  cannot be blank.'
+                        }
+                        else if (!checkPlannedDate) {
+                            resp = 'Planned Start Date must be less than Planned End Date.'
+                        } else if (typeof checkActualDate == 'object') {
+                            resp = 'please fill Actual start date/end date as these are mandatory field.'
+                        } else if (!checkActualDate) {
+                            resp = 'Actual Start Date must be less than Actual End Date.'
+                        }
+                        else if (!checkActual_End_Date) {
+                            resp = 'Actual End Date should not be of future date'
+
+                        }
+                        if (resp) {
+                            let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' + resp +
+                                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                                '<span aria-hidden="true">&times;</span>' +
+                                '</button>' +
+                                '</div>';
+                            $('#createErrorMessages').empty();
+                            $('#createErrorMessages').append(errorHtml);
+                            setTimeout(function () {
+                                $('#createErrorMessages').empty()
+                            }, 5000);
+                        } else if (checkPlannedDate && checkActualDate && checkActual_End_Date) {
+                            $("#editTaskButton").attr("disabled", true);
+                            console.log('values>>>>>>>>>>>>>before updatedd????>', values)
+                            if (values.Estimated_Expense == "") {
+                                values.Estimated_Expense = 0;
+                            }
+                            if (values.Estimated_Hours == "") {
+                                values.Estimated_Hours = 0;
+                            }
+                            console.log('after update blank', values)
+                            $.ajax({
+                                url: '/tasks/createTask',
+                                type: 'post',
+                                data: values,
+                            })
+                                .done((data) => {
+                                    console.log('data ' + JSON.stringify(data))
+                                    let resp = JSON.stringify(data);
+                                    console.log('dataaaaa' + resp);
+                                    if (data == 'Success') {
+                                        // document.getElementById("taskForm").reset()
+                                        let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">' + resp +
+                                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                                            '<span aria-hidden="true">&times;</span>' +
+                                            '</button>' +
+                                            '</div>';
+                                        $('#createErrorMessages').empty();
+                                        $('#createErrorMessages').append(errorHtml);
+                                        $("#createTaskButton").attr("disabled", false);
+                                        //  $("#createTaskModal").modal("hide");
+                                        window.location.reload()
+                                    }
+                                    else {
+                                        //document.getElementById("taskForm").reset()
+                                        let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' + resp +
+                                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                                            '<span aria-hidden="true">&times;</span>' +
+                                            '</button>' +
+                                            '</div>';
+                                        $('#createErrorMessages').empty();
+                                        $('#createErrorMessages').append(errorHtml);
+                                        $("#createTaskButton").attr("disabled", false);
+                                        setTimeout(function () {
+                                            $('#createErrorMessages').empty()
+                                        }, 5000);
+
+                                    }
+
+                                })
+                                .fail((jqXHR, status, error) => {
+                                    console.log('jqXHR  ' + JSON.stringify(jqXHR));
+
+                                })
+                        }
+                    })
+
+                }
+
+
+            </script>
