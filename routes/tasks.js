@@ -30,11 +30,11 @@ router.get('/taskList',(request,response)=>{
         console.log('inside iffff', request.query.activityCode)
         let activityCode = request.query.activityCode;
         qry = pool
-         .query('SELECT sfid, Task_Stage__c, Name,Project_Name2__c	,Activity_Code_Name__c,Project_Task_Category_Name__c,CreatedById,CreatedDate,Id,IsDeleted,LastActivityDate,LastModifiedById,LastModifiedDate,LastReferencedDate,LastViewedDate '+
+         .query('SELECT sfid, Task_Stage__c, Name,Project_Name2__c	,Activity_Code_Name__c,Project_Task_Category_Name__c,CreatedById,CreatedDate,Id,IsDeleted,estimated_expense__c,start_date__c,due_date__c,actual_start_date__c,actual_end_date__c,LastActivityDate,LastModifiedById,LastModifiedDate,LastReferencedDate,LastViewedDate '+
          'FROM salesforce.Milestone1_Task__c WHERE Activity_Codes__c =$1',[activityCode])
     }else {
         qry =pool
-        .query('SELECT sfid, Task_Stage__c, Name,Project_Name2__c	,Activity_Code_Name__c,Project_Task_Category_Name__c,CreatedById,CreatedDate,Id,IsDeleted,LastActivityDate,LastModifiedById,LastModifiedDate,LastReferencedDate,LastViewedDate '+
+        .query('SELECT sfid, Task_Stage__c, Name,Project_Name2__c	,Activity_Code_Name__c,Project_Task_Category_Name__c,CreatedById,CreatedDate,Id,IsDeleted,estimated_expense__c,start_date__c,due_date__c,actual_start_date__c,actual_end_date__c,LastActivityDate,LastModifiedById,LastModifiedDate,LastReferencedDate,LastViewedDate '+
         'FROM salesforce.Milestone1_Task__c WHERE sfid IS NOT NULL');
     }
      console.log('qry  =>'+qry)
@@ -58,6 +58,11 @@ router.get('/taskList',(request,response)=>{
               obj.project = eachRecord.project_name2__c	;
               obj.activityCode = eachRecord.activity_code_name__c;
               obj.projectTaskCategory=eachRecord.project_task_category_name__c;
+              obj.estimated_expense__c=eachRecord.estimated_expense__c;
+              obj.start_date__c=eachRecord.start_date__c != null ? eachRecord.start_date__c.toLocaleString().split(',')[0]: eachRecord.start_date__c; 
+              obj.due_date__c=eachRecord.due_date__c !=null ? eachRecord.due_date__c.toLocaleString().split(',')[0]: eachRecord.due_date__c;
+              obj.actual_start_date__c=eachRecord.actual_start_date__c!=null ? eachRecord.actual_start_date__c.toLocaleString().split(',')[0]: eachRecord.actual_start_date__c;
+              obj.actual_end_date__c=eachRecord.actual_end_date__c !=null ? eachRecord.actual_end_date__c.toLocaleString().split(',')[0] : eachRecord.actual_end_date__c;
               obj.createdDate = strDate;
               i= i+1;
               modifiedList.push(obj);

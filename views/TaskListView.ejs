@@ -78,7 +78,8 @@
                                         <div class="row">
 
                                             <div class="col-md-6">
-                                                <label for="projectDropdown">Project </label>
+                                                <label for="projectDropdown">Project <span
+                                                    style="color: red;">*</span></label>
                                                 <select id="projectDropdown" name="projectDropdown"
                                                     class="form-control item_unit" onChange="getActivityCodes(value)">
                                                     <option value="">Select</option>
@@ -91,7 +92,8 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="description">Project Task Category </label>
+                                                <label for="description">Project Task Category <span
+                                                    style="color: red;">*</span></label>
                                                 <select id="projecttaskcategorycreate" name="projecttaskcategorycreate"
                                                     class="form-control item_unit">
                                                     <option value="">Select</option>
@@ -395,9 +397,12 @@
                         name: ' Project Task Name',
                         status: 'Status',
                         project: 'Project',
-                        activityCode: 'Activity Code',
                         projectTaskCategory: 'Project Task Category',
-                        createdDate: 'Created Date',
+                        start_date__c: 'Planned Start Date',
+                        due_date__c: 'Planned End Date',
+                        actual_start_date__c: 'Actual Start Date',
+                        actual_end_date__c: 'Actual End Date',
+                        estimated_expense__c: 'Estimated Expense',
                     }
                     var table = $('#taskListViewTable').tableSortable({
                         data: [],

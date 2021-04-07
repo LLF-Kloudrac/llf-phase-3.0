@@ -7,7 +7,7 @@
             <link rel="stylesheet"
                 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-            <h3 style="text-align: center; margin-top: 20px;">Activity Codeee List</h3>
+            <h3 style="text-align: center; margin-top: 20px;">Activity Code List</h3>
             <div id="deleteErrorMessages" style="width: max-content;margin-left: 544px;"></div>
             <div class="container">
                 <div class="row mt-5 mb-3 align-items-center">
@@ -78,7 +78,7 @@
                                         <div class="row">
 
                                             <div class="col-md-6">
-                                                <label for="projectDropdown">Project </label>
+                                                <label for="projectDropdown">Project <span style="color: red;">*</span></label>
                                                 <select id="projectDropdown" name="projectDropdown"
                                                     class="form-control item_unit">
                                                     <option value="">Select</option>
@@ -319,6 +319,8 @@
                         project: 'Project',
                         expenseHead: ' Expense Head Category',
                         actualExpenseFromTally: 'Actual Expense from Tally',
+                        planned_annual_budget__c: 'Approved Annual Budget',
+                        estimated_expense_from_tasks: 'Estimated Expense from Tasks',
                         createdDate: 'Created Date',
                     }
                     var table = $('#activityListViewTable').tableSortable({
