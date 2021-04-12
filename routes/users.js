@@ -121,7 +121,7 @@ router.post('/login', async (request,response)=>{
     errors.push({ msg: 'Please enter all fields' });
     response.render('login',{errors});
   }
-
+  console.log('pool.query : '+pool.query);
   await
   pool
   .query('SELECT Id, sfid, Name, email,PM_email__c FROM salesforce.Contact WHERE email = $1 AND password2__c = $2',[email,password])
