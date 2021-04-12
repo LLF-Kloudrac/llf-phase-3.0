@@ -4,7 +4,7 @@ const nodemailer = require("nodemailer");
 //var router = express.Router();
 const Router = require('express-promise-router');
 const router = new Router()
-const pool = require('../db/dbConfig');
+const {pool} = require('../db/dbConfig');
 const verify = require('../config/verifyToken');
 const jwt = require('jsonwebtoken');
 const joi = require('@hapi/joi');
@@ -122,8 +122,8 @@ router.post('/login', async (request,response)=>{
     response.render('login',{errors});
   }
   console.log('pool.query : '+pool.query);
-  await
-  pool
+  
+  await pool
   .query('SELECT Id, sfid, Name, email,PM_email__c FROM salesforce.Contact WHERE email = $1 AND password2__c = $2',[email,password])
   .then((loginResult) => {
         console.log('loginResult.rows[0]  '+JSON.stringify(loginResult.rows));
@@ -143,8 +143,8 @@ router.post('/login', async (request,response)=>{
     isUserExist = false;
   })
 
-  await 
-  pool.query('SELECT sfid FROM salesforce.Team__c WHERE Manager__c =  $1 ',[userId])
+   
+  await pool.query('SELECT sfid FROM salesforce.Team__c WHERE Manager__c =  $1 ',[userId])
   .then((teamQueryResult) => {
         if(teamQueryResult.rowCount > 0)
               objUser.isManager = true;
