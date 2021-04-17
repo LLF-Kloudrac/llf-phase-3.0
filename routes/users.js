@@ -23,7 +23,11 @@ router.get('/testByAmit',(request,response) =>{
   })
  
  })
- 
+
+router.post("/testRoute", (req, res) => {
+  res.send("hello");
+});
+
 router.post('/savePldForm',(request, response) => {
 
   console.log('request.body  : '+JSON.stringify(request.body));
