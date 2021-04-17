@@ -4,7 +4,8 @@ const nodemailer = require("nodemailer");
 //var router = express.Router();
 const Router = require('express-promise-router');
 const router = new Router()
-const {pool} = require('../db/dbConfig');
+const pool = require('../db/dbConfig');
+const poolConn = require('../db/dbConnection');
 const verify = require('../config/verifyToken');
 const jwt = require('jsonwebtoken');
 const joi = require('@hapi/joi');
@@ -122,7 +123,8 @@ router.post('/login', async (req, res) => {
       res.render('login', { errors });
     }
     console.log("going to query pool");
-    const loginResult = await pool.query('SELECT Id, sfid, Name, email,PM_email__c FROM salesforce.Contact WHERE email = $1 AND password2__c = $2', [email, password]);
+    const client = await poolConn.connect();
+    const loginResult = await client.query('SELECT Id, sfid, Name, email,PM_email__c FROM salesforce.Contact WHERE email = $1 AND password2__c = $2', [email, password]);
     if (loginResult.rowCount > 0) {
       userId = loginResult.rows[0].sfid;
       objUser = loginResult.rows[0];
@@ -132,12 +134,13 @@ router.post('/login', async (req, res) => {
     }
     console.log("objuser 1 -> ", objUser);
 
-    const teamQueryResult = await pool.query('SELECT sfid FROM salesforce.Team__c WHERE Manager__c =  $1 ', [userId]);
+    const teamQueryResult = await client.query('SELECT sfid FROM salesforce.Team__c WHERE Manager__c =  $1 ', [userId]);
     if (teamQueryResult.rowCount > 0) {
       objUser.isManager = true;
     } else {
       objUser.isManager = false; 
     }
+    client.release();
 
     console.log("objuser 2 -> ", objUser);
 
