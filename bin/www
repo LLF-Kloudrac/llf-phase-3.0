@@ -7,7 +7,6 @@
 var app = require('../app');
 var debug = require('debug')('myapp:server');
 var http = require('http');
-const dbConn = require('../db/dbConfig');
 
 /**
  * Get port from environment and store in Express.
@@ -25,16 +24,10 @@ var server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
-dbConn.connect(function (connect) {
-  if (!connect) {
-    process.exit(1);
-  }
 
-  server.listen(port);
-  server.on('error', onError);
-  server.on('listening', onListening);
-  console.log("here server started");
-})
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
 
 /**
  * Normalize a port into a number, string, or false.
@@ -94,4 +87,5 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+  console.log(`Server listening on port ${bind}`);
 }

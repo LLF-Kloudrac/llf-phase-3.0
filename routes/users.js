@@ -4,7 +4,7 @@ const nodemailer = require("nodemailer");
 //var router = express.Router();
 const Router = require('express-promise-router');
 const router = new Router()
-const dbConn = require('../db/dbConfig');
+const pool = require('../db/dbConfig');
 const verify = require('../config/verifyToken');
 const jwt = require('jsonwebtoken');
 const joi = require('@hapi/joi');
@@ -122,7 +122,7 @@ router.post('/login', async (req, res) => {
       res.render('login', { errors });
     }
     console.log("going to query pool");
-    const loginResult = await dbConn.pool.query('SELECT Id, sfid, Name, email,PM_email__c FROM salesforce.Contact WHERE email = $1 AND password2__c = $2', [email, password]);
+    const loginResult = await pool.query('SELECT Id, sfid, Name, email,PM_email__c FROM salesforce.Contact WHERE email = $1 AND password2__c = $2', [email, password]);
     if (loginResult.rowCount > 0) {
       userId = loginResult.rows[0].sfid;
       objUser = loginResult.rows[0];
@@ -130,23 +130,18 @@ router.post('/login', async (req, res) => {
     } else {
       isUserExist = false;
     }
-    console.log("objuser 1 -> ", objUser);
 
-    const teamQueryResult = await dbConn.pool.query('SELECT sfid FROM salesforce.Team__c WHERE Manager__c =  $1 ', [userId]);
+    const teamQueryResult = await pool.query('SELECT sfid FROM salesforce.Team__c WHERE Manager__c =  $1 ', [userId]);
     if (teamQueryResult.rowCount > 0) {
       objUser.isManager = true;
     } else {
       objUser.isManager = false; 
     }
 
-    console.log("objuser 2 -> ", objUser);
-
     if (isUserExist && errors.length == 0) {
       const token = jwt.sign({ user : objUser }, process.env.TOKEN_SECRET, {
         expiresIn: 8640000 // expires in 24 hours
       });
-
-      console.log("objuser 3 -> ", objUser);
 
       res.cookie('jwt', token, { httpOnly: false, secure: false, maxAge: 3600000 });
       res.header('auth-token', token).render('dashboard', { objUser });
