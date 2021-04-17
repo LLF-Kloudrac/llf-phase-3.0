@@ -11,6 +11,7 @@ const flash = require('connect-flash');
 var session = require('cookie-session');
 dotenv.config();
 
+require('./db/dbConfig');
 
 
 var app = express();

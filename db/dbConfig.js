@@ -13,6 +13,11 @@ pool.on('error',function(err){
     console.log('Error Stack'+err.stack);
 })
 
+pool.query('SELECT Id, sfid, Name, email,PM_email__c FROM salesforce.Contact where id=1', function (err, result) {
+    console.log("err", err);
+    console.log("result ", result);
+})
+
 module.exports = {
     pool,
     query: (text, params, callback) =>{
