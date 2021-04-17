@@ -155,6 +155,7 @@ router.post('/login', async (req, res) => {
     }
 
   } catch (error) {
+    console.log("errors in catch block -> ", error);
     res.render('login', { errors: ["Something went wrong"] });
   }
 });
