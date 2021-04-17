@@ -111,7 +111,7 @@ router.get('/login', function(req, response, next) {
 
 router.post('/login', async (req, res) => {
   try {
-    
+    console.log("login request");
     const { email, password } = req.body;
     
     let errors = [], userId, objUser, isUserExist = false;
@@ -120,7 +120,7 @@ router.post('/login', async (req, res) => {
       errors.push({ msg: 'Please enter all fields' });
       res.render('login', { errors });
     }
-    
+    console.log("going to query pool");
     const loginResult = await pool.query('SELECT Id, sfid, Name, email,PM_email__c FROM salesforce.Contact WHERE email = $1 AND password2__c = $2', [email, password]);
     if (loginResult.rowCount > 0) {
       userId = loginResult.rows[0].sfid;
