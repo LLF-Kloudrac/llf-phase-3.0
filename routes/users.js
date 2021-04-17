@@ -109,70 +109,55 @@ router.get('/login', function(req, response, next) {
     response.render('login');
 });
 
-
-router.post('/login', async (request,response)=>{
-
-  const {email, password} = request.body;
-  console.log('email : '+email+' passoword '+password);
-
-  let errors = [], userId, objUser, isUserExist = false;
-
-  if (!email || !password) {
-    errors.push({ msg: 'Please enter all fields' });
-    response.render('login',{errors});
-  }
-  console.log('pool.query : '+pool.query);
-  
-  await pool
-  .query('SELECT Id, sfid, Name, email,PM_email__c FROM salesforce.Contact WHERE email = $1 AND password2__c = $2',[email,password])
-  .then((loginResult) => {
-        console.log('loginResult.rows[0]  '+JSON.stringify(loginResult.rows));
-        if(loginResult.rowCount > 0)
-        {
-          userId = loginResult.rows[0].sfid;
-          objUser = loginResult.rows[0];
-          isUserExist = true;
-        }
-        else
-        {
-          isUserExist = false;
-        }      
-  }) 
-  .catch((loginError) =>{
-    console.log('loginError   :  '+loginError.stack);
-    isUserExist = false;
-  })
-
-   
-  await pool.query('SELECT sfid FROM salesforce.Team__c WHERE Manager__c =  $1 ',[userId])
-  .then((teamQueryResult) => {
-        if(teamQueryResult.rowCount > 0)
-              objUser.isManager = true;
-        else
-              objUser.isManager = false; 
-
-    console.log('is Manager ++++'+objUser.isManager);
-  })
-  .catch((teamQueryError) => {
-
-  })
-
-  if(isUserExist && errors.length == 0)
-  {
-    const token = jwt.sign({ user : objUser }, process.env.TOKEN_SECRET, {
-      expiresIn: 8640000 // expires in 24 hours
-    });
-  
-    response.cookie('jwt',token, { httpOnly: false, secure: false, maxAge: 3600000 });
-    response.header('auth-token', token).render('dashboard',{objUser});
-  }
-  else
-  {
-    errors.push({ msg: 'Please enter correct email or correct password' });
-    response.render('login',{errors});
-  }
+router.post('/login', async (req, res) => {
+  try {
     
-}) 
+    const { email, password } = req.body;
+    
+    let errors = [], userId, objUser, isUserExist = false;
+    
+    if (!email || !password) {
+      errors.push({ msg: 'Please enter all fields' });
+      res.render('login', { errors });
+    }
+    
+    const loginResult = await pool.query('SELECT Id, sfid, Name, email,PM_email__c FROM salesforce.Contact WHERE email = $1 AND password2__c = $2', [email, password]);
+    if (loginResult.rowCount > 0) {
+      userId = loginResult.rows[0].sfid;
+      objUser = loginResult.rows[0];
+      isUserExist = true;
+    } else {
+      isUserExist = false;
+    }
+    console.log("objuser 1 -> ", objUser);
+
+    const teamQueryResult = await pool.query('SELECT sfid FROM salesforce.Team__c WHERE Manager__c =  $1 ', [userId]);
+    if (teamQueryResult.rowCount > 0) {
+      objUser.isManager = true;
+    } else {
+      objUser.isManager = false; 
+    }
+
+    console.log("objuser 2 -> ", objUser);
+
+    if (isUserExist && errors.length == 0) {
+      const token = jwt.sign({ user : objUser }, process.env.TOKEN_SECRET, {
+        expiresIn: 8640000 // expires in 24 hours
+      });
+
+      console.log("objuser 3 -> ", objUser);
+
+      res.cookie('jwt', token, { httpOnly: false, secure: false, maxAge: 3600000 });
+      res.header('auth-token', token).render('dashboard', { objUser });
+    } else {
+      errors.push({ msg: 'Please enter correct email or correct password' });
+      res.render('login', { errors });
+    }
+
+  } catch (error) {
+    res.render('login', { errors: ["Something went wrong"] });
+  }
+});
 
 router.get('/home',verify, (request, response) => {
     let objUser = request.user;
