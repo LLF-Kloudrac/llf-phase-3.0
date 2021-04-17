@@ -123,7 +123,8 @@ router.post('/login', async (req, res) => {
       res.render('login', { errors });
     }
     console.log("going to query pool");
-    const loginResult = await poolConn.query('SELECT Id, sfid, Name, email,PM_email__c FROM salesforce.Contact WHERE email = $1 AND password2__c = $2', [email, password]);
+    const poolObj = poolConn.createPool();
+    const loginResult = await poolObj.query('SELECT Id, sfid, Name, email,PM_email__c FROM salesforce.Contact WHERE email = $1 AND password2__c = $2', [email, password]);
     if (loginResult.rowCount > 0) {
       userId = loginResult.rows[0].sfid;
       objUser = loginResult.rows[0];
@@ -133,7 +134,7 @@ router.post('/login', async (req, res) => {
     }
     console.log("objuser 1 -> ", objUser);
 
-    const teamQueryResult = await poolConn.query('SELECT sfid FROM salesforce.Team__c WHERE Manager__c =  $1 ', [userId]);
+    const teamQueryResult = await poolObj.query('SELECT sfid FROM salesforce.Team__c WHERE Manager__c =  $1 ', [userId]);
     if (teamQueryResult.rowCount > 0) {
       objUser.isManager = true;
     } else {
