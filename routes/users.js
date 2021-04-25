@@ -123,25 +123,26 @@ router.post('/login', async (request,response)=>{
   }
   console.log('pool.query : '+pool.query);
   
-  await pool
+ const dddd = await pool
   .query('SELECT Id, sfid, Name, email,PM_email__c FROM salesforce.Contact WHERE email = $1 AND password2__c = $2',[email,password])
-  .then((loginResult) => {
-        console.log('loginResult.rows[0]  '+JSON.stringify(loginResult.rows));
-        if(loginResult.rowCount > 0)
-        {
-          userId = loginResult.rows[0].sfid;
-          objUser = loginResult.rows[0];
-          isUserExist = true;
-        }
-        else
-        {
-          isUserExist = false;
-        }      
-  }) 
-  .catch((loginError) =>{
-    console.log('loginError   :  '+loginError.stack);
-    isUserExist = false;
-  })
+  console.log('dddd : ',dddd);
+  // .then((loginResult) => {
+  //       console.log('loginResult.rows[0]  '+JSON.stringify(loginResult.rows));
+  //       if(loginResult.rowCount > 0)
+  //       {
+  //         userId = loginResult.rows[0].sfid;
+  //         objUser = loginResult.rows[0];
+  //         isUserExist = true;
+  //       }
+  //       else
+  //       {
+  //         isUserExist = false;
+  //       }      
+  // }) 
+  // .catch((loginError) =>{
+  //   console.log('loginError   :  '+loginError.stack);
+  //   isUserExist = false;
+  // })
 
    
   await pool.query('SELECT sfid FROM salesforce.Team__c WHERE Manager__c =  $1 ',[userId])
