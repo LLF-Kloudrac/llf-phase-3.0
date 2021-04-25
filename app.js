@@ -9,11 +9,13 @@ const dotenv = require('dotenv');
 const flash = require('connect-flash');
 //const session = require('express-session');
 var session = require('cookie-session');
+const cors = require('cors');
 dotenv.config();
 
 
 
 var app = express();
+app.use(cors());
 app.use(expressLayout);
 app.use(function(req, res, next) {  
   res.header('Access-Control-Allow-Origin', req.headers.origin);
