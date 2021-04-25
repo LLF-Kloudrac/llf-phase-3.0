@@ -9,6 +9,7 @@ const verify = require('../config/verifyToken');
 const jwt = require('jsonwebtoken');
 const joi = require('@hapi/joi');
 const { response } = require('express');
+const { Client } = require('pg');
 // const {check, validationResult }=require('express-validator');
 
 router.get('/testByAmit',(request,response) =>{
@@ -112,20 +113,44 @@ router.get('/login', function(req, response, next) {
 
 router.post('/login', async (request,response)=>{
 
-  const {email, password} = request.body;
-  console.log('email : '+email+' passoword '+password);
+//////////////////////////////////////////////////////////////////////////////////////
 
-  let errors = [], userId, objUser, isUserExist = false;
-
-  if (!email || !password) {
-    errors.push({ msg: 'Please enter all fields' });
-    response.render('login',{errors});
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
   }
-  console.log('pool.query : '+pool.query);
+});
+
+client.connect();
+
+client.query('SELECT id,sfid,name  FROM salesforce.contact;', (err, res) => {
+  if (err) throw err;
+  for (let row of res.rows) {
+    console.log(JSON.stringify(row));
+  }
+  client.end();
+});
+
+return
+//////////////////////////////////////////////////////////////////////////////////////
+
+
+
+//   const {email, password} = request.body;
+//   console.log('email : '+email+' passoword '+password);
+
+//   let errors = [], userId, objUser, isUserExist = false;
+
+//   if (!email || !password) {
+//     errors.push({ msg: 'Please enter all fields' });
+//     response.render('login',{errors});
+//   }
+//   console.log('pool.query : '+pool.query);
   
- const dddd = await pool
-  .query('SELECT Id, sfid, Name, email,PM_email__c FROM salesforce.Contact WHERE email = $1 AND password2__c = $2',[email,password])
-  console.log('dddd : ',dddd);
+//  const dddd = await pool
+//   .query('SELECT Id, sfid, Name, email,PM_email__c FROM salesforce.Contact WHERE email = $1 AND password2__c = $2',[email,password])
+//   console.log('dddd : ',dddd.rows);
   // .then((loginResult) => {
   //       console.log('loginResult.rows[0]  '+JSON.stringify(loginResult.rows));
   //       if(loginResult.rowCount > 0)
