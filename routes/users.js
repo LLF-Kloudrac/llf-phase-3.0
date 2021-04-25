@@ -123,7 +123,7 @@ const client = new Client({
 });
 
 client.connect();
-
+console.log('MYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY');
 client.query('SELECT id,sfid,name  FROM salesforce.contact;', (err, res) => {
   if (err) throw err;
   for (let row of res.rows) {
