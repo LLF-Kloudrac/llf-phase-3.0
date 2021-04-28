@@ -148,9 +148,9 @@ return  */
     }
    console.log('pool.query : '+pool.query);
   
-    const dddd = await pool
+    await
+    pool
    .query('SELECT Id, sfid, Name, email,PM_email__c FROM salesforce.Contact WHERE email = $1 AND password2__c = $2',[email,password])
-   console.log('dddd : ',dddd.rows);
    .then((loginResult) => {
          console.log('loginResult.rows[0]  '+JSON.stringify(loginResult.rows));
          if(loginResult.rowCount > 0)
