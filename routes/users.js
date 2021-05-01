@@ -76,6 +76,7 @@ router.get('/getpldForm',verify, (request, response) => {
 });
 
 
+
 router.get('/viewResponses',verify,(request,response)=>{
 
   let pldFormId = request.query.pldformid;
@@ -110,6 +111,20 @@ router.get('/login', function(req, response, next) {
     response.render('login');
 });
 
+
+router.post('/testApi', (request,response)=>{
+  pool
+  .query('SELECT Id, sfid, name  FROM salesforce.account')
+  .then((queryResult) => {
+       console.log('loginResult  : '+JSON.stringify(queryResult));  
+       response.send(queryResult);
+  }) 
+  .catch((loginError)=>{
+    console.log('loginError   :  '+loginError.stack);
+    isUserExist = false;
+  })
+
+});
 
 router.post('/login', async (request,response)=>{
 
