@@ -10,6 +10,9 @@ const flash = require('connect-flash');
 //const session = require('express-session');
 var session = require('cookie-session');
 const cors = require('cors');
+var timeout = require('connect-timeout'); //express v4
+
+
 dotenv.config();
 
 
@@ -23,6 +26,13 @@ app.use(function(req, res, next) {
   next();
 });  
 
+
+app.use(timeout(120000));
+app.use(haltOnTimedout);
+
+function haltOnTimedout(req, res, next){
+  if (!req.timedout) next();
+}
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
