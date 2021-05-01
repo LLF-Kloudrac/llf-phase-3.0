@@ -112,7 +112,7 @@ router.get('/login', function(req, response, next) {
 });
 
 
-router.post('/testApi', (request,response)=>{
+router.get('/testApi', (request,response)=>{
   pool
   .query('SELECT Id, sfid, name  FROM salesforce.account')
   .then((queryResult) => {
