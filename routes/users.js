@@ -24,6 +24,24 @@ router.get('/testByAmit',(request,response) =>{
   })
  
  })
+
+ router.get('/testByAmitClient',(request,response) =>{
+
+   const dbConfig = {
+    connectionString: process.env.DATABASE_URL,
+    ssl:true,
+  }
+  const client = new Client(dbConfig);
+  client.query('select id,sfid, name from salesforce.contact;')
+  .then((result)=>{
+    console.log('result : '+JSON.stringify(result));
+    response.send(result);
+  })
+  .catch((error)=>{
+    console.log('error  '+error.stack);
+  })
+ 
+ })
  
 router.post('/savePldForm',(request, response) => {
 
