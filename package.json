@@ -35,6 +35,9 @@
     "pg-format": "^1.0.4",
     "pg-promise": "^10.5.1"
   },
+  "engines": {
+    "node": "12.16.2"
+  },
   "author": "amit,anukarsh,chitranshi",
   "license": "ISC",
   "description": ""
