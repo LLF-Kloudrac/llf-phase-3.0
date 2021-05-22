@@ -528,6 +528,7 @@
                             dataType: 'json'
                         })
                             .done((data) => {
+                                console.log('DATA DEtails=>' + JSON.stringify(data));
                                 let recordData = data[0];
                                 console.log('DATA DEtails=>' + JSON.stringify(data.ActivityCodeDetail));
                                 let record = data.ActivityCodeDetail;
