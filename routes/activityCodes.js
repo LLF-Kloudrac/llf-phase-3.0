@@ -63,7 +63,7 @@ router.post('/deleteAllActivityCodes', (request, response) => {
 })
 
 router.get('/activityCodesList', (request, response) => {
-    let qry = 'SELECT sfid,Name,Activity_Code_Name__c,Project_Name__c,Expense_Head_Category__c,Description__c,Actual_Expense_from_tally__c,CreatedById,CreatedDate,Id,IsDeleted,planned_annual_budget__c,estimated_expense_from_tasks__c,LastActivityDate,LastModifiedById,LastModifiedDate,LastReferencedDate,LastViewedDate,Record_ID__c ' +
+    let qry = 'SELECT sfid,Name,Activity_Code_Name__c,Description__c,Actual_Expense_from_tally__c,CreatedById,CreatedDate,Id,IsDeleted,planned_annual_budget__c,estimated_expense_from_tasks__c,LastActivityDate,LastModifiedById,LastModifiedDate,LastReferencedDate,LastViewedDate ' +
         'FROM salesforce.Activity_Code__c WHERE sfid IS NOT NULL';
     console.log('qry  =>' + qry)
     pool.query(qry)
@@ -83,12 +83,12 @@ router.get('/activityCodesList', (request, response) => {
                     obj.editAction = '<button href="#" class="btn btn-primary editActivityCode" id="' + eachRecord.sfid + '" >Edit</button>'
                     obj.name = '<a href="#" class="ActivityTag" id="' + eachRecord.sfid + '" >' + eachRecord.name + '</a>';
                     obj.activityCodeName = eachRecord.activity_code_name__c;
-                    obj.project = eachRecord.project_name__c;
-                    obj.expenseHead = eachRecord.expense_head_category__c;
+                  //  obj.project = eachRecord.project_name__c;
+                  //  obj.expenseHead = eachRecord.expense_head_category__c;
                     obj.description = eachRecord.description__c;
                     obj.actualExpenseFromTally = eachRecord.actual_expense_from_tally__c != null ? eachRecord.actual_expense_from_tally__c.toFixed(2) : eachRecord.actual_expense_from_tally__c;
                     obj.planned_annual_budget__c= eachRecord.planned_annual_budget__c != null ? eachRecord.planned_annual_budget__c.toFixed(2): eachRecord.planned_annual_budget__c;
-                    obj.estimated_expense_from_tasks= eachRecord.estimated_expense_from_tasks__c != null ? eachRecord.estimated_expense_from_tasks__c.toFixed(2): estimated_expense_from_tasks__c;
+                    obj.estimated_expense_from_tasks= eachRecord.estimated_expense_from_tasks__c != null ? eachRecord.estimated_expense_from_tasks__c.toFixed(2): eachRecord.estimated_expense_from_tasks__c;
                     obj.createdDate = strDate;
                     i = i + 1;
                     modifiedList.push(obj);
