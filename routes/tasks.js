@@ -34,7 +34,8 @@ router.get('/taskList',(request,response)=>{
          'FROM salesforce.Milestone1_Task__c WHERE Activity_Codes__c =$1',[activityCode])
     }else {
         qry =pool
-        .query('SELECT sfid, Task_Stage__c, Name,Project_Name2__c	,Activity_Code_Name__c,Project_Task_Category_Name__c,CreatedById,CreatedDate,Id,IsDeleted,estimated_expense__c,start_date__c,due_date__c,actual_start_date__c,actual_end_date__c,LastActivityDate,LastModifiedById,LastModifiedDate,LastReferencedDate,LastViewedDate '+
+      //  .query('SELECT * FROM salesforce.Milestone1_Task__c WHERE sfid IS NOT NULL');
+        .query('SELECT sfid, Task_Stage__c,total_hours__c, Name,Project_Name2__c	,Activity_Code_Name__c,Project_Task_Category_Name__c,CreatedById,CreatedDate,Id,IsDeleted,estimated_expense__c,start_date__c,due_date__c,actual_start_date__c,actual_end_date__c,LastActivityDate,LastModifiedById,LastModifiedDate,LastReferencedDate,LastViewedDate '+
         'FROM salesforce.Milestone1_Task__c WHERE sfid IS NOT NULL');
     }
      console.log('qry  =>'+qry)
@@ -88,7 +89,7 @@ router.get('/getTaskDetails',async(request,response)=>{
     let recordDeatil={};
     await
     pool
-    .query('select sfid, Task_Stage__c,total_hours__c, Name,Project_Name2__c,Activity_Code_Name__c,Project_Task_Category_Name__c,Start_Date__c,Due_Date__c,Pro_Rate_Analysis__c,Grant_Utilization_On_Pro_Rate_Basis__c,Description__c,Actual_Start_Date__c,Actual_End_Date__c,Today_s_Date__c,Actual_Hours__c,Estimated_Hours__c,Estimated_Expense__c,CreatedById,CreatedDate,Id '+
+    .query('select sfid, Task_Stage__c, Name,Project_Name2__c,Activity_Code_Name__c,Project_Task_Category_Name__c,Start_Date__c,Due_Date__c,Pro_Rate_Analysis__c,Grant_Utilization_On_Pro_Rate_Basis__c,Description__c,Actual_Start_Date__c,Actual_End_Date__c,Today_s_Date__c,Actual_Hours__c,Estimated_Hours__c,Estimated_Expense__c,CreatedById,CreatedDate,Id '+
     'FROM salesforce.Milestone1_Task__c where sfid =$1 ',[activityCode])
     .then((queryResult)=>{
         console.log('queryResult +>'+JSON.stringify(queryResult.rows));
