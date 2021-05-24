@@ -274,6 +274,8 @@ router.get('/getActivityCode',async(request,response)=>{
         response.send(error);
     })
 })
+
+
 //create task
 router.post('/createTask',(request,response)=>{
     let body = request.body;
@@ -294,10 +296,10 @@ router.post('/createTask',(request,response)=>{
         let queryResult;
         if(Actual_Start_Date=="" || Actual_End_Date==""){
             
-            queryResult= pool.query('INSERT INTO salesforce.Milestone1_Task__c (Name,Task_Stage__c,Project_Name__c,Activity_Codes__c,Project_Task_Category__c,Start_Date__c,Due_Date__c,Description__c,Estimated_Hours__c,Estimated_Expense__c, RecordTypeId ) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)',[name,statusCreate,projectDropdown,activitycodes, projecttaskcategorycreate,StartDate,DueDate,Description,Estimated_Hours,Estimated_Expense,'0120p000000C8pqAAC']) 
+            queryResult= pool.query('INSERT INTO salesforce.Milestone1_Task__c (Name,Task_Stage__c,Project_Name__c,Activity_Codes__c,Project_Task_Category__c,Start_Date__c,Due_Date__c,Description__c,Estimated_Hours__c,Estimated_Expense__c, RecordTypeId ) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)',[name,statusCreate,projectDropdown,activitycodes, projecttaskcategorycreate,StartDate,DueDate,Description,Estimated_Hours,Estimated_Expense,'0122y00000005mLAAQ']) 
         }else {
             queryResult= pool
-            .query('INSERT INTO salesforce.Milestone1_Task__c (Name,Task_Stage__c,Project_Name__c,Activity_Codes__c,Project_Task_Category__c,Start_Date__c,Due_Date__c,Description__c,Actual_Start_Date__c,Actual_End_Date__c,Estimated_Hours__c,Estimated_Expense__c, RecordTypeId ) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)',[name,statusCreate,projectDropdown,activitycodes, projecttaskcategorycreate,StartDate,DueDate,Description,Actual_Start_Date,Actual_End_Date,Estimated_Hours,Estimated_Expense,'0120p000000C8pqAAC'])
+            .query('INSERT INTO salesforce.Milestone1_Task__c (Name,Task_Stage__c,Project_Name__c,Activity_Codes__c,Project_Task_Category__c,Start_Date__c,Due_Date__c,Description__c,Actual_Start_Date__c,Actual_End_Date__c,Estimated_Hours__c,Estimated_Expense__c, RecordTypeId ) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)',[name,statusCreate,projectDropdown,activitycodes, projecttaskcategorycreate,StartDate,DueDate,Description,Actual_Start_Date,Actual_End_Date,Estimated_Hours,Estimated_Expense,'0122y00000005mLAAQ'])
         }
         queryResult.then((updateQuerryResult) => {     
                  console.log('updateQuerryResult =>>'+JSON.stringify(updateQuerryResult));
