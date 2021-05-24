@@ -622,6 +622,30 @@
                 }
 
                 function additionalEditFunctionality() {
+
+                    $("#projectDropdown").change(function () {
+                    /*    var selectedValue = this.value;
+                        alert('selectedValue  : '+selectedValue);
+
+                        $.ajax({
+                            url: '/activityCodes/getActivityCode',
+                            type: 'get',
+                            data: {
+                                projectId: selectedValue
+                            },
+                            dataType: 'json',
+                            beforeSend: function () {
+                                $('#detailLoadingSpinner').show();
+                            }
+                        })
+                        .done((data) => {
+                            console.log('lstActivityCodes' + JSON.stringify(data));
+                        })
+                        .fail((jqXHR, textStatus, err) => {
+                            console.log('textStatus  : ' + textStatus);
+                        })  */
+                    });
+
                     //for create
                     $('.createTask').on('click', function (event) {
                         event.stopPropagation();
@@ -662,6 +686,12 @@
                                 console.log('rtecordDeatail ',response.project);
                                 let project = response.project
                                 $('#projectDropdown').empty();
+                                
+                                $('#projectDropdown')
+                                    .append($("<option></option>")
+                                    .attr("value",'')
+                                    .text('None'))
+
                                 for(let i=0; i <project.length; i++)
                                 {
                                     console.log('project[i].project>>>>>>>>>>>>',project)
