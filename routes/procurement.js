@@ -2251,7 +2251,7 @@ router.post('/sendProcurementAccountsApproval',verify,(request, response) => {
              else{
 
               pool
-              .query('UPDATE salesforce.Asset_Requisition_Form__c SET isSentForApprovalFromHeroku__c = $1 ,Heroku_Accounts_Approval_Comment__c =$2, Submitted_By_Heroku_User__c = $3 WHERE sfid= $4;',[true, body.comment, objUser.sfid, body.assetRequisitionFormId])
+              .query('UPDATE salesforce.Asset_Requisition_Form__c SET isSentForAccountsApprovalFromHeroku__c = $1 ,Heroku_Accounts_Approval_Comment__c =$2, Submitted_By_Heroku_User__c = $3 WHERE sfid= $4;',[true, body.comment, objUser.sfid, body.assetRequisitionFormId])
               .then((requisitionQueryResult) =>{
                   console.log('requisitionQueryResult  : '+JSON.stringify(requisitionQueryResult));
                   response.send('Accounts Approval Sent Successfully !');
