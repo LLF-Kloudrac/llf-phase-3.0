@@ -2193,6 +2193,7 @@ router.post('/sendProcurementAccountsApproval',verify,(request, response) => {
     let body = request.body;
     console.log('body  : '+JSON.stringify(body));
     let comment = body.comment;
+    let sendAccountsApproval = true;
     console.log('comment'+comment);
     let selectqry ='SELECT asset.id, asset.sfid as sfid,asset.name as name ,asset.Requested_Closure_Plan_Date__c,asset.Project_Department__c, '+
     'asset.Manager_Approval__c,asset.Management_Approval__c,asset.Procurement_Committee_Approval__c,asset.Chairperson_Approval__c,'+
@@ -2251,7 +2252,7 @@ router.post('/sendProcurementAccountsApproval',verify,(request, response) => {
              else{
 
               pool
-              .query('UPDATE salesforce.Asset_Requisition_Form__c SET isSentForAccountsApprovalFromHeroku__c = $1 ,Heroku_Accounts_Approval_Comment__c =$2, Submitted_By_Heroku_User__c = $3 WHERE sfid= $4;',[true, body.comment, objUser.sfid, body.assetRequisitionFormId])
+              .query('UPDATE salesforce.Asset_Requisition_Form__c SET isSentForAccountsApprovalFromHeroku__c = $1 ,Heroku_Accounts_Approval_Comment__c =$2, Submitted_By_Heroku_User__c = $3 WHERE sfid= $4;',[sendAccountsApproval, body.comment, objUser.sfid, body.assetRequisitionFormId])
               .then((requisitionQueryResult) =>{
                   console.log('requisitionQueryResult  : '+JSON.stringify(requisitionQueryResult));
                   response.send('Accounts Approval Sent Successfully !');
