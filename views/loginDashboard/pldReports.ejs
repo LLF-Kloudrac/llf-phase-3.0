@@ -201,7 +201,7 @@
                                 htmlResponsesTable += '<td></td>';
                                 if(eachRecord.status__c != null && eachRecord.status__c != 'Pending' )
                                 {
-                                  htmlResponsesTable += '<td><a class="btn btn-primary " href="https://llfdev1-llf1.cs74.force.com/responsepdf?Id='+eachRecord.sfid+'" target="_blank" style="color:white;"  >Preview</a> </td>';
+                                  htmlResponsesTable += '<td><a class="btn btn-primary " href="https://learninglinksfoundationdonor.secure.force.com/responsepdf?Id='+eachRecord.sfid+'" target="_blank" style="color:white;"  >Preview</a> </td>';
                                   htmlResponsesTable += '<td><button class="btn btn-danger deleteResponse" id="'+eachRecord.sfid+'" >Delete</a> </td>';
                                 }
   
@@ -228,12 +228,12 @@
                             event.stopImmediatePropagation();
                             event.stopPropagation();
                             
-                         //   let reponseId = this.id;
-                            alert('Hello I am clicked '+reponseId);
+                            let reponseId = this.id;
+                          //  alert('Hello I am clicked '+reponseId);
   
                             $.post('/users/deletePldResponse',{reponseId : reponseId},function(response){
                                   console.log('reponse '+response);
-                                //  alert(response);
+                                  alert(response);
                             }).fail((error) => {
                                   console.log('Error');
                             })
@@ -378,7 +378,7 @@
         }
         else
         {
-            location.assign('http://llfdev1-llf1.cs74.force.com/PldColumnReport?id='+selectedProjectAndLibraryId);
+            location.assign('https://learninglinksfoundationdonor.secure.force.com/PldColumnReport?id='+selectedProjectAndLibraryId);
         }
 
 

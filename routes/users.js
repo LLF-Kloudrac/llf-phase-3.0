@@ -118,7 +118,7 @@ router.get('/viewResponses',verify,(request,response)=>{
 
   })
   .catch((pldResponseQueryError) => {
-    console.log('pldResponseQueryError : '+pldResponseQueryError.error);
+    console.log('pldResponseQueryError : '+pldResponseQueryError.stack);
     response.send([]);
   });
 
