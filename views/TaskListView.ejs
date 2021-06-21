@@ -496,6 +496,10 @@
                             let activityCode = response.ActivityCodeDetail;
                             //let activityCode = ['Test_activity17/03','test_today','test_activity_code17/03','tetsttst644646'] -->
                             $('#activitycodes').empty();
+                            $('#activitycodes')
+                            .append($("<option></option>")
+                            .attr("value",'')
+                            .text('None'))
                             for(let i=0; i <activityCode.length; i++)
                             {
                                 console.log('activityCode>>>>>>>>>>>',activityCode)
