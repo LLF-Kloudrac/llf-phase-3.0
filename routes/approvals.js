@@ -88,12 +88,19 @@ router.get('/pldFormsApprovalList', verify, (request, response) => {
                 for(let i=0, len = customApprovalResult.rows.length ; i < len ; i++ )
                 {
                     let crDate = new Date(customApprovalResult.rows[i].createddate);
+                    console.log('crDate  : '+crDate);
                     let strDate = crDate.toLocaleString();
+                    console.log('strDate  :'+strDate);
+                    let dateTime = new Date(customApprovalResult.rows[i].createddate);
+                   dateTime.setHours(dateTime.getHours() + 5);
+                   dateTime.setMinutes(dateTime.getMinutes() + 30);
+                  //  dateTime =  dateTime.toLocaleString();
+                  //  console.log('dateTime   : '+dateTime);
                     let obj = {};
                     obj.sequence = (i+1);
                     obj.recordName = '<a href="https://llfdev1-llf1.cs74.force.com/responsepdf?Id='+customApprovalResult.rows[i].expense__c+'" target="_blank"  id="name'+customApprovalResult.rows[i].expense__c+'" class="pldResponseName" >'+customApprovalResult.rows[i].name+'</a>';
                     obj.currentStatus = customApprovalResult.rows[i].status__c;
-                    obj.createdDate = strDate;
+                    obj.createdDate =  dateTime.toLocaleString();
                     obj.approveBtn = '<button class="btn btn-primary approveResponse" id="approve'+customApprovalResult.rows[i].expense__c+'"  >Approve</button>';
                     obj.rejectBtn = '<button class="btn btn-danger rejectResponse" id="reject'+customApprovalResult.rows[i].expense__c+'" >Reject</button>';
                     lstApprovalRecords.push(obj);

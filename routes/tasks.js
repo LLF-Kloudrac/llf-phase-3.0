@@ -36,7 +36,7 @@ router.get('/taskList',(request,response)=>{
         qry =pool
       //  .query('SELECT * FROM salesforce.Milestone1_Task__c WHERE sfid IS NOT NULL');
         .query('SELECT sfid, Task_Stage__c,total_hours__c, Name,Project_Name2__c	,Activity_Code_Name__c,Project_Task_Category_Name__c,CreatedById,CreatedDate,Id,IsDeleted,estimated_expense__c,start_date__c,due_date__c,actual_start_date__c,actual_end_date__c,LastActivityDate,LastModifiedById,LastModifiedDate,LastReferencedDate,LastViewedDate '+
-        'FROM salesforce.Milestone1_Task__c WHERE sfid IS NOT NULL');
+        'FROM salesforce.Milestone1_Task__c WHERE project_task_category_name__c != $1 AND sfid IS NOT NULL',['Timesheets']);
     }
      console.log('qry  =>'+qry)
     //  pool.query(qry,[activityCode])
