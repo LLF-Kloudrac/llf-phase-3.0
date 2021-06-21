@@ -24,8 +24,30 @@ router.get('/TaskListView/:activityId',verify,(request,response)=>{
     response.render('TaskListView',{objUser,vendorId, activityCode:activityId});
 
 })
-router.get('/taskList',(request,response)=>{
-    let qry;
+router.get('/taskList',verify,async(request,response)=>{
+
+    let objUser = request.user; let projectIdParams = [] ; let lstProjectIds = [];
+    await
+    pool.query('select id, sfid,project__c from salesforce.Heroku_Visibility__c where to_contact__c = $1 and hastaskaccess__c = $2', [objUser.sfid, true])
+    .then((result)=>{
+            if(result.rowCount > 0)
+            {
+                let herokuVisibiltyRows = result.rows;
+                for(let k=0 ; k < herokuVisibiltyRows.length ; k++)
+                {
+                    lstProjectIds.push(herokuVisibiltyRows[k].project__c);
+                    projectIdParams.push('$'+(k+1));
+                } 
+            }
+            
+    })
+    .catch((error)=>{
+        console.log('heroku visibility error : '+error.stack);
+    })
+
+    console.log('lstProjectIds  : '+lstProjectIds);
+    console.log('projectIdParams  : '+projectIdParams);
+/*    let qry;
     if(request.query.activityCode){
         console.log('inside iffff', request.query.activityCode)
         let activityCode = request.query.activityCode;
@@ -38,9 +60,17 @@ router.get('/taskList',(request,response)=>{
         .query('SELECT sfid, Task_Stage__c,total_hours__c, Name,Project_Name2__c	,Activity_Code_Name__c,Project_Task_Category_Name__c,CreatedById,CreatedDate,Id,IsDeleted,estimated_expense__c,start_date__c,due_date__c,actual_start_date__c,actual_end_date__c,LastActivityDate,LastModifiedById,LastModifiedDate,LastReferencedDate,LastViewedDate '+
         'FROM salesforce.Milestone1_Task__c WHERE project_task_category_name__c != $1 AND sfid IS NOT NULL',['Timesheets']);
     }
-     console.log('qry  =>'+qry)
-    //  pool.query(qry,[activityCode])
-     qry.then((taskListResult) => {
+     console.log('qry  =>'+qry);  */
+
+    let projectTaskCategoryName = 'Timesheets';
+    let queryTxt = 'SELECT sfid, Task_Stage__c,total_hours__c, Name,Project_Name2__c ,Activity_Code_Name__c,Project_Task_Category_Name__c,CreatedById,CreatedDate,Id,IsDeleted,estimated_expense__c,start_date__c,due_date__c,actual_start_date__c,actual_end_date__c,LastActivityDate,LastModifiedById,LastModifiedDate,LastReferencedDate,LastViewedDate '+
+    'FROM salesforce.Milestone1_Task__c WHERE project_task_category_name__c != \''+projectTaskCategoryName+'\' AND  Project_Name__c IN (' + projectIdParams.join(',') + ')';
+
+     console.log('queryTxt  : '+queryTxt);
+
+     await
+     pool.query(queryTxt,lstProjectIds)
+    .then((taskListResult) => {
          console.log('activityCodeListResult  : '+JSON.stringify(taskListResult.rows));
          if(taskListResult.rowCount>0){
 
@@ -80,6 +110,9 @@ router.get('/taskList',(request,response)=>{
          response.send('Error Occurred !');
      })
 })
+
+
+
 router.get('/getTaskDetails',async(request,response)=>{
     let activityCode=request.query.taskCodeId;
     console.log('activityCode '+activityCode);
