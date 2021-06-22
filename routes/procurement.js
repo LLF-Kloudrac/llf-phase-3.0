@@ -2188,11 +2188,9 @@ router.post('/sendProcurementApproval',verify, (request, response) => {
        }
 });
 
-router.post('/sendProcurementAccountsApproval',verify,async (request, response) => {
+router.post('/sendProcurementAccountsApproval',verify,(request, response) => {
 
     
-
-
 
     let objUser = request.user;
     let body = request.body;
@@ -2201,7 +2199,6 @@ router.post('/sendProcurementAccountsApproval',verify,async (request, response) 
     let sendAccountsApproval = true;
 
 
-    await
     pool
     .query('SELECT id, sfid, isSentForAccountsApprovalFromHeroku__c from salesforce.Asset_Requisition_Form__c where sfid = $1',[body.assetRequisitionFormId])
     .then((assetQueryResult) =>{
@@ -2210,7 +2207,95 @@ router.post('/sendProcurementAccountsApproval',verify,async (request, response) 
         {
                 if(assetQueryResult.rows[0].issentforaccountsapprovalfromheroku__c)
                 {
-                        response.send('Account approval sent already !');
+                        response.send('Accounts approval sent already !');
+                        return;
+                }
+                else
+                {
+                    console.log('comment'+comment);
+                    let selectqry ='SELECT asset.id, asset.sfid as sfid,asset.name as name ,asset.Requested_Closure_Plan_Date__c,asset.Project_Department__c, '+
+                    'asset.Manager_Approval__c,asset.Management_Approval__c,asset.Procurement_Committee_Approval__c,asset.Chairperson_Approval__c,'+
+                    'asset.Accounts_Approval__c,asset.Procurement_Head_Approval__c,'+
+                    'asset.Number_Of_IT_Product__c,asset.Number_Of_Non_IT_Product__c,asset.Procurement_IT_total_amount__c,asset.Procurement_Non_IT_total_amount__c, asset.Total_amount__c,proj.name as projname,proj.sfid as profsfid, '+
+                    'asset.Management_Approval_Activity_Code__c,asset.Management_Approval_for_fortnight_limit__c, '+
+                    'asset.Management_Approval_less_than_3_quotes__c,asset.Procurement_Comt_Approval_for_fortnight__c, '+
+                     'asset.P_O_attachment__c,po_attachment_url__c,payment_status__c,asset.status__c,asset.payment_received_acknowledgement__c,asset.receiver_name__c,asset.received_quantity_goods__c,asset.date_of_receiving_goods__c '+
+                    'FROM  salesforce.Asset_Requisition_Form__c asset '+
+                     'INNER JOIN salesforce.Milestone1_Project__c proj '+
+                     'ON asset.Project_Department__c =  proj.sfid '+
+                      'WHERE asset.sfid = $1';
+                      console.log(selectqry);
+                
+                      pool.query(selectqry,[body.assetRequisitionFormId])
+                      .then((result)=>{
+                          console.log('result '+JSON.stringify(result.rows));
+                          let eachRequisitionForm=result.rows[0];
+                          if((eachRequisitionForm.manager_approval__c == null) &&
+                              (eachRequisitionForm.procurement_head_approval__c == null) &&
+                              (eachRequisitionForm.procurement_committee_approval__c == null) &&
+                              (eachRequisitionForm.procurement_comt_approval_for_fortnight__c == null)  &&
+                              (eachRequisitionForm.management_approval__c == null)  &&
+                              (eachRequisitionForm.chairperson_approval__c == null) &&
+                              (eachRequisitionForm.management_approval_less_than_3_quotes__c == null ) &&
+                              (eachRequisitionForm.management_approval_for_fortnight_limit__c == null) &&
+                              (eachRequisitionForm.management_approval_activity_code__c == null )
+                          ){
+                              console.log('All Approval fields are null');
+                              response.send('Please send the record for 1st approval stage , then only it can be send for Accounts Approval.');
+                          }
+                          else if((eachRequisitionForm.manager_approval__c == 'Pending') ||
+                          ( eachRequisitionForm.procurement_head_approval__c == 'Pending') ||
+                          ( eachRequisitionForm.procurement_committee_approval__c == 'Pending') ||
+                          ( eachRequisitionForm.procurement_comt_approval_for_fortnight__c == 'Pending') ||
+                          ( eachRequisitionForm.management_approval__c == 'Pending') ||
+                          ( eachRequisitionForm.chairperson_approval__c == 'Pending') ||
+                          ( eachRequisitionForm.management_approval_less_than_3_quotes__c == 'Pending') ||
+                          ( eachRequisitionForm.management_approval_for_fortnight_limit__c == 'Pending') ||
+                          (  eachRequisitionForm.management_approval_activity_code__c == 'Pending')
+                          )
+                          {
+                              console.log('One of the fields are in pending state');
+                              response.send('You cannot send for accounts approval until there is a pending status !');
+                          }
+                          else{
+                              console.log('READY FOR SEND Accout APPROVAL');
+                              const schema=joi.object({
+                                comment:joi.string().required().label('Please Fill Comment'),
+                            })
+                        
+                           let result=schema.validate({comment});
+                           if(result.error){
+                            console.log('fd'+result.error);
+                            response.send(result.error.details[0].context.label);    
+                             }
+                             else{
+                
+                              pool
+                              .query('UPDATE salesforce.Asset_Requisition_Form__c SET isSentForAccountsApprovalFromHeroku__c = $1 ,Heroku_Accounts_Approval_Comment__c =$2, Submitted_By_Heroku_User__c = $3 WHERE sfid= $4;',[sendAccountsApproval, body.comment, objUser.sfid, body.assetRequisitionFormId])
+                              .then((requisitionQueryResult) =>{
+                                  console.log('requisitionQueryResult  : '+JSON.stringify(requisitionQueryResult));
+                                  response.send('Accounts Approval Sent Successfully !');
+                              })
+                              .catch((error)=>{
+                                  console.log('error '+JSON.stringify(error.stack));
+                                  response.send(error);
+                            })
+                          }
+                        }
+                      })
+                
+                  /*  pool
+                    .query('UPDATE salesforce.Asset_Requisition_Form__c SET isSentForApprovalFromHeroku__c = $1 ,Heroku_Approval_Comment__c =$2 WHERE sfid= $3;',[true, body.comment, body.assetRequisitionFormId])
+                    .then((requisitionQueryResult) =>{
+                        console.log('requisitionQueryResult  : '+JSON.stringify(requisitionQueryResult));
+                        response.send('Accounts Approval Sent Successfully !');
+                    })
+                    */
+                    .catch((requisitionQueryError) =>{
+                        console.log('requisitionQueryError   '+requisitionQueryError);
+                        response.send('Error occured while sending approval !');
+                    }) 
+
                 }
         }
     })
@@ -2219,90 +2304,7 @@ router.post('/sendProcurementAccountsApproval',verify,async (request, response) 
         response.send('Error occured while sending approval !');
     })
     
-    console.log('comment'+comment);
-    let selectqry ='SELECT asset.id, asset.sfid as sfid,asset.name as name ,asset.Requested_Closure_Plan_Date__c,asset.Project_Department__c, '+
-    'asset.Manager_Approval__c,asset.Management_Approval__c,asset.Procurement_Committee_Approval__c,asset.Chairperson_Approval__c,'+
-    'asset.Accounts_Approval__c,asset.Procurement_Head_Approval__c,'+
-    'asset.Number_Of_IT_Product__c,asset.Number_Of_Non_IT_Product__c,asset.Procurement_IT_total_amount__c,asset.Procurement_Non_IT_total_amount__c, asset.Total_amount__c,proj.name as projname,proj.sfid as profsfid, '+
-    'asset.Management_Approval_Activity_Code__c,asset.Management_Approval_for_fortnight_limit__c, '+
-    'asset.Management_Approval_less_than_3_quotes__c,asset.Procurement_Comt_Approval_for_fortnight__c, '+
-     'asset.P_O_attachment__c,po_attachment_url__c,payment_status__c,asset.status__c,asset.payment_received_acknowledgement__c,asset.receiver_name__c,asset.received_quantity_goods__c,asset.date_of_receiving_goods__c '+
-    'FROM  salesforce.Asset_Requisition_Form__c asset '+
-     'INNER JOIN salesforce.Milestone1_Project__c proj '+
-     'ON asset.Project_Department__c =  proj.sfid '+
-      'WHERE asset.sfid = $1';
-      console.log(selectqry);
-
-    await
-      pool.query(selectqry,[body.assetRequisitionFormId])
-      .then((result)=>{
-          console.log('result '+JSON.stringify(result.rows));
-          let eachRequisitionForm=result.rows[0];
-          if((eachRequisitionForm.manager_approval__c == null) &&
-              (eachRequisitionForm.procurement_head_approval__c == null) &&
-              (eachRequisitionForm.procurement_committee_approval__c == null) &&
-              (eachRequisitionForm.procurement_comt_approval_for_fortnight__c == null)  &&
-              (eachRequisitionForm.management_approval__c == null)  &&
-              (eachRequisitionForm.chairperson_approval__c == null) &&
-              (eachRequisitionForm.management_approval_less_than_3_quotes__c == null ) &&
-              (eachRequisitionForm.management_approval_for_fortnight_limit__c == null) &&
-              (eachRequisitionForm.management_approval_activity_code__c == null )
-          ){
-              console.log('All Approval fields are null');
-              response.send('Please send the record for 1st approval stage , then only it can be send for Accounts Approval.');
-          }
-          else if((eachRequisitionForm.manager_approval__c == 'Pending') ||
-          ( eachRequisitionForm.procurement_head_approval__c == 'Pending') ||
-          ( eachRequisitionForm.procurement_committee_approval__c == 'Pending') ||
-          ( eachRequisitionForm.procurement_comt_approval_for_fortnight__c == 'Pending') ||
-          ( eachRequisitionForm.management_approval__c == 'Pending') ||
-          ( eachRequisitionForm.chairperson_approval__c == 'Pending') ||
-          ( eachRequisitionForm.management_approval_less_than_3_quotes__c == 'Pending') ||
-          ( eachRequisitionForm.management_approval_for_fortnight_limit__c == 'Pending') ||
-          (  eachRequisitionForm.management_approval_activity_code__c == 'Pending')
-          )
-          {
-              console.log('One of the fields are in pending state');
-              response.send('You cannot send for accounts approval until there is a pending status !');
-          }
-          else{
-              console.log('READY FOR SEND Accout APPROVAL');
-              const schema=joi.object({
-                comment:joi.string().required().label('Please Fill Comment'),
-            })
-        
-           let result=schema.validate({comment});
-           if(result.error){
-            console.log('fd'+result.error);
-            response.send(result.error.details[0].context.label);    
-             }
-             else{
-
-              pool
-              .query('UPDATE salesforce.Asset_Requisition_Form__c SET isSentForAccountsApprovalFromHeroku__c = $1 ,Heroku_Accounts_Approval_Comment__c =$2, Submitted_By_Heroku_User__c = $3 WHERE sfid= $4;',[sendAccountsApproval, body.comment, objUser.sfid, body.assetRequisitionFormId])
-              .then((requisitionQueryResult) =>{
-                  console.log('requisitionQueryResult  : '+JSON.stringify(requisitionQueryResult));
-                  response.send('Accounts Approval Sent Successfully !');
-              })
-              .catch((error)=>{
-                  console.log('error '+JSON.stringify(error.stack));
-                  response.send(error);
-            })
-          }
-        }
-      })
-
-  /*  pool
-    .query('UPDATE salesforce.Asset_Requisition_Form__c SET isSentForApprovalFromHeroku__c = $1 ,Heroku_Approval_Comment__c =$2 WHERE sfid= $3;',[true, body.comment, body.assetRequisitionFormId])
-    .then((requisitionQueryResult) =>{
-        console.log('requisitionQueryResult  : '+JSON.stringify(requisitionQueryResult));
-        response.send('Accounts Approval Sent Successfully !');
-    })
-    */
-    .catch((requisitionQueryError) =>{
-        console.log('requisitionQueryError   '+requisitionQueryError);
-        response.send('Error occured while sending approval !');
-    }) 
+   
 
     
 });
