@@ -1039,7 +1039,7 @@ router.post('/itProducts', (request,response) => {
             }
             else{
                // if(itFormResult.quoteNum<3 &&(itFormResult.justification==null || itFormResult.justification=="" || itFormResult.justification==' ')){
-                  if(itFormResult.quoteNum<3 && itFormResult.justification.length < 3 ){
+                  if(itFormResult.quoteNum<3 && itFormResult.justification.length < 2 ){
                        response.send('Please enter Justification because quote count is not equal to 3.');     
                  }
                  else{
@@ -2188,12 +2188,37 @@ router.post('/sendProcurementApproval',verify, (request, response) => {
        }
 });
 
-router.post('/sendProcurementAccountsApproval',verify,(request, response) => {
+router.post('/sendProcurementAccountsApproval',verify,async (request, response) => {
+
+    
+
+
+
     let objUser = request.user;
     let body = request.body;
     console.log('body  : '+JSON.stringify(body));
     let comment = body.comment;
     let sendAccountsApproval = true;
+
+
+    await
+    pool
+    .query('SELECT id, sfid, isSentForAccountsApprovalFromHeroku__c from salesforce.Asset_Requisition_Form__c where sfid = $1',[body.assetRequisitionFormId])
+    .then((assetQueryResult) =>{
+        console.log('assetQueryResult.rows  '+JSON.stringify(assetQueryResult.rows));
+        if(assetQueryResult.rowCount > 0)
+        {
+                if(assetQueryResult.rows[0].issentforaccountsapprovalfromheroku__c)
+                {
+                        response.send('Account approval sent already !');
+                }
+        }
+    })
+    .catch((assetQueryError)=>{
+        console.log('assetQueryError  : '+assetQueryError.stack);
+        response.send('Error occured while sending approval !');
+    })
+    
     console.log('comment'+comment);
     let selectqry ='SELECT asset.id, asset.sfid as sfid,asset.name as name ,asset.Requested_Closure_Plan_Date__c,asset.Project_Department__c, '+
     'asset.Manager_Approval__c,asset.Management_Approval__c,asset.Procurement_Committee_Approval__c,asset.Chairperson_Approval__c,'+
@@ -2207,6 +2232,8 @@ router.post('/sendProcurementAccountsApproval',verify,(request, response) => {
      'ON asset.Project_Department__c =  proj.sfid '+
       'WHERE asset.sfid = $1';
       console.log(selectqry);
+
+    await
       pool.query(selectqry,[body.assetRequisitionFormId])
       .then((result)=>{
           console.log('result '+JSON.stringify(result.rows));
