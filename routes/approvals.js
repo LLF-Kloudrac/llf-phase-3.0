@@ -134,23 +134,45 @@ router.post('/pldApprovalFeedback',verify, (request,response) => {
         statusToSet = 'Rejected';
     }
     console.log('statusToSet  : '+statusToSet);
-    
-    let updateQueryText = 'UPDATE salesforce.Custom_Approval__c SET  '+
+
+
+
+    pool.query('UPDATE salesforce.Project_Survey_Response__c SET Approval_Status__c = $1 WHERE sfid = $2',[statusToSet,body.responseId])
+    .then((responseUpdateQuery) => {
+            if(responseUpdateQuery.rowCount > 0)
+            {
+                let updateQueryText = 'UPDATE salesforce.Custom_Approval__c SET  '+
                           'status__c = \''+statusToSet+'\' '+
                           'WHERE Assign_To__c = $1 AND Approval_Type__c = $2 AND expense__c = $3 ';
 
-    console.log('updateQueryText  : '+updateQueryText);
-    console.log('objUser.Id  :  '+objUser.Id+' body.responseId  : '+body.responseId);
-    pool
-    .query(updateQueryText,[objUser.sfid, 'PldForm', body.responseId])
-    .then((approvalFeedbackResult) => {
-            console.log('approvalFeedbackResult  '+JSON.stringify(approvalFeedbackResult));
-            response.send('Success');
+                console.log('updateQueryText  : '+updateQueryText);
+                console.log('objUser.Id  :  '+objUser.Id+' body.responseId  : '+body.responseId);
+                pool
+                .query(updateQueryText,[objUser.sfid, 'PldForm', body.responseId])
+                .then((approvalFeedbackResult) => {
+                        console.log('approvalFeedbackResult  '+JSON.stringify(approvalFeedbackResult));
+                        response.send('Success');
+                })
+                .catch((approvalFeedbackError) => {
+                    console.log('approvalFeedbackError  '+approvalFeedbackError.stack);
+                    response.send('Error');
+                })
+            }
+            else
+            {
+                response.send('Error');
+            }
+
     })
-    .catch((approvalFeedbackError) => {
+    .catch((responseUpdateQueryError) => {
         console.log('approvalFeedbackError  '+approvalFeedbackError.stack);
         response.send('Error');
     })
+            
+                    
+
+    
+    
  
 });
 
