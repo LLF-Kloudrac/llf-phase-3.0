@@ -1827,7 +1827,7 @@ router.post('/sendResponseForApproval',verify, (request, response) => {
                    if(responseStatusQuery.rowCount > 0)
                    {
                         console.log('responseStatusQuery.rows  : '+JSON.stringify(responseStatusQuery.rows));
-                        if(responseStatusQuery.rows[0].approval_status__c == 'Pending')
+                        if(responseStatusQuery.rows[0].approval_status__c == 'Pending' || responseStatusQuery.rows[0].approval_status__c == 'Approved' || responseStatusQuery.rows[0].approval_status__c == 'Rejected')
                         {
                           response.send('Approval already sent !');
                           return;
