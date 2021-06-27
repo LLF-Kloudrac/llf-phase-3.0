@@ -79,7 +79,7 @@ router.get('/pldFormApprovals',verify, (request, response) => {
 router.get('/pldFormsApprovalList', verify, (request, response) => {
     let objUser = request.user;
 
-    pool.query('SELECT app.Submitter_Heroku__c, app.status__c, app.createddate, app.record_name__c, app.expense__c, pldresp.name FROM salesforce.Custom_Approval__c as app INNER JOIN salesforce.Project_Survey_Response__c as pldresp ON app.expense__c = pldresp.sfid WHERE Approval_Type__c = $1 AND Assign_To__c = $2 ',['PldForm', objUser.sfid])
+    pool.query('SELECT app.Submitter_Heroku__c, app.status__c, app.createddate, pldresp.createddate, app.record_name__c, app.expense__c, pldresp.name FROM salesforce.Custom_Approval__c as app INNER JOIN salesforce.Project_Survey_Response__c as pldresp ON app.expense__c = pldresp.sfid WHERE Approval_Type__c = $1 AND Assign_To__c = $2 ',['PldForm', objUser.sfid])
     .then((customApprovalResult) => {
             console.log('customApprovalResult  : '+JSON.stringify(customApprovalResult.rows));
             if(customApprovalResult.rowCount > 0)
