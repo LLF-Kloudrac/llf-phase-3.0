@@ -1,0 +1,825 @@
+<% include ./partials/navbar %>
+    <% include ./partials/footer %>
+        <% include ./partials/messages %>
+            <link rel="stylesheet" href="/stylesheets/table-sortable.css">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <script src="/scripts/table-sortable.js"></script>
+            <link rel="stylesheet"
+                href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+            <h3 style="text-align: center; margin-top: 20px;">Activity Code List</h3>
+            <div id="deleteErrorMessages" style="width: max-content;margin-left: 544px;"></div>
+            <div class="container">
+                <div class="row mt-5 mb-3 align-items-center">
+                    <div class="col-md-5">
+                        <!-- <a class="btn btn-primary btn-md bg-gray" href="/procurement/createvendor" target="_blank" id="createNewVendor">Create New</a> -->
+                        <button id="activityCodeCreateModal" class="btn btn-primary createActivityCode" >Create New</button>
+                        <button class="btn btn-primary" id="deleteActivityCodeButton">Delete</button>
+                        <a href="/activityCodes/getActivityCodesListView" style="color: #555;" id="ref"><i
+                                class="fa fa-refresh" style="font-size:34px; margin-left: 10px; margin-top: 30px;"></i>
+                        </a>
+                    <!-- <a class="btn btn-primary btn-md bg-gray" href="/procurement/createvendor" target="_blank" id="createNewVendor">Create New</a> -->
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" placeholder="Search by Activity Code" id="searchField"
+                            style="margin-top: 5px;">
+                    </div>
+                    <div class="col-md-2 text-right">
+                        <span class="pr-2">Rows Per Page:</span>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="d-flex justify-content-end">
+                            <select class="custom-select" name="rowsPerPage" id="changeRows">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="15" selected>15</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="activityListViewTable" class="responsive ">
+                    
+                </div>
+
+            </div>
+
+            <!-- Start of Create modal -->
+
+            <div id="createActivityCodeModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
+                aria-labelledby="myLargeModalLabel">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="createTaskModal">Create New ActivityCode</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="">
+                                <div id="errorMessages"></div>
+                                <form id="createActivityCode" class="needs-validation" novalidate>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="name"> Activity Code<span style="color: red;">*</span></label>
+                                                <input type="text" class="form-control" id="name"
+                                                    value="" name="name" maxlength="80" onkeypress="return AvoidSpace(event)">
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="activityCodeName">Activity Code Name </label>
+                                                <input type="text" class="form-control" id="activityCodeName" value="" name="activityCodeName" maxlength="255" onkeypress="return AvoidSpace(event)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+
+                                            <div class="col-md-6">
+                                                <label for="projectDropdown">Project <span style="color: red;">*</span></label>
+                                                <select id="projectDropdown" name="projectDropdown"
+                                                    class="form-control item_unit">
+                                                    <option value="">Select</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="expenseHeadDropdown"> Expense Head Category <span style="color: red;">*</span></label>
+                                                <select id="expenseHeadDropdown" name="expenseHeadDropdown"
+                                                    class="form-control item_unit">
+                                                    <option value="">Select</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="description">Description </label>
+                                                <input type="text" class="form-control" id="description" value="" name="description" maxlength="255" onkeypress="return AvoidSpace(event)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary"
+                                            id="createActivityCodeButton">Save</button>
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--activitycode create modal finished-->
+
+            <!-- activityCode edit Modal  modal -->
+            <div id="activityCodedEditModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
+                aria-labelledby="myLargeModalLabel">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="createTaskModal">Activity Code Edit Form</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="">
+                                <div id="errorMessages"></div>
+                                <form id="editActivityCode" class="needs-validation" novalidate>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="name"> Activity Code<span style="color: red;">*</span></label>
+                                                <input type="text" class="form-control" id="name"
+                                                    value="" name="name" maxlength="80" onkeypress="return AvoidSpace(event)">
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="activityCodeName">Activity Code Name </label>
+                                                <input type="text" class="form-control" id="activityCodeName" value="" name="activityCodeName" maxlength="255" onkeypress="return AvoidSpace(event)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+
+                                            <div class="col-md-6">
+                                                <label for="project">Project </label>
+                                                <input type="text" disabled class="form-control" id="project" value="" name="project">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="expenseHead"> Expense Head Category </label>
+                                                <select id="expenseHead" name="expenseHead"
+                                                    class="form-control item_unit">
+                                                    <option value="">Select</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="description">Description </label>
+                                                <input type="text" class="form-control" id="description" value="" name="description" maxlength="255" onkeypress="return AvoidSpace(event)">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="actualexpenseonsalesforce">Actual Expense On Salesforce </label>
+                                                <input type="text" disabled class="form-control" id="actualexpenseonsalesforce" value="" name="actualexpenseonsalesforce">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="actualexpensefromtally">Actual Expense from Tally </label>
+                                                <input type="text" disabled class="form-control" id="actualexpensefromtally" value="" name="actualexpensefromtally">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="estimatedexpensefromtasks">Estimated Expense from Tasks </label>
+                                                <input type="text" disabled class="form-control" id="estimatedexpensefromtasks" value="" name="estimatedexpensefromtasks">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="estimatedexpensefromtasks">Actual Expense from Procurement </label>
+                                                <input type="text" disabled class="form-control" id="actualexpensefromprocurement" value="" name="actualexpensefromprocurement">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="estimatedexpensefromtasks">Estimated Expenditure till Current Date </label>
+                                                <input type="text" disabled class="form-control" id="estimatedexpendituretillcurrentdate" value="" name="estimatedexpendituretillcurrentdate">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="estimatedexpensefromtasks">Actual Utilization for Planned till Date </label>
+                                                <input type="text" disabled class="form-control" id="grantutlization" value="" name="grantutlization">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="estimatedexpensefromtasks">Actual Hours From Tasks </label>
+                                                <input type="text" disabled class="form-control" id="actualhoursfromtasks" value="" name="actualhoursfromtasks">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="estimatedexpensefromtasks">Approved Annual Budget </label>
+                                                <input type="text" disabled class="form-control" id="plannedannualbudget" value="" name="plannedannualbudget">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="estimatedexpensefromtasks">Actual Utilization Against Annual Budget </label>
+                                                <input type="text" disabled class="form-control" id="actualutilizationagainstannualbudget" value="" name="actualutilizationagainstannualbudget">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="estimatedexpensefromtasks">Actual Expense on Tally Date </label>
+                                                <input type="date" disabled class="form-control" id="tallyDate" value=""   name="tallyDate" >
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="fo
+                                    rm-group">
+                                        <div class="row">
+
+                                            <div class="col-md-6">
+                                                <input type="hidden" class="form-control" id="hide" value=""
+                                                    name="hide">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary"
+                                            id="editActivityCodeButton">Save</button>
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- End of Edit modal -->
+
+
+            <!-- Modal Popup For ActivityCodeList Detail & Their Related data -->
+
+            <div class="modal fade" id="popup">
+
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"> Activity Code Details</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <nav>
+                                        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab"
+                                                href="#nav-home" role="tab" aria-controls="nav-home"
+                                                aria-selected="true">Details</a>
+                                        <!--    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab"
+                                                href="#nav-profile" role="tab" aria-controls="nav-profile"
+                                                aria-selected="false">Related</a>  -->
+                                        </div>
+                                    </nav>
+                                    <div class="tab-content" id="nav-tabContent">
+                                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel"
+                                            aria-labelledby="nav-home-tab">
+
+                                            <div class="table-responsive">
+                                                <table id="activityCodeDetail" class="table table-hover striped">
+                                                    <!-- Inside code is handled by Jquery to add dyanamic Content -->
+                                                </table>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="tab-pane fade" id="nav-profile" role="tabpanel"
+                                            aria-labelledby="nav-profile-tab">
+                                            <div class="accordion" id="accordionExample">
+
+                                                <div class="card">
+                                                    <div class="card-header" id="headingOne">
+                                                        <h5 class="mb-0">
+                                                            <button class="btn btn-link text-left"
+                                                                type="pettyCashButton" data-toggle="collapse"
+                                                                data-target="#collapseOne" aria-expanded="true"
+                                                                aria-controls="collapseOne">
+                                                                <i class="fa fa-angle-double-right mr-3"></i>Tasks
+                                                            </button>
+                                                        </h5>
+                                                    </div>
+
+                                                    <div id="collapseOne" class="collapse show fade"
+                                                        aria-labelledby="headingOne" data-parent="#accordionExample">
+                                                        <div class="card-body">
+                                                            <table id="TaskDescriptionTable"
+                                                                class="table table-hover striped">
+
+                                                            </table>
+                                                            <!-- Feedback table code -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                $(document).ready(function () {
+                    let columns = {
+                        sequence: 'Sequence',
+                        selectAction: 'Delete',
+                        editAction: 'Action',
+                        name: ' Activity Code',
+                        activityCodeName: 'Activity Code Name',
+                       // project: 'Project',
+                       // expenseHead: ' Expense Head Category',
+                        actualExpenseFromTally: 'Actual Expense from Tally',
+                        planned_annual_budget__c: 'Approved Annual Budget',
+                        estimated_expense_from_tasks: 'Estimated Expense from Tasks',
+                        createdDate: 'Created Date',
+                    }
+                    var table = $('#activityListViewTable').tableSortable({
+                        data: [],
+                        columns,
+                        searchField: '#searchField',
+                        sorting: true,
+                        rowsPerPage: 15,
+                        pagination: true,
+                        sorting: ['sequence', 'createdDate'],
+                        tableWillMount: () => {
+                            console.log('table will mount')
+
+                        },
+                        tableDidMount: () => {
+                            console.log('table did mount');
+
+                            $('#spinner').hide();
+                        },
+                        tableWillUpdate: () => {
+                            console.log('table will update')
+                            //  table.refresh();
+                            // onLoadTask();
+                        },
+                        tableDidUpdate: () => {
+                            console.log('table did update');
+                            anchorClickFunctionalities();
+                            additionalEditFunctionality();
+
+                        },
+                        tableWillUnmount: () => console.log('table will unmount'),
+                        tableDidUnmount: () => console.log('table did unmount'),
+                        onPaginationChange: function (nextPage, setPage) {
+                            setPage(nextPage);
+                        },
+
+                    });
+                    $('#changeRows').on('change', function () {
+                        table.updateRowsPerPage(parseInt($(this).val()));
+                    })
+
+                    $('#refresh').click(function () {
+                        table.refresh(true);
+                        onLoadTask();
+                    })
+                    $.ajax({
+                        url: '/activityCodes/activityCodesList',
+                        type: 'get',
+                        dataType: 'json'
+                    })
+                        .done((response) => {
+                            console.log('response it : ' + JSON.stringify(response));
+                            table.setData(response, columns);
+                            anchorClickFunctionalities();
+                        })
+                        .fail((jqXHR, status, error) => {
+                            console.log('jqXHR  : ' + JSON.stringify(jqXHR));
+                            console.log('error  : ' + error);
+                        })
+                })
+                var vendorIDS;
+                function AvoidSpace(event) {
+                    var k = event ? event.which : window.event.keyCode;
+                    if (k == 32 && event.target.selectionStart === 0) return false;
+                }
+                function anchorClickFunctionalities() {
+                    $('a.ActivityTag').on('click', function (event) {
+                        event.stopImmediatePropagation();
+                        event.stopPropagation();
+                        vendorIDS = this.id;
+                        let vendorId = this.id;
+                        //  alert('vendorTag=>'+vendorId);
+                        $("#popup").modal("show");
+                        $.ajax({
+                            type: 'GET',
+                            url: '/activityCodes/getactivityCodeDetails',
+                            data: {
+                                'activityCodeId': vendorId
+                            },
+                            dataType: 'json'
+                        })
+                            .done((data) => {
+                                let recordData = data[0];
+                                console.log('DATA DEtails=>' + JSON.stringify(data.ActivityCodeDetail));
+                                let record = data.ActivityCodeDetail;
+                                console.log('DATA record=>' + JSON.stringify(record));
+                                if (data.ActivityCodeDetail.length > 0) {
+                                    console.log('Inside ActivityCode Details');
+                                    let ActivityCodeDetailRow = '';
+                                    data.ActivityCodeDetail.forEach((eachRecord) => {
+                                        ActivityCodeDetailRow += '<tr>';
+                                        //ActivityCodeDetailRow += '<td colspan="4" style="background-color:#d3d3d3;"><h5>Activity Code Metrics</h5></td>';
+                                        ActivityCodeDetailRow += '</tr>';
+
+                                        ActivityCodeDetailRow += '<tr>';
+                                        ActivityCodeDetailRow += '<td><strong> Activity Code<span style="color: red;">*</span><strong></td>';
+                                        ActivityCodeDetailRow += '<td>' + eachRecord.name + '</td>';
+                                        ActivityCodeDetailRow += '<td><strong>Activity Code Name<strong></td>';
+                                        ActivityCodeDetailRow += '<td>' + eachRecord.activity_code_name__c + '</td>';
+                                        ActivityCodeDetailRow += '</tr>';
+
+                                        ActivityCodeDetailRow += '<tr>';
+                                        ActivityCodeDetailRow += '<td><strong>Project<strong></td>';
+                                        ActivityCodeDetailRow += '<td>' + eachRecord.project_name__c + '</td>';
+                                        ActivityCodeDetailRow += '<td><strong> Expense Head Category<strong></td>';
+                                        ActivityCodeDetailRow += '<td>' + eachRecord.expense_head_category__c + '</td>';
+                                        ActivityCodeDetailRow += '</tr>';
+                                        ActivityCodeDetailRow += '<tr>';
+
+                                        ActivityCodeDetailRow += '<tr>';
+                                        ActivityCodeDetailRow += '<td><strong>Description<strong></td>';
+                                        ActivityCodeDetailRow += '<td width="200">' + eachRecord.description__c + '</td>';
+                                        ActivityCodeDetailRow += '<td><strong>Actual Expense On Salesforce<strong></td>';
+                                        ActivityCodeDetailRow += '<td>' + eachRecord.actual_expense_on_salesforce__c + '</td>';
+                                        ActivityCodeDetailRow += '</tr>';
+                                        
+                                        ActivityCodeDetailRow += '<tr>';
+                                        ActivityCodeDetailRow += '<td><strong>Actual Expense from Tally<strong></td>';
+                                        var actual_expense_from_tally = eachRecord.actual_expense_from_tally__c !=null ? eachRecord.actual_expense_from_tally__c.toFixed(2): eachRecord.actual_expense_from_tally__c;    
+                                        ActivityCodeDetailRow += '<td>' + actual_expense_from_tally + '</td>';
+                                        ActivityCodeDetailRow += '<td><strong>Estimated Expense from Tasks<strong></td>';
+                                        var estimated_expense_from_tasks= eachRecord.estimated_expense_from_tasks__c!=null ? eachRecord.estimated_expense_from_tasks__c.toFixed(2): eachRecord.estimated_expense_from_tasks__c;
+                                        ActivityCodeDetailRow += '<td>' + estimated_expense_from_tasks + '</td>';
+                                        ActivityCodeDetailRow += '</tr>';
+                                        //ActivityCodeDetailRow += '</tr>';
+
+                                        ActivityCodeDetailRow += '<tr>';
+                                        var actual_expense_from_procurement = eachRecord.actual_expense_from_procurement__c !=null ? eachRecord.actual_expense_from_procurement__c.toFixed(2): eachRecord.actual_expense_from_procurement__c;
+                                        ActivityCodeDetailRow += '<td><strong>Actual Expense from Procurement<strong></td>';
+                                        ActivityCodeDetailRow += '<td>' + actual_expense_from_procurement + '</td>';
+                                        ActivityCodeDetailRow += '<td><strong>Estimated Expenditure till Current Date<strong></td>';
+                                        ActivityCodeDetailRow += '<td>' + eachRecord.estimated_expenditure_till_current_date__c + '</td>';
+                                        ActivityCodeDetailRow += '</tr>';
+
+                                        ActivityCodeDetailRow += '<tr>';
+                                        ActivityCodeDetailRow += '<td><strong>Actual Utilization for Planned till Date<strong></td>';
+                                        ActivityCodeDetailRow += '<td>'+ eachRecord.grant_utlization__c +'</td>';
+                                        ActivityCodeDetailRow += '<td><strong>Actual Hours From Tasks<strong></td>';
+                                        var actual_hours = eachRecord.actual_hours_from_tasks__c != null ? eachRecord.actual_hours_from_tasks__c.toFixed(2) : eachRecord.actual_hours_from_tasks__c   
+                                        ActivityCodeDetailRow += '<td>' + actual_hours + '</td>';
+                                        ActivityCodeDetailRow += '</tr>';
+
+                                        ActivityCodeDetailRow += '<tr>';
+                                        ActivityCodeDetailRow += '<td><strong>Approved Annual Budget<strong></td>';
+                                        var planned_annual_budget = eachRecord.planned_annual_budget__c != null ? eachRecord.planned_annual_budget__c.toFixed(2): eachRecord.planned_annual_budget__c;    
+                                        ActivityCodeDetailRow += '<td>' + planned_annual_budget + '</td>';
+                                        ActivityCodeDetailRow += '<td><strong>Actual Utilization Against Annual Budget<strong></td>';
+                                        var actual_utilization_against_annual_budget = eachRecord.actual_utilization_against_annual_budget__c != null ? eachRecord.actual_utilization_against_annual_budget__c+'%': eachRecord.actual_utilization_against_annual_budget__c;
+                                        ActivityCodeDetailRow += '<td>' + actual_utilization_against_annual_budget + '</td>';
+                                        ActivityCodeDetailRow += '</tr>';
+
+                                        ActivityCodeDetailRow += '<tr>';
+                                        ActivityCodeDetailRow += '<td><strong>Actual Expense on Tally Date<strong></td>';
+                                        ActivityCodeDetailRow += '<td>' + eachRecord.actual_expense_on_tally_date__c + '</td>';
+                                        ActivityCodeDetailRow += '</tr>';
+                                        
+                                        $('#activityCodeDetail').html(ActivityCodeDetailRow);
+
+                                    })
+                                }
+
+                                if (data.task.length > 0) {
+                                    console.log('INSIDE task Description')
+                                    let taskDescription = '';
+                                    taskDescription += '<thead>  <th>Project Task Name</th><th>Status</th><th>Project</th><th>Activity Code</th><th>Project Task Category</th></thead>';
+                                    data.task.forEach((each) => {
+                                        taskDescription
+                                        taskDescription += '<td>' + each.name + '</td>';
+                                        taskDescription += '<td>' + each.task_stage__c + '</td>';
+                                        taskDescription += '<td>' + each.project_name2__c	+ '</td>';
+                                        taskDescription += '<td>' + each.activity_code_name__c + '</td>';
+                                        taskDescription += '<td>' + each.project_task_category_name__c + '</td></tr>';
+                                    })
+                                    taskDescription += '<td colspan="6"><center><a target="_blank" href="/tasks/TaskListView?activityId='+data.task[0].activity_codes__c+'">View All</a></centre></td>';
+
+                                    console.log('iddd' + data.ActivityCodeDetail.sfid);
+                                    $('#TaskDescriptionTable').empty();
+                                    $('#TaskDescriptionTable').append(taskDescription);
+                                }
+                            })
+                            .fail((jqXHR, textStatus, err) => {
+                                console.log('textStatus  : ' + textStatus);
+                            })
+                    })
+                }
+
+                $('a.newVendor').click(() => {
+                    console.log('newVendor anchor tag ');
+                    //var assetId = document.getElementById('assetId').innerHTML;
+                    console.log('vendorIDS  : ' + vendorIDS);
+                    window.open('/procurement/ItemDescription/' + vendorIDS, '_blank');
+                    //location.assign('/procurement/ItemDescription/'+vendorIDS);           
+                })
+                $('a.itemDescTag').click(() => {
+                    console.log('ItemDescription view List anchor tag ');
+                    //var assetId = document.getElementById('assetId').innerHTML;
+                    console.log('vendorIDS  : ' + vendorIDS);
+                    window.open('/procurement/ItemDescription/' + vendorIDS, '_blank');
+                    //  location.assign('/procurement/ItemDescription/'+vendorIDS);           
+                })
+                function additionalEditFunctionality() {
+                    $('.createActivityCode').on('click', function (event) {
+                        let expenseHeadDropdown= ["Content Development",
+                        "Corp. Expenses",
+                        "Events",
+                        "Hardware to Project Team","Misc. Project Implementation Charges",
+                        "Monitoring & Evaluation - Project",
+                        "Office Maintenance",
+                        "Personnel Cost - Project",
+                        "Project Material/Equipments – Beneficiaries",
+                        "Trainings - Beneficiaries",
+                        "Trainings – Internal",
+                        "Travel & Communication"]
+                        console.log('click ene ton create>>>>>>>>>>>>>')
+                        event.stopPropagation();
+                        event.stopImmediatePropagation();
+                            
+                            let strTallyDate = ''
+                        //    alert('vendorEditId modal ID=>'+vendorId);
+                        $('#createActivityCodeModal').modal('show');
+                        $('#expenseHeadDropdown').empty();
+                        for(let i=0; i <expenseHeadDropdown.length; i++)
+                        {
+                            $('#expenseHeadDropdown')
+                            .append($("<option></option>")
+                            .attr("value",expenseHeadDropdown[i])
+                            .text(expenseHeadDropdown[i]))
+                        }
+                        $.ajax({
+                            url: '/activityCodes/getProjects',
+                            type: 'get',
+                            data: {
+                                type: "ActivityCode"
+                            },
+                            dataType: 'json',
+                            beforeSend: function () {
+                                $('#detailLoadingSpinner').show();
+                            }
+                        })
+                            .then((response) => {
+                                console.log('response from Edit Ajax +=' + JSON.stringify(response));
+                                console.log('rtecordDeatail ',response.project);
+                                let project = response.project
+                                $('#projectDropdown').empty();
+                                for(let i=0; i <project.length; i++)
+                                {
+                                    console.log('project[i].project>>>>>>>>>>>>',project)
+                                    $('#projectDropdown')
+                                    .append($("<option></option>")
+                                    .attr("value",project[i].project__c)
+                                    .text(project[i].project_name__c))
+                                }
+                            })
+                            .fail((jqXHR, status, error) => {
+                                $('#detailLoadingSpinner').show();
+                                console.log('jqXHR  : ' + JSON.stringify(jqXHR));
+                                console.log('error  : ' + error);
+                            })
+                    })
+                    $('#createActivityCodeButton').on('click', function (event) {
+
+                        // $('#district').empty();
+
+                        event.preventDefault();
+                        event.stopPropagation();
+                        event.stopImmediatePropagation();
+                        var $inputs = $('#createActivityCode :input');
+                        var values = {};
+                        $inputs.each(function () {
+                            values[this.name] = $(this).val();
+                            console.log('fomvalues=> ' + JSON.stringify(values));
+                        });
+                        console.log('>>>>valuess>>>>. in craeeetet>>>>>>',values)
+                        console.log('fomvalues=> ' + JSON.stringify(values));
+                        
+                        $("#createActivityCodeButton").attr("disabled", true);
+                        $.ajax({
+                            url: '/activityCodes/createActivityCode',
+                            type: 'post',
+                            data: values,
+                        })
+                            .done((data) => {
+                                console.log('data ' + JSON.stringify(data))
+                                let resp = JSON.stringify(data);
+                                console.log('dataaaaa after createtete>>' + resp);
+                                if (data == 'Success') {
+                                    // document.getElementById("taskForm").reset()
+                                    let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">' + resp +
+                                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                                        '<span aria-hidden="true">&times;</span>' +
+                                        '</button>' +
+                                        '</div>';
+                                    $('#errorMessages').empty();
+                                    $('#errorMessages').append(errorHtml);
+                                    $("#createActivityCodeButton").attr("disabled", false);
+                                    //  $("#createTaskModal").modal("hide");
+                                    window.location.reload()
+                                }
+                                else {
+                                    //document.getElementById("taskForm").reset()
+                                    let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' + resp +
+                                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                                        '<span aria-hidden="true">&times;</span>' +
+                                        '</button>' +
+                                        '</div>';
+                                    $('#errorMessages').empty();
+                                    $('#errorMessages').append(errorHtml);
+                                    $("#createActivityCodeButton").attr("disabled", false);
+                                    //  $("#createTaskModal").modal("hide");
+                                    // window.location.reload()
+                                }
+
+                            })
+                            .fail((jqXHR, status, error) => {
+                                console.log('jqXHR  ' + JSON.stringify(jqXHR));
+
+                            })
+                    })
+                    $('.editActivityCode').on('click', function (event) {
+                        event.stopPropagation();
+                        event.stopImmediatePropagation();
+                        $('#district').empty();
+                        let vendorId = this.id;
+                        let expenseHead= ["Content Development",
+                        "Corp. Expenses",
+                        "Events",
+                        "Hardware to Project Team","Misc. Project Implementation Charges",
+                        "Monitoring & Evaluation - Project",
+                        "Office Maintenance",
+                        "Personnel Cost - Project",
+                        "Project Material/Equipments – Beneficiaries",
+                        "Trainings - Beneficiaries",
+                        "Trainings – Internal",
+                        "Travel & Communication"]
+                            
+                            let strTallyDate = ''
+                        //    alert('vendorEditId modal ID=>'+vendorId);
+                        $('#activityCodedEditModal').modal('show');
+                        $.ajax({
+                            url: '/activityCodes/getactivityCodeDetails',
+                            type: 'get',
+                            data: {
+                                activityCodeId: vendorId
+                            },
+                            dataType: 'json',
+                            beforeSend: function () {
+                                $('#detailLoadingSpinner').show();
+                            }
+                        })
+                            .then((response) => {
+                                console.log('response from Edit Ajax +=' + JSON.stringify(response));
+                                console.log('rtecordDeatail ' + response.ActivityCodeDetail[0].name);
+                                document.forms["editActivityCode"]["activityCodeName"].value = response.ActivityCodeDetail[0].activity_code_name__c;
+                                $('#expenseHead').empty();
+                                for(let i=0; i <expenseHead.length; i++)
+                                {
+                                    $('#expenseHead')
+                                    .append($("<option></option>")
+                                    .attr("value",expenseHead[i])
+                                    .text(expenseHead[i]))
+                                }
+                                document.forms["editActivityCode"]["expenseHead"].value = response.ActivityCodeDetail[0].expense_head_category__c;
+                                document.forms["editActivityCode"]["name"].value = response.ActivityCodeDetail[0].name;
+                                document.forms["editActivityCode"]["project"].value = response.ActivityCodeDetail[0].project_name__c;
+                                document.forms["editActivityCode"]["description"].value = response.ActivityCodeDetail[0].description__c;
+                                document.forms["editActivityCode"]["actualexpenseonsalesforce"].value = response.ActivityCodeDetail[0].actual_expense_on_salesforce__c;
+                                document.forms["editActivityCode"]["actualexpensefromtally"].value = response.ActivityCodeDetail[0].actual_expense_from_tally__c!= null ? response.ActivityCodeDetail[0].actual_expense_from_tally__c.toFixed(2): response.ActivityCodeDetail[0].actual_expense_from_tally__c;
+                                document.forms["editActivityCode"]["estimatedexpensefromtasks"].value = response.ActivityCodeDetail[0].estimated_expense_from_tasks__c!=null ? response.ActivityCodeDetail[0].estimated_expense_from_tasks__c.toFixed(2): response.ActivityCodeDetail[0].estimated_expense_from_tasks__c;
+                                document.forms["editActivityCode"]["actualutilizationagainstannualbudget"].value = response.ActivityCodeDetail[0].actual_utilization_against_annual_budget__c != null ? response.ActivityCodeDetail[0].actual_utilization_against_annual_budget__c+'%': response.ActivityCodeDetail[0].actual_utilization_against_annual_budget__c;
+                                document.forms["editActivityCode"]["tallyDate"].value = response.ActivityCodeDetail[0].actual_expense_on_tally_date__c;
+                                document.forms["editActivityCode"]["plannedannualbudget"].value = response.ActivityCodeDetail[0].planned_annual_budget__c !=null ? response.ActivityCodeDetail[0].planned_annual_budget__c.toFixed(2): response.ActivityCodeDetail[0].planned_annual_budget__c;
+                                if(response.ActivityCodeDetail[0].actual_hours_from_tasks__c != null){
+                                    document.forms["editActivityCode"]["actualhoursfromtasks"].value= response.ActivityCodeDetail[0].actual_hours_from_tasks__c.toFixed(2)
+                                }else {
+                                    document.forms["editActivityCode"]["actualhoursfromtasks"].value = response.ActivityCodeDetail[0].actual_hours_from_tasks__c;
+                                }
+                                document.forms["editActivityCode"]["grantutlization"].value = response.ActivityCodeDetail[0].grant_utlization__c;
+                                document.forms["editActivityCode"]["estimatedexpendituretillcurrentdate"].value = response.ActivityCodeDetail[0].estimated_expenditure_till_current_date__c;
+                                document.forms["editActivityCode"]["actualexpensefromprocurement"].value = response.ActivityCodeDetail[0].actual_expense_from_procurement__c!=null ? response.ActivityCodeDetail[0].actual_expense_from_procurement__c.toFixed(2): response.ActivityCodeDetail[0].actual_expense_from_procurement__c;
+                                
+                                document.forms["editActivityCode"]["hide"].value = response.ActivityCodeDetail[0].sfid;
+                            })
+                            .fail((jqXHR, status, error) => {
+                                $('#detailLoadingSpinner').show();
+                                console.log('jqXHR  : ' + JSON.stringify(jqXHR));
+                                console.log('error  : ' + error);
+                            })
+                    })
+                    $('#deleteActivityCodeButton').on('click', function(event){
+                        event.preventDefault();
+                        event.stopPropagation();
+                        event.stopImmediatePropagation();
+
+
+                        var activityCodeArray = []
+                        var checkboxes = document.querySelectorAll('input[type=checkbox]:checked')
+
+                        for (var i = 0; i < checkboxes.length; i++) {
+                            activityCodeArray.push(checkboxes[i].value)
+                        }
+                        let resp = 'Please choose the records to delete'
+                        if(!activityCodeArray.length>0){
+                            $("#deleteActivityCodeButton").attr("disabled", false);
+                            let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' + resp +
+                                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                                '<span aria-hidden="true">&times;</span>' +
+                                '</button>' +
+                                '</div>';
+                            $('#deleteErrorMessages').empty();
+                            $('#deleteErrorMessages').append(errorHtml);
+                        }else {
+                            if(confirm('Do you want to continue')){
+                                $.ajax({
+                                    url: '/activityCodes/deleteAllActivityCodes',
+                                    type: 'post',
+                                    data:  {
+                                        activityCodeArray
+                                    }
+                                        
+                                }).done((data) => {
+                                        console.log('data ' + JSON.stringify(data))
+                                        if (data == 'Success') {
+                                            $("#deleteActivityCodeButton").attr("disabled", false);
+                                            window.location.reload()
+                                        }
+                                        else {
+        
+                                        }
+        
+                                    })
+                                    .fail((jqXHR, status, error) => {
+                                        console.log('jqXHR  ' + JSON.stringify(jqXHR));
+        
+                                    })
+                            }else {
+
+                            }                        
+                        }
+                    })
+                    $('#editActivityCodeButton').on('click', function (event) {
+
+                        // $('#district').empty();
+
+                        event.preventDefault();
+                        event.stopPropagation();
+                        event.stopImmediatePropagation();
+                        var $inputs = $('#editActivityCode :input');
+                        var values = {};
+                        $inputs.each(function () {
+                            values[this.name] = $(this).val();
+                            console.log('fomvalues=> ' + JSON.stringify(values));
+                        });
+                        console.log('>>>>valuess>>>>.',values)
+                        console.log('fomvalues=> ' + JSON.stringify(values));
+                        $("#editActivityCodeButton").attr("disabled", true);
+                        $.ajax({
+                            url: '/activityCodes/updateActivityCode',
+                            type: 'post',
+                            data: values,
+                        })
+                            .done((data) => {
+                                console.log('data ' + JSON.stringify(data))
+                                let resp = JSON.stringify(data);
+                                console.log('dataaaaa' + resp);
+                                if (data == 'Success') {
+                                    // document.getElementById("taskForm").reset()
+                                    let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">' + resp +
+                                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                                        '<span aria-hidden="true">&times;</span>' +
+                                        '</button>' +
+                                        '</div>';
+                                    $('#errorMessages').empty();
+                                    $('#errorMessages').append(errorHtml);
+                                    $("#editActivityCodeButton").attr("disabled", false);
+                                    //  $("#createTaskModal").modal("hide");
+                                    window.location.reload()
+                                }
+                                else {
+                                    //document.getElementById("taskForm").reset()
+                                    let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' + resp +
+                                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                                        '<span aria-hidden="true">&times;</span>' +
+                                        '</button>' +
+                                        '</div>';
+                                    $('#errorMessages').empty();
+                                    $('#errorMessages').append(errorHtml);
+                                    $("#editActivityCodeButton").attr("disabled", false);
+                                    //  $("#createTaskModal").modal("hide");
+                                    // window.location.reload()
+                                }
+
+                            })
+                            .fail((jqXHR, status, error) => {
+                                console.log('jqXHR  ' + JSON.stringify(jqXHR));
+
+                            })
+                    })
+
+                }
+
+
+            </script>
