@@ -194,12 +194,15 @@
                                 htmlResponsesTable += '<td>'+i+' </td>';
                                 htmlResponsesTable += '<td>'+eachRecord.name+' </td>';
                                 htmlResponsesTable += '<td>'+dateTime+' </td>';
+                                if(eachRecord.approval_status__c == 'Pending' || eachRecord.approval_status__c == 'Rejected'  || eachRecord.approval_status__c == 'Approved' )
+                                htmlResponsesTable += '<td><button class="btn btn-primary submitFormForApproval" disabled = true id="'+eachRecord.sfid+'" >Submit For Approval</a> </td>';
+                                else
                                 htmlResponsesTable += '<td><button class="btn btn-primary submitFormForApproval" id="'+eachRecord.sfid+'" >Submit For Approval</a> </td>';
                                 if(eachRecord.approval_status__c == 'Approved' || eachRecord.approval_status__c == 'Rejected' || eachRecord.approval_status__c != 'Pending' )
                                   htmlResponsesTable += '<td>'+eachRecord.approval_status__c+'</td>';
                                 else
                                 htmlResponsesTable += '<td>'+eachRecord.approval_status__c+'</td>';
-                                if(eachRecord.approval_status__c != null && eachRecord.approval_status__c != 'Pending' )
+                                if(eachRecord.approval_status__c != null && eachRecord.approval_status__c != 'Pending' && eachRecord.approval_status__c != 'Rejected' )
                                 {
                                   htmlResponsesTable += '<td><a class="btn btn-primary " href="https://learninglinksfoundationdonor.secure.force.com/responsepdf?Id='+eachRecord.sfid+'" target="_blank" style="color:white;"  >Preview</a> </td>';
                                   htmlResponsesTable += '<td><button class="btn btn-danger deleteResponse" id="'+eachRecord.sfid+'" >Delete</a> </td>';
