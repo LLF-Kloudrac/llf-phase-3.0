@@ -391,7 +391,7 @@
                         $('#checkRef').hide()
                     }
                     let columns = {
-                        sequence: 'Sequence',
+                      //  sequence: 'Sequence',
                         selectAction: 'Delete',
                         editAction: 'Action',
                         name: ' Project Task Name',
@@ -402,7 +402,7 @@
                         due_date__c: 'Planned End Date',
                         actual_start_date__c: 'Actual Start Date',
                         actual_end_date__c: 'Actual End Date',
-                        estimated_expense__c: 'Estimated Expense',
+                        estimated_expense__c: 'Estimated Expense (INR)',
                     }
                     var table = $('#taskListViewTable').tableSortable({
                         data: [],
@@ -411,7 +411,7 @@
                         sorting: true,
                         rowsPerPage: 15,
                         pagination: true,
-                        sorting: ['sequence', 'createdDate'],
+                        sorting: [ 'createdDate'],
                         tableWillMount: () => {
                             console.log('table will mount')
 
@@ -577,10 +577,10 @@
                                         ActivityCodeDetailRow += '<tr>';
                                         ActivityCodeDetailRow += '<td><strong> Pro-Rata Calculated Expense Per Day<strong></td>';
                                         var pro_rate_analysis = eachRecord.pro_rate_analysis__c != null ? eachRecord.pro_rate_analysis__c.toFixed(2) : eachRecord.pro_rate_analysis__c;
-                                        ActivityCodeDetailRow += '<td>' + pro_rate_analysis + '</td>';
+                                        ActivityCodeDetailRow += '<td>INR ' + pro_rate_analysis + '</td>';
                                         ActivityCodeDetailRow += '<td><strong>Estimated expenditure till current date<strong></td>';
                                         var grant_utilization_on_pro_rate_basis = eachRecord.grant_utilization_on_pro_rate_basis__c != null ? eachRecord.grant_utilization_on_pro_rate_basis__c.toFixed(2) : eachRecord.grant_utilization_on_pro_rate_basis__c;
-                                        ActivityCodeDetailRow += '<td>' + grant_utilization_on_pro_rate_basis + '</td>';
+                                        ActivityCodeDetailRow += '<td>INR ' + grant_utilization_on_pro_rate_basis + '</td>';
 
                                         ActivityCodeDetailRow += '</tr>';
                                         ActivityCodeDetailRow += '<tr>';
@@ -609,7 +609,7 @@
                                         ActivityCodeDetailRow += '<td>' + estimated_hours + '</td>';
                                         ActivityCodeDetailRow += '<td><strong>Estimated Expense<strong></td>';
                                         var estimated_expense = eachRecord.estimated_expense__c != null ? eachRecord.estimated_expense__c.toFixed(2) : eachRecord.estimated_expense__c;
-                                        ActivityCodeDetailRow += '<td>' + estimated_expense + '</td>';
+                                        ActivityCodeDetailRow += '<td>INR ' + estimated_expense + '</td>';
 
                                         ActivityCodeDetailRow += '</tr>';
 

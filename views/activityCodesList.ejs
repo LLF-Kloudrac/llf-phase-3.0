@@ -318,7 +318,7 @@
                         activityCodeName: 'Activity Code Name',
                        // project: 'Project',
                        // expenseHead: ' Expense Head Category',
-                        actualExpenseFromTally: 'Actual Expense from Tally',
+                        actualExpenseFromTally: 'Actual Expense from Tally (INR)',
                         planned_annual_budget__c: 'Approved Annual Budget',
                         estimated_expense_from_tasks: 'Estimated Expense from Tasks',
                         createdDate: 'Created Date',
@@ -434,30 +434,30 @@
                                         ActivityCodeDetailRow += '<td><strong>Description<strong></td>';
                                         ActivityCodeDetailRow += '<td width="200">' + eachRecord.description__c + '</td>';
                                         ActivityCodeDetailRow += '<td><strong>Actual Expense On Salesforce<strong></td>';
-                                        ActivityCodeDetailRow += '<td>' + eachRecord.actual_expense_on_salesforce__c + '</td>';
+                                        ActivityCodeDetailRow += '<td>INR ' + eachRecord.actual_expense_on_salesforce__c + '</td>';
                                         ActivityCodeDetailRow += '</tr>';
                                         
                                         ActivityCodeDetailRow += '<tr>';
                                         ActivityCodeDetailRow += '<td><strong>Actual Expense from Tally<strong></td>';
                                         var actual_expense_from_tally = eachRecord.actual_expense_from_tally__c !=null ? eachRecord.actual_expense_from_tally__c.toFixed(2): eachRecord.actual_expense_from_tally__c;    
-                                        ActivityCodeDetailRow += '<td>' + actual_expense_from_tally + '</td>';
+                                        ActivityCodeDetailRow += '<td>INR ' + actual_expense_from_tally + '</td>';
                                         ActivityCodeDetailRow += '<td><strong>Estimated Expense from Tasks<strong></td>';
                                         var estimated_expense_from_tasks= eachRecord.estimated_expense_from_tasks__c!=null ? eachRecord.estimated_expense_from_tasks__c.toFixed(2): eachRecord.estimated_expense_from_tasks__c;
-                                        ActivityCodeDetailRow += '<td>' + estimated_expense_from_tasks + '</td>';
+                                        ActivityCodeDetailRow += '<td>INR ' + estimated_expense_from_tasks + '</td>';
                                         ActivityCodeDetailRow += '</tr>';
                                         //ActivityCodeDetailRow += '</tr>';
 
                                         ActivityCodeDetailRow += '<tr>';
                                         var actual_expense_from_procurement = eachRecord.actual_expense_from_procurement__c !=null ? eachRecord.actual_expense_from_procurement__c.toFixed(2): eachRecord.actual_expense_from_procurement__c;
                                         ActivityCodeDetailRow += '<td><strong>Actual Expense from Procurement<strong></td>';
-                                        ActivityCodeDetailRow += '<td>' + actual_expense_from_procurement + '</td>';
+                                        ActivityCodeDetailRow += '<td>INR ' + actual_expense_from_procurement + '</td>';
                                         ActivityCodeDetailRow += '<td><strong>Estimated Expenditure till Current Date<strong></td>';
-                                        ActivityCodeDetailRow += '<td>' + eachRecord.estimated_expenditure_till_current_date__c + '</td>';
+                                        ActivityCodeDetailRow += '<td>INR ' + eachRecord.estimated_expenditure_till_current_date__c + '</td>';
                                         ActivityCodeDetailRow += '</tr>';
 
                                         ActivityCodeDetailRow += '<tr>';
                                         ActivityCodeDetailRow += '<td><strong>Actual Utilization for Planned till Date<strong></td>';
-                                        ActivityCodeDetailRow += '<td>'+ eachRecord.grant_utlization__c +'</td>';
+                                        ActivityCodeDetailRow += '<td>INR '+ eachRecord.grant_utlization__c +'</td>';
                                         ActivityCodeDetailRow += '<td><strong>Actual Hours From Tasks<strong></td>';
                                         var actual_hours = eachRecord.actual_hours_from_tasks__c != null ? eachRecord.actual_hours_from_tasks__c.toFixed(2) : eachRecord.actual_hours_from_tasks__c   
                                         ActivityCodeDetailRow += '<td>' + actual_hours + '</td>';
@@ -466,15 +466,15 @@
                                         ActivityCodeDetailRow += '<tr>';
                                         ActivityCodeDetailRow += '<td><strong>Approved Annual Budget<strong></td>';
                                         var planned_annual_budget = eachRecord.planned_annual_budget__c != null ? eachRecord.planned_annual_budget__c.toFixed(2): eachRecord.planned_annual_budget__c;    
-                                        ActivityCodeDetailRow += '<td>' + planned_annual_budget + '</td>';
+                                        ActivityCodeDetailRow += '<td>INR ' + planned_annual_budget + '</td>';
                                         ActivityCodeDetailRow += '<td><strong>Actual Utilization Against Annual Budget<strong></td>';
                                         var actual_utilization_against_annual_budget = eachRecord.actual_utilization_against_annual_budget__c != null ? eachRecord.actual_utilization_against_annual_budget__c+'%': eachRecord.actual_utilization_against_annual_budget__c;
-                                        ActivityCodeDetailRow += '<td>' + actual_utilization_against_annual_budget + '</td>';
+                                        ActivityCodeDetailRow += '<td>INR ' + actual_utilization_against_annual_budget + '</td>';
                                         ActivityCodeDetailRow += '</tr>';
 
                                         ActivityCodeDetailRow += '<tr>';
                                         ActivityCodeDetailRow += '<td><strong>Actual Expense on Tally Date<strong></td>';
-                                        ActivityCodeDetailRow += '<td>' + eachRecord.actual_expense_on_tally_date__c + '</td>';
+                                        ActivityCodeDetailRow += '<td>INR ' + eachRecord.actual_expense_on_tally_date__c + '</td>';
                                         ActivityCodeDetailRow += '</tr>';
                                         
                                         $('#activityCodeDetail').html(ActivityCodeDetailRow);

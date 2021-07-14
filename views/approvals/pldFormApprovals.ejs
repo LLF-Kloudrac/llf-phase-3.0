@@ -90,11 +90,15 @@
               //onLoadTask();
             },
             tableWillUnmount: () => console.log('table will unmount'),
-            tableDidUnmount: () => console.log('table did unmount'),
-            onPaginationChange: function(nextPage, setPage) {
-                setPage(nextPage);
-            }, 
-        });
+          tableDidUnmount: () => console.log('table did unmount'),
+          onPaginationChange: function(nextPage, setPage) {
+              setPage(nextPage);
+          },
+          
+      });
+      $('#changeRows').on('change', function() {
+        table.updateRowsPerPage(parseInt($(this).val()));
+      })
 
         $('#refresh').click(function() {
             table.refresh(true);

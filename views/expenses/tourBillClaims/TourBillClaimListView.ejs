@@ -523,7 +523,7 @@
                   tourBillClaimTableHtml += '</tr>'; 
                   tourBillClaimTableHtml += '<tr>'; 
                   tourBillClaimTableHtml += '<td>Grand Total</td>';
-                  tourBillClaimTableHtml += '<td>'+tourBillClaim.grand__c+'</td>';
+                  tourBillClaimTableHtml += '<td>INR '+tourBillClaim.grand__c+'</td>';
                   tourBillClaimTableHtml += '<td></td>';
                   tourBillClaimTableHtml += '<td></td>';
                   tourBillClaimTableHtml += '</tr>';
@@ -554,7 +554,7 @@
                       airBusRailFareHtml += '<td>'+eachAirRailBus.name+'</td>';
                       airBusRailFareHtml += '<td>'+strArrivalDate+'</td>';
                       airBusRailFareHtml += '<td>'+strDepartureDate+'</td>';
-                      airBusRailFareHtml += '<td>'+eachAirRailBus.amount__c+'</td>';
+                      airBusRailFareHtml += '<td>INR '+eachAirRailBus.amount__c+'</td>';
                       airBusRailFareHtml += '</tr>';
                     });
                     airBusRailFareHtml += '<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/getAirBusListView?tourBillClaimId='+tourBillClaimId+'" >View All</a></center></td></tr>';
@@ -583,7 +583,7 @@
                       conveyanceChargesHtml += '<td>'+eachConveyanceCharge.name+'</td>';
                       conveyanceChargesHtml += '<td>'+eachConveyanceCharge.place__c+'</td>';
                       conveyanceChargesHtml += '<td>'+strDate+'</td>';
-                      conveyanceChargesHtml += '<td>'+eachConveyanceCharge.amount__c+'</td>';  
+                      conveyanceChargesHtml += '<td>INR '+eachConveyanceCharge.amount__c+'</td>';  
                       conveyanceChargesHtml += '</tr>';
                     });
                     conveyanceChargesHtml += '<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/conveyanceChargesListView?tourBillClaimId='+tourBillClaimId+'" >View All</a></center></td></tr>';
@@ -610,7 +610,7 @@
                           boardingLodgingChargesHtml += '<td>'+eachBoardingLodging.name+'</td>';
                           boardingLodgingChargesHtml += '<td>'+eachBoardingLodging.place_journey__c+'</td>';
                         boardingLodgingChargesHtml += '<td>'+eachBoardingLodging.from__c.toString().split('T')[0]+'</td>';
-                        boardingLodgingChargesHtml += '<td>'+eachBoardingLodging.total_amount__c+'</td>';  
+                        boardingLodgingChargesHtml += '<td>INR '+eachBoardingLodging.total_amount__c+'</td>';  
                         boardingLodgingChargesHtml += '</tr>';
                     });
                     boardingLodgingChargesHtml+='<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/boardingLodgingListView?tourBillClaimId='+tourBillClaimId+'" >View All</a></center></td></tr>';
@@ -635,8 +635,8 @@
                     telephoneFoodCharges.forEach((eachTelephoneFoodCharge) => {
                           telephoneFoodChargesHtml += '<tr>';
                           telephoneFoodChargesHtml += '<td>'+eachTelephoneFoodCharge.name+'</td>';
-                          telephoneFoodChargesHtml += '<td>'+eachTelephoneFoodCharge.laundry_expense__c+'</td>';
-                          telephoneFoodChargesHtml += '<td>'+eachTelephoneFoodCharge.fooding_expense__c+'</td>';  
+                          telephoneFoodChargesHtml += '<td>INR '+eachTelephoneFoodCharge.laundry_expense__c+'</td>';
+                          telephoneFoodChargesHtml += '<td>INR '+eachTelephoneFoodCharge.fooding_expense__c+'</td>';  
                           telephoneFoodChargesHtml += '<td>'+eachTelephoneFoodCharge.remarks__c+'</td>';  
                           telephoneFoodChargesHtml += '</tr>';
                     });
@@ -663,7 +663,7 @@
                         miscellenousChargesHtml += '<tr>';
                         miscellenousChargesHtml += '<td>'+eachMiscellenousCharge.name+'</td>';
                         miscellenousChargesHtml += '<td>'+strDate+'</td>';
-                        miscellenousChargesHtml += '<td>'+eachMiscellenousCharge.amount__c+'</td>';  
+                        miscellenousChargesHtml += '<td>INR '+eachMiscellenousCharge.amount__c+'</td>';  
                         miscellenousChargesHtml += '<td>'+eachMiscellenousCharge.remarks__c+'</td>';  
                         miscellenousChargesHtml += '</tr>';
                     });

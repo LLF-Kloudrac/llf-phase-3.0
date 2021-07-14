@@ -81,7 +81,7 @@ router.get('/taskList',verify,async(request,response)=>{
               crDate.setHours(crDate.getHours() + 5);
               crDate.setMinutes(crDate.getMinutes() + 30);
               let strDate = crDate.toLocaleString();
-              obj.sequence = i;
+          //    obj.sequence = i;
               obj.selectAction = '<input type="checkbox" id="' + eachRecord.sfid + '" name="' + eachRecord.sfid + '" value="' + eachRecord.sfid + '">'
               obj.editAction = '<button href="#" class="btn btn-primary editTask" id="'+eachRecord.sfid+'" >Edit</button>'
               obj.name = '<a href="#" class="ActivityTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
