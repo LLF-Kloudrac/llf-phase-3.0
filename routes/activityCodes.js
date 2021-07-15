@@ -131,7 +131,7 @@ router.get('/activityCodesList', verify,async(request, response) => {
 router.post('/updateActivityCode', (request, response) => {
     let body = request.body;
     console.log('body  : ' + JSON.stringify(body));
-    const { name, project, activityCodeName, hide, expenseHead, description } = request.body;
+    const { name, project, activityCodeName, hide, expenseHead, description,approvedactivitycodebudget } = request.body;
     console.log('ActivityCode id  ' + hide);
     console.log('request body=======  ', request.body);
 
@@ -149,7 +149,7 @@ router.post('/updateActivityCode', (request, response) => {
         let updateQuerry = 'UPDATE salesforce.Activity_Code__c SET ' +
             'Name = \'' + name + '\', ' +
             'Activity_Code_Name__c = \'' + activityCodeName + '\', ' +
-            'Expense_Head_Category__c = \'' + expenseHead + '\', ' + 'Description__c = \'' + description + '\' ' + 'WHERE sfid = $1';
+            'ExpenseHeadCategory__c = \'' + expenseHead + '\', ' + 'Description__c = \'' + description + '\' , ' + 'Planned_Annual_Budget__c = \'' + approvedactivitycodebudget + '\'' + 'WHERE sfid = $1';
         console.log('updateQuerry  ' + updateQuerry);
         pool
             .query(updateQuerry, [hide])

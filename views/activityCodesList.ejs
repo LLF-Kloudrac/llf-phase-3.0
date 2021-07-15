@@ -199,6 +199,10 @@
                                                 <label for="estimatedexpensefromtasks">Actual Expense on Tally Date </label>
                                                 <input type="date" disabled class="form-control" id="tallyDate" value=""   name="tallyDate" >
                                             </div>
+                                            <div class="col-md-6">
+                                                <label for="approvedactivitycodebudget">Approved Activity Code Budget </label>
+                                                <input type="number" class="form-control" id="approvedactivitycodebudget" value=""   name="approvedactivitycodebudget" >
+                                            </div>
                                         </div>
                                     </div>
 
@@ -475,6 +479,8 @@
                                         ActivityCodeDetailRow += '<tr>';
                                         ActivityCodeDetailRow += '<td><strong>Actual Expense on Tally Date<strong></td>';
                                         ActivityCodeDetailRow += '<td>INR ' + eachRecord.actual_expense_on_tally_date__c + '</td>';
+                                        ActivityCodeDetailRow += '<td><strong>Approved Activity Code Budget<strong></td>';
+                                        ActivityCodeDetailRow += '<td>INR ' + eachRecord.planned_annual_budget__c + '</td>';
                                         ActivityCodeDetailRow += '</tr>';
                                         
                                         $('#activityCodeDetail').html(ActivityCodeDetailRow);
@@ -523,17 +529,20 @@
                 })
                 function additionalEditFunctionality() {
                     $('.createActivityCode').on('click', function (event) {
-                        let expenseHeadDropdown= ["Content Development",
-                        "Corp. Expenses",
-                        "Events",
-                        "Hardware to Project Team","Misc. Project Implementation Charges",
+                        let expenseHeadDropdown= ["Personnel Cost - Project (Full Time)",
+                        "Personnel Cost - Project (Shared)",
+                        "LLF Overheads",
+                        "Content Development",
                         "Monitoring & Evaluation - Project",
-                        "Office Maintenance",
-                        "Personnel Cost - Project",
-                        "Project Material/Equipments – Beneficiaries",
+                        "Travel & Communication",
+                        "Hardware to Project Team",
+                        "Office Maintenance - Projects",
+                        "Project Material/Equipments - Beneficiaries",
                         "Trainings - Beneficiaries",
-                        "Trainings – Internal",
-                        "Travel & Communication"]
+                        "Trainings - Internal",
+                        "Events",
+                        "Infrastructure cost - Beneficiairies",
+                        "Misc. Project Implementation Charges"  ]
                         console.log('click ene ton create>>>>>>>>>>>>>')
                         event.stopPropagation();
                         event.stopImmediatePropagation();
@@ -644,17 +653,20 @@
                         event.stopImmediatePropagation();
                         $('#district').empty();
                         let vendorId = this.id;
-                        let expenseHead= ["Content Development",
-                        "Corp. Expenses",
-                        "Events",
-                        "Hardware to Project Team","Misc. Project Implementation Charges",
+                        let expenseHead= ["Personnel Cost - Project (Full Time)",
+                        "Personnel Cost - Project (Shared)",
+                        "LLF Overheads",
+                        "Content Development",
                         "Monitoring & Evaluation - Project",
-                        "Office Maintenance",
-                        "Personnel Cost - Project",
-                        "Project Material/Equipments – Beneficiaries",
+                        "Travel & Communication",
+                        "Hardware to Project Team",
+                        "Office Maintenance - Projects",
+                        "Project Material/Equipments - Beneficiaries",
                         "Trainings - Beneficiaries",
-                        "Trainings – Internal",
-                        "Travel & Communication"]
+                        "Trainings - Internal",
+                        "Events",
+                        "Infrastructure cost - Beneficiairies",
+                        "Misc. Project Implementation Charges"  ]
                             
                             let strTallyDate = ''
                         //    alert('vendorEditId modal ID=>'+vendorId);
@@ -698,6 +710,7 @@
                                     document.forms["editActivityCode"]["actualhoursfromtasks"].value = response.ActivityCodeDetail[0].actual_hours_from_tasks__c;
                                 }
                                 document.forms["editActivityCode"]["grantutlization"].value = response.ActivityCodeDetail[0].grant_utlization__c;
+                                document.forms["editActivityCode"]["approvedactivitycodebudget"].value = response.ActivityCodeDetail[0].planned_annual_budget__c;
                                 document.forms["editActivityCode"]["estimatedexpendituretillcurrentdate"].value = response.ActivityCodeDetail[0].estimated_expenditure_till_current_date__c;
                                 document.forms["editActivityCode"]["actualexpensefromprocurement"].value = response.ActivityCodeDetail[0].actual_expense_from_procurement__c!=null ? response.ActivityCodeDetail[0].actual_expense_from_procurement__c.toFixed(2): response.ActivityCodeDetail[0].actual_expense_from_procurement__c;
                                 
