@@ -752,6 +752,15 @@
                             .then((response) => {
                                 console.log('response from Edit Ajax +=' + JSON.stringify(response));
                                 console.log('rtecordDeatail ' + response.ActivityCodeDetail[0].name);
+                             //   console.log('task details ' + response.ActivityCodeDetail[0]);
+                                let taskrecord = response.ActivityCodeDetail[0];
+                                let activityCodes = [];
+                                for(let i=0; i< response.activity.length ;i++)
+                                    {
+                                        activityCodes.push(response.activity[i]);
+                                    }
+                                    console.log('Asset Details list'+JSON.stringify(taskrecord));
+                                console.log('Activity Codes'+JSON.stringify(activityCodes));
                                 document.forms["editTask"]["name"].value = response.ActivityCodeDetail[0].name;
                                 $('#status').empty();
                                 for (let i = 0; i < TaskStatus.length; i++) {
@@ -760,9 +769,24 @@
                                             .attr("value", TaskStatus[i])
                                             .text(TaskStatus[i]))
                                 }
+                                $('#activityCode').empty();
+                                $('#activityCode')
+                                    .append($("<option></option>")
+                                    .attr("value",'')
+                                    .text('None'));
+                                for(let i=0; i< activityCodes.length ;i++)
+                                    {
+                                    $('#activityCode')
+                                    .append($("<option></option>")
+                                    .attr("value",activityCodes[i].sfid)
+                                    .text(activityCodes[i].name));	
+                                    }
                                 document.forms["editTask"]["status"].value = response.ActivityCodeDetail[0].task_stage__c;
                                 document.forms["editTask"]["project"].value = response.ActivityCodeDetail[0].project_name2__c;
-                                document.forms["editTask"]["activitycodes"].value = response.ActivityCodeDetail[0].activity_code_name__c;
+                                if( response.ActivityCodeDetail[0].activity_code_name__c !=null ){
+                                 document.forms["editTask"]["activityCode"].value = assetRecord.activity_code_project__c;
+                                    }
+                               // document.forms["editTask"]["activityCode"].value = response.ActivityCodeDetail[0].activity_codes__c;
                                 $('#projecttaskcategory').empty();
                                 for (let i = 0; i < projectTaskCategory.length; i++) {
                                     $('#projecttaskcategory')

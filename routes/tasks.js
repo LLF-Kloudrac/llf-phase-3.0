@@ -115,11 +115,13 @@ router.get('/taskList',verify,async(request,response)=>{
 
 router.get('/getTaskDetails',async(request,response)=>{
     let activityCode=request.query.taskCodeId;
-    console.log('activityCode '+activityCode);
+    console.log('task details '+activityCode);
     
     let qry ='';
     console.log('qry Detail =>'+qry);
-    let recordDeatil={};
+    let recordDeatil= {};
+    let projectId ;
+    let activity ;
     await
     pool
     .query('select sfid, Task_Stage__c, Name,Project_Name2__c,Activity_Code_Name__c,Project_Task_Category_Name__c,Start_Date__c,Due_Date__c,Pro_Rate_Analysis__c,Grant_Utilization_On_Pro_Rate_Basis__c,Description__c,Actual_Start_Date__c,Actual_End_Date__c,Today_s_Date__c,Actual_Hours__c,Estimated_Hours__c,Estimated_Expense__c,CreatedById,CreatedDate,Id '+
@@ -127,6 +129,50 @@ router.get('/getTaskDetails',async(request,response)=>{
     .then((queryResult)=>{
         console.log('queryResult +>'+JSON.stringify(queryResult.rows));
         recordDeatil.ActivityCodeDetail=queryResult.rows;
+        if(recordDeatil !=null){
+            console.log('hello i am inside Procurement Activity Code');
+            
+                          pool
+                          .query('SELECT sfid, Project_Name__c FROM salesforce.Milestone1_Task__c WHERE  sfid = $1',[activityCode])
+                          .then((taskQueryResult) => {
+                            console.log('taskQueryResult :' +JSON.stringify(taskQueryResult.rows));
+                            if(taskQueryResult.rowCount > 0)
+                            {
+                               activity = taskQueryResult.rows[0] ;
+                               console.log('activity ++ '+activity);
+                              projectId = activity.project_name__c;
+                              console.log('Inside Procurement query  : '+projectId);
+                              pool
+                              .query('Select sfid , Name FROM salesforce.Activity_Code__c where Project__c = $1', [projectId])
+                              .then((activityCodeQueryResult) => {
+                                console.log('activityCodeQueryResult  : '+JSON.stringify(activityCodeQueryResult.rows));
+                                let numberOfRows, lstActivityCode =[];
+                                if(activityCodeQueryResult.rowCount > 0)
+                                {
+                                  numberOfRows = activityCodeQueryResult.rows.length;
+                                  for(let i=0; i< numberOfRows ; i++)
+                                  {
+                                    lstActivityCode.push(activityCodeQueryResult.rows[i]);
+                                  }
+                                  console.log('lstActivityCode ++ '+lstActivityCode);
+                                  recordDeatil.activity = lstActivityCode;
+                                  
+                                //  details.push(lstActivityCode);
+                                  //response.send(objData);
+                                }
+                              })
+                              .catch((activityCodeQueryError) => {
+                                console.log('activityCodeQueryError  : '+activityCodeQueryError.stack);
+                                response.send([]);
+                              })
+                            }
+                          })
+                          .catch((projectQueryError) =>
+                              {
+                            console.log('projectQueryError  : '+projectQueryError.stack);
+                             })
+        }
+     
         if(recordDeatil.ActivityCodeDetail[0].start_date__c !=null){
             let crDate = new Date(recordDeatil.ActivityCodeDetail[0].start_date__c);
                 crDate.setHours(crDate.getHours() + 5);
@@ -163,6 +209,8 @@ router.get('/getTaskDetails',async(request,response)=>{
             recordDeatil.ActivityCodeDetail[0].today_s_date__c= formatDate(strDate.split(',')[0])
         }  
         console.log('record '+recordDeatil);
+      
+                               
         response.send(recordDeatil);
     })
     .catch((error)=>{

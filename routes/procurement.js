@@ -150,6 +150,7 @@ router.get('/assetEditDetails',verify ,async(request, response) =>{
                                  if(ProcurementQueryResult.rowCount > 0)
                                  {
                                     activity = ProcurementQueryResult.rows[0] ;
+                                    console.log('activity ++ '+activity);
                                    projectId = activity.project_department__c;
                                    console.log('Inside Procurement query  : '+projectId);
                                    pool
