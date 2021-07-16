@@ -2,6 +2,7 @@
 <% include ../partials/footer %>
 <h3 style="text-align: center; margin-top: 20px;">M&E Forms</h3>
 <% if(showExcelReport){ %>
+  <p id="demo"></p>
   <div class="row mt-4">
         <div class="col-md-6 m-auto">
            <div class="card card-body">
@@ -128,17 +129,23 @@
                 response.forEach((eachRecord) => {
                   console.log('type  : '+typeof(eachRecord.createddate));
                   console.log('eachRecord.pldform_generatedurl__c  : '+eachRecord.pldform_generatedurl__c);
-                  let dateTime = new Date(eachRecord.createddate);
-                  dateTime.setHours(dateTime.getHours() - 5);
-                  dateTime.setMinutes(dateTime.getMinutes() - 30);
-                  dateTime =  dateTime.toLocaleString();
-                  console.log('dateTime  : '+dateTime);
+                  let dateTime1 = new Date(eachRecord.createddate);
+                  var d = new Date();
+                  var n = d.getTimezoneOffset();
+                 // document.getElementById("demo").innerHTML = n;
+                  console.log('p tag +++ '+n);
+                  let x = dateTime1.getTimezoneOffset();
+                  console.log('value of X ++ '+x);
+                 // dateTime1.setHours(dateTime1.getHours() - 5);
+                  dateTime1.setMinutes(dateTime1.getMinutes() - x);
+                  dateTime1 =  dateTime1.toLocaleString();
+                  console.log('dateTime1  : '+dateTime1);
                   htmlTable += '<tr>';
                   htmlTable += '<td>'+i+' </td>';
                   htmlTable += '<td>'+eachRecord.proname+' </td>';
                   htmlTable += '<td>'+eachRecord.pldname+' </td>';
                   htmlTable += '<td><a class="btn btn-primary" style="color:white;" href="'+eachRecord.pldform_generatedurl__c+'" target="_blank" >Click Here</a></td>';
-                  htmlTable += '<td>'+dateTime+' </td>';
+                  htmlTable += '<td>'+dateTime1+' </td>';
                   htmlTable += '<td><a class="btn btn-primary responseModalAnchorId" id="'+eachRecord.project_library__c+'"  style="color:white;" href="#"  >View Responses</a> </td>';
                   htmlTable += '</tr>';
                   i++;
