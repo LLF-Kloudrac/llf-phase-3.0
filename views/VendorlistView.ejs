@@ -264,7 +264,6 @@ let st =["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Go
     $(document).ready(function(){
         let columns ={
             sequence : 'Sequence',
-            editAction:'Action',
             name: ' Vendor List ID',
             vendorname: 'Vendor Name',
             state:'State',
@@ -273,6 +272,7 @@ let st =["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Go
             contact:'Contact Number',
            // add:'Address',
             createdDate:'Created Date',
+            editAction:'Action'
         }
         var table = $('#vendorListViewTable').tableSortable({
             data :[],

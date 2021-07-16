@@ -715,7 +715,6 @@
     $(document).ready(function(){
         let columns ={
           sequence: 'Sr No.',
-          editbutton : 'Action',
           name: 'Asset Requisition Name',
           projectname: 'Project Name',
           //actCode:'Activity Code',
@@ -728,6 +727,7 @@
        //   nonitamount: 'Non-IT Amount' ,
           totalamount: 'Total Amount (INR)', 
           createdDate : 'Created Date',
+          editbutton : 'Action',
           approvalbutton : '1st Stage Approval', 
           accountsapprovalbutton : 'Accounts Approval',
 
@@ -1565,10 +1565,10 @@ function accountsApprovalFunctionality(){
       let resp = JSON.stringify(response);
       console.log('response....'+resp);
       
-    if(resp == 'Accounts Approval Sent Successfully !')
+    if(resp != 'Accounts Approval Sent Successfully !')
     {
           //    $('#taskForm')[0].reset()
-              let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+ resp+
+              let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+ resp+
           '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
             '<span aria-hidden="true">&times;</span>'+
           '</button>'+
@@ -1579,7 +1579,7 @@ function accountsApprovalFunctionality(){
     }
     else if(resp == 'Accounts approval sent already !')
     {
-            let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+ resp+
+            let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+ resp+
             '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
             '<span aria-hidden="true">&times;</span>'+
             '</button>'+
