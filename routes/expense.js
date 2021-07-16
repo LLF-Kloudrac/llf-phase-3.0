@@ -194,7 +194,7 @@ router.get('/expenseAllRecords',verify, async (request, response) => {
                 obj.name = '<a href="'+expenseQueryResult.rows[i].sfid+'" data-toggle="modal" data-target="#popup" class="expId" id="name'+expenseQueryResult.rows[i].sfid+'"  >'+expenseQueryResult.rows[i].name+'</a>';
                 obj.projectName = expenseQueryResult.rows[i].proname;
                // obj.approvalStatus = expenseQueryResult.rows[i].approval_status__c;
-                obj.totalAmount = '<span id="amount'+expenseQueryResult.rows[i].sfid+'" >'+expenseQueryResult.rows[i].amount_claimed__c+'</span>';
+                obj.totalAmount = '<span id="amount'+expenseQueryResult.rows[i].sfid+'" ><h6>INR</h6>'+expenseQueryResult.rows[i].amount_claimed__c+'</span>';
                 obj.pettyCashAmount = expenseQueryResult.rows[i].petty_cash_amount__c;
                 obj.conveyanceVoucherAmount = expenseQueryResult.rows[i].conveyance_amount__c;
                 obj.accStatus=expenseQueryResult.rows[i].accounts_status__c;
@@ -451,11 +451,11 @@ router.post('/createExpense',(request, response) => {
    // var {expenseName, projectName} = request.body;
     console.log('request.body  '+JSON.stringify(request.body));
 
-   const {taskname,proj , empCategory, incurredBy} = request.body;
+   const {taskname,proj , incurredBy} = request.body;
    console.log('taskname  '+taskname);
    console.log('proj  '+proj);
   // console.log('department  '+department);
-   console.log('empCategory  '+empCategory);
+  // console.log('empCategory  '+empCategory);
    console.log('incurredBy  '+incurredBy);
 
    const schema=joi.object({
@@ -474,7 +474,7 @@ if(result.error){
 }
   else{
     pool
-    .query('INSERT INTO salesforce.Milestone1_Expense__c (name,project_name__c,Conveyance_Employee_Category_Band__c,Incurred_By_Heroku_User__c) values ($1,$2,$3,$4)',[taskname,proj,empCategory,incurredBy])
+    .query('INSERT INTO salesforce.Milestone1_Expense__c (name,project_name__c,Incurred_By_Heroku_User__c) values ($1,$2,$3)',[taskname,proj,incurredBy])
     .then((expenseInsertResult) => {     
              console.log('expenseInsertResult.rows '+JSON.stringify(expenseInsertResult.rows));
              response.send('Successfully Inserted');

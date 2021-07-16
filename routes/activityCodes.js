@@ -110,7 +110,14 @@ router.get('/activityCodesList', verify,async(request, response) => {
                     obj.project = eachRecord.project_name__c;
                     obj.expenseHead = eachRecord.expense_head_category__c;
                     obj.description = eachRecord.description__c;
-                    obj.actualExpenseFromTally = eachRecord.actual_expense_from_tally__c != null ? eachRecord.actual_expense_from_tally__c.toFixed(2) : eachRecord.actual_expense_from_tally__c;
+                    if(eachRecord.actual_expense_from_tally__c != null){
+                        obj.actualExpenseFromTally = '<span id="amount'+eachRecord.sfid+'" ><h6>INR</h6>'+ eachRecord.actual_expense_from_tally__c.toFixed(2)+'</span>';
+                    }
+                    else{
+                        obj.actualExpenseFromTally = '<span id="amount'+eachRecord.sfid+'" ><h6>INR</h6>'+ eachRecord.actual_expense_from_tally__c+'</span>';
+
+                    }
+                 
                     obj.planned_annual_budget__c= eachRecord.planned_annual_budget__c != null ? eachRecord.planned_annual_budget__c.toFixed(2): eachRecord.planned_annual_budget__c;
                     obj.estimated_expense_from_tasks= eachRecord.estimated_expense_from_tasks__c != null ? eachRecord.estimated_expense_from_tasks__c.toFixed(2): eachRecord.estimated_expense_from_tasks__c;
                     obj.createdDate = strDate;

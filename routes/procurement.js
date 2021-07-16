@@ -62,7 +62,8 @@ router.get('/assetDetails',verify,(request, response)=> {
               obj.nononit = assetQueryResult.rows[i].number_of_non_it_product__c;
               obj.itamount = assetQueryResult.rows[i].procurement_it_total_amount__c;
               obj.nonitamount = assetQueryResult.rows[i].procurement_non_it_total_amount__c;
-              obj.totalamount = assetQueryResult.rows[i].total_amount__c;
+             // obj.totalamount = '<span id="amount'+expenseQueryResult.rows[i].sfid+'" ><h6>INR</h6>'+assetQueryResult.rows[i].total_amount__c+'</span>';
+              obj.totalamount  = '<span id="amount'+assetQueryResult.rows[i].sfid+'" ><h6>INR</h6>'+assetQueryResult.rows[i].total_amount__c+'</span>';
               obj.dateofRec = strDateOfRecev.toLocaleString().split(',')[0];
               obj.actCode = assetQueryResult.rows[i].actname;
               obj.accAppStatus=assetQueryResult.rows[i].accounts_approval__c;
@@ -533,7 +534,7 @@ const schema=joi.object({
     asset: joi.string().max(255).required().label('Asset Requisition Name is too long'),
     project:joi.string().required().label('Please choose Project/Department'),
     plandte:joi.date().required().label('Please Fill Target Date'),
-    planDate:joi.date().greater('now').label('Target Date should be greater than today date'),
+    planDate:joi.date().min("now").label('Target Date should be greater than or equals to today date'),
   //  planDate:joi.string().required().label('Please fill Target Date of Receiving'),
    // act:joi.string().required().label('Pleasse Chose Activity'),
 })
@@ -2413,7 +2414,7 @@ router.post('/updateVendor',(request,response)=>{
                          'Bank_Account_No__c = \''+aacc+'\', '+
                          'contact_no__c = \''+cont+'\', '+
                          'name_of_signing_authority__c = \''+auth+'\', '+
-                         'name = \''+bankDetail+'\', '+
+                         'bank_details__c = \''+bankDetail+'\', '+
                          'Bank_IFSC_Code__c = \''+ifsc+'\', '+
                          'pan_no__c = \''+pan+'\', '+
                          'address__c = \''+add+'\', '+
