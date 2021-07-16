@@ -202,7 +202,7 @@
                                   htmlResponsesTable += '<td>'+eachRecord.approval_status__c+'</td>';
                                 else
                                 htmlResponsesTable += '<td>'+eachRecord.approval_status__c+'</td>';
-                                if(eachRecord.approval_status__c != null && eachRecord.approval_status__c != 'Pending' && eachRecord.approval_status__c != 'Rejected' )
+                                if(eachRecord.approval_status__c != null && eachRecord.approval_status__c != 'Pending' )
                                 {
                                   htmlResponsesTable += '<td><a class="btn btn-primary " href="https://learninglinksfoundationdonor.secure.force.com/responsepdf?Id='+eachRecord.sfid+'" target="_blank" style="color:white;"  >Preview</a> </td>';
                                   htmlResponsesTable += '<td><button class="btn btn-danger deleteResponse" id="'+eachRecord.sfid+'" >Delete</a> </td>';
