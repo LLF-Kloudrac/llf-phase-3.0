@@ -129,17 +129,14 @@
                 response.forEach((eachRecord) => {
                   console.log('type  : '+typeof(eachRecord.createddate));
                   console.log('eachRecord.pldform_generatedurl__c  : '+eachRecord.pldform_generatedurl__c);
-                  let dateTime1 = new Date(eachRecord.createddate);
-                  var d = new Date();
-                  var n = d.getTimezoneOffset();
-                 // document.getElementById("demo").innerHTML = n;
-                  console.log('p tag +++ '+n);
-                  let x = dateTime1.getTimezoneOffset();
-                  console.log('value of X ++ '+x);
-                 // dateTime1.setHours(dateTime1.getHours() - 5);
-                  dateTime1.setMinutes(dateTime1.getMinutes() - x);
-                  dateTime1 =  dateTime1.toLocaleString();
-                  console.log('dateTime1  : '+dateTime1);
+                  let crDate = new Date(eachRecord.createddate);
+                  console.log('crDate  : '+crDate);
+                    let strDate = crDate.toLocaleString();
+                    console.log('strDate  :'+strDate);
+                    let dateTime = new Date(eachRecord.createddate);
+                   dateTime.setHours(dateTime.getHours() + 5);
+                   dateTime.setMinutes(dateTime.getMinutes() + 30);
+                   dateTime1 =  dateTime.toLocaleString();
                   htmlTable += '<tr>';
                   htmlTable += '<td>'+i+' </td>';
                   htmlTable += '<td>'+eachRecord.proname+' </td>';
