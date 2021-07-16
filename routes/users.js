@@ -82,7 +82,6 @@ router.get('/getpldForm',verify, (request, response) => {
 
   console.log('Expense request.user '+JSON.stringify(request.user));
   var userId = request.user.sfid; 
-
   console.log('request.query  : '+JSON.stringify(request.query));
   let contactId = request.query.contactId;
 
