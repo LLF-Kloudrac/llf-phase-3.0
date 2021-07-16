@@ -82,7 +82,14 @@ router.get('/assetDetails',verify,(request, response)=> {
                 obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
                 obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
             }
-              obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
+            if(assetQueryResult.rows[i].manager_approval__c != 'Rejected' || assetQueryResult.rows[i].procurement_head_approval__c != 'Rejected'         )
+         {
+            obj.accountsapprovalbutton = '<button href="#" disabled="true" class="btn btn-primary accountsapprovalpopup" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
+       }
+        else
+        {
+            obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
+       }
               obj.createdDate = strDate;
               modifiedList.push(obj);
               }

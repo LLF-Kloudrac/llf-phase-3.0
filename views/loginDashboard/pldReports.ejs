@@ -129,8 +129,8 @@
                   console.log('type  : '+typeof(eachRecord.createddate));
                   console.log('eachRecord.pldform_generatedurl__c  : '+eachRecord.pldform_generatedurl__c);
                   let dateTime = new Date(eachRecord.createddate);
-                  dateTime.setHours(dateTime.getHours() + 5);
-                  dateTime.setMinutes(dateTime.getMinutes() + 30);
+                  dateTime.setHours(dateTime.getHours() - 5);
+                  dateTime.setMinutes(dateTime.getMinutes() - 30);
                   dateTime =  dateTime.toLocaleString();
                   console.log('dateTime  : '+dateTime);
                   htmlTable += '<tr>';
