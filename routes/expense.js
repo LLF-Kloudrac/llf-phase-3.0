@@ -194,7 +194,7 @@ router.get('/expenseAllRecords',verify, async (request, response) => {
                 obj.name = '<a href="'+expenseQueryResult.rows[i].sfid+'" data-toggle="modal" data-target="#popup" class="expId" id="name'+expenseQueryResult.rows[i].sfid+'"  >'+expenseQueryResult.rows[i].name+'</a>';
                 obj.projectName = expenseQueryResult.rows[i].proname;
                // obj.approvalStatus = expenseQueryResult.rows[i].approval_status__c;
-                obj.totalAmount = '<span id="amount'+expenseQueryResult.rows[i].sfid+'" ><h6>INR</h6>'+expenseQueryResult.rows[i].amount_claimed__c+'</span>';
+                obj.totalAmount = '<span id="amount'+expenseQueryResult.rows[i].sfid+'" >'+expenseQueryResult.rows[i].amount_claimed__c+'</span>';
                 obj.pettyCashAmount = expenseQueryResult.rows[i].petty_cash_amount__c;
                 obj.conveyanceVoucherAmount = expenseQueryResult.rows[i].conveyance_amount__c;
                 obj.accStatus=expenseQueryResult.rows[i].accounts_status__c;

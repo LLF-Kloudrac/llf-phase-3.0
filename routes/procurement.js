@@ -63,7 +63,7 @@ router.get('/assetDetails',verify,(request, response)=> {
               obj.itamount = assetQueryResult.rows[i].procurement_it_total_amount__c;
               obj.nonitamount = assetQueryResult.rows[i].procurement_non_it_total_amount__c;
              // obj.totalamount = '<span id="amount'+expenseQueryResult.rows[i].sfid+'" ><h6>INR</h6>'+assetQueryResult.rows[i].total_amount__c+'</span>';
-              obj.totalamount  = '<span id="amount'+assetQueryResult.rows[i].sfid+'" ><h6>INR</h6>'+assetQueryResult.rows[i].total_amount__c+'</span>';
+              obj.totalamount  = '<span id="amount'+assetQueryResult.rows[i].sfid+'" >'+assetQueryResult.rows[i].total_amount__c+'</span>';
               obj.dateofRec = strDateOfRecev.toLocaleString().split(',')[0];
               obj.actCode = assetQueryResult.rows[i].actname;
               obj.accAppStatus=assetQueryResult.rows[i].accounts_approval__c;
