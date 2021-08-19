@@ -486,7 +486,7 @@
                 }
                 var vendorIDS;
                 function getActivityCodes(value){
-                    console.log('calleddddd activitycodess>>>>>>>>>>',value)
+                    console.log('calleddddd activitycodess>>>>>>>>>>'+value);
                     //getActivityCode
                     $.ajax({
                         url: '/tasks/getActivityCode',
@@ -500,9 +500,12 @@
                         }
                     })
                         .then((response) => {
-                            console.log('response from Edit Ajax +=' + JSON.stringify(response));
-                            console.log('rtecordDeatail ',response.ActivityCodeDetail);
+                            console.log('response from Edit Ajax : ' + JSON.stringify(response));
+                            console.log('rtecordDeatail '+response.ActivityCodeDetail);
+                            console.log('rtecordDeatail '+JSON.stringify(response.ActivityCodeDetail));
                             let activityCode = response.ActivityCodeDetail;
+                            console.log('activityCode : '+JSON.stringify(activityCode));
+                            console.log('activityCode : '+typeof(activityCode));
                             //let activityCode = ['Test_activity17/03','test_today','test_activity_code17/03','tetsttst644646'] -->
                             $('#activitycodes').empty();
                             $('#activitycodes')
@@ -756,11 +759,11 @@
                              //   console.log('task details ' + response.ActivityCodeDetail[0]);
                                 let taskrecord = response.ActivityCodeDetail[0];
                                 let activityCodes = [];
-                                for(let i=0; i< response.activity.length ;i++)
+                                for(let i=0; i< response.ActivityCodeDetail.length ;i++)
                                     {
-                                        activityCodes.push(response.activity[i]);
+                                        activityCodes.push(response.ActivityCodeDetail[i]);
                                     }
-                                    console.log('Asset Details list'+JSON.stringify(taskrecord));
+                                    //console.log('Asset Details list'+JSON.stringify(taskrecord));
                                 console.log('Activity Codes'+JSON.stringify(activityCodes));
                                 document.forms["editTask"]["name"].value = response.ActivityCodeDetail[0].name;
                                 $('#status').empty();
