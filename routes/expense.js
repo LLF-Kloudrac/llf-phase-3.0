@@ -166,7 +166,7 @@ router.get('/expenseAllRecords',verify, async (request, response) => {
 
   let objUser = request.user;
   console.log('objUser   : '+JSON.stringify(objUser));
-
+  var isEnableNewButton;
   pool
   .query('SELECT exp.id, exp.sfid, exp.Name,exp.Project_Manager_Status__c ,exp.Accounts_Status__c, exp.isHerokuEditButtonDisabled__c, exp.Project_Name__c, exp.Approval_Status__c, exp.Amount_Claimed__c, exp.petty_cash_amount__c, exp.Conveyance_Amount__c, exp.createddate, pro.sfid as prosfid, pro.name as proname FROM salesforce.Milestone1_Expense__c as exp JOIN salesforce.Milestone1_Project__c as pro ON exp.Project_name__c = pro.sfid WHERE exp.Incurred_By_Heroku_User__c = $1 AND exp.sfid != \'\'',[objUser.sfid])
   .then((expenseQueryResult) => {
@@ -203,11 +203,15 @@ router.get('/expenseAllRecords',verify, async (request, response) => {
                 obj.createdDate = strDate;
                 obj.print='<button    data-toggle="modal" data-target="#popupPrint" class="btn btn-primary printexp" id="print'+expenseQueryResult.rows[i].sfid+'" >Print</button>';
                   obj.editButton = '<button    data-toggle="modal" data-target="#popupEdit" class="btn btn-primary expIdEditMode"   id="edit'+expenseQueryResult.rows[i].sfid+'" >Edit</button>';
-               
-                  if(expenseQueryResult.rows[i].approval_status__c == 'Pending' || expenseQueryResult.rows[i].approval_status__c == 'Approved' || expenseQueryResult.rows[i].project_manager_status__c == 'Pending' || expenseQueryResult.rows[i].project_manager_status__c == 'Approved' )
+                if(expenseQueryResult.rows[i].approval_status__c == 'Rejected'){
+                  obj.editButton = '<button    data-toggle="modal" data-target="#popupEdit" class="btn btn-primary expIdEditMode" id="edit'+expenseQueryResult.rows[i].sfid+'" >Edit</button>';
+                  obj.approvalButton = '<button   class="btn btn-primary expIdApproval" style="color:white;" id="'+expenseQueryResult.rows[i].sfid+'" >Approval</button>';
+                }
+                 else if(expenseQueryResult.rows[i].approval_status__c == 'Pending' || expenseQueryResult.rows[i].approval_status__c == 'Approved' || expenseQueryResult.rows[i].project_manager_status__c == 'Pending' || expenseQueryResult.rows[i].project_manager_status__c == 'Approved' )
                   {
                     obj.editButton = '<button    data-toggle="modal" data-target="#popupEdit" class="btn btn-primary expIdEditMode" disabled = "true"  id="edit'+expenseQueryResult.rows[i].sfid+'" >Edit</button>';
                     obj.approvalButton = '<button   class="btn btn-primary expIdApproval" disabled = "true" style="color:white;" id="'+expenseQueryResult.rows[i].sfid+'" >Approval</button>';
+                    obj.isEnableNewButton = true;
                   }
                  else
                  {
@@ -1554,14 +1558,17 @@ router.post('/sendForApproval',verify, async(request, response) => {
             }
 });
 
-router.get('/pettycashlistview',verify,(request, response) => {
+var isDisabled = false;
+router.get('/pettycashlistview/:expenseId&:isDisabled',verify,(request, response) => {
 
   let objUser = request.user;
   console.log('objUser  : '+JSON.stringify(objUser));
-  let expenseId = request.query.expenseId;
+  let expenseId = request.params.expenseId;
   console.log('expenseId  '+expenseId);
+  isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
 
-  response.render('./expenses/pettyCash/pettycashlistview',{objUser,expenseId});
+  response.render('./expenses/pettyCash/pettycashlistview',{objUser,isDisabled,expenseId});
 })
 
 
@@ -1593,8 +1600,14 @@ router.get('/getpettycashlist',verify,(request, response) => {
                 obj.total=eachRecord.amount__c;
                 obj.billDate = strBillDate.split(',')[0];
                 obj.createDdate = strDate;
+                if(isDisabled == 'true')
+                {
+                    console.log('++Inside if check ++ '+isDisabled);
+                obj.deleteAction = '<button href="#" class="btn btn-primary deletePetty" disabled = "true" id="'+eachRecord.sfid+'" >Delete</button>'
+              } else{
+                console.log('++Inside else check ++ '+isDisabled);
                 obj.deleteAction = '<button href="#" class="btn btn-primary deletePetty" id="'+eachRecord.sfid+'" >Delete</button>'
-
+            }
                 i= i+1;
                 modifiedPettyCashList.push(obj);
               })
@@ -1648,14 +1661,15 @@ router.get('/getpettycashDetail',verify,(request, response) => {
 })
 /*****  Anukarsh Conveyance ListView */
 
-router.get('/ConveyanceListView',verify,(request, response) => {
+router.get('/ConveyanceListView/:expenseId&:isDisabled',verify,(request, response) => {
 
   let objUser = request.user;
   console.log('objUser  : '+JSON.stringify(objUser));
-  let expenseId = request.query.expenseId;
+  let expenseId = request.params.expenseId;
   console.log('expenseId  '+expenseId);
-
-  response.render('./expenses/conveyanceVoucher/ConveyanceListView',{objUser,expenseId});
+  isDisabled = request.params.isDisabled;
+  console.log(' ++++ isDisabled ++++ '+isDisabled);
+  response.render('./expenses/conveyanceVoucher/ConveyanceListView',{objUser,isDisabled,expenseId});
 })
 
 router.get('/getconveyancelist' ,verify,(request,response) => {
@@ -1684,8 +1698,14 @@ router.get('/getconveyancelist' ,verify,(request,response) => {
         obj.createDdate = strDate;
         obj.BillAmt=eachRecord.amount__c;
         obj.modeOfTravel = eachRecord.mode_of_conveyance__c;
+        if(isDisabled == 'true')
+        {
+            console.log('++Inside if check ++ '+isDisabled);
+        obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" disabled = "true" id="'+eachRecord.sfid+'" >Delete</button>'
+      } else{
+        console.log('++Inside else check ++ '+isDisabled);
         obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" id="'+eachRecord.sfid+'" >Delete</button>'
-
+    }
         i= i+1;
         modifiedConveyanceList.push(obj);
       })
@@ -1701,13 +1721,14 @@ router.get('/getconveyancelist' ,verify,(request,response) => {
   })
 } )
 
-router.get('/TourBillClaimListView',verify,(request,response)=>{
+router.get('/TourBillClaimListView/:expenseId&:isDisabled',verify,(request,response)=>{
   let objUser = request.user;
   console.log('objUser  : '+JSON.stringify(objUser));
   let expenseId = request.query.expenseId;
   console.log('expenseId  '+expenseId);
-
-  response.render('TourBillClaimListView',{objUser,expenseId});
+  isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
+  response.render('TourBillClaimListView',{objUser,isDisabled,expenseId});
 })
 
 

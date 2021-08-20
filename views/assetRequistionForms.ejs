@@ -2,6 +2,11 @@
 <% include ./partials/footer %> 
 <% include ./partials/messages %>
 
+<style>
+.anchorDisable{
+  pointer-events: none;
+}
+</style>
 
 <!-- <link rel="stylesheet" href="/stylesheets/table-sortable.css">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -611,7 +616,9 @@
                       <i class="fa fa-angle-double-right mr-3"></i>Procurement-Non IT
                     </button>
                     <!-- <button class="btn btn-primary float-right" id="pettyCashButton" >New</button> -->
-                  <a href="#" class="btn btn-primary float-right procurementNonIT" id="pettyCashButton" style="color:white;" >New</a>
+                 
+                    <a href = "#" class="btn btn-primary float-right procurementNonIT"  id="pettyCashButton" style="color:white;" >New</a>              
+                 
                 </h5>
               </div>
 
@@ -633,7 +640,7 @@
           <i class="fa fa-angle-double-right mr-3"></i>Procurement-IT
         </button>
         <!-- <button class="btn btn-primary float-right">New</button> -->
-        <a href="#" class="btn btn-primary float-right procurementIT" style="color:white;">New</a>
+        <a href="#" class="btn btn-primary float-right procurementIT" id="pettyCashButton2" style="color:white;">New</a>
       </h5>
     </div>
     <div id="collapseTwo" class="collapse fade" aria-labelledby="headingTwo"
@@ -730,7 +737,7 @@
           editbutton : 'Action',
           approvalbutton : '1st Stage Approval', 
           accountsapprovalbutton : 'Accounts Approval',
-
+       
         }
         var table = $('#AssetListViewTable').tableSortable({
             data :[],
@@ -866,6 +873,7 @@
       })
     $('#assetIdpTag').hide();
    var assetIds;
+   
     function anchorClickFunctionalities()
     {
         $('a.assetTag').on('click',function(event){
@@ -876,13 +884,24 @@
             $('#expenseIdpTag').hide();
             let assetId = $(this).attr('href');
             console.log('assetId   : '+assetId);
+            let buttonDisable = document.getElementById(assetId).disabled;
+            console.log(' button Disable + '+buttonDisable);
+           
+            if(buttonDisable ===true ){
+          //   document.getElementById("pettyCashButton").setAttribute('disabled',true);
+                document.getElementById("pettyCashButton").classList.add("anchorDisable");
+                document.getElementById("pettyCashButton2").classList.add("anchorDisable");
+                document.getElementById("notes").classList.add("anchorDisable");
+            }
+           
           document.getElementById('expenseIdpTag').innerHTML = assetId;
           $("#popup").modal("show");
             $.ajax({
                 type : 'GET',
                 url  : '/procurement/details',
                 data : {
-                    'assetId' : assetId
+                    'assetId' : assetId,
+
                 },
                 dataType : 'json',
                 beforeSend: function()
@@ -1120,7 +1139,7 @@
                             nonItProductTable += '<td>'+eachNonIt.quantity__c +'</td>';
                             nonItProductTable += '<td>INR '+eachNonIt.budget__c +'</td></tr>';  
                         })
-                        nonItProductTable+=  '<td colspan="6"><center><a target="_blank" href="/procurement/getNonItProcurementListVIew/'+assetId+'">View All</a></centre></td>';
+                        nonItProductTable+=  '<td colspan="6"><center><a target="_blank" href="/procurement/getNonItProcurementListVIew/'+assetId+'&'+buttonDisable+'">View All</a></centre></td>';
                             $('#procuremnetNonItTable').empty();
                             $('#procuremnetNonItTable').append(nonItProductTable);
                     }
@@ -1135,7 +1154,7 @@
                             itProductTable += '<td>'+eachIt.quantity__c +'</td>';
                             itProductTable += '<td>'+eachIt.budget__c +'</td></tr>';      
                         })
-                        itProductTable+=  '<td colspan="6"><center><a target="_blank" href="/procurement/getProcurementItListView/'+assetId+'">View All</a></centre></td>';
+                        itProductTable+=  '<td colspan="6"><center><a target="_blank" href="/procurement/getProcurementItListView/'+assetId+'&'+buttonDisable+'">View All</a></centre></td>';
                             $('#procuremnetItTable').empty();
                         $('#procuremnetItTable').append(itProductTable);   
                     }
@@ -1565,10 +1584,10 @@ function accountsApprovalFunctionality(){
       let resp = JSON.stringify(response);
       console.log('response....'+resp);
       
-    if(resp != 'Accounts Approval Sent Successfully !')
+    if(resp == 'Accounts Approval Sent Successfully !')
     {
           //    $('#taskForm')[0].reset()
-              let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+ resp+
+              let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+ resp+
           '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
             '<span aria-hidden="true">&times;</span>'+
           '</button>'+
@@ -1591,7 +1610,7 @@ function accountsApprovalFunctionality(){
     }
     else
     {
-      let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+ resp+
+      let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+ resp+
         '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
         '<span aria-hidden="true">&times;</span>'+
         '</button>'+

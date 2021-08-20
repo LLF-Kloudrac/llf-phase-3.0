@@ -5,26 +5,28 @@ const verify = require('../config/verifyToken');
 const format = require('pg-format');
 const joi = require('@hapi/joi');
 
-
-router.get('/tourBillClaimListview',verify,(request, response) => {
+var isDisabled = false;
+router.get('/tourBillClaimListview/:expenseId&:isDisabled',verify,(request, response) => {
 
     let objUser = request.user;
-    let expenseId = request.query.expenseId;
+    let expenseId = request.params.expenseId;
 
     console.log('Tour Bill expenseId  :'+expenseId);
     console.log('Tour Bill objUser  :'+JSON.stringify(objUser));
-
+    isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
+    
     pool.query('SELECT Id, sfid, Name, Expense__c,Grand__c FROM salesforce.Tour_Bill_Claim__c WHERE Expense__c = $1 ',[expenseId])
     .then((tourBillClaimResult) => {
         console.log('tourBillClaimResult '+JSON.stringify(tourBillClaimResult.rows));
         //response.send(tourBillClaimResult.rows);
         //response.render('tourBillExpenses',{ name : request.use r.name, email : request.user.email, tourBillClaimRows : tourBillClaimResult.rows ,parentExpenseId : parentExpenseId});
-        response.render('./expenses/tourBillClaims/TourBillClaimListView',{objUser,expenseId});
+        response.render('./expenses/tourBillClaims/TourBillClaimListView',{objUser,isDisabled,expenseId});
     })
     .catch((tourBillClaimError) => {
         console.log('Tour Bill Claim Query Error '+tourBillClaimError.stack);
         //response.render('tourBillExpenses',{ name : request.user.name, email : request.user.email, tourBillClaimRows : [] ,parentExpenseId : ''});
-        response.render('./expenses/tourBillClaims/TourBillClaimListView',{objUser,expenseId});
+        response.render('./expenses/tourBillClaims/TourBillClaimListView',{objUser,isDisabled,expenseId});
     }) 
 
    
@@ -306,8 +308,14 @@ router.get('/getAirBusListView',verify,(request,response)=>{
           obj.createDdate = strDate;
           obj.arrival=eachRecord.arrival_station__c;
         //  obj.editAction = '<button href="#" class="btn btn-primary editAirRailBus" id="'+eachRecord.sfid+'" >Edit</button>'
-         obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" id="'+eachRecord.sfid+'" >Delete</button>'
-
+        if(isDisabled == 'true')
+        {
+        console.log('++Inside if check ++ '+isDisabled);
+        obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" disabled = "true" id="'+eachRecord.sfid+'" >Delete</button>'
+        } else{
+        console.log('++Inside else check ++ '+isDisabled);
+        obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" id="'+eachRecord.sfid+'" >Delete</button>'
+         }
           i= i+1;
           modifiedAirBuslList.push(obj);
         })
@@ -781,8 +789,15 @@ router.post('/conveyanceCharges',verify, (request, response) => {
           obj.createDdate = strDate;
           obj.dated=strDate3;
        //   obj.editAction = '<button href="#" class="btn btn-primary editConveyance" id="'+eachRecord.sfid+'" >Edit</button>'
-         obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" id="'+eachRecord.sfid+'" >Delete</button>'
-
+        //  obj.editAction = '<button href="#" class="btn btn-primary editAirRailBus" id="'+eachRecord.sfid+'" >Edit</button>'
+        if(isDisabled == 'true')
+        {
+        console.log('++Inside if check ++ '+isDisabled); 
+       obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" disabled = "true" id="'+eachRecord.sfid+'" >Delete</button>'
+      } else{
+        console.log('++Inside else check ++ '+isDisabled);
+        obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" id="'+eachRecord.sfid+'" >Delete</button>'
+      }
              i= i+1;
           modifiedAirBuslList.push(obj);
         })
@@ -1363,8 +1378,15 @@ router.get('/boardingLodgingListView',verify,(request,response)=>{
           obj.from=strDateFrom;
           obj.to=strDateTo;
           obj.createDdate = strDate;
+          if(isDisabled == 'true')
+          {
+          console.log('++Inside if check ++ '+isDisabled); 
+          obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" disabled = "true" id="'+eachRecord.sfid+'" >Delete</button>'
+          } else{
+          console.log('++Inside else check ++ '+isDisabled);
           obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" id="'+eachRecord.sfid+'" >Delete</button>'
-      //    obj.editAction = '<button href="#" class="btn btn-primary editBoarding" id="'+eachRecord.sfid+'" >Edit</button>'
+          }
+          //    obj.editAction = '<button href="#" class="btn btn-primary editBoarding" id="'+eachRecord.sfid+'" >Edit</button>'
           i= i+1;
           modifiedAirBuslList.push(obj);
         })
@@ -1679,8 +1701,15 @@ router.get('/telephoneFoodCharge',verify,(request,response)=>{
           obj.fooding=eachRecord.fooding_expense__c;
           obj.laundry=eachRecord.laundry_expense__c;
           obj.createDdate = strDate;
-          obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" id="'+eachRecord.sfid+'" >Delete</button>'
-         // obj.editAction = '<button href="#" class="btn btn-primary editFooding" id="'+eachRecord.sfid+'" >Edit</button>'
+          if(isDisabled == 'true')
+          {
+          console.log('++Inside if check ++ '+isDisabled);
+          obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" disabled = "true" id="'+eachRecord.sfid+'" >Delete</button>'
+          } else{
+          console.log('++Inside else check ++ '+isDisabled);
+          obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" disabled = "true" id="'+eachRecord.sfid+'" >Delete</button>'
+           }
+          // obj.editAction = '<button href="#" class="btn btn-primary editFooding" id="'+eachRecord.sfid+'" >Edit</button>'
              i= i+1;
              modifiedFoodChargeList.push(obj);
         })
@@ -1849,8 +1878,14 @@ router.get('/miscellaneousCharge',verify,(request,response)=>{
           obj.remarks=eachRecord.remarks__c;
           obj.createDdate = strDate;
           obj.date=dated.slice(0, 10);
+          if(isDisabled == 'true')
+          {
+              console.log('++Inside if check ++ '+isDisabled);
+          obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" disabled = "true" id="'+eachRecord.sfid+'" >Delete</button>'
+          } else{
+          console.log('++Inside else check ++ '+isDisabled);
           obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" id="'+eachRecord.sfid+'" >Delete</button>'
-        //  obj.editAction = '<button href="#" class="btn btn-primary editMiscellanous" id="'+eachRecord.sfid+'" >Edit</button>'
+           }//  obj.editAction = '<button href="#" class="btn btn-primary editMiscellanous" id="'+eachRecord.sfid+'" >Edit</button>'
       
               i= i+1;
              modifiedList.push(obj);

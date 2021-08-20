@@ -2,6 +2,7 @@
 <% include ./partials/footer %>
 <% include ./partials/messages %>
 <p id ="parentId"><%=parentAssetId %></p>
+<p id ="isDisabled"><%=isDisabled %></p>
 <link rel="stylesheet" href="/stylesheets/table-sortable.css">
 <script src="/scripts/table-sortable.js" ></script>
 
@@ -190,8 +191,11 @@
 <script>
     $(document).ready(function(){
       $('#parentId').hide();
+      $('#isDisabled').hide();
       let parentId=document.getElementById('parentId').innerHTML;
   //    alert('parentId '+parentId);
+       let isDisabled1 = document.getElementById('isDisabled').innerHTML;
+      // alert('isDisabled1 '+isDisabled1);
     /**************Table Sortable Start ***********/
 
         let columns ={

@@ -1310,7 +1310,13 @@ router.get('/getTeamdetails',verify,async(request,response)=>{
          lstTaskOfRelatedDate.forEach((eachTask) => {
                let taskDetail = {};
                taskDetail.name = eachTask.tskname;
-               taskDetail.plannedHours = eachTask.planned_hours__c.toFixed(2);
+               if(eachTask.planned_hours__c != null || achTask.planned_hours__c != '' ){
+                taskDetail.plannedHours = eachTask.planned_hours__c.toFixed(2);
+               }
+               else{
+                taskDetail.plannedHours = eachTask.planned_hours__c
+               }
+             
            //    taskDetail.status = eachTask.task_stage__c;
    
                if(actualHoursMap.has(eachTask.sfid))

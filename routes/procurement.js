@@ -20,6 +20,7 @@ router.get('/assetDetails',verify,(request, response)=> {
     console.log('Asset request.user '+JSON.stringify(request.user));
     var userId = request.user.sfid;
     var objUser = request.user;
+    var isEnableNewButton;
     console.log('Asset userId : '+userId);
     let qry ='SELECT asset.sfid, asset.isHerokuApprovalButtonDisabled__c,asset.Activity_Code_project__c,asset.accounts_approval__c,asset.Requested_Closure_Plan_Date__c,asset.Status__c,asset.Name, proj.name as projname, proj.sfid as projId,'+
             'asset.Manager_Approval__c, asset.Procurement_Head_Approval__c, asset.Procurement_Committee_Approval__c, '+
@@ -92,13 +93,14 @@ router.get('/assetDetails',verify,(request, response)=> {
                 {
                 obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
                 obj.editbutton = '<button href="#" disabled="true" class="btn btn-primary assetRequisitionEditModal" id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
+                obj.isEnableNewButton = true;
                 }
              else
              {
                 obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
                 obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
                 }
-                if(assetQueryResult.rows[i].accounts_approval__c == 'Pending' )
+                if(assetQueryResult.rows[i].accounts_approval__c == 'Pending' || assetQueryResult.rows[i].accounts_approval__c == 'Approved' )
                 {
                obj.accountsapprovalbutton = '<button href="#" disabled="true" class="btn btn-primary accountsapprovalpopup" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
                 }
@@ -390,7 +392,7 @@ router.get('/details',verify, async(request, response) => {
 
     var assetId = request.query.assetId;
     console.log('assetId   '+assetId);
-
+    var isEnableNewButton ;
     var assetFormAndRelatedRecords = {};
 
     let qyr1='SELECT asset.id, asset.sfid,asset.name as name ,asset.Requested_Closure_Plan_Date__c,asset.Project_Department__c,asset.Activity_Code_Project__c as actname, '+
@@ -528,13 +530,19 @@ router.post('/insertAsssetForm',(request,response)=>{
        console.log('dsjjd');
        planDate=null;      
    }
-  
+ var dateInMss = new Date();
+     dateInMss.setDate(dateInMss.getDate());
+    console.log(' Todays date ++ '+dateInMss);
+var date2 = dateInMss.toISOString();
+    console.log( 'date 2 ++ '+date2);
+
 const schema=joi.object({
     assetRequisitionName:joi.string().min(3).required().label('Please Fill Asset Requisition Name'),
     asset: joi.string().max(255).required().label('Asset Requisition Name is too long'),
     project:joi.string().required().label('Please choose Project/Department'),
     plandte:joi.date().required().label('Please Fill Target Date'),
-    planDate:joi.date().min("now").label('Target Date should be greater than or equals to today date'),
+    //planDatee:joi.date().min('now').required().label('Target Date should be greater than or equals to today date'),
+    planDate:joi.date().required().less(joi.ref('date2')).label('Target Date should be greater than or equals to today date'),
   //  planDate:joi.string().required().label('Please fill Target Date of Receiving'),
    // act:joi.string().required().label('Pleasse Chose Activity'),
 })
@@ -1593,12 +1601,14 @@ router.get('/getProcurementApprovalDetails',verify,(request,response)=>{
 })
 
 
-router.get('/getProcurementItListView/:parentAssetId',verify,(request,response)=>{
+router.get('/getProcurementItListView/:parentAssetId&:isDisabled',verify,(request,response)=>{
     let objUser=request.user;
     console.log('user '+objUser);
     let parentAssetId = request.params.parentAssetId;
-    console.log('parentAssetId  '+parentAssetId);
-    response.render('procurementListView',{objUser,parentAssetId:parentAssetId});
+    console.log('parentAssetId ++++  '+parentAssetId);
+    isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled); 
+    response.render('procurementListView',{objUser,isDisabled,parentAssetId: parentAssetId});
 })
 
 router.get('/itProcurementList',(request,response)=>{
@@ -1634,8 +1644,14 @@ router.get('/itProcurementList',(request,response)=>{
               obj.vendor=eachRecord.vendername;
               obj.createdDate = strDate;
              // obj.editAction = '<button href="#" class="btn btn-primary editProcIt" id="'+eachRecord.sfid+'" >Edit</button>'
-              obj.deleteAction = '<button href="#" class="btn btn-primary deleteProcIt" id="'+eachRecord.sfid+'" >Delete</button>'
-
+             if(isDisabled == 'true')
+             {
+                console.log('++Inside if check ++ '+isDisabled);
+             obj.deleteAction = '<button href="#" class="btn btn-primary deleteProcIt" disabled = "true" id="'+eachRecord.sfid+'" >Delete</button>'
+            } else{
+                console.log('++Inside else check ++ '+isDisabled);
+                obj.deleteAction = '<button href="#" class="btn btn-primary deleteProcIt" id="'+eachRecord.sfid+'" >Delete</button>'
+            }
               i= i+1;
               modifiedProcurementITList.push(obj);
             })
@@ -1686,18 +1702,23 @@ router.get('/getProcurementITDetail',(request,response)=>{
     })
 })
 /**********************************  NON IT PROCUREMENT LIST VIEW   ******************************/
-router.get('/getNonItProcurementListVIew/:parentAssetId',verify,(request,response)=>{
+var isDisabled = false;
+
+router.get('/getNonItProcurementListVIew/:parentAssetId&:isDisabled',verify,(request,response)=>{
     let objUser=request.user;
     console.log('user '+objUser);
     let parentAssetId = request.params.parentAssetId;
     console.log('parentAssetId  '+parentAssetId);
-    response.render('getNonItProcurementList',{objUser,parentAssetId: parentAssetId});
+     isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled); 
+    response.render('getNonItProcurementList',{objUser,isDisabled,parentAssetId: parentAssetId});
     
 })
 
 router.get('/NonItProcurementList',(request,response)=>{
     let parentAssetId=request.query.parentId;
     console.log('nonIT DETAIL LIST for parent id=  '+parentAssetId);
+   
     let qry='SELECT proc.sfid,proc.Name as procName ,proc.Items__c ,proc.Products_Services_Name__c, proc.createddate, vend.name as vendorName,proc.Product_Service__c,proc.Quantity__c, proc.Number_of_quotes__c, proc.Budget__c,proc.Impaneled_Vendor__c '+
     'FROM salesforce.Product_Line_Item__c proc '+
     'INNER JOIN salesforce.Impaneled_Vendor__c vend '+
@@ -1728,7 +1749,16 @@ router.get('/NonItProcurementList',(request,response)=>{
               obj.vendor=eachRecord.vendorname;
               obj.createdDate = strDate;
            //   obj.editAction = '<button href="#" class="btn btn-primary editProcurement" id="'+eachRecord.sfid+'" >Edit</button>'
-             obj.deleteAction = '<button href="#" class="btn btn-primary deleteProcIt" id="'+eachRecord.sfid+'" >Delete</button>'
+             console.log('++Inside PROCUREMENT NON-IT isDisabled ++ '+isDisabled);
+            if(isDisabled == 'true')
+            {
+                console.log('++Inside if check ++ '+isDisabled);
+                obj.deleteAction = '<button href="#" class="btn btn-primary deleteProcIt" disabled = "true" id="'+eachRecord.sfid+'" >Delete</button>'
+            } else{
+                console.log('++Inside else check ++ '+isDisabled);
+                obj.deleteAction = '<button href="#" class="btn btn-primary deleteProcIt" id="'+eachRecord.sfid+'" >Delete</button>'
+            }
+             
            i= i+1;
               modifiedProcurementList.push(obj);
             })

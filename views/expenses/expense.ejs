@@ -139,8 +139,13 @@
   .col-11 {width: 91.66%;}
   .col-12 {width: 100%;}
 }
-    
+
   </style>
+  <style>
+    .anchorDisable{
+      pointer-events: none;
+    }
+    </style>
 </head>
 <body>
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -254,7 +259,7 @@
                                                               <i class="fa fa-angle-double-right mr-3"></i>Conveyance Voucher
                                                           </button>
                                                           <!-- <button class="btn btn-primary float-right">New</button> -->
-                                                          <a href="#" class="btn btn-primary float-right conveyanceVoucherButton" style="color:white;">New</a>
+                                                          <a href="#" class="btn btn-primary float-right conveyanceVoucherButton" id="conveyanceVoucherButton" style="color:white;">New</a>
                                                       </h5>
                                                   </div>
                                                   <div id="collapseTwo" class="collapse fade" aria-labelledby="headingTwo"
@@ -1082,7 +1087,15 @@
           console.log('expenseId   : '+expenseId);
           $('#hiddenExpenseId').val(expenseId);   //Setting Hidden Field ExpenseId
           document.getElementById('expenseIdpTag').innerHTML = expenseId;
-
+          let buttonDisable = document.getElementById(expenseId).disabled;
+            console.log(' button Disable + '+buttonDisable);
+           
+            if(buttonDisable ===true ){
+          //   document.getElementById("pettyCashButton").setAttribute('disabled',true);
+                document.getElementById("pettyCashNewButton").classList.add("anchorDisable");
+                document.getElementById("conveyanceVoucherButton").classList.add("anchorDisable");
+                document.getElementById("tourBillClaimNewButton").classList.add("anchorDisable");
+            }
           $.ajax({
               type : 'GET',
               url  : '/expense/details',
@@ -1192,7 +1205,7 @@
               pettyCashTableRows += '</tr>';
             }
             if(lengthOfPettyCashList>0){
-              pettyCashTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/pettycashlistview?expenseId='+expenseId+'" >View All</a></center></td></tr>';
+              pettyCashTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/pettycashlistview/'+expenseId+'&'+buttonDisable+'" >View All</a></center></td></tr>';
             }
           
             $('#pettyCashTable').empty();
@@ -1222,7 +1235,7 @@
               conveyanceVoucherTableRows += '</tr>';
             }
             if(conveyanceVoucherListLength>0){
-              conveyanceVoucherTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/ConveyanceListView?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
+              conveyanceVoucherTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/ConveyanceListView/'+expenseId+'&'+buttonDisable+'" >View All</a></center></td></tr></tbody>';
            
             }
             $('#conveyanceVoucherTable').empty();
@@ -1249,7 +1262,7 @@
               tourBillClaimTableRows += '</tr>';
             }
             if(tourBillClaimListLength>0){
-              tourBillClaimTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/tourBillClaimListview?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
+              tourBillClaimTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/tourBillClaimListview/'+expenseId+'&'+buttonDisable+'" >View All</a></center></td></tr></tbody>';
  
             
             }

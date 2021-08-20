@@ -190,7 +190,10 @@ $(document).ready(function(){
     }
     $('#place'+cnt).on("change",function(){
         if(this.value == 'Others')
-          $('#tier3City'+cnt).attr("readonly",false);
+          {
+            $('#tier3City'+cnt).attr("readonly",false);
+          cityAllowance(this.value,cnt); 
+          }
         else
         {
           $('#tier3City'+cnt).attr("readonly","readonly");
