@@ -541,12 +541,12 @@ const schema=joi.object({
     asset: joi.string().max(255).required().label('Asset Requisition Name is too long'),
     project:joi.string().required().label('Please choose Project/Department'),
     plandte:joi.date().required().label('Please Fill Target Date'),
-    //planDatee:joi.date().min('now').required().label('Target Date should be greater than or equals to today date'),
-    planDate:joi.date().required().less(joi.ref('date2')).label('Target Date should be greater than or equals to today date'),
+    planDatee:joi.date().min('now').required().label('Target Date should be greater than or equals to today date'),
+ // planDate:joi.date().required().less(joi.ref('date2')).label('Target Date should be greater than or equals to today date'),
   //  planDate:joi.string().required().label('Please fill Target Date of Receiving'),
    // act:joi.string().required().label('Pleasse Chose Activity'),
 })
-let result=schema.validate({assetRequisitionName,project,asset:assetRequisitionName,plandte:planDate,planDate});
+let result=schema.validate({assetRequisitionName,project,asset:assetRequisitionName,plandte:planDate,planDatee:planDate});
 if(result.error){
     console.log('fd'+result.error);
     response.send(result.error.details[0].context.label);    

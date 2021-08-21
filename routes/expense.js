@@ -203,7 +203,7 @@ router.get('/expenseAllRecords',verify, async (request, response) => {
                 obj.createdDate = strDate;
                 obj.print='<button    data-toggle="modal" data-target="#popupPrint" class="btn btn-primary printexp" id="print'+expenseQueryResult.rows[i].sfid+'" >Print</button>';
                   obj.editButton = '<button    data-toggle="modal" data-target="#popupEdit" class="btn btn-primary expIdEditMode"   id="edit'+expenseQueryResult.rows[i].sfid+'" >Edit</button>';
-                if(expenseQueryResult.rows[i].approval_status__c == 'Rejected'){
+                if(expenseQueryResult.rows[i].project_manager_status__c == 'Rejected' || expenseQueryResult.rows[i].approval_status__c == 'Rejected' || expenseQueryResult.rows[i].accounts_status__c == 'Rejected' ){
                   obj.editButton = '<button    data-toggle="modal" data-target="#popupEdit" class="btn btn-primary expIdEditMode" id="edit'+expenseQueryResult.rows[i].sfid+'" >Edit</button>';
                   obj.approvalButton = '<button   class="btn btn-primary expIdApproval" style="color:white;" id="'+expenseQueryResult.rows[i].sfid+'" >Approval</button>';
                 }
