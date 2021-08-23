@@ -154,7 +154,7 @@ $(document).ready(function(){
     let label = selectedCode[0].name;
     console.log('label'+label);
     document.getElementById('projectTask'+cnt).value = label;
-    $('#projectTask'+cnt).value = label;
+  //  $('#projectTask'+cnt).value = label;
     console.log('label  :'+label+' value : '+taskId);
 })
    /* $('#activity_code'+cnt).on('change',function(){
@@ -190,6 +190,13 @@ $(document).ready(function(){
 });
 $(function () {
   $('form#formdata').bind('submit', function () {
+    let formArrayData = $('form#formdata').serializeArray();
+    if(formArrayData.length == 0)
+    {
+        alert('Please add a row first');
+    }
+    else
+    {
     $("#submitButton").attr("disabled", true);
     $.ajax({
       type: 'post',
@@ -228,6 +235,7 @@ $(function () {
         console.log('jqXHR '+JSON.stringify(jqXHR));        
       }
     });
+  }
     return false;
   });
 });

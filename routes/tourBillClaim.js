@@ -411,6 +411,7 @@ router.post('/airRailBusCharges',verify, (request, response) => {
   var bdy = request.body;
   var bodyResult = request.body;  
   let parentTourBillId = '';
+  console.log('airRailBusCharges Body 1 '+JSON.stringify(request.body));
   console.log('airRailBusCharges Body'+JSON.stringify(bodyResult));
   if(typeof(request.body.parentTourBillId)!='object'){
     parentTourBillId =request.body.parentTourBillId;
@@ -441,7 +442,8 @@ router.post('/airRailBusCharges',verify, (request, response) => {
         let numberOfRows; let lstAirRailBus= [];
         if(typeof(bodyResult.arrival_Date) == 'object')
         {
-            numberOfRows = bodyResult.arrival_Date.length;
+            console.log('Inside tour bill cliam for object type of data');
+            numberOfRows = request.body.arrival_Date.length;
             for(let i=0; i<numberOfRows ;i++)
             {
   
@@ -1986,7 +1988,7 @@ router.get('/miscellaneousCharge',verify,(request,response)=>{
     console.log('tourBillQueryResult => '+JSON.stringify(tourBillQueryResult.rows));
     let expenseId =tourBillQueryResult.rows[0].expense__c;
     console.log('expense ID for Validation  = '+expenseId);
-pool.
+    pool.
     query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId ])
     .then((ExpenseQuerryResult)=>{
       console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
