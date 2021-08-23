@@ -673,7 +673,7 @@
                                     .attr("value", TaskStatus[i])
                                     .text(TaskStatus[i]))
                         }
-                        let activityCode = ['Test_activity17/03','test_today','test_activity_code17/03','tetsttst644646']
+                        let activityCode = [];
                         $('#activitycodes').empty
                         for(let i=0; i <activityCode.length; i++)
                         {
@@ -697,7 +697,7 @@
                             .then((response) => {
                                 console.log('response from Edit Ajax +=' + JSON.stringify(response));
                                 console.log('rtecordDeatail ',response.project);
-                                let project = response.project
+                                let project = response.project;
                                 $('#projectDropdown').empty();
                                 
                                 $('#projectDropdown')
@@ -751,14 +751,17 @@
                             }
                         })
                             .then((response) => {
-                                console.log('response from Edit Ajax +=' + JSON.stringify(response));
-                                console.log('rtecordDeatail ' + response.ActivityCodeDetail[0].name);
-                             //   console.log('task details ' + response.ActivityCodeDetail[0]);
+                                console.log('task details ' + JSON.stringify(response));
+                                let selectedActivityCode = '';
+                                if( response.ActivityCodeDetail[0].activity_code_name__c != null ){
+                                    console.log('response.ActivityCodeDetail[0].activity_code_name__c : '+response.ActivityCodeDetail[0].activity_code_name__c);
+                                    selectedActivityCode = response.ActivityCodeDetail[0].activity_code_name__c;
+                                }
                                 let taskrecord = response.ActivityCodeDetail[0];
                                 let activityCodes = [];
-                                for(let i=0; i< response.activity.length ;i++)
+                                for(let i=0; i< response.ActivityCodeDetail.length ;i++)
                                     {
-                                        activityCodes.push(response.activity[i]);
+                                        activityCodes.push(response.ActivityCodeDetail[i]);
                                     }
                                     console.log('Asset Details list'+JSON.stringify(taskrecord));
                                 console.log('Activity Codes'+JSON.stringify(activityCodes));
@@ -784,9 +787,60 @@
                                     }
                                 document.forms["editTask"]["status"].value = response.ActivityCodeDetail[0].task_stage__c;
                                 document.forms["editTask"]["project"].value = response.ActivityCodeDetail[0].project_name2__c;
-                                if( response.ActivityCodeDetail[0].activity_code_name__c !=null ){
-                                 document.forms["editTask"]["activityCode"].value = assetRecord.activity_code_project__c;
-                                    }
+                               
+
+                                    $.ajax({
+                                        url: '/tasks/getActivityCode',
+                                        type: 'get',
+                                        data: {
+                                            projectId: response.ActivityCodeDetail[0].project_name__c
+                                        },
+                                        dataType: 'json',
+                                        beforeSend: function () {
+                                            $('#detailLoadingSpinner').show();
+                                        }
+                                    })
+                                    .then((response) => {
+                                        console.log('edit mode activity codes' + JSON.stringify(response));
+                                        console.log('edit mode activity codes  ',response.ActivityCodeDetail);
+                                        let activityCode = response.ActivityCodeDetail;
+                                        //let activityCode = ['Test_activity17/03','test_today','test_activity_code17/03','tetsttst644646'] -->
+                                        $('#activityCode').empty();
+                                        $('#activityCode')
+                                        .append($("<option></option>")
+                                        .attr("value",'')
+                                        .text('None'))
+
+                                       
+
+                                        
+                                        for(let i=0; i <activityCode.length; i++)
+                                        {
+                                            console.log('activityCode>>>>>>>>>>>',selectedActivityCode);
+
+                                            if(selectedActivityCode == activityCode[i].name ){
+                                                let option1 = new Option(activityCode[i].name,activityCode[i].sfid,true, true);
+                                                console.log('Option1'+option1);
+                                                document.forms["editTask"]["activityCode"].appendChild(option1);
+                                            }
+                                            else
+                                            {
+                                               // console.log('activityCode>>>>>>>>>>>',activityCode)
+                                                $('#activityCode')
+                                                .append($("<option></option>")
+                                                .attr("value",activityCode[i].sfid)
+                                                .text(activityCode[i].name))
+                                            }
+                                        }
+                                    })
+                                    .fail((jqXHR, status, error) => {
+                                        $('#detailLoadingSpinner').show();
+                                        console.log('jqXHR  : ' + JSON.stringify(jqXHR));
+                                        console.log('error  : ' + error);
+                                    })
+
+
+
                                // document.forms["editTask"]["activityCode"].value = response.ActivityCodeDetail[0].activity_codes__c;
                                 $('#projecttaskcategory').empty();
                                 for (let i = 0; i < projectTaskCategory.length; i++) {
