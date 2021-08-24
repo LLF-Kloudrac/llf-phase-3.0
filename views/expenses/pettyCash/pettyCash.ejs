@@ -25,7 +25,7 @@
        
       <div class="col-md-10 m-auto">
         <div class="col-md-10">
-          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/pettycashlistview?expenseId=<%= parentExpenseId %>" id="createNewPettyCashButton">Go To Petty Cash</a>
+          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/pettycashlistview/<%= parentExpenseId %>/&<%= buttonDisable %>" id="createNewPettyCashButton">Go To Petty Cash</a>
           <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/expenseViewRel/<%= parentExpenseId %>" >Go To Expense </a>
           <a class="btn btn-primary btn-md bg-gray mb-mobile" href="https://res.cloudinary.com/hfmqrflec/image/upload/v1600428034/expense%20document/LLF_-_Travel_Policy_rbojui.pdf" target="_blank" >Petty Cash Policy Document </a>
         </div>
@@ -79,6 +79,9 @@ $(document).ready(function(){
  $('#addButton').hide();
  var count = 1
  let expenseId = document.getElementById('expenseId').innerHTML; 
+ let buttonDisable = document.getElementById(expenseId).disabled;
+            console.log(' button Disable + '+buttonDisable);
+ $('#buttonDisable').hide();
  let lstActivityCodes = [];
 
   $.ajax({

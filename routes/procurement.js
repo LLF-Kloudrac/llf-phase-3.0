@@ -21,6 +21,7 @@ router.get('/assetDetails',verify,(request, response)=> {
     var userId = request.user.sfid;
     var objUser = request.user;
     var isEnableNewButton;
+    var isNull,isApproved,isPending,isRejected;
     console.log('Asset userId : '+userId);
     let qry ='SELECT asset.sfid, asset.isHerokuApprovalButtonDisabled__c,asset.Activity_Code_project__c,asset.accounts_approval__c,asset.Requested_Closure_Plan_Date__c,asset.Status__c,asset.Name, proj.name as projname, proj.sfid as projId,'+
             'asset.Manager_Approval__c, asset.Procurement_Head_Approval__c, asset.Procurement_Committee_Approval__c, '+
@@ -70,104 +71,82 @@ router.get('/assetDetails',verify,(request, response)=> {
               obj.accAppStatus=assetQueryResult.rows[i].accounts_approval__c;
               obj.status = assetQueryResult.rows[i].status__c
 
-              if((assetQueryResult.rows[i].manager_approval__c == 'Pending' || assetQueryResult.rows[i].procurement_head_approval__c == 'Pending' ||
-              assetQueryResult.rows[i].procurement_committee_approval__c == 'Pending' || assetQueryResult.rows[i].procurement_comt_approval_for_fortnight__c == 'Pending' || 
-              assetQueryResult.rows[i].management_approval__c == 'Pending' || assetQueryResult.rows[i].chairperson_approval__c == 'Pending' ||
-              assetQueryResult.rows[i].management_approval_less_than_3_quotes__c == 'Pending' || assetQueryResult.rows[i].management_approval_for_fortnight_limit__c == 'Pending' || 
-              assetQueryResult.rows[i].management_approval_activity_code__c == 'Pending') && (assetQueryResult.rows[i].accounts_approval__c == 'null') )
-              {
-                  obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
-                  obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup"  id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
-                  obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
-                  obj.isEnableNewButton = true;
-                }
-                else if((assetQueryResult.rows[i].manager_approval__c == 'Rejected' || assetQueryResult.rows[i].procurement_head_approval__c == 'Rejected' ||
-                assetQueryResult.rows[i].procurement_committee_approval__c == 'Rejected' || assetQueryResult.rows[i].procurement_comt_approval_for_fortnight__c == 'Rejected' || 
-                assetQueryResult.rows[i].management_approval__c == 'Rejected' || assetQueryResult.rows[i].chairperson_approval__c == 'Rejected' ||
-                assetQueryResult.rows[i].management_approval_less_than_3_quotes__c == 'Rejected' || assetQueryResult.rows[i].management_approval_for_fortnight_limit__c == 'Rejected' || 
-                assetQueryResult.rows[i].management_approval_activity_code__c == 'Rejected') || (assetQueryResult.rows[i].accounts_approval__c == null) )
+              if(assetQueryResult.rows[i].manager_approval__c == 'Approved' || assetQueryResult.rows[i].procurement_head_approval__c == 'Approved' ||
+              assetQueryResult.rows[i].procurement_committee_approval__c == 'Approved' || assetQueryResult.rows[i].procurement_comt_approval_for_fortnight__c == 'Approved' || 
+              assetQueryResult.rows[i].management_approval__c == 'Approved' || assetQueryResult.rows[i].chairperson_approval__c == 'Approved' ||
+              assetQueryResult.rows[i].management_approval_less_than_3_quotes__c == 'Approved' || assetQueryResult.rows[i].management_approval_for_fortnight_limit__c == 'Approved' || 
+              assetQueryResult.rows[i].management_approval_activity_code__c == 'Approved') 
                 {
-                    obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
-                    obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
-                    obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
+                 isApproved = true;
                 }
-               else if((assetQueryResult.rows[i].manager_approval__c == 'Rejected' || assetQueryResult.rows[i].procurement_head_approval__c == 'Rejected' ||
-                assetQueryResult.rows[i].procurement_committee_approval__c == 'Rejected' || assetQueryResult.rows[i].procurement_comt_approval_for_fortnight__c == 'Rejected' || 
-                assetQueryResult.rows[i].management_approval__c == 'Rejected' || assetQueryResult.rows[i].chairperson_approval__c == 'Rejected' ||
-                assetQueryResult.rows[i].management_approval_less_than_3_quotes__c == 'Rejected' || assetQueryResult.rows[i].management_approval_for_fortnight_limit__c == 'Rejected' || 
-                assetQueryResult.rows[i].management_approval_activity_code__c == 'Rejected') && (assetQueryResult.rows[i].accounts_approval__c == 'Rejected') )
-                {
-                    obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
-                    obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
-                    obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
-                }
-               else if((assetQueryResult.rows[i].manager_approval__c == 'Pending' || assetQueryResult.rows[i].procurement_head_approval__c == 'Pending' ||
+               else if(assetQueryResult.rows[i].manager_approval__c == 'Pending' || assetQueryResult.rows[i].procurement_head_approval__c == 'Pending' ||
                 assetQueryResult.rows[i].procurement_committee_approval__c == 'Pending' || assetQueryResult.rows[i].procurement_comt_approval_for_fortnight__c == 'Pending' || 
                 assetQueryResult.rows[i].management_approval__c == 'Pending' || assetQueryResult.rows[i].chairperson_approval__c == 'Pending' ||
                 assetQueryResult.rows[i].management_approval_less_than_3_quotes__c == 'Pending' || assetQueryResult.rows[i].management_approval_for_fortnight_limit__c == 'Pending' || 
-                assetQueryResult.rows[i].management_approval_activity_code__c == 'Pending') && (assetQueryResult.rows[i].accounts_approval__c == null) )
+                assetQueryResult.rows[i].management_approval_activity_code__c == 'Pending') 
+                  {
+                  isPending = true;
+                  }
+              else if(assetQueryResult.rows[i].manager_approval__c == 'Rejected' || assetQueryResult.rows[i].procurement_head_approval__c == 'Rejected' ||
+                  assetQueryResult.rows[i].procurement_committee_approval__c == 'Rejected' || assetQueryResult.rows[i].procurement_comt_approval_for_fortnight__c == 'Rejected' || 
+                  assetQueryResult.rows[i].management_approval__c == 'Rejected' || assetQueryResult.rows[i].chairperson_approval__c == 'Rejected' ||
+                  assetQueryResult.rows[i].management_approval_less_than_3_quotes__c == 'Rejected' || assetQueryResult.rows[i].management_approval_for_fortnight_limit__c == 'Rejected' || 
+                  assetQueryResult.rows[i].management_approval_activity_code__c == 'Rejected') 
+                    {
+                        isRejected = true;
+                    }
+               else{
+                        isNull = true;
+                   }
+               
+                if((isRejected = true) && (isPending = false) && (isApproved = false) )
                 {
-                    obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
+                   
+                  obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
+                  obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" disabled = "true"  id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
+                  obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal"  id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
+                  obj.isEnableNewButton = false;
+                }
+               
+               else if((isApproved = true) && (isPending = false) && (isRejected = false) )
+                {
+                   
+                  obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
+                  obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup"  id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
+                  obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" disabled = "true"  id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
+                  obj.isEnableNewButton = true;
+                }
+                else if(assetQueryResult.rows[i].accounts_approval__c == 'Pending' )
+                {
+                   
+                  obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
+                  obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
+                  obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" disabled = "true"  id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
+                  obj.isEnableNewButton = true;
+                }
+                else if(assetQueryResult.rows[i].accounts_approval__c == 'Approved' )
+                {
+                   
+                  obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
+                  obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
+                  obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal"  id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
+                  obj.isEnableNewButton = true;
+                }
+                else if(assetQueryResult.rows[i].accounts_approval__c == 'Rejected' )
+                {
+                   
+                  obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
+                  obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
+                  obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal"  id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
+                  obj.isEnableNewButton = false;
+                }    
+                else{
+                    obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
                     obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
-                    obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
-                    obj.isEnableNewButton = true;
-                }
-                else if((assetQueryResult.rows[i].manager_approval__c == 'Approved' || assetQueryResult.rows[i].procurement_head_approval__c == 'Approved' ||
-                assetQueryResult.rows[i].procurement_committee_approval__c == 'Approved' || assetQueryResult.rows[i].procurement_comt_approval_for_fortnight__c == 'Approved' || 
-                assetQueryResult.rows[i].management_approval__c == 'Approved' || assetQueryResult.rows[i].chairperson_approval__c == 'Approved' ||
-                assetQueryResult.rows[i].management_approval_less_than_3_quotes__c == 'Approved' || assetQueryResult.rows[i].management_approval_for_fortnight_limit__c == 'Approved' || 
-                assetQueryResult.rows[i].management_approval_activity_code__c == 'Approved') && (assetQueryResult.rows[i].accounts_approval__c == null) )
-                {
-                    obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
-                    obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
-                    obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
-                    obj.isEnableNewButton = true;
-                }
-                else if((assetQueryResult.rows[i].manager_approval__c == 'Approved' || assetQueryResult.rows[i].procurement_head_approval__c == 'Approved' ||
-                assetQueryResult.rows[i].procurement_committee_approval__c == 'Approved' || assetQueryResult.rows[i].procurement_comt_approval_for_fortnight__c == 'Approved' || 
-                assetQueryResult.rows[i].management_approval__c == 'Approved' || assetQueryResult.rows[i].chairperson_approval__c == 'Approved' ||
-                assetQueryResult.rows[i].management_approval_less_than_3_quotes__c == 'Approved' || assetQueryResult.rows[i].management_approval_for_fortnight_limit__c == 'Approved' || 
-                assetQueryResult.rows[i].management_approval_activity_code__c == 'Approved') && (assetQueryResult.rows[i].accounts_approval__c == 'Pending') )
-                {
-                    obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
-                    obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
-                    obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
-                    obj.isEnableNewButton = true;
-                }
-                else if((assetQueryResult.rows[i].manager_approval__c == 'Approved' || assetQueryResult.rows[i].procurement_head_approval__c == 'Approved' ||
-                assetQueryResult.rows[i].procurement_committee_approval__c == 'Approved' || assetQueryResult.rows[i].procurement_comt_approval_for_fortnight__c == 'Approved' || 
-                assetQueryResult.rows[i].management_approval__c == 'Approved' || assetQueryResult.rows[i].chairperson_approval__c == 'Approved' ||
-                assetQueryResult.rows[i].management_approval_less_than_3_quotes__c == 'Approved' || assetQueryResult.rows[i].management_approval_for_fortnight_limit__c == 'Approved' || 
-                assetQueryResult.rows[i].management_approval_activity_code__c == 'Approved') && (assetQueryResult.rows[i].accounts_approval__c == 'Approved') )
-                {
-                    obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
-                    obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
-                    obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
+                    obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal"  id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
                     obj.isEnableNewButton = false;
                 }
-                else if((assetQueryResult.rows[i].manager_approval__c == null || assetQueryResult.rows[i].procurement_head_approval__c == null ||
-                    assetQueryResult.rows[i].procurement_committee_approval__c == null || assetQueryResult.rows[i].procurement_comt_approval_for_fortnight__c == null || 
-                    assetQueryResult.rows[i].management_approval__c == null || assetQueryResult.rows[i].chairperson_approval__c == null ||
-                    assetQueryResult.rows[i].management_approval_less_than_3_quotes__c == null || assetQueryResult.rows[i].management_approval_for_fortnight_limit__c == null || 
-                    assetQueryResult.rows[i].management_approval_activity_code__c == null) && (assetQueryResult.rows[i].accounts_approval__c == null) )
-                    {
-                        obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
-                        obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
-                        obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
-                    }
-             else
-             {
-                obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
-                obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
-                }
-                if(assetQueryResult.rows[i].accounts_approval__c == 'Pending' || assetQueryResult.rows[i].accounts_approval__c == 'Approved' )
-                {
-               obj.accountsapprovalbutton = '<button href="#" disabled="true" class="btn btn-primary accountsapprovalpopup" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
-                }
-               else
-               {
-               obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
-               }              obj.createdDate = strDate;
+               obj.createdDate = strDate;
               modifiedList.push(obj);
               }
               response.send(modifiedList);
