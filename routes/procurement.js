@@ -101,16 +101,32 @@ router.get('/assetDetails',verify,(request, response)=> {
                
                 if((isRejected = true) && (isPending = false) && (isApproved = false) )
                 {
-                   
+                   console.log(' +++ Inside is rejected  +++ ')
                   obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
                   obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" disabled = "true"  id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
                   obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal"  id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
                   obj.isEnableNewButton = false;
                 }
                
-               else if((isApproved = true) && (isPending = false) && (isRejected = false) )
+               else if((isPending = true) && (isApproved = false) && (isRejected = false) )
                 {
-                   
+                    console.log(' +++ Inside is Pending  +++ ')
+                  obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
+                  obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" disabled = "true"  id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
+                  obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" disabled = "true"  id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
+                  obj.isEnableNewButton = true;
+                }
+                else if((isApproved = true) && (assetQueryResult.rows[i].accounts_approval__c == null)  )
+                {
+                    console.log(' +++ Inside is Approveddddd +++ ')
+                  obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
+                  obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup"  id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
+                  obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" disabled = "true"  id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
+                  obj.isEnableNewButton = true;
+                }
+                else if((isApproved = true) && (isPending = false) && (isRejected = false) )
+                {
+                    console.log(' +++ Inside is Approved  +++ ')
                   obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
                   obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup"  id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
                   obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" disabled = "true"  id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
@@ -118,7 +134,7 @@ router.get('/assetDetails',verify,(request, response)=> {
                 }
                 else if(assetQueryResult.rows[i].accounts_approval__c == 'Pending' )
                 {
-                   
+                    console.log(' +++ Inside is Accounts approval Pending  +++ ')
                   obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
                   obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
                   obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" disabled = "true"  id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
@@ -126,7 +142,7 @@ router.get('/assetDetails',verify,(request, response)=> {
                 }
                 else if(assetQueryResult.rows[i].accounts_approval__c == 'Approved' )
                 {
-                   
+                    console.log(' +++ Inside is Accounts approval Approved  +++ ')
                   obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
                   obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
                   obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal"  id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
@@ -134,13 +150,14 @@ router.get('/assetDetails',verify,(request, response)=> {
                 }
                 else if(assetQueryResult.rows[i].accounts_approval__c == 'Rejected' )
                 {
-                   
+                    console.log(' +++ Inside is Accounts approval rejected  +++ ')
                   obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
                   obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
                   obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal"  id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
                   obj.isEnableNewButton = false;
                 }    
                 else{
+                    console.log(' +++ Inside else  +++ ')
                     obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
                     obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
                     obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal"  id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
