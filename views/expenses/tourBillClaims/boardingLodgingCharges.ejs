@@ -86,7 +86,7 @@ $(document).ready(function(){
    $('#tourbillId').hide();
    $('#addButton').hide();
    let tourbillId = document.getElementById('tourbillId').innerHTML;
-  var count = 1;
+ // var count = 1;
  
  let activityCodes = [];
  var count = 1;
@@ -171,7 +171,7 @@ $(document).ready(function(){
               if(eachCode.sfid == taskId)
                 return eachCode;
             })
-            let label = selectedCode[0].name;
+            let label = selectedCode[0].activity_code__c;
             document.getElementById('projectTask'+cnt).value = label;
           //  $('#projectTask'+cnt).value = label;
             console.log('label  :'+label+' value : '+taskId);
@@ -200,124 +200,22 @@ $(document).ready(function(){
             cityAllowance(this.value,cnt);                                  // to auto fill the allowanne fields
         } 
     });
-	function totalAllowancesCalculation()
-	{
-			let fromDate = document.getElementById('fromDate'+cnt).value;
-      let fromTime = document.getElementById('fromTime'+cnt).value;
-      let toDate = document.getElementById('toDate'+cnt).value;
-      let toTime = document.getElementById('toTime'+cnt).value;
-      let fromHours = parseInt(fromTime.split(':')[0],10);
-      let fromMinutes = parseInt(fromTime.split(':')[1],10);
-      let toHours = parseInt(toTime.split(':')[0],10);
-      let toMinutes = parseInt(toTime.split(':')[1],10);
-      
-      let dailyAllowances = document.getElementById('dailyAllowances'+cnt).value;
-      let ownStayAmount = document.getElementById('ownStayAmount'+cnt).value;
-      let amtForBL = document.getElementById('amtForBL'+cnt).value;
-      console.log('fromDate   : '+fromDate);
-      console.log('typeof(fromDate)  '+typeof(fromDate));
-      console.log('fromTime   : '+typeof(fromTime));
-      console.log('toDate   : '+toDate);
-      console.log('toTime   : '+toTime);
-    
-      let stayType = document.getElementById('stay'+cnt).value;
-      console.log('stayType  '+stayType);
-      if(stayType == 'Stay')
-      {
-        var date1 = new Date(fromDate); 
-        var date2 = new Date(toDate); 
-          
-        var Difference_In_Time = date2.getTime() - date1.getTime(); 
-        var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24); 
-        console.log('Difference_In_Days  '+Difference_In_Days);
-        console.log('dailyAllowances  : '+dailyAllowances);
-        Difference_In_Days = Difference_In_Days - 1;
-        var totalAllowances = dailyAllowances * Difference_In_Days;
-        console.log('totalAllowances  : '+totalAllowances);
-        
-        if(fromHours > 0 && fromMinutes > 0 &&  (fromHours <= 11 && fromMinutes <= 59) || (fromHours <= 12 && fromMinutes == 00))
-        {
-          console.log('if from : '+dailyAllowances);
-          let dailyAllowanceValue = parseInt(dailyAllowances,10);
-          totalAllowances = parseInt(totalAllowances,10) + dailyAllowanceValue;
-        }
-        else if(fromHours >=12 && fromMinutes > 00)
-        {
-          console.log('else from : '+dailyAllowances/2);
-          let dailyAllowanceValue = parseInt(dailyAllowances/2,10);
-          totalAllowances = parseInt(totalAllowances,10) + dailyAllowanceValue;
-        }
-        if((toHours > 0 && toMinutes > 0) && (toHours <= 11 && toMinutes <= 59)   )
-        {
-          console.log('if to : '+dailyAllowances/2);
-          let dailyAllowanceValue = parseInt(dailyAllowances/2,10);
-          totalAllowances = parseInt(totalAllowances,10) + dailyAllowanceValue;
-        }
-        else if(toHours >=12 && toHours > 00)
-        {
-          console.log('else to : '+dailyAllowances);
-          let dailyAllowanceValue = parseInt(dailyAllowances,10);
-          totalAllowances = parseInt(totalAllowances,10) + dailyAllowanceValue;
-        }
-        document.getElementById('totalAllowances'+cnt).value = totalAllowances;
-        let policyamtForBL = amtForBL * Difference_In_Days;
-        document.getElementById('policyamtForBL'+cnt).value = policyamtForBL;
-      }
 
-      if(stayType != 'Stay')
-      {
-        var date1 = new Date(fromDate); 
-        var date2 = new Date(toDate); 
-          
-        var Difference_In_Time = date2.getTime() - date1.getTime(); 
-        var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24); 
-        console.log('Difference_In_Days  '+Difference_In_Days);
-        console.log('ownStayAmount  : '+ownStayAmount);
-        Difference_In_Days = Difference_In_Days - 1;
-        var totalOwnStay = ownStayAmount * Difference_In_Days;
-        console.log('totalAllowances  : '+totalOwnStay);
-        
-        if(fromHours > 0 && fromMinutes > 0 &&  (fromHours <= 11 && fromMinutes <= 59) || (fromHours <= 12 && fromMinutes == 00))
-        {
-          console.log('if from : '+ownStayAmount);
-          let dailyAllowanceValue = parseInt(ownStayAmount,10);
-          totalOwnStay = parseInt(totalOwnStay,10) + dailyAllowanceValue;
-        }
-        else if(fromHours >=12 && fromMinutes > 00)
-        {
-          console.log('else from : '+ownStayAmount/2);
-          let dailyAllowanceValue = parseInt(ownStayAmount/2,10);
-          totalOwnStay = parseInt(totalOwnStay,10) + dailyAllowanceValue;
-        }
-        if((toHours > 0 && toMinutes > 0) && (toHours <= 11 && toMinutes <= 59)   )
-        {
-          console.log('if to : '+ownStayAmount/2);
-          let dailyAllowanceValue = parseInt(ownStayAmount/2,10);
-          totalOwnStay = parseInt(totalOwnStay,10) + dailyAllowanceValue;
-        }
-        else if(toHours >=12 && toHours > 00)
-        {
-          console.log('else to : '+ownStayAmount);
-          let dailyAllowanceValue = parseInt(ownStayAmount,10);
-          totalOwnStay = parseInt(totalOwnStay,10) + dailyAllowanceValue;
-        }
-        document.getElementById('totalOwnStay'+cnt).value = totalOwnStay;
-        let policyamtForBL = amtForBL * Difference_In_Days;
-        document.getElementById('policyamtForBL'+cnt).value = policyamtForBL;
-      }
-		
-	}
+   console.log('Line 311 fromDate'+cnt);
+   console.log('Line 312 fromTime'+cnt);
+   console.log('Line 313 toDate'+cnt);
+   console.log('Line 314 toTime'+cnt);
     $('#fromDate'+cnt).on("change",function(){
-			totalAllowancesCalculation();
+			totalAllowancesCalculation(cnt);
     });
     $('#fromTime'+cnt).on("change",function(){
-			totalAllowancesCalculation();
+			totalAllowancesCalculation(cnt);
     });
     $('#toDate'+cnt).on("change",function(){
-			totalAllowancesCalculation();
+			totalAllowancesCalculation(cnt);
     });
     $('#toTime'+cnt).on("change",function(){
-			totalAllowancesCalculation();
+			totalAllowancesCalculation(cnt);
 	});
   }).fail(function(jqXHR, error) {
       console.log('error  : '+JSON.stringify(jqXHR));
@@ -332,7 +230,7 @@ $(document).ready(function(){
     html += '<td><select  id="stay'+cnt+'" name="stayOption" class="form-control"><option value="">None</option><option value="Own Stay">Own Stay</option><option value="Stay">Stay</option></select>';
     html += '<td><select id="activity_code'+cnt+'"  name="projectTask" class="form-control item_unit"></select></td>';
     html += '<td><select  id="place'+cnt+'" name="placeJourney" class="form-control" ></select></td>';
-    html += '<td><input type="text" id="tier3City'+cnt+'" disabled="true" name="tier3City" class="form-control" /></td>';
+    html += '<td><input type="text" id="tier3City'+cnt+'" readonly="readonly" name="tier3City" class="form-control" /></td>';
     html += '<td><input type="date" id="fromDate'+cnt+'" name="fromDate" class="form-control" /></td>';
     html += '<td><input type="time" id="fromTime'+cnt+'" name="fromTime" class="form-control" /></td>';
     html += '<td><input type="date" id="toDate'+cnt+'" name="toDate" class="form-control" /></td>';
@@ -346,6 +244,7 @@ $(document).ready(function(){
     html += '<td><input type="number" id="ownStayAmount'+cnt+'" name="ownStayAmount" class="form-control" /></td>';
     html += '<td><input type="file" onChange="chkFile(this,'+cnt+')" name="fileprety" style="overflow:hidden;width:auto" class="form-control" /><input type="hidden" value="demo" name="imgpath" id="file_'+cnt+'"></td>';
     html += '<td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="glyphicon glyphicon-minus">Delete</span></button></td></tr>';
+    html += '<td style="display:none;"><input  type="hidden" id="projectTask'+cnt+'"  name="activity_code"  class="form-control" /></td>';
     html += '<td style="display:none;"><input  type="hidden" name="parentTourBillId" value="<%= parentTourBillId %>" class="form-control" /></td>';
     $('#item_table').append(html);
     $('#stay'+cnt).on("change" ,function(){
@@ -382,6 +281,22 @@ $(document).ready(function(){
           $('#ownStayAmount'+cnt).attr("readonly","readonly"); 
         }
     })
+    console.log('Line 391 fromDate'+cnt);
+   console.log('Line 392 fromTime'+cnt);
+   console.log('Line 393 toDate'+cnt);
+   console.log('Line 394 toTime'+cnt);
+    $('#fromDate'+cnt).on("change",function(){
+			totalAllowancesCalculation(cnt);
+    });
+    $('#fromTime'+cnt).on("change",function(){
+			totalAllowancesCalculation(cnt);
+    });
+    $('#toDate'+cnt).on("change",function(){
+			totalAllowancesCalculation(cnt);
+    });
+    $('#toTime'+cnt).on("change",function(){
+			totalAllowancesCalculation(cnt);
+	});
     $('#activity_code'+cnt)
     .append($("<option></option>")
     .attr("value",'')
@@ -399,11 +314,12 @@ $(document).ready(function(){
             if(eachCode.sfid == taskId)
               return eachCode;
           })
-          let label = selectedCode[0].name;
+          let label = selectedCode[0].activity_code__c;
           document.getElementById('projectTask'+cnt).value = label;
         //  $('#projectTask'+cnt).value = label;
           console.log('label  :'+label+' value : '+taskId);
   })
+  
   $('#place'+cnt).empty();
    $('#place'+cnt)
     .append($("<option></option>")
@@ -417,11 +333,15 @@ $(document).ready(function(){
     .text(lstPlaces[i]));
     }
     $('#place'+cnt).on("change",function(){
-        if(this.value == 'Others')
+        if(this.value == 'Others'){
           $('#tier3City'+cnt).attr("readonly",false);
-        else
-        cityAllowance(this.value,cnt);    
-          
+          cityAllowance(this.value,cnt); 
+        }
+        else{
+          $('#tier3City'+cnt).attr("readonly","readonly");
+            cityAllowance(this.value,cnt); 
+        }
+                     
     });
   });
  
@@ -539,4 +459,112 @@ function cityAllowance(name,cnt)
     console.log('error  : '+JSON.stringify(jqXHR));
  })
 }
+function totalAllowancesCalculation(cnt)
+	{
+			let fromDate = document.getElementById('fromDate'+cnt).value;
+      let fromTime = document.getElementById('fromTime'+cnt).value;
+      let toDate = document.getElementById('toDate'+cnt).value;
+      let toTime = document.getElementById('toTime'+cnt).value;
+      let fromHours = parseInt(fromTime.split(':')[0],10);
+      let fromMinutes = parseInt(fromTime.split(':')[1],10);
+      let toHours = parseInt(toTime.split(':')[0],10);
+      let toMinutes = parseInt(toTime.split(':')[1],10);
+      
+      let dailyAllowances = document.getElementById('dailyAllowances'+cnt).value;
+      let ownStayAmount = document.getElementById('ownStayAmount'+cnt).value;
+      let amtForBL = document.getElementById('amtForBL'+cnt).value;
+      console.log('fromDate   : '+fromDate);
+      console.log('typeof(fromDate)  '+typeof(fromDate));
+      console.log('fromTime   : '+typeof(fromTime));
+      console.log('toDate   : '+toDate);
+      console.log('toTime   : '+toTime);
+    
+      let stayType = document.getElementById('stay'+cnt).value;
+      console.log('stayType  '+stayType);
+      if(stayType == 'Stay')
+      {
+        var date1 = new Date(fromDate); 
+        var date2 = new Date(toDate); 
+          
+        var Difference_In_Time = date2.getTime() - date1.getTime(); 
+        var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24); 
+        console.log('Difference_In_Days  '+Difference_In_Days);
+        console.log('dailyAllowances  : '+dailyAllowances);
+        Difference_In_Days = Difference_In_Days - 1;
+        var totalAllowances = dailyAllowances * Difference_In_Days;
+        console.log('totalAllowances  : '+totalAllowances);
+        
+        if(fromHours > 0 && fromMinutes > 0 &&  (fromHours <= 11 && fromMinutes <= 59) || (fromHours <= 12 && fromMinutes == 00))
+        {
+          console.log('if from : '+dailyAllowances);
+          let dailyAllowanceValue = parseInt(dailyAllowances,10);
+          totalAllowances = parseInt(totalAllowances,10) + dailyAllowanceValue;
+        }
+        else if(fromHours >=12 && fromMinutes > 00)
+        {
+          console.log('else from : '+dailyAllowances/2);
+          let dailyAllowanceValue = parseInt(dailyAllowances/2,10);
+          totalAllowances = parseInt(totalAllowances,10) + dailyAllowanceValue;
+        }
+        if((toHours > 0 && toMinutes > 0) && (toHours <= 11 && toMinutes <= 59)   )
+        {
+          console.log('if to : '+dailyAllowances/2);
+          let dailyAllowanceValue = parseInt(dailyAllowances/2,10);
+          totalAllowances = parseInt(totalAllowances,10) + dailyAllowanceValue;
+        }
+        else if(toHours >=12 && toHours > 00)
+        {
+          console.log('else to : '+dailyAllowances);
+          let dailyAllowanceValue = parseInt(dailyAllowances,10);
+          totalAllowances = parseInt(totalAllowances,10) + dailyAllowanceValue;
+        }
+        document.getElementById('totalAllowances'+cnt).value = totalAllowances;
+        let policyamtForBL = amtForBL * Difference_In_Days;
+        document.getElementById('policyamtForBL'+cnt).value = policyamtForBL;
+      }
+
+      if(stayType != 'Stay')
+      {
+        var date1 = new Date(fromDate); 
+        var date2 = new Date(toDate); 
+          
+        var Difference_In_Time = date2.getTime() - date1.getTime(); 
+        var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24); 
+        console.log('Difference_In_Days  '+Difference_In_Days);
+        console.log('ownStayAmount  : '+ownStayAmount);
+        Difference_In_Days = Difference_In_Days - 1;
+        var totalOwnStay = ownStayAmount * Difference_In_Days;
+        console.log('totalAllowances  : '+totalOwnStay);
+        
+        if(fromHours > 0 && fromMinutes > 0 &&  (fromHours <= 11 && fromMinutes <= 59) || (fromHours <= 12 && fromMinutes == 00))
+        {
+          console.log('if from : '+ownStayAmount);
+          let dailyAllowanceValue = parseInt(ownStayAmount,10);
+          totalOwnStay = parseInt(totalOwnStay,10) + dailyAllowanceValue;
+        }
+        else if(fromHours >=12 && fromMinutes > 00)
+        {
+          console.log('else from : '+ownStayAmount/2);
+          let dailyAllowanceValue = parseInt(ownStayAmount/2,10);
+          totalOwnStay = parseInt(totalOwnStay,10) + dailyAllowanceValue;
+        }
+        if((toHours > 0 && toMinutes > 0) && (toHours <= 11 && toMinutes <= 59)   )
+        {
+          console.log('if to : '+ownStayAmount/2);
+          let dailyAllowanceValue = parseInt(ownStayAmount/2,10);
+          totalOwnStay = parseInt(totalOwnStay,10) + dailyAllowanceValue;
+        }
+        else if(toHours >=12 && toHours > 00)
+        {
+          console.log('else to : '+ownStayAmount);
+          let dailyAllowanceValue = parseInt(ownStayAmount,10);
+          totalOwnStay = parseInt(totalOwnStay,10) + dailyAllowanceValue;
+        }
+        document.getElementById('totalOwnStay'+cnt).value = totalOwnStay;
+        console.log('Line 305 ++ Id value totalOwnStay'+cnt);
+        let policyamtForBL = amtForBL * Difference_In_Days;
+        document.getElementById('policyamtForBL'+cnt).value = policyamtForBL;
+      }
+		
+	} 
 </script>

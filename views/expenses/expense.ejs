@@ -850,8 +850,11 @@
           console.log('Petty Cash Anchor Tag');
           var expenseId = document.getElementById('expenseIdpTag').innerHTML;
           console.log('Inside PettyCash Anchor Tag expenseId  '+expenseId);
+          let buttonDisable = document.getElementById(expenseId).disabled;
+            console.log(' button Disable + '+buttonDisable);
+           
           //location.assign('/expense/pettyCash/'+expenseId);
-          window.open('/expense/pettyCash/'+expenseId,'_blank');
+          window.open('/expense/pettyCash/'+expenseId+'&'+buttonDisable,'_blank');
         });
 
 
@@ -860,7 +863,9 @@
           var expenseId = document.getElementById('expenseIdpTag').innerHTML;
           console.log('Inside conveyanceVoucherButton Anchor Tag expenseId  '+expenseId);
           // location.assign('/expense/conveyanceVoucher/'+expenseId);
-           window.open('/expense/conveyanceVoucher/'+expenseId,'_blank');
+          let buttonDisable = document.getElementById(expenseId).disabled;
+            console.log(' button Disable + '+buttonDisable);
+           window.open('/expense/conveyanceVoucher/'+expenseId+'&'+buttonDisable,'_blank');
         });
 
        /*  $("a.tourBillClaim").click(() => {
@@ -1383,7 +1388,9 @@
               var expenseId = document.getElementById('expenseIdpTag').innerHTML;
               console.log('Inside conveyanceVoucherButton Anchor Tag expenseId  '+expenseId);
           // location.assign('/expense/conveyanceVoucher/'+expenseId);
-              window.open('/expense/tourBillNewPage/'+expenseId,'_blank');
+          let buttonDisable = document.getElementById(expenseId).disabled;
+            console.log(' button Disable + '+buttonDisable);  
+          window.open('/expense/tourBillNewPage/'+expenseId+'&'+buttonDisable,'_blank');
 
             /*  // $('#createTourBillClaimModal').modal('show');
               $('#tourBillClaimSubmitbutton').on('click',function(event){

@@ -3,7 +3,7 @@
 <% include ./partials/messages %>
 
 <p id= "parentId"><%=parentprocurementId %></p>
-
+<p id ="isDisabled"><%=isDisabled %></p>
 <!-- Modal Popup For Asset Requisition Detail & Their Related data -->
 
 
@@ -155,7 +155,10 @@
 <script>
         $(document).ready(function(){
            $('#parentId').hide();
+           $('#isDisabled').hide();
             let assetId = document.getElementById('parentId').innerHTML;
+            let isDisabled = document.getElementById('isDisabled').innerHTML;
+            alert('isDisabled ++ '+isDisabled);
        //     alert('parentId  : '+assetId);
           $("#popup").modal("show"); 
           $.ajax({

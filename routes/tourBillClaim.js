@@ -397,11 +397,13 @@ router.get('/getAirBusListView',verify,(request,response)=>{
   })
   
 
-router.get('/airRailBusCharges/:parentTourBillId',verify,(request, response) => {
+router.get('/airRailBusCharges/:parentTourBillId&:isDisabled',verify,(request, response) => {
     
      let objUser=request.user;
+     let isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
      let parentTourBillId = request.params.parentTourBillId; 
-     response.render('./expenses/tourBillClaims/airRailBusCharges',{objUser, parentTourBillId :parentTourBillId});
+     response.render('./expenses/tourBillClaims/airRailBusCharges',{objUser,isDisabled, parentTourBillId :parentTourBillId});
 
 });
 
@@ -2278,11 +2280,13 @@ let objUser=request.user;
       response.render('./expenses/tourBillClaims/tourBillViewRelated', {objUser, tourbillId});
 })
 
-router.get('/expenseLanding/:parentExpenseId',verify,(request, response) => {
+router.get('/expenseLanding/:parentExpenseId&:isDisabled',verify,(request, response) => {
   var tourbillId = request.params.parentExpenseId;
   console.log('tourbillId  bbbb'+tourbillId);
   let objUser=request.user;
   console.log('user '+objUser); 
+  isDisabled = request.params.isDisabled;
+  console.log(' ++++ isDisabled ++++ '+isDisabled);
   let qry ='SELECT sfid,name,Expense__c	 FROM salesforce.Tour_Bill_Claim__c WHERE  sfid = $1';
   pool.query(qry,[tourbillId])
   .then((testQueryResult) => {
@@ -2290,7 +2294,7 @@ router.get('/expenseLanding/:parentExpenseId',verify,(request, response) => {
      if(testQueryResult.rowCount>0){
        console.log('testQueryResult[0].sfid; '+JSON.stringify(testQueryResult.rows[0].expense__c));
        let parentExpenseId=testQueryResult.rows[0].expense__c;
-      response.render('./expenses/expensePageRealted',{objUser,parentExpenseId:parentExpenseId}); 
+      response.render('./expenses/expensePageRealted',{objUser,isDisabled,parentExpenseId:parentExpenseId}); 
      }
   })
   .catch((testQueryError) => {

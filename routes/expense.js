@@ -968,7 +968,7 @@ cloudinary.config({
 
 
 
-router.get('/pettyCash/:parentExpenseId',verify,(request, response) => {
+router.get('/pettyCash/:parentExpenseId&:isDisabled',verify,(request, response) => {
 
   var parentExpenseId = request.params.parentExpenseId;
   console.log('parentExpenseId  '+parentExpenseId);
@@ -976,8 +976,9 @@ router.get('/pettyCash/:parentExpenseId',verify,(request, response) => {
   var userId = request.user.sfid; 
   var objUser = request.user;
   console.log('Expense userId : '+userId);
-
-  response.render('expenses/pettyCash/pettyCash',{objUser, parentExpenseId: parentExpenseId });
+  isDisabled = request.params.isDisabled;
+  console.log(' ++++ isDisabled ++++ '+isDisabled);
+  response.render('expenses/pettyCash/pettyCash',{objUser,isDisabled, parentExpenseId: parentExpenseId });
  // response.render('expenses/pettyCash/pettyCash',{objUser, parentExpenseId:parentExpenseId });
 });
 
@@ -1156,7 +1157,7 @@ router.post('/uploadImage',upload.any(),async (request, response) => {
 
 
 
-router.get('/conveyanceVoucher/:parentExpenseId',verify,(request, response) => {
+router.get('/conveyanceVoucher/:parentExpenseId&:isDisabled',verify,(request, response) => {
 
   var parentExpenseId = request.params.parentExpenseId;
   console.log('conveyanceVoucher parentExpenseId '+parentExpenseId);
@@ -1164,11 +1165,12 @@ router.get('/conveyanceVoucher/:parentExpenseId',verify,(request, response) => {
   var userId = request.user.sfid; 
   var objUser = request.user;
   console.log('Expense userId : '+userId);
-
-  response.render('expenses/conveyanceVoucher/conveyanceVoucher',{objUser, parentExpenseId: parentExpenseId });
+  isDisabled = request.params.isDisabled;
+  console.log(' ++++ isDisabled ++++ '+isDisabled);
+  response.render('expenses/conveyanceVoucher/conveyanceVoucher',{objUser,isDisabled, parentExpenseId: parentExpenseId });
 
 }); 
-router.get('/tourBillNewPage/:parentExpenseId',verify,(request, response) => {
+router.get('/tourBillNewPage/:parentExpenseId&:isDisabled',verify,(request, response) => {
 
   var parentExpenseId = request.params.parentExpenseId;
   console.log(' parentExpenseId '+parentExpenseId);
@@ -1176,6 +1178,8 @@ router.get('/tourBillNewPage/:parentExpenseId',verify,(request, response) => {
   var userId = request.user.sfid; 
   var objUser = request.user;
   console.log('Expense userId : '+userId);
+  isDisabled = request.params.isDisabled;
+  console.log(' ++++ isDisabled ++++ '+isDisabled);
   pool
   .query('SELECT sfid, name from salesforce.Tour_Bill_Claim__c WHERE expense__c = $1',[parentExpenseId])
   .then((querryResult) => {
@@ -1183,10 +1187,10 @@ router.get('/tourBillNewPage/:parentExpenseId',verify,(request, response) => {
 
     console.log('tourbillquerryResult :  '+JSON.stringify(querryResult.rows));
     if(querryResult.rowCount>0){
-      response.render('expenses/tourBillClaims/TourBillclaimNew',{objUser, parentExpenseId: parentExpenseId,tourbillId:querryResult.rows[0].sfid });
+      response.render('expenses/tourBillClaims/TourBillclaimNew',{objUser,isDisabled, parentExpenseId: parentExpenseId,tourbillId:querryResult.rows[0].sfid });
     }
     else{
-      response.render('expenses/tourBillClaims/TourBillclaimNew',{objUser, parentExpenseId: parentExpenseId ,tourbillId:'true'});
+      response.render('expenses/tourBillClaims/TourBillclaimNew',{objUser,isDisabled, parentExpenseId: parentExpenseId ,tourbillId:'true'});
     }
     
 })
@@ -1600,6 +1604,7 @@ router.get('/getpettycashlist',verify,(request, response) => {
                 obj.total=eachRecord.amount__c;
                 obj.billDate = strBillDate.split(',')[0];
                 obj.createDdate = strDate;
+                obj.isDisabled = isDisabled;
                 if(isDisabled == 'true')
                 {
                     console.log('++Inside if check ++ '+isDisabled);
@@ -1772,7 +1777,7 @@ router.get('/tourBillClaimActivityCode', verify ,(request, response) => {
 
   console.log('hello i am inside Tour Bill Claim Activity Code');
 
-  let tourbillId = request.query.tourbillId;
+  let tourbillId = request.params.tourbillId;
 
   console.log('tourbillId :' +tourbillId)
   let expenseId;
@@ -1828,12 +1833,14 @@ router.get('/tourBillClaimActivityCode', verify ,(request, response) => {
   })
 
 
-  router.get('/expenseViewRel/:parentExpenseId',verify,(request, response) => {
+  router.get('/expenseViewRel/:parentExpenseId&:isDisabled',verify,(request, response) => {
     var parentExpenseId = request.params.parentExpenseId;
     console.log('parentExpenseId  '+parentExpenseId);
   let objUser=request.user;
         console.log('user '+objUser);  
-        response.render('./expenses/expensePageRealted',{objUser,parentExpenseId:parentExpenseId}); 
+        isDisabled = request.params.isDisabled;
+        console.log(' ++++ isDisabled ++++ '+isDisabled);
+        response.render('./expenses/expensePageRealted',{objUser,isDisabled,parentExpenseId:parentExpenseId}); 
 })
 
     router.get('/deletepetty/:parentId',(request,response)=>{

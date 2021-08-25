@@ -138,6 +138,7 @@
 
 
 <p id="expenseId"><%= expenseId %></p>
+<p id= "isDisabled"><%=isDisabled %></p>
 <p id="tourBillId"></p>
 
 <center><h3 style="text-align: center; margin-top: 20px;">Tour Bill Claim Expenses</h3></center>     
@@ -145,7 +146,7 @@
 <div class="row mt-5 mb-3 align-items-center">
     <div class="col-md-6">
         <button class="btn btn-primary btn-md bg-gray"  id="tourBillClaimButton">Create New</button>
-        <a class="btn btn-primary btn-md bg-gray" href="/expense/expenseViewRel/<%= expenseId %>" >Go To Expense</a>
+        <a class="btn btn-primary btn-md bg-gray" href="/expense/expenseViewRel/<%= expenseId %>&<%= isDisabled %>" >Go To Expense</a>
        <!--  <button class="btn btn-primary btn-md" id="refresh">Refresh</button> -->
     </div>
     <div class="col-md-2">
@@ -411,8 +412,10 @@
     $(document).ready(function() { 
         $('#expenseId').hide();
         $('#tourBillId').hide();
+        $('#isDisabled').hide();
         $('#tourBillClaimTableSpinner').hide();
         let expenseId =document.getElementById('expenseId').innerHTML;
+           let isDisabled = document.getElementById('isDisabled').innerHTML;
       //  alert(expenseId);
 
         

@@ -808,15 +808,19 @@
       console.log('procurementNonIT anchor tag ');
       var assetId = document.getElementById('expenseIdpTag').innerHTML;
       console.log('assetId : '+assetId);
+      let buttonDisable = document.getElementById(assetId).disabled;
+            console.log(' button Disable + '+buttonDisable);
     //  location.assign('/procurement/nonItProducts/'+assetId);
-      window.open('/procurement/nonItProducts/'+assetId,'_blank');
+      window.open('/procurement/nonItProducts/'+assetId+'&'+buttonDisable,'_blank');
       });
       $('a.procurementIT').click(() => {
       console.log('procurementIT anchor tag ');
       var assetId = document.getElementById('expenseIdpTag').innerHTML;
       console.log('assetId : '+assetId);
+      let buttonDisable = document.getElementById(assetId).disabled;
+            console.log(' button Disable + '+buttonDisable);
      // location.assign('/procurement/itProducts/'+assetId);
-      window.open('/procurement/itProducts/'+assetId,'_blank');
+      window.open('/procurement/itProducts/'+assetId+'&'+buttonDisable,'_blank');
       });
       $('a.notes').on('click',function(event){
       //alert('Hello'+this.id);
@@ -891,7 +895,7 @@
           //   document.getElementById("pettyCashButton").setAttribute('disabled',true);
                 document.getElementById("pettyCashButton").classList.add("anchorDisable");
                 document.getElementById("pettyCashButton2").classList.add("anchorDisable");
-                document.getElementById("notes").classList.add("anchorDisable");
+              //  document.getElementById("notes").classList.add("anchorDisable");
             }
            
           document.getElementById('expenseIdpTag').innerHTML = assetId;
@@ -1582,11 +1586,12 @@ function accountsApprovalFunctionality(){
       $.post('/procurement/sendProcurementAccountsApproval',{assetRequisitionFormId:assetRequisitionFormId, comment: comment }, function(response){
       console.log('jqxhrjjkj'+JSON.stringify(response))
       let resp = JSON.stringify(response);
-      console.log('response....'+resp);
+      console.log('response....'+String(resp));
       
-    if(resp == "Accounts Approval Sent Successfully !")
+    if(resp == '"Accounts Approval Sent Successfully !"')
     {
           //    $('#taskForm')[0].reset()
+          console.log('Line 1590 response....'+String(resp));
               let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+ resp+
           '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
             '<span aria-hidden="true">&times;</span>'+
@@ -1596,7 +1601,7 @@ function accountsApprovalFunctionality(){
         $('#accApprovalerrorMessages').append(errorHtml);
         $('#accountsapprovalpopup')[0].reset()
     }
-    else if(resp == 'Accounts approval sent already !')
+    else if(resp == '"Accounts approval sent already !"')
     {
             let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+ resp+
             '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
@@ -1610,6 +1615,7 @@ function accountsApprovalFunctionality(){
     }
     else
     {
+      console.log('Line 1614 response....'+String(resp));
       let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+ resp+
         '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
         '<span aria-hidden="true">&times;</span>'+

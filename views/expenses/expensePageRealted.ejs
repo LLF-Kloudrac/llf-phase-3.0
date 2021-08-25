@@ -2,7 +2,7 @@
 <% include ../partials/messages %>
 <% include ../partials/footer %>
 <p id= "expenseId"><%=parentExpenseId %></p>
-
+<p id= "isDisabled"><%=isDisabled %></p>
 
 <!-- Create Tour Bill Claim Modal Start -->
 
@@ -90,7 +90,7 @@
                                                   <i class="fa fa-angle-double-right mr-3"></i>Petty Cash
                                               </button>
                                                 <!-- <button class="btn btn-primary float-right" id="pettyCashButton" >New</button> -->
-                                              <a href="#" class="btn btn-primary float-right pettyCashButton" id="" style="color:white;" >New</a>
+                                              <a href="#" class="btn btn-primary float-right pettyCashButton" id="pettyCashNewButton" style="color:white;" >New</a>
                                           </h5>
                                       </div>
 
@@ -188,7 +188,10 @@
 <script>
     $(document).ready(function(){
        $('#expenseId').hide();
+       $('#isDisabled').hide();
         let expenseId = document.getElementById('expenseId').innerHTML;
+        let isDisabled = document.getElementById('isDisabled').innerHTML;
+      //  alert('isDisabled ++ '+isDisabled);
        // alert('expenseId  : '+expenseId);
         $('#hiddenExpenseId').val(expenseId); // setting toubill ceate Hide Id
 
@@ -315,7 +318,7 @@
                 pettyCashTableRows += '</tr>';
               }
               if(lengthOfPettyCashList>0){
-                pettyCashTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/pettycashlistview?expenseId='+expenseId+'" >View All</a></center></td></tr>';
+                pettyCashTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/pettycashlistview/'+expenseId+'&'+isDisabled+'" >View All</a></center></td></tr>';
 
               }
                 $('#pettyCashTable').empty();
@@ -346,7 +349,7 @@
                 conveyanceVoucherTableRows += '</tr>';
               }
               if(conveyanceVoucherListLength>0){
-                conveyanceVoucherTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/ConveyanceListView?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
+                conveyanceVoucherTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/ConveyanceListView/'+expenseId+'&'+isDisabled+'" >View All</a></center></td></tr></tbody>';
               
               }
               $('#conveyanceVoucherTable').empty();
@@ -374,7 +377,7 @@
                 tourBillClaimTableRows += '</tr>';
               }
               if(tourBillClaimListLength>0){
-                tourBillClaimTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/tourBillClaimListview?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
+                tourBillClaimTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/tourBillClaimListview/'+expenseId+'&'+isDisabled+'" >View All</a></center></td></tr></tbody>';
              
               }
               $('#tourBillClaimTable').empty();
@@ -422,7 +425,7 @@
           var expenseId = document.getElementById('expenseId').innerHTML;
           console.log('Inside PettyCash Anchor Tag expenseId  '+expenseId);
           //location.assign('/expense/pettyCash/'+expenseId);
-          window.open('/expense/pettyCash/'+expenseId,'_blank');
+          window.open('/expense/pettyCash/'+expenseId+'&'+isDisabled,'_blank');
         });
 
         $("a.conveyanceVoucherButton").click(() => {
@@ -430,7 +433,7 @@
           var expenseId = document.getElementById('expenseId').innerHTML;
           console.log('Inside conveyanceVoucherButton Anchor Tag expenseId  '+expenseId);
           // location.assign('/expense/conveyanceVoucher/'+expenseId);
-           window.open('/expense/conveyanceVoucher/'+expenseId,'_blank');
+          window.open('/expense/conveyanceVoucher/'+expenseId+'&'+isDisabled,'_blank');
         });
 
         $("a.tourBillClaim").click(function(){

@@ -912,13 +912,14 @@ router.post('/updateasset',(request,response)=>{
     }
     */
     
-   router.get('/nonItProducts/:parentAssetId',verify, (request,response) => {
+   router.get('/nonItProducts/:parentAssetId&:isDisabled',verify, (request,response) => {
 
     let parentAssetId = request.params.parentAssetId;
     console.log('parentAssetId  '+parentAssetId);
     var userId = request.user.sfid; 
     var objUser = request.user;
     console.log('Expense userId : '+userId);
+    
   /*   let qry ='SELECT sfid ,	State__c,District__c,Items__c Form salesforce.Impaneled_Vendor__c';
     pool
     .query()
@@ -2936,12 +2937,14 @@ router.post('/uploadItemFiless',(request,response)=>{
 })
 
 
-router.get('/assetRequisitionViewRel/:parentExpenseId',verify,(request, response) => {
+router.get('/assetRequisitionViewRel/:parentExpenseId&:isDisabled',verify,(request, response) => {
     var parentprocurementId = request.params.parentExpenseId;
     console.log('parentExpenseId  '+parentprocurementId);
+    isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
   let objUser=request.user;
         console.log('user '+objUser);  
-        response.render('AssetLandingPage',{objUser,parentprocurementId:parentprocurementId}); 
+        response.render('AssetLandingPage',{objUser,isDisabled,parentprocurementId:parentprocurementId}); 
 })
 
 router.get('/impaneledVendorUpload/:itemId',verify,(request, response) => {
