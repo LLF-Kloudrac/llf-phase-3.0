@@ -500,7 +500,7 @@
                                         taskDescription += '<td>' + each.activity_code_name__c + '</td>';
                                         taskDescription += '<td>' + each.project_task_category_name__c + '</td></tr>';
                                     })
-                                    taskDescription += '<td colspan="6"><center><a target="_blank" href="/tasks/TaskListView?activityId='+data.task[0].activity_codes__c+'">View All</a></centre></td>';
+                                    taskDescription += '<td colspan="6"><center><a target="_blank" href="/activityCodes/getRelatedTasks?activityId='+data.task[0].activity_codes__c+'">View All</a></centre></td>';
 
                                     console.log('iddd' + data.ActivityCodeDetail.sfid);
                                     $('#TaskDescriptionTable').empty();

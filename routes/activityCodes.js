@@ -10,12 +10,40 @@ const { object } = require('@hapi/joi');
 
 const router = new Router();
 
+router.get('/getRelatedTasks', verify, (request, response) => {
+    let objUser = request.user;
+    console.log('user ' + objUser);
+    let activityCodeId = request.params.activityId;
+    console.log('activityCodeId   : '+activityCodeId);
+    response.render('relatedTasksToActivityCodePage', { objUser, activityCodeId });
+})
+
+
 router.get('/getActivityCodesListView', verify, (request, response) => {
     let objUser = request.user;
     console.log('user ' + objUser);
     response.render('activityCodesList', { objUser });
 
 })
+
+
+router.get('/getActivityCodesListView', verify, (request, response) => {
+
+        let activityCodeId = request.params.activityCodeId;
+
+        pool
+        .query('select sfid ,name,Task_Stage__c,Project_Name2__c	,Activity_Codes__c,Activity_Code_Name__c,Project_Task_Category_Name__c ' +
+            'FROM salesforce.Milestone1_Task__c where Activity_Codes__c=$1', [activityCodeId])
+        .then((taskdescriptionQueryy) => {
+            console.log('taskdescriptionQueryy =>' + JSON.stringify(taskdescriptionQueryy.rows));
+            response.send(taskdescriptionQueryy.rows);
+        })
+        .catch((error) => {
+            console.log('error ' + error.stack);
+            response.send(error);
+        })
+});
+
 router.post('/deleteAllActivityCodes', (request, response) => {
     var projectParams = [], lstProjectId = [];
     var data = request.body['activityCodeArray[]'];
