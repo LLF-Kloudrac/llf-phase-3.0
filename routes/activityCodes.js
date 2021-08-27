@@ -13,8 +13,8 @@ const router = new Router();
 router.get('/getRelatedTasks', verify, (request, response) => {
     let objUser = request.user;
     console.log('user ' + objUser);
-    let activityCodeId = request.params.activityId;
-    console.log('activityCodeId   : '+activityCodeId);
+    let activityCodeId = request.query.activityId;
+    console.log('query activityCodeId   : '+activityCodeId);
     response.render('relatedTasksToActivityCodePage', { objUser, activityCodeId });
 })
 
@@ -27,10 +27,10 @@ router.get('/getActivityCodesListView', verify, (request, response) => {
 })
 
 
-router.get('/getActivityCodesListView', verify, (request, response) => {
+router.get('/getTasksRelatedToActivityCode', verify, (request, response) => {
 
-        let activityCodeId = request.params.activityCodeId;
-
+        let activityCodeId = request.query.activityCodeId;
+        console.log('line 33 activityCodeId  : '+activityCodeId);
         pool
         .query('select sfid ,name,Task_Stage__c,Project_Name2__c	,Activity_Codes__c,Activity_Code_Name__c,Project_Task_Category_Name__c ' +
             'FROM salesforce.Milestone1_Task__c where Activity_Codes__c=$1', [activityCodeId])

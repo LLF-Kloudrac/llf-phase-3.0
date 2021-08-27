@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="/stylesheets/table-sortable.css">
 <script src="/scripts/table-sortable.js" ></script>
 
-
+<p id="activityCodeId"><%= activityCodeId %></p>
 <div class="row mt-5">
     <div class="col-md-9 m-auto">
         <div class="card card-body">
@@ -226,18 +226,21 @@
 <script>
     $(document).ready(function(){
         $('#expenseDetailsSpinner').hide();
+        $('#activityCodeId').hide();
+        let activityCodeId = document.getElementById('activityCodeId').innerHTML;
+        alert('activityCodeId  : '+activityCodeId);
 
         let columns = {
-            sequence: 'Sr No.',
-            recordName: 'Expense Name',
+            name: 'Activity Code Name',
            /*  pettycashAmt:'Petty Cash Amount ',
             conveyanceAmt:'Conveyance Amount ',
             tourBillAmt:'Tour Bill Claim Amount ',
-            */ totalAmount : 'Total Amount',
-            currentStatus: 'Reporting Manager Status',
-            createdDate: 'Created Date',
-            approveBtn : 'Approve', 
-            rejectBtn : 'Reject',
+            */ 
+            task_stage__c : 'Task Stage',
+           // currentStatus: 'Reporting Manager Status',
+           // createdDate: 'Created Date',
+           // approveBtn : 'Approve', 
+           // rejectBtn : 'Reject',
             
         };
 
@@ -276,7 +279,7 @@
             }, 
         });
   
-        $.get("/approvals/expenseApprovalsList",
+        $.get("/activityCodes/getTasksRelatedToActivityCode",{activityCodeId : activityCodeId},
         function(returnedData){
             console.log('returnedData  : '+JSON.stringify(returnedData));
             if(returnedData.length > 0)
