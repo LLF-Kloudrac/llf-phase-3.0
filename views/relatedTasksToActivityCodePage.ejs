@@ -45,7 +45,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h4 class="modal-title">Expense Name </h4>
+                <h4 class="modal-title">Task Details </h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
@@ -61,15 +61,15 @@
                     </nav>
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                            <!-- Particular Expense Details -->
-                                <table id="expenseTable" class="table table-hover striped" style="overflow-y: auto;">
+                            <!-- Particular Task Details -->
+                                <table id="taskDetail" class="table table-hover striped" style="overflow-y: auto;">
                                         <!-- Inside code is handled by Jquery to add dyanamic Content -->
                                 <div id="expenseDetailsSpinner">
                                             <center> <img src="/spinner-gif-transparent-background-14.gif" />  </center>
                                   </div>
                                     
                                 </table>
-                            <!-- Particular Expense Details-->
+                            <!-- Particular Task Details-->
                         </div>
                         <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                             <div class="accordion" id="accordionExample">
@@ -228,21 +228,23 @@
         $('#expenseDetailsSpinner').hide();
         $('#activityCodeId').hide();
         let activityCodeId = document.getElementById('activityCodeId').innerHTML;
-        alert('activityCodeId  : '+activityCodeId);
+      //  alert('activityCodeId  : '+activityCodeId);
 
         let columns = {
-            name: 'Activity Code Name',
-           /*  pettycashAmt:'Petty Cash Amount ',
-            conveyanceAmt:'Conveyance Amount ',
-            tourBillAmt:'Tour Bill Claim Amount ',
-            */ 
-            task_stage__c : 'Task Stage',
-           // currentStatus: 'Reporting Manager Status',
-           // createdDate: 'Created Date',
-           // approveBtn : 'Approve', 
-           // rejectBtn : 'Reject',
-            
-        };
+          //  sequence: 'Sequence',
+           // selectAction: 'Delete',
+            name: ' Project Task Name',
+            status: 'Status',
+            project: 'Project',
+            projectTaskCategory: 'Project Task Category',
+            start_date__c: 'Planned Start Date',
+            due_date__c: 'Planned End Date',
+            actual_start_date__c: 'Actual Start Date',
+            actual_end_date__c: 'Actual End Date',
+            estimated_expense__c: 'Estimated Expense (INR)',
+            createdDate: 'Created Date',
+           // editAction: 'Action'
+        }
 
         var table = $('#expenseApprovalsTableList').tableSortable({
             data :[],
@@ -296,225 +298,114 @@
 
         function anchorClickFunctionalities()
         {
+          $('a.ActivityTag').on('click', function (event) {
+            event.stopImmediatePropagation();
+            event.stopPropagation();
+            vendorIDS = this.id;
+            let vendorId = this.id;
+            //  alert('vendorTag=>'+vendorId);
+            $("#popup").modal("show");
+            $.ajax({
+                type: 'GET',
+                url: '/tasks/getTaskDetails',
+                data: {
+                    'taskCodeId': vendorId
+                },
+                dataType: 'json'
+            })
+                .done((data) => {
+                    console.log('DATA DEtails=>' + JSON.stringify(data));
+                    let recordData = data[0];
+                    console.log('DATA DEtails=>' + JSON.stringify(data.ActivityCodeDetail));
+                    let record = data.ActivityCodeDetail;
+                    console.log('DATA record=>' + JSON.stringify(record));
+                    if (data.ActivityCodeDetail.length > 0) {
+                        console.log('Inside Vendor Details');
+                        let ActivityCodeDetailRow = '';
+                        data.ActivityCodeDetail.forEach((eachRecord) => {
+                            ActivityCodeDetailRow += '<tr>';
+                            ActivityCodeDetailRow += '<td colspan="4" style="background-color:#d3d3d3;"><h5>Task Details</h5></td>';
+                            ActivityCodeDetailRow += '</tr>';
 
-            $("a.expnseRecordName").click(function(event){
-                event.stopPropagation();
-                event.stopImmediatePropagation();
+                            ActivityCodeDetailRow += '<tr>';
+                            ActivityCodeDetailRow += '<td><strong> Project Task Name<span style="color: red;">*</span><strong></td>';
+                            ActivityCodeDetailRow += '<td>' + eachRecord.name + '</td>';
+                            ActivityCodeDetailRow += '<td><strong>Status<strong></td>';
+                            ActivityCodeDetailRow += '<td>' + eachRecord.task_stage__c + '</td>';
+                            ActivityCodeDetailRow += '</tr>';
 
-             //   alert(this.id);
-                let expenseId = this.id.substring(4,23);
-                console.log('expenseId'+expenseId);
-              //  alert('expenseId'+expenseId);
+                            ActivityCodeDetailRow += '<tr>';
+                            ActivityCodeDetailRow += '<td><strong>Project<strong></td>';
+                            ActivityCodeDetailRow += '<td>' + eachRecord.project_name2__c + '</td>';
+                            ActivityCodeDetailRow += '<td><strong> Activity Code<strong></td>';
+                            ActivityCodeDetailRow += '<td>' + eachRecord.activity_code_name__c + '</td>';
+                            ActivityCodeDetailRow += '</tr>';
 
-                $.ajax({
-                    type : 'GET',
-                    url  : '/expense/details',
-                    data : {
-                        'expenseId' : expenseId
-                    },
-                    dataType : 'json',
-                    beforeSend: function()
-                    {
-                      $('#popup').modal('show');
-                      $('#expenseDetailsSpinner').show();
+                            ActivityCodeDetailRow += '<tr>';
+                            ActivityCodeDetailRow += '<td><strong> Project Task Category<strong></td>';
+                            ActivityCodeDetailRow += '<td>' + eachRecord.project_task_category_name__c + '</td>';
+                            ActivityCodeDetailRow += '<td><strong> Planned Start Date<span style="color: red;">*</span><strong></td>';
+                            ActivityCodeDetailRow += '<td>' + eachRecord.start_date__c + '</td>';
+                            ActivityCodeDetailRow += '</tr>';
+
+                            ActivityCodeDetailRow += '<tr>';
+                            ActivityCodeDetailRow += '<td><strong> Planned End Date<span style="color: red;">*</span><strong></td>';
+                            ActivityCodeDetailRow += '<td>' + eachRecord.due_date__c + '</td>';
+                            ActivityCodeDetailRow += '<td><strong>Description<strong></td>';
+                            ActivityCodeDetailRow += '<td>' + eachRecord.description__c + '</td>';
+                            //ActivityCodeDetailRow += '<td><strong>Actual Expense On Salesforce<strong></td>';
+                            ActivityCodeDetailRow += '</tr>';
+
+                            ActivityCodeDetailRow += '<tr>';
+                            ActivityCodeDetailRow += '<td><strong> Pro-Rata Calculated Expense Per Day<strong></td>';
+                            var pro_rate_analysis = eachRecord.pro_rate_analysis__c != null ? eachRecord.pro_rate_analysis__c.toFixed(2) : eachRecord.pro_rate_analysis__c;
+                            ActivityCodeDetailRow += '<td>INR ' + pro_rate_analysis + '</td>';
+                            ActivityCodeDetailRow += '<td><strong>Estimated expenditure till current date<strong></td>';
+                            var grant_utilization_on_pro_rate_basis = eachRecord.grant_utilization_on_pro_rate_basis__c != null ? eachRecord.grant_utilization_on_pro_rate_basis__c.toFixed(2) : eachRecord.grant_utilization_on_pro_rate_basis__c;
+                            ActivityCodeDetailRow += '<td>INR ' + grant_utilization_on_pro_rate_basis + '</td>';
+
+                            ActivityCodeDetailRow += '</tr>';
+                            ActivityCodeDetailRow += '<tr>';
+                            ActivityCodeDetailRow += '<td><strong> Actual Start Date<strong></td>';
+                            ActivityCodeDetailRow += '<td>' + eachRecord.actual_start_date__c + '</td>';
+                            ActivityCodeDetailRow += '<td><strong>Actual End Date<strong></td>';
+                            ActivityCodeDetailRow += '<td>' + eachRecord.actual_end_date__c + '</td>';
+
+                            ActivityCodeDetailRow += '</tr>';
+
+                            ActivityCodeDetailRow += '</tr>';
+                            ActivityCodeDetailRow += '<tr>';
+                            ActivityCodeDetailRow += '<td><strong> Today’s Date<strong></td>';
+                            ActivityCodeDetailRow += '<td>' + eachRecord.today_s_date__c + '</td>';
+                            ActivityCodeDetailRow += '<td><strong>Actual Hours<strong></td>';
+                            ActivityCodeDetailRow += '<td>' + eachRecord.actual_hours__c + '</td>';
+
+                            ActivityCodeDetailRow += '</tr>';
+
+                            ActivityCodeDetailRow += '</tr>';
+
+                            ActivityCodeDetailRow += '</tr>';
+                            ActivityCodeDetailRow += '<tr>';
+                            ActivityCodeDetailRow += '<td><strong> Estimated Hours<strong></td>';
+                            var estimated_hours = eachRecord.estimated_hours__c != null ? eachRecord.estimated_hours__c.toFixed(2) : eachRecord.estimated_hours__c
+                            ActivityCodeDetailRow += '<td>' + estimated_hours + '</td>';
+                            ActivityCodeDetailRow += '<td><strong>Estimated Expense<strong></td>';
+                            var estimated_expense = eachRecord.estimated_expense__c != null ? eachRecord.estimated_expense__c.toFixed(2) : eachRecord.estimated_expense__c;
+                            ActivityCodeDetailRow += '<td>INR ' + estimated_expense + '</td>';
+
+                            ActivityCodeDetailRow += '</tr>';
+
+
+                            $('#taskDetail').html(ActivityCodeDetailRow);
+
+                        })
                     }
                 })
-                .done((expenseRelatedData) => {
-            
-            let expenseRecord = expenseRelatedData.Expense[0];
-            console.log('expenseList  '+JSON.stringify(expenseRecord));
-
-            let expenseTableRows = '';
-            expenseTableRows += '<tr>';
-            expenseTableRows += '<td><strong>Expense Name<strong></td>';
-            expenseTableRows += '<td>'+expenseRecord.name+'</td>';
-            expenseTableRows += '<td><strong>Project Name<strong></td>';
-            expenseTableRows += '<td>'+expenseRecord.projname+'</td>';
-            expenseTableRows += '</tr>';   
-            
-            expenseTableRows += '<tr>';
-            expenseTableRows += '<td><strong>Department<strong></td>';
-            if(expenseRecord.department__c != null)
-              expenseTableRows += '<td>'+expenseRecord.department__c+'</td>';
-            else
-              expenseTableRows += '<td> </td>';
-            expenseTableRows += '<td><strong>Designation<strong></td>';
-            expenseTableRows += '<td>'+expenseRecord.designation__c+'</td>';
-            expenseTableRows += '</tr>';   
-
-            expenseTableRows += '<tr>';
-            expenseTableRows += '<td><strong>Employee ID<strong></td>';
-            expenseTableRows += '<td>'+expenseRecord.employee_id__c+'</td>';
-            expenseTableRows += '<td><strong>Employee Category / Band<strong></td>';
-            if(expenseRecord.conveyance_employee_category_band__c != null)
-              expenseTableRows += '<td>'+expenseRecord.conveyance_employee_category_band__c+'</td>';
-            else
-            expenseTableRows += '<td> </td>';
-            expenseTableRows += '</tr>';   
-
-            expenseTableRows += '<tr>';
-            expenseTableRows += '<td><strong>Reporting Manager Status<strong></td>';
-            if(expenseRecord.approval_status__c != null)
-              expenseTableRows += '<td>'+expenseRecord.approval_status__c+'</td>';
-            else 
-              expenseTableRows += '<td> </td>';
-            expenseTableRows += '<td><strong>Project Manager Status<strong></td>';
-            if(expenseRecord.project_manager_status__c != null)
-              expenseTableRows += '<td>'+expenseRecord.project_manager_status__c+'</td>';
-            else 
-              expenseTableRows += '<td> </td>';
-            expenseTableRows += '</tr>'; 
-
-
-            expenseTableRows += '<tr>';
-              expenseTableRows += '<td><strong>Accounts Status<strong></td>';
-              if(expenseRecord.accounts_status__c != null)
-                expenseTableRows += '<td>'+expenseRecord.accounts_status__c+'</td>';
-              else 
-                expenseTableRows += '<td> </td>';
-              expenseTableRows += '<td><strong><strong></td>';
-              expenseTableRows += '<td> </td>';
-              expenseTableRows += '</tr>'; 
-            
-          
-            expenseTableRows += '<tr>';
-            expenseTableRows += '<td colspan="4" style="background-color:#d3d3d3;padding:5px;"><h5 style="padding-left:5px;">Amount Information</h5></td>';    
-            expenseTableRows += '</tr>';
-
-            expenseTableRows += '<tr>';
-            expenseTableRows += '<td><strong>Amount Claimed<strong></td>';
-            expenseTableRows += '<td>'+expenseRecord.amount_claimed__c+'</td>';
-            expenseTableRows += '<td><strong>Petty Cash Amount<strong></td>';
-            expenseTableRows += '<td>'+expenseRecord.petty_cash_amount__c+'</td>';
-            expenseTableRows += '</tr>'; 
-
-            expenseTableRows += '<tr>';
-            expenseTableRows += '<td><strong>Conveyance Amount<strong></td>';
-            expenseTableRows += '<td>'+expenseRecord.conveyance_amount__c+'</td>';
-            expenseTableRows += '<td><strong>Tour Bill Claim Amount<strong></td>';
-            expenseTableRows += '<td>'+expenseRecord.tour_bill_claim__c+'</td>';
-            expenseTableRows += '</tr>';   
-
-            //$('#expenseTable').append(expenseTableRows);
-            $('#expenseDetailsSpinner').hide();
-            $('#expenseTable').empty();
-            $('#expenseTable').html(expenseTableRows);
-
-
-            
-            let pettyCashList = expenseRelatedData.PettyCash;
-            console.log('pettyCashList  '+JSON.stringify(pettyCashList));
-            let lengthOfPettyCashList = pettyCashList.length < 3 ? pettyCashList.length : 3;
-            console.log('lengthOfPettyCashList : '+lengthOfPettyCashList);
-            let pettyCashTableRows = '<thead><tr>';
-            pettyCashTableRows += '<th>Name</th>';
-            pettyCashTableRows += '<th>Total Amount</th>';
-            pettyCashTableRows += '<th>Nature Of Expense</th>';
-            pettyCashTableRows += '<th>Created Date</th>';
-            pettyCashTableRows += '</tr></thead>';
-
-            for(let i= 0 ; i < lengthOfPettyCashList ; i++)
-            {
-              var strDate = pettyCashList[i].bill_date__c.toString().split('T')[0];
-              pettyCashTableRows += '<tr>';
-              pettyCashTableRows += '<td>'+pettyCashList[i].name+'</td>';
-              pettyCashTableRows += '<td>'+pettyCashList[i].amount__c+'</td>';
-            //  pettyCashTableRows += '<td>'+pettyCashList[i].activity_code__c+'</td>';
-              pettyCashTableRows += '<td>'+pettyCashList[i].nature_of_exp__c+'</td>';
-              pettyCashTableRows += '<td>'+strDate+'</td>';
-              pettyCashTableRows += '</tr>';
-            }
-            pettyCashTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/pettycashlistview?expenseId='+expenseId+'" >View All</a></center></td></tr>';
-            $('#pettyCashTable').empty();
-            $('#pettyCashTable').html(pettyCashTableRows);
-          
-
-            let conveyanceVoucherList =  expenseRelatedData.Conveyance;
-            console.log('conveyanceVoucherList  '+JSON.stringify(conveyanceVoucherList));
-            let conveyanceVoucherListLength = conveyanceVoucherList.length < 3 ? conveyanceVoucherList.length : 3;
-
-            let conveyanceVoucherTableRows = '';
-
-            for(let i=0 ;i < conveyanceVoucherListLength ; i++)
-            {
-              var strDate = conveyanceVoucherList[i].from__c.toString().split('T')[0];
-              if(i== 0)
-              {
-                conveyanceVoucherTableRows += '<thead><tr>';
-                conveyanceVoucherTableRows += '<th>Conveyance Voucher ID</th>';
-                conveyanceVoucherTableRows += '<th>Amount</th>';
-                conveyanceVoucherTableRows += '<th>Mode Of Conveyance</th>';
-                conveyanceVoucherTableRows += '<th>From</th>';
-                conveyanceVoucherTableRows += '</tr></thead><tbody>';
-              }
-              conveyanceVoucherTableRows += '<tr>';
-              conveyanceVoucherTableRows += '<td>'+conveyanceVoucherList[i].name+'</td>';
-              conveyanceVoucherTableRows += '<td>'+conveyanceVoucherList[i].amount__c+'</td>';
-              conveyanceVoucherTableRows += '<td>'+conveyanceVoucherList[i].mode_of_conveyance__c+'</td>';
-              conveyanceVoucherTableRows += '<td>'+strDate+'</td>';
-              conveyanceVoucherTableRows += '</tr>';
-            }
-            conveyanceVoucherTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/ConveyanceListView?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
-            $('#conveyanceVoucherTable').empty();
-            $('#conveyanceVoucherTable').html(conveyanceVoucherTableRows);
-            
-            
-            let tourBillClaimList = expenseRelatedData.TourBillClaim;
-            let tourBillClaimListLength = tourBillClaimList.length < 3 ? tourBillClaimList.length : 3;
-            console.log('tourBillClaimList  '+JSON.stringify(tourBillClaimList));
-
-            let tourBillClaimTableRows = '';
-        
-            for(let i=0 ; i < tourBillClaimListLength ; i++)
-            {
-              if(i == 0 )
-              {
-                  tourBillClaimTableRows += '<thead><tr>';
-                  tourBillClaimTableRows += '<th>Tour Bill Claim Name</th>';
-                  tourBillClaimTableRows += '<th>Grand Total</th>';
-                  tourBillClaimTableRows += '</tr></thead><tbody>';
-              }
-              tourBillClaimTableRows += '<tr>';
-              tourBillClaimTableRows += '<td>'+tourBillClaimList[i].name+'</td>';
-              tourBillClaimTableRows += '<td>'+tourBillClaimList[i].grand__c+'</td>';
-              tourBillClaimTableRows += '</tr>';
-            }
-            tourBillClaimTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/tourBillClaimListview?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
-            $('#tourBillClaimTable').empty();
-            $('#tourBillClaimTable').html(tourBillClaimTableRows);
-
-            let customApprovalList = expenseRelatedData.customApproval;
-            let customApprovalListLength = customApprovalList.length < 3 ? customApprovalList.length : 3;
-            console.log('customApprovalList  '+JSON.stringify(customApprovalList));
-
-            let customApprovalTableRows = '';
-        
-            for(let i=0 ; i < customApprovalListLength ; i++)
-            {
-              if(i == 0 )
-              {
-                customApprovalTableRows += '<thead><tr>';
-                customApprovalTableRows += '<th>Expense Approval Name</th>';
-                customApprovalTableRows += '<th>Approver (RM)</th>';
-                customApprovalTableRows += '<th>Comment</th>';
-                customApprovalTableRows += '</tr></thead><tbody>';
-              }
-              customApprovalTableRows += '<tr>';
-                customApprovalTableRows += '<td>'+customApprovalList[i].custname+'</td>';
-                customApprovalTableRows += '<td>'+customApprovalList[i].conname+'</td>';
-                customApprovalTableRows += '<td>'+customApprovalList[i].custcomm+'</td>';
-
-                customApprovalTableRows += '</tr>';
-            }
-            customApprovalTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/getExpenseApproval?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
-            $('#customApprovalTable').empty();
-            $('#customApprovalTable').html(customApprovalTableRows);
-            
-        })
                 .fail((jqXHR, textStatus, err) => {
-                    console.log('AJAX error response :',textStatus);
+                    console.log('textStatus  : ' + textStatus);
                 })
-            }); 
+           })
+
         }
 
       /*  function buttonFunctionality()
