@@ -693,7 +693,7 @@
           //  alert('tourBillId  '+tourBillId);
             console.log('tourBillId   '+tourBillId);
            // location.assign('/expense/tourBillClaim/airRailBusCharges/'+tourBillId);
-            window.open('/expense/tourBillClaim/airRailBusCharges/'+tourBillId,'_blank');
+            window.open('/expense/tourBillClaim/airRailBusCharges/'+tourBillId+'&'+isDisabled,'_blank');
           });
   
           $('a.conveyanceCharges').click(() => {

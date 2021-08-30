@@ -3,7 +3,8 @@
 <% include ./partials/messages %>
 
 <p id= "parentId"><%=parentprocurementId %></p>
-<p id ="isDisabled"><%=isDisabled %></p>
+<p id= "isDisabled"><%=isDisabled %></p>
+
 <!-- Modal Popup For Asset Requisition Detail & Their Related data -->
 
 
@@ -158,7 +159,7 @@
            $('#isDisabled').hide();
             let assetId = document.getElementById('parentId').innerHTML;
             let isDisabled = document.getElementById('isDisabled').innerHTML;
-            alert('isDisabled ++ '+isDisabled);
+           // alert('isDisabled ++ '+isDisabled);
        //     alert('parentId  : '+assetId);
           $("#popup").modal("show"); 
           $.ajax({
@@ -399,7 +400,7 @@
                             nonItProductTable += '<td>'+eachNonIt.quantity__c +'</td>';
                             nonItProductTable += '<td>'+eachNonIt.budget__c +'</td></tr>';  
                         })
-                        nonItProductTable+=  '<td colspan="6"><center><a target="_blank" href="/procurement/getNonItProcurementListVIew/'+assetId+'">View All</a></centre></td>';
+                        nonItProductTable+=  '<td colspan="6"><center><a target="_blank" href="/procurement/getNonItProcurementListVIew/'+assetId+'&'+isDisabled+'">View All</a></centre></td>';
                             $('#procuremnetNonItTable').empty();
                             $('#procuremnetNonItTable').append(nonItProductTable);
                     }
@@ -414,7 +415,7 @@
                             itProductTable += '<td>'+eachIt.quantity__c +'</td>';
                             itProductTable += '<td>'+eachIt.budget__c +'</td></tr>';      
                         })
-                        itProductTable+=  '<td colspan="6"><center><a target="_blank" href="/procurement/getProcurementItListView/'+assetId+'">View All</a></centre></td>';
+                        itProductTable+=  '<td colspan="6"><center><a target="_blank" href="/procurement/getProcurementItListView/'+assetId+'&'+isDisabled+'">View All</a></centre></td>';
                             $('#procuremnetItTable').empty();
                         $('#procuremnetItTable').append(itProductTable);   
                     }
@@ -466,7 +467,7 @@
                         var assetId = document.getElementById('parentId').innerHTML;
                         console.log('assetId : '+assetId);
                       //  location.assign('/procurement/nonItProducts/'+assetId);
-                        window.open('/procurement/nonItProducts/'+assetId,'_blank');
+                        window.open('/procurement/nonItProducts/'+assetId+'&'+isDisabled,'_blank');
                         });
 
                        $('a.procurementIT').click(() => {
@@ -474,7 +475,7 @@
                            var assetId = document.getElementById('parentId').innerHTML;
                            console.log('assetId : '+assetId);
                          //  location.assign('/procurement/itProducts/'+assetId);
-                           window.open('/procurement/itProducts/'+assetId,'_blank');
+                           window.open('/procurement/itProducts/'+assetId+'&'+isDisabled,'_blank');
                        });
 
                         $('a.notes').on('click',function(event){

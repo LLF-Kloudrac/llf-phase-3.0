@@ -262,15 +262,16 @@ router.get('/getRelatedTourBillClaimDetails/:tourBillClaimId', async (request, r
 /************************************* Start Air Rail Bus ******************************************************************* */
 
 
-router.get('/getAirBusListView',verify,(request,response)=>{
+router.get('/getAirBusListView/:parentTourBillId&:isDisabled',verify,(request,response)=>{
     let objUser = request.user;
     console.log('objUser  : '+JSON.stringify(objUser));
-    let tourbillId = request.query.tourBillClaimId;
+    let tourbillId = request.params.tourBillClaimId;
   
     console.log('getAirBusListView tourbillId:'+tourbillId);
-    
+    isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
   
-    response.render('./expenses/tourBillClaims/airRailBusListView', {objUser, tourbillId});
+    response.render('./expenses/tourBillClaims/airRailBusListView', {objUser,isDisabled, tourbillId});
 });
 
   
@@ -2272,12 +2273,14 @@ router.get('/fetchAllowence',verify,(request,response)=>{
   })
 })
 
-router.get('/tourBillViewRelated/:parentExpenseId',verify,(request, response) => {
+router.get('/tourBillViewRelated/:tourbillId&:isDisabled',verify,(request, response) => {
   var tourbillId = request.params.parentExpenseId;
   console.log('tourbillId  '+tourbillId);
 let objUser=request.user;
       console.log('user '+objUser);  
-      response.render('./expenses/tourBillClaims/tourBillViewRelated', {objUser, tourbillId});
+      isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
+      response.render('./expenses/tourBillClaims/tourBillViewRelated', {objUser,isDisabled, tourbillId});
 })
 
 router.get('/expenseLanding/:parentExpenseId&:isDisabled',verify,(request, response) => {

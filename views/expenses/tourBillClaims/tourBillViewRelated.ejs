@@ -2,6 +2,7 @@
 <% include ../../partials/messages %>
 <% include ../../partials/footer %>
 <p id="tourbillId"><%= tourbillId %></p>
+<p id= "isDisabled"><%=isDisabled %></p>
   <!-- Tour Bill Detail and Related Modal  Start -->
 
   <div class="modal fade" id="popupTourBillModal">
@@ -169,8 +170,10 @@
 <script>
     $(document).ready(function(){
        $('#tourbillId').hide();
+       $('#isDisabled').hide();
         let tourBillClaimId = document.getElementById('tourbillId').innerHTML;
-      //  alert('tourBillClaimId  : '+tourBillClaimId);
+        let isDisabled = document.getElementById('isDisabled').innerHTML;
+        alert('tourBillClaimId  : '+tourBillClaimId);
      //   $('#hiddenExpenseId').val(expenseId); // setting toubill ceate Hide Id
         $("#popupTourBillModal").modal("show"); 
         $.ajax({
@@ -343,7 +346,7 @@ $('a.airRailBusCharges').click(() => {
             //alert('tourBillId  '+tourBillId);
             console.log('tourBillId   '+tourBillId);
            // location.assign('/expense/tourBillClaim/airRailBusCharges/'+tourBillId);
-            window.open('/expense/tourBillClaim/airRailBusCharges/'+tourBillId,'_blank');
+            window.open('/expense/tourBillClaim/airRailBusCharges/'+tourBillId+'&'+isDisabled,'_blank');
           });
 
           $('a.conveyanceCharges').click(() => {

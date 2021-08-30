@@ -1729,7 +1729,7 @@ router.get('/getconveyancelist' ,verify,(request,response) => {
 router.get('/TourBillClaimListView/:expenseId&:isDisabled',verify,(request,response)=>{
   let objUser = request.user;
   console.log('objUser  : '+JSON.stringify(objUser));
-  let expenseId = request.query.expenseId;
+  let expenseId = request.params.expenseId;
   console.log('expenseId  '+expenseId);
   isDisabled = request.params.isDisabled;
     console.log(' ++++ isDisabled ++++ '+isDisabled);

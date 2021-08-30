@@ -3,6 +3,8 @@
 <% include ./partials/messages %>
 <p id ="parentId"><%=parentAssetId %></p>
 <p id ="isDisabled"><%=isDisabled %></p>
+
+
 <link rel="stylesheet" href="/stylesheets/table-sortable.css">
 <script src="/scripts/table-sortable.js" ></script>
 
@@ -11,7 +13,7 @@
 <div class="container">
     <div class="row mt-5 mb-3 align-items-center">
         <div class="col-md-5">
-          <a class="btn btn-primary btn-md bg-gray" href="/procurement/assetRequisitionViewRel/<%=parentAssetId %>" >Go To Asset Requisition </a>
+          <a class="btn btn-primary btn-md bg-gray" href="/procurement/assetRequisitionViewRel/<%=parentAssetId %>&<%= isDisabled %>" >Go To Asset Requisition </a>
          <!--    <a class="btn btn-primary btn-md bg-gray" href="#" id="">Create New It Procurement</a> -->
          <!--    <a class="btn btn-primary btn-md bg-gray" href="/procurement/getProcurementItListView/"+<%=parentAssetId %> >Refresh</a> -->
         </div>
@@ -192,10 +194,12 @@
     $(document).ready(function(){
       $('#parentId').hide();
       $('#isDisabled').hide();
+
       let parentId=document.getElementById('parentId').innerHTML;
   //    alert('parentId '+parentId);
-       let isDisabled1 = document.getElementById('isDisabled').innerHTML;
+         let isDisabled = document.getElementById('isDisabled').innerHTML;
       // alert('isDisabled1 '+isDisabled1);
+      
     /**************Table Sortable Start ***********/
 
         let columns ={
