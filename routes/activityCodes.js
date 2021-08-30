@@ -281,7 +281,7 @@ router.post('/createActivityCode', (request, response) => {
     }
     else {
         pool
-            .query('INSERT INTO salesforce.Activity_Code__c (Name, Activity_Code_Name__c, Expense_Head_Category__c, Description__c,Project__c ) values ($1,$2,$3,$4,$5)',[name, activityCodeName, expenseHeadDropdown, description,projectDropdown])
+            .query('INSERT INTO salesforce.Activity_Code__c (Name, Activity_Code_Name__c, ExpenseHeadCategory__c, Description__c,Project__c ) values ($1,$2,$3,$4,$5)',[name, activityCodeName, expenseHeadDropdown, description,projectDropdown])
             .then((updateQuerryResult) => {
                 console.log('updateQuerryResult =>>' + JSON.stringify(updateQuerryResult));
                 response.send('Success');
