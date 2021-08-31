@@ -629,37 +629,33 @@ router.get('/details',verify, async(request, response) => {
 
 router.post('/insertAsssetForm',(request,response)=>{
     let body = request.body;
-    let planDate=request.body.planDate;
+    let datepicker=request.body.date_from;
     console.log('Form Value =>'+JSON.stringify(body));
    const{assetRequisitionName,project,submittedBy,act}=request.body;
    console.log('Asset name=> '+assetRequisitionName);
    console.log('Asset project=> '+project);
-   console.log('Asset planDate=> '+planDate);
+   console.log('Asset planDate=> '+datepicker);
    console.log('Asset spocApproval=> '+submittedBy);
    console.log('Activity code '+act);
   // console.log('Asset spocApproval=> '+spocApproval);
   // console.log('availableInStock=> '+availableInStock);
-   if(planDate==''){
+   if(datepicker==''){
        console.log('dsjjd');
-       planDate=null;      
+       datepicker=null;      
    }
- var dateInMss = new Date();
-     dateInMss.setDate(dateInMss.getDate());
-    console.log(' Todays date ++ '+dateInMss);
-var date2 = dateInMss.toISOString();
-    console.log( 'date 2 ++ '+date2);
+
 
 const schema=joi.object({
     assetRequisitionName:joi.string().min(3).required().label('Please Fill Asset Requisition Name'),
     asset: joi.string().max(255).required().label('Asset Requisition Name is too long'),
     project:joi.string().required().label('Please choose Project/Department'),
     plandte:joi.date().required().label('Please Fill Target Date'),
-    planDatee:joi.date().min('now').required().label('Target Date should be greater than or equals to today date'),
+   // planDatee:joi.date().min('now').required().label('Target Date should be greater than or equals to today date'),
  // planDate:joi.date().required().less(joi.ref('date2')).label('Target Date should be greater than or equals to today date'),
   //  planDate:joi.string().required().label('Please fill Target Date of Receiving'),
    // act:joi.string().required().label('Pleasse Chose Activity'),
 })
-let result=schema.validate({assetRequisitionName,project,asset:assetRequisitionName,plandte:planDate,planDatee:planDate});
+let result=schema.validate({assetRequisitionName,project,asset:assetRequisitionName,plandte:datepicker});
 if(result.error){
     console.log('fd'+result.error);
     response.send(result.error.details[0].context.label);    
@@ -668,7 +664,7 @@ else{
    let query ='INSERT INTO salesforce.Asset_Requisition_Form__c (name,Project_Department__c,Requested_Closure_Plan_Date__c,Activity_Code_project__c,Submitted_By_Heroku_User__c) values ($1,$2,$3,$4,$5)';
    console.log('asset Insert Query= '+query);
    pool
-   .query(query,[assetRequisitionName,project,planDate,act,submittedBy])
+   .query(query,[assetRequisitionName,project,datepicker,act,submittedBy])
    .then((assetQueryResult) => {     
             console.log('assetQueryResult.rows '+JSON.stringify(assetQueryResult));
             response.send('Successfully Inserted');

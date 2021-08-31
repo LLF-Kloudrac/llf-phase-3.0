@@ -134,8 +134,8 @@
                     let strDate = crDate.toLocaleString();
                     console.log('strDate  :'+strDate);
                     let dateTime = new Date(eachRecord.createddate);
-                   dateTime.setHours(dateTime.getHours() + 5);
-                   dateTime.setMinutes(dateTime.getMinutes() + 30);
+                   dateTime.setHours(dateTime.getHours() - 5);
+                   dateTime.setMinutes(dateTime.getMinutes() - 30);
                    dateTime1 =  dateTime.toLocaleString();
                   htmlTable += '<tr>';
                   htmlTable += '<td>'+i+' </td>';
