@@ -190,10 +190,11 @@
                             response.forEach((eachRecord)=> {
                                 console.log('type  : '+typeof(eachRecord.createddate));
                                 let dateTime = new Date(eachRecord.createddate);
-                                dateTime.setHours(dateTime.getHours() - 5);
-                                dateTime.setMinutes(dateTime.getMinutes() - 30);
+                                console.log('dateTime before edit on 193  : '+dateTime);
+                                dateTime.setHours(dateTime.getHours() + 5);
+                                dateTime.setMinutes(dateTime.getMinutes() + 30);
                                 dateTime =  dateTime.toLocaleString();
-                                console.log('dateTime  : '+dateTime);
+                                console.log('dateTime after edit on 197 : '+dateTime);
                                 htmlResponsesTable += '<tr>';
                                 htmlResponsesTable += '<td>'+i+' </td>';
                                 htmlResponsesTable += '<td>'+eachRecord.name+' </td>';
