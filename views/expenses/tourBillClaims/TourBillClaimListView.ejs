@@ -560,7 +560,7 @@
                       airBusRailFareHtml += '<td>INR '+eachAirRailBus.amount__c+'</td>';
                       airBusRailFareHtml += '</tr>';
                     });
-                    airBusRailFareHtml += '<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/getAirBusListView?tourBillClaimId='+tourBillClaimId+'" >View All</a></center></td></tr>';
+                    airBusRailFareHtml += '<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/getAirBusListView/'+tourBillClaimId+'&'+isDisabled+'" >View All</a></center></td></tr>';
                     airBusRailFareHtml += '</tbody>';
                     
                     $('#airRailBusTable').html(airBusRailFareHtml);
@@ -589,7 +589,7 @@
                       conveyanceChargesHtml += '<td>INR '+eachConveyanceCharge.amount__c+'</td>';  
                       conveyanceChargesHtml += '</tr>';
                     });
-                    conveyanceChargesHtml += '<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/conveyanceChargesListView?tourBillClaimId='+tourBillClaimId+'" >View All</a></center></td></tr>';
+                    conveyanceChargesHtml += '<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/conveyanceChargesListView/'+tourBillClaimId+'&'+isDisabled+'" >View All</a></center></td></tr>';
                     conveyanceChargesHtml += '</tbody>';
                     
                     $('#conveyanceChargesTable').html(conveyanceChargesHtml);
@@ -616,7 +616,7 @@
                         boardingLodgingChargesHtml += '<td>INR '+eachBoardingLodging.total_amount__c+'</td>';  
                         boardingLodgingChargesHtml += '</tr>';
                     });
-                    boardingLodgingChargesHtml+='<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/boardingLodgingListView?tourBillClaimId='+tourBillClaimId+'" >View All</a></center></td></tr>';
+                    boardingLodgingChargesHtml+='<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/boardingLodgingListView/'+tourBillClaimId+'&'+isDisabled+'" >View All</a></center></td></tr>';
                     boardingLodgingChargesHtml += '</tbody>'
 
                     $('#boardingLodgingChargesTable').html(boardingLodgingChargesHtml);
@@ -643,7 +643,7 @@
                           telephoneFoodChargesHtml += '<td>'+eachTelephoneFoodCharge.remarks__c+'</td>';  
                           telephoneFoodChargesHtml += '</tr>';
                     });
-                    telephoneFoodChargesHtml+='<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/telephoneFoodCharge?tourBillClaimId='+tourBillClaimId+'" >View All</a></center></td></tr>';
+                    telephoneFoodChargesHtml+='<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/telephoneFoodCharge/'+tourBillClaimId+'&'+isDisabled+'" >View All</a></center></td></tr>';
                     telephoneFoodChargesHtml += '</tbody>'
 
                     $('#telephoneFoodChargesTable').html(telephoneFoodChargesHtml);
@@ -671,7 +671,7 @@
                         miscellenousChargesHtml += '</tr>';
                     });
                     
-                    miscellenousChargesHtml+='<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/miscellaneousCharge?tourBillClaimId='+tourBillClaimId+'" >View All</a></center></td></tr>';
+                    miscellenousChargesHtml+='<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/miscellaneousCharge/'+tourBillClaimId+'&'+isDisabled+'" >View All</a></center></td></tr>';
                     miscellenousChargesHtml += '</tbody>'
                     $('#miscellaneousChargesTable').html(miscellenousChargesHtml);
                   } 
@@ -701,7 +701,7 @@
             var tourBillId = document.getElementById('tourBillId').innerHTML;
             console.log('tourBillId   '+tourBillId);
          //   location.assign('/expense/tourBillClaim/conveyanceCharges/'+tourBillId);
-            window.open('/expense/tourBillClaim/conveyanceCharges/'+tourBillId,'_blank');
+            window.open('/expense/tourBillClaim/conveyanceCharges/'+tourBillId+'&'+isDisabled,'_blank');
           });
   
           $('a.boardingLodgingCharges').click(() => {
@@ -709,7 +709,7 @@
             var tourBillId = document.getElementById('tourBillId').innerHTML;
             console.log('tourBillId   : '+tourBillId);
            // location.assign('/expense/tourBillClaim/boardingLodgingCharges/'+tourBillId);
-            window.open('/expense/tourBillClaim/boardingLodgingCharges/'+tourBillId,'_blank');
+            window.open('/expense/tourBillClaim/boardingLodgingCharges/'+tourBillId+'&'+isDisabled,'_blank');
           });
   
           $('a.telephoneFood').click(() => {
@@ -717,7 +717,7 @@
             var tourBillId = document.getElementById('tourBillId').innerHTML;
             console.log('tourBillId   '+tourBillId);
          //   location.assign('/expense/tourBillClaim/telephoneFood/'+tourBillId);
-            window.open('/expense/tourBillClaim/telephoneFood/'+tourBillId,'_blank');
+            window.open('/expense/tourBillClaim/telephoneFood/'+tourBillId+'&'+isDisabled,'_blank');
           });
   
           $('a.miscellaneousCharges').click(() => {
@@ -725,7 +725,7 @@
             var tourBillId = document.getElementById('tourBillId').innerHTML;
             console.log('tourBillId   '+tourBillId);
           //  location.assign('/expense/tourBillClaim/miscellenousCharges/'+tourBillId);
-            window.open('/expense/tourBillClaim/miscellenousCharges/'+tourBillId,'_blank');
+            window.open('/expense/tourBillClaim/miscellenousCharges/'+tourBillId+'&'+isDisabled,'_blank');
           });
 
 

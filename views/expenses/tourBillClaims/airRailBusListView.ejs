@@ -12,7 +12,7 @@
 <div class="container">
     <div class="row mt-5 mb-3 align-items-center">
         <div class="col-md-6">
-            <a href="/expense/tourBillClaim/airRailBusCharges/<%= tourbillId %>" class="btn btn-primary  airRailBusCharges" id="airRailBusCharges" style="color:white;" > Create New</a>
+            <a href="/expense/tourBillClaim/airRailBusCharges/<%= tourbillId %>&<%= isDisabled %>" class="btn btn-primary  airRailBusCharges" id="airRailBusCharges" style="color:white;" > Create New</a>
             <a class="btn btn-primary btn-md bg-gray" href="/expense/tourBillClaim/tourBillViewRelated/<%= tourbillId %>&<%= isDisabled %>"  >Go To TourBill</a>
             <a class="btn btn-primary btn-md bg-gray" href="/expense/tourBillClaim/expenseLanding/<%= tourbillId %>&<%= isDisabled %>"  >Go To Expense</a>
            <!--  <button class="btn btn-primary btn-md bg-gray"  id="createNewPettyCashButton">Create New Air/Rail/Bus</button>
@@ -188,7 +188,7 @@
        
 
         let tourbillId=document.getElementById('tourbillId').innerHTML;
-        alert('tour bill id ++'+tourbillId);
+        //alert('tour bill id ++'+tourbillId);
         let columns ={
             sequence : 'Sequence',
             //editAction:'Action',

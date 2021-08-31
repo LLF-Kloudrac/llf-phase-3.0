@@ -24,6 +24,7 @@
                 </div>
             </br>
    <p id="tourbillId"><%= parentTourBillId %></p>
+   <p id="isDisabled"><%= isDisabled %></p>
    <h4 align="center">Air/Rail/Bus Fare</h4>
    <br />
 
@@ -65,11 +66,14 @@ $(document).ready(function(){
  // alert('Hello pettyCash');
  $('#addButton').hide();
  $('#tourbillId').hide();
+ $('#isDisabled').hide();
+ 
  let tourbillId  = document.getElementById('tourbillId').innerHTML;
+ let isDisabled  = document.getElementById('isDisabled').innerHTML;
  console.log('Tour bill id inside air rail bus'+tourbillId);
  let activityCodes = [];
  var count = 1;
- $.get('/expense/tourBillClaimActivityCode',{tourbillId : tourbillId}, function(response){
+ $.get('/expense/tourBillClaimActivityCode',{tourbillId : tourbillId, isDisabled:isDisabled}, function(response){
       console.log('response  : '+JSON.stringify(response));
       activityCodes = response;
       $('#addButton').show();

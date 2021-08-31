@@ -265,7 +265,7 @@ router.get('/getRelatedTourBillClaimDetails/:tourBillClaimId', async (request, r
 router.get('/getAirBusListView/:parentTourBillId&:isDisabled',verify,(request,response)=>{
     let objUser = request.user;
     console.log('objUser  : '+JSON.stringify(objUser));
-    let tourbillId = request.params.tourBillClaimId;
+    let tourbillId = request.params.parentTourBillId;
   
     console.log('getAirBusListView tourbillId:'+tourbillId);
     isDisabled = request.params.isDisabled;
@@ -586,12 +586,13 @@ router.post('/airRailBusCharges',verify, (request, response) => {
 /*************************************End Air Rail Bus ******************************************************************* */
 
 /*************************************Start  tourBillConveyanceCharges ******************************************************************* */
-router.get('/conveyanceCharges/:parentTourBillId',verify, (request, response) => {
+router.get('/conveyanceCharges/:parentTourBillId&:isDisabled',verify, (request, response) => {
 
     let objUser=request.user;
     let parentTourBillId = request.params.parentTourBillId;
     console.log('conveyanceCharges parentTourBillId  : '+request.params.parentTourBillId);
-
+    let isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
     var conveyanceChargesQuery = 'SELECT sfid, Name, Date__c, Amount__c, Place__c,'+ 
                           'Remarks__c, Tour_Bill_Claim__c '+
                           'FROM salesforce.Conveyance_Charges__c WHERE Tour_Bill_Claim__c = $1';
@@ -604,10 +605,10 @@ router.get('/conveyanceCharges/:parentTourBillId',verify, (request, response) =>
         console.log('conveyanceChargesQueryError '+conveyanceChargesQueryError.stack);
     })
 
-    response.render('./expenses/tourBillClaims/tourBillConveyanceCharges',{objUser, parentTourBillId :parentTourBillId});
+    response.render('./expenses/tourBillClaims/tourBillConveyanceCharges',{objUser,isDisabled, parentTourBillId :parentTourBillId});
 });
 
-router.post('/conveyanceCharges',verify, (request, response) => {
+router.post('/conveyanceCharges/:parentTourBillId&:isDisabled',verify, (request, response) => {
 
   let bodyResult =  request.body;
   console.log('conveyanceCharges bodyResult  : '+JSON.stringify(bodyResult));
@@ -755,14 +756,15 @@ router.post('/conveyanceCharges',verify, (request, response) => {
 
 });
 
- router.get('/conveyanceChargesListView',verify,(request,response)=>{
+ router.get('/conveyanceChargesListView/:parentTourBillId&:isDisabled',verify,(request,response)=>{
     let objUser = request.user;
     console.log('objUser  : '+JSON.stringify(objUser));
-    let tourbillId = request.query.tourBillClaimId;
+    let tourbillId = request.params.parentTourBillId;
   
     console.log('getConveyanceView tourbillId:'+tourbillId);
-  
-    response.render('./expenses/tourBillClaims/ConveyanceView', {objUser, tourbillId});
+    isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
+    response.render('./expenses/tourBillClaims/ConveyanceView', {objUser,isDisabled, tourbillId});
   })
   
   router.get('/getConveyanceDetalList',verify,(request,response)=>{
@@ -906,12 +908,13 @@ router.post('/conveyanceCharges',verify, (request, response) => {
 
 /************************************* Start boardingLodgingCharges ******************************************************************* */
 
-router.get('/boardingLodgingCharges/:parentTourBillId', verify, (request, response) => {
+router.get('/boardingLodgingCharges/:parentTourBillId&:isDisabled', verify, (request, response) => {
 
     let objUser =request.user;
     let parentTourBillId = request.params.parentTourBillId;
-    console.log(' boardingLodgingCharges parentTourBillId  : '+request.params.parentTourBillId);
-
+    console.log(' boardingLodgingCharges parentTourBillId  : '+parentTourBillId);
+    let isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
     var boardingLodgingChargesQuery = 'SELECT sfid, Name, Tour_Bill_Claim__c, Stay_Option__c, Place_Journey__c,'+ 
                           'Correspondence_City__c,   Own_Stay_Amount__c , From__c, To__c,'+
                           'No_of_Days__c, Total_time__c, Actual_Amount_for_boarding_and_lodging__c, Amount_for_boarding_and_lodging__c,'+
@@ -926,12 +929,12 @@ router.get('/boardingLodgingCharges/:parentTourBillId', verify, (request, respon
        // console.log('querryResuklt '+JSON.stringify(queryResult.rows));
         var city=JSON.stringify(queryResult.rows);
         console.log(city[0]);
-        response.render('./expenses/tourBillClaims/boardingLodgingCharges',{objUser,city, parentTourBillId :parentTourBillId});
+        response.render('./expenses/tourBillClaims/boardingLodgingCharges',{objUser,isDisabled,city, parentTourBillId :parentTourBillId});
     }).catch((error)=>{console.log(Json.stringify(error.stack))})
     })
     .catch((boardingLodgingChargesQueryError) => {
         console.log('boardingLodgingChargesQueryError '+boardingLodgingChargesQueryError.stack);
-        response.render('./expenses/tourBillClaims/boardingLodgingCharges',{objUser,city :'', parentTourBillId :parentTourBillId});
+        response.render('./expenses/tourBillClaims/boardingLodgingCharges',{objUser,isDisabled,city :'', parentTourBillId :parentTourBillId});
     })
 });
 
@@ -1342,14 +1345,15 @@ pool.
    
 });
 
-router.get('/boardingLodgingListView',verify,(request,response)=>{
+router.get('/boardingLodgingListView/:parentTourBillId&:isDisabled',verify,(request,response)=>{
     let objUser = request.user;
     console.log('objUser  : '+JSON.stringify(objUser));
-    let tourbillId = request.query.tourBillClaimId;
+    let tourbillId = request.params.parentTourBillId;
   
     console.log('Boarding/Lodging tourbillId:'+tourbillId);
-  
-    response.render('./expenses/tourBillClaims/boardingLodging', {objUser, tourbillId});
+    isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
+    response.render('./expenses/tourBillClaims/boardingLodging', {objUser,isDisabled, tourbillId});
   
   });
   router.get('/getBoardingLodgingDetalList',verify,(request,response)=>{
@@ -1511,11 +1515,13 @@ router.get('/boardingLodgingListView',verify,(request,response)=>{
 
 
 /************************************* start telephoneFoodCharges ******************************************************************* */
-router.get('/telephoneFood/:parentTourBillId',verify, (request, response) => {
+router.get('/telephoneFood/:tourbillId&:isDisabled',verify, (request, response) => {
 
     let objUser=request.user;
-    let parentTourBillId = request.params.parentTourBillId;
+    let parentTourBillId = request.params.tourbillId;
     console.log('telephoneFood  parentTourBillId  : '+request.params.parentTourBillId);
+    let isDisabled = request.params.isDisabled;
+    console.log('telephoneFood  isDisabled  : '+request.params.isDisabled);
 
     var telephoneFoodQuery = 'SELECT sfid, Name, Laundry_Expense__c, Fooding_Expense__c, Remarks__c,'+ 
                           'Tour_Bill_Claim__c, Total_Amount__c '+
@@ -1529,7 +1535,7 @@ router.get('/telephoneFood/:parentTourBillId',verify, (request, response) => {
         console.log('telephoneFoodQueryError '+telephoneFoodQueryError.stack);
     })
 
-    response.render('./expenses/tourBillClaims/telephoneFoodCharges',{objUser, parentTourBillId : parentTourBillId});
+    response.render('./expenses/tourBillClaims/telephoneFoodCharges',{objUser,isDisabled, parentTourBillId : parentTourBillId});
 });
 
 
@@ -1673,13 +1679,15 @@ pool.
   
   
 
-router.get('/telephoneFoodCharge',verify,(request,response)=>{
+router.get('/telephoneFoodCharge/:parentTourBillId&:isDisabled',verify,(request,response)=>{
     let objUser = request.user;
     console.log('objUser  : '+JSON.stringify(objUser));
-    let tourbillId = request.query.tourBillClaimId;
+    let tourbillId = request.params.parentTourBillId;
   
     console.log('telephoneFoodCharge tourbillId:'+tourbillId);
-    response.render('./expenses/tourBillClaims/telephoneFoodChargeView', {objUser,tourbillId});
+    isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
+    response.render('./expenses/tourBillClaims/telephoneFoodChargeView', {objUser,isDisabled,tourbillId});
   });
   
   router.get('/gettelephoneFoodChargeDetalList',verify,(request,response)=>{
@@ -1822,12 +1830,13 @@ router.get('/telephoneFoodCharge',verify,(request,response)=>{
 
 
 /************************************* Start Miscellaneous Charges ******************************************************************* */
-router.get('/miscellenousCharges/:parentTourBillId', verify, (request, response) => {
+router.get('/miscellenousCharges/:parentTourBillId&:isDisabled', verify, (request, response) => {
 
     let objUser=request.user;
     let parentTourBillId = request.params.parentTourBillId;
     console.log('miscellenousCharges  parentTourBillId  : '+request.params.parentTourBillId);
-
+    let isDisabled = request.params.isDisabled;
+    console.log('miscellenousCharges  isDisabled  : '+isDisabled);
     var miscellenousChargesQuery = 'SELECT sfid, Name, Date__c, Amount__c, Particulars_Mode__c,'+ 
                                     'Remarks__c, Activity_Code_Project__c, Tour_Bill_Claim__c '+
                                     'FROM salesforce.Miscellaneous_Expenses__c WHERE Tour_Bill_Claim__c = $1';
@@ -1841,18 +1850,19 @@ router.get('/miscellenousCharges/:parentTourBillId', verify, (request, response)
     console.log('miscellenousChargesQueryError '+miscellenousChargesQueryError.stack);
     })
 
-    response.render('./expenses/tourBillClaims/miscellenousCharges',{objUser, parentTourBillId : parentTourBillId});
+    response.render('./expenses/tourBillClaims/miscellenousCharges',{objUser,isDisabled, parentTourBillId : parentTourBillId});
 });
 
 
-router.get('/miscellaneousCharge',verify,(request,response)=>{
-    let objUser = request.user;
-    console.log('objUser  : '+JSON.stringify(objUser));
-    let tourbillId = request.query.tourBillClaimId;
+router.get('/miscellaneousCharge/:parentTourBillId&:isDisabled',verify,(request,response)=>{
+  let objUser=request.user;
+  let isDisabled = request.params.isDisabled;
+ console.log(' ++++ isDisabled ++++ '+isDisabled);
+    let tourbillId = request.params.parentTourBillId;
   
     console.log('Miscellaneous tourbillId:'+tourbillId);
-    
-    response.render('./expenses/tourBillClaims/MiscellaneousView', {objUser, tourbillId});
+   
+    response.render('./expenses/tourBillClaims/MiscellaneousView', {objUser,isDisabled, tourbillId});
   
   });
   
@@ -2273,9 +2283,9 @@ router.get('/fetchAllowence',verify,(request,response)=>{
   })
 })
 
-router.get('/tourBillViewRelated/:tourbillId&:isDisabled',verify,(request, response) => {
-  var tourbillId = request.params.parentExpenseId;
-  console.log('tourbillId  '+tourbillId);
+router.get('/tourBillViewRelated/:parentTourBillId&:isDisabled',verify,(request, response) => {
+  var tourbillId = request.params.parentTourBillId;
+  console.log('tourbillId line no 2278  '+tourbillId);
 let objUser=request.user;
       console.log('user '+objUser);  
       isDisabled = request.params.isDisabled;

@@ -1777,9 +1777,11 @@ router.get('/tourBillClaimActivityCode', verify ,(request, response) => {
 
   console.log('hello i am inside Tour Bill Claim Activity Code');
 
-  let tourbillId = request.params.tourbillId;
+  let tourbillId = request.query.tourbillId;
 
   console.log('tourbillId :' +tourbillId)
+  isDisabled = request.query.isDisabled;
+  console.log(' ++++ isDisabled ++++ '+isDisabled);
   let expenseId;
   let projectId ;
 

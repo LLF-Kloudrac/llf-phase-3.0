@@ -12,15 +12,16 @@
 
 <div class="container-fluid">
   <br />
-  
+  <p id="isDisabled"><%= isDisabled %></p>
      <div class="col-md-10">
-      <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/tourBillClaim/miscellaneousCharge?tourBillClaimId=<%= parentTourBillId %>" >Go To Miscellenous Charges</a>
-      <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/tourBillClaim/tourBillViewRelated/<%= parentTourBillId %>"  >Go To TourBill</a>
-      <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/tourBillClaim/expenseLanding/<%= parentTourBillId %>"  >Go To Expense</a>
+      <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/tourBillClaim/miscellaneousCharge/<%= parentTourBillId %>&<%= isDisabled %>" >Go To Miscellenous Charges</a>
+      <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/tourBillClaim/tourBillViewRelated/<%= parentTourBillId %>&<%= isDisabled %>"  >Go To TourBill</a>
+      <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/tourBillClaim/expenseLanding/<%= parentTourBillId %>&<%= isDisabled %>"  >Go To Expense</a>
 
     </div>
   </br>
    <p id="tourbillId"><%= parentTourBillId %></p>
+
    <h4 align="center">Miscellaneous Expenses</h4>
    <br />
   </div>
@@ -61,10 +62,13 @@ $(document).ready(function(){
   //alert('Hello pettyCash');
   $('#addButton').hide();
   $('#tourbillId').hide();
+  $('#isDisabled').hide();
  let tourbillId  = document.getElementById('tourbillId').innerHTML;
+ let isDisabled  = document.getElementById('isDisabled').innerHTML;
+ console.log('Tour bill id inside air rail bus'+tourbillId);
  let activityCodes = [];
  var count = 1;
- $.get('/expense/tourBillClaimActivityCode',{tourbillId : tourbillId}, function(response){
+ $.get('/expense/tourBillClaimActivityCode',{tourbillId : tourbillId, isDisabled:isDisabled}, function(response){
       console.log('response  : '+JSON.stringify(response));
       activityCodes = response;
       $('#addButton').show();

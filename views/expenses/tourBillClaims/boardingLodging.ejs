@@ -13,9 +13,9 @@
 <div class="container">
     <div class="row mt-5 mb-3 align-items-center">
         <div class="col-md-6">
-            <a href="/expense/tourBillClaim/boardingLodgingCharges/<%= tourbillId %>" class="btn btn-primary"  style="color:white;" >Create New</a>
-            <a class="btn btn-primary btn-md bg-gray" href="/expense/tourBillClaim/tourBillViewRelated/<%= tourbillId %>"  >Go To TourBill</a>
-            <a class="btn btn-primary btn-md bg-gray" href="/expense/tourBillClaim/expenseLanding/<%= tourbillId %>"  >Go To Expense</a>
+            <a href="/expense/tourBillClaim/boardingLodgingCharges/<%= tourbillId %>&<%= isDisabled %>" class="btn btn-primary"  style="color:white;" >Create New</a>
+            <a class="btn btn-primary btn-md bg-gray" href="/expense/tourBillClaim/tourBillViewRelated/<%= tourbillId %>&<%= isDisabled %>"  >Go To TourBill</a>
+            <a class="btn btn-primary btn-md bg-gray" href="/expense/tourBillClaim/expenseLanding/<%= tourbillId %>&<%= isDisabled %>"  >Go To Expense</a>
            <!--  <button class="btn btn-primary btn-md bg-gray"  id="AirBustour">New Boarding/Loadging Expense</button>
             <button class="btn btn-primary btn-md" id="refresh">Refresh</button> -->
         </div>
@@ -145,8 +145,11 @@
 
 <script>
     $(document).ready(function(){
-        $('#tourbillId').hide();
-        let tourbillId=document.getElementById('tourbillId').innerHTML;
+      $('#tourbillId').hide();
+       
+
+       let tourbillId=document.getElementById('tourbillId').innerHTML;
+     //  alert('tour bill id ++'+tourbillId);
        // alert(tourbillId);
         let columns ={
             sequence : 'Sequence',

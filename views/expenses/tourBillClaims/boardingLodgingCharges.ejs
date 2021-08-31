@@ -23,11 +23,12 @@
 <div style="overflow-y: auto;">
   <div class="container-fluid">
    <br />
-   
+   <p id="tourbillId"><%= parentTourBillId %></p>
+   <p id="isDisabled"><%= isDisabled %></p>
       <div class="col-md-10">
-          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/tourBillClaim/boardingLodgingListView?tourBillClaimId=<%= parentTourBillId %>" >Go To Boarding &amp; Lodging</a>
-          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/tourBillClaim/tourBillViewRelated/<%= parentTourBillId %>"  >Go To TourBill</a>
-          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/tourBillClaim/expenseLanding/<%= parentTourBillId %>"  >Go To Expense</a>
+          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/tourBillClaim/boardingLodgingListView/<%= parentTourBillId %>&<%= isDisabled %>" >Go To Boarding &amp; Lodging</a>
+          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/tourBillClaim/tourBillViewRelated/<%= parentTourBillId %>&<%= isDisabled %>"  >Go To TourBill</a>
+          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/tourBillClaim/expenseLanding/<%= parentTourBillId %>&<%= isDisabled %>"  >Go To Expense</a>
           <a class="btn btn-primary btn-md bg-gray mb-mobile" href="https://res.cloudinary.com/hfmqrflec/image/upload/v1600428143/LLF_-_Travel_Policy_1_de9yad.pdf" target="_blank" >Boarding & Lodging Policy Document </a>
         </div>
 
@@ -74,7 +75,7 @@
   </div>
 </div>
 </div>
-<p id ='tourbillId' ><%= parentTourBillId %></p>
+
 <script>
   var lstPlaces = ["Mumbai","Delhi/NCR","Bengaluru","Hyderabad","Itanagar","Dispur", 
   "Patna", "Raipur", "Panaji", "Gandhinagar", "Shimla", "Srinagar", "Chandigarh", 
@@ -83,14 +84,17 @@
   "Kolkata", "Port Blair", "Silvassa", "Daman", "Kavaratti", "Pondicherry", "Agra", "Pune", "Kochi", 
   "Ajmer", "Allahabad", "Amritsar","Coimbatore", "Indore", "Gwalior", "Jalandhar", "Mussorie","Ooty", "Others"];
 $(document).ready(function(){
-   $('#tourbillId').hide();
+  $('#tourbillId').hide();
    $('#addButton').hide();
-   let tourbillId = document.getElementById('tourbillId').innerHTML;
+   $('#isDisabled').hide();
+   
+   var tourbillId  = document.getElementById('tourbillId').innerHTML;
+  // alert('parentTourBillId ++ '+tourbillId);
  // var count = 1;
- 
+ let isDisabled  = document.getElementById('isDisabled').innerHTML;
  let activityCodes = [];
  var count = 1;
- $.get('/expense/tourBillClaimActivityCode',{tourbillId : tourbillId}, function(response){
+ $.get('/expense/tourBillClaimActivityCode',{tourbillId : tourbillId, isDisabled:isDisabled}, function(response){
       console.log('response  : '+JSON.stringify(response));
       activityCodes = response;
       $('#addButton').show();
@@ -348,7 +352,7 @@ $(document).ready(function(){
  $(document).on('click', '.remove', function(){
     $(this).closest('tr').remove();
  });
- $.get('/expense/tourBillClaimActivityCode',{tourbillId : tourbillId}, function(response){
+ $.get('/expense/tourBillClaimActivityCode',{tourbillId : tourbillId, isDisabled:isDisabled}, function(response){
     console.log('response  : '+JSON.stringify(response));
  }).fail(function(jqXHR, error) {
     console.log('error  : '+JSON.stringify(jqXHR));

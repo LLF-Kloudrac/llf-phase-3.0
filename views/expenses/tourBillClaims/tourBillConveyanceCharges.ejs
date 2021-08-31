@@ -15,12 +15,13 @@
         
         <div class="col-md-10 m-auto">
               
-          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/tourBillClaim/conveyanceChargesListView?tourBillClaimId=<%= parentTourBillId %>" >Go To Conveyance Charges</a>
-          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/tourBillClaim/tourBillViewRelated/<%= parentTourBillId %>"  >Go To TourBill</a>
-          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/tourBillClaim/expenseLanding/<%= parentTourBillId %>"  >Go To Expense</a>
+          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/tourBillClaim/conveyanceChargesListView/<%= parentTourBillId %>&<%= isDisabled %>" >Go To Conveyance Charges</a>
+          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/tourBillClaim/tourBillViewRelated/<%= parentTourBillId %>&<%= isDisabled %>"  >Go To TourBill</a>
+          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/tourBillClaim/expenseLanding/<%= parentTourBillId %>&<%= isDisabled %>"  >Go To Expense</a>
         <br>
       </br>
    <p id="tourbillId"><%= parentTourBillId %></p>
+   <p id="isDisabled"><%= isDisabled %></p>
    <h4 align="center">Conveyance Charge Expenses</h4>
    <br />
    <div class="">
@@ -60,10 +61,12 @@ $(document).ready(function(){
   //alert('Hello pettyCash');
   $('#addButton').hide();
   $('#tourbillId').hide();
+  $('#isDisabled').hide();
  let tourbillId  = document.getElementById('tourbillId').innerHTML;
+ let isDisabled  = document.getElementById('isDisabled').innerHTML;
  let activityCodes = [];
  var count = 1;
- $.get('/expense/tourBillClaimActivityCode',{tourbillId : tourbillId}, function(response){
+ $.get('/expense/tourBillClaimActivityCode',{tourbillId : tourbillId, isDisabled:isDisabled}, function(response){
       console.log('response  : '+JSON.stringify(response));
       activityCodes = response;
       $('#addButton').show();
