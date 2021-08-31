@@ -708,15 +708,17 @@ router.get('/details', async (request, response) => {
 });
 
 
-router.get('/getExpenseApproval',verify,(request,response)=>{
+router.get('/getExpenseApproval/:expenseId&:isDisabled',verify,(request,response)=>{
 
   console.log('About to render expense Approval Page');
   let objUser=request.user;
   console.log('user '+objUser);
  // let expenseId = request.query.expenseId;
-  let parentExpenseId = request.query.expenseId;
+  let parentExpenseId = request.params.expenseId;
   console.log('parentExpenseId  '+parentExpenseId);
-  response.render('./expenses/expenseApprovalList',{objUser,parentExpenseId:parentExpenseId});
+  isDisabled = request.params.isDisabled;
+  console.log(' ++++ isDisabled ++++ '+isDisabled);
+  response.render('./expenses/expenseApprovalList',{objUser,isDisabled,parentExpenseId:parentExpenseId});
 //  response.render('./expenses/conveyanceVoucher/ConveyanceListView',{objUser,expenseId});
 
 })

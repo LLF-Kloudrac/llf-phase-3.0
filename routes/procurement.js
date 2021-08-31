@@ -1620,12 +1620,14 @@ router.get('/getProjectList', verify ,(request,response) => {
    
 })
 
-router.get('/getProcurementApproval/:parentAssetId',verify,(request,response)=>{
+router.get('/getProcurementApproval/:parentAssetId&:isDisabled',verify,(request,response)=>{
     let objUser=request.user;
     console.log('user '+objUser);
     let parentAssetId = request.params.parentAssetId;
     console.log('parentAssetId  '+parentAssetId);
-    response.render('approvalView',{objUser,parentAssetId:parentAssetId});
+    let isDisabled = request.params.isDisabled;
+    console.log('parentAssetId  '+isDisabled);
+    response.render('approvalView',{objUser,isDisabled,parentAssetId:parentAssetId});
 })
 
 router.get('/getProcurementApprovalList',verify,(request,response)=>{
@@ -2888,12 +2890,14 @@ response.send("succesfully Update");
 
 })
 
-router.get('/upload/:parentAssetId',verify,(request,response)=>{
+router.get('/upload/:parentAssetId&:isDisabled',verify,(request,response)=>{
 
     let parentAssetId = request.params.parentAssetId;
     let objUser=request.user;
     console.log('parentAssetId  '+parentAssetId);
-    response.render('uploadFile',{parentAssetId,objUser});
+    let isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
+    response.render('uploadFile',{parentAssetId,isDisabled,objUser});
 })
 
 router.post('/uploadFiless',(request,response)=>{

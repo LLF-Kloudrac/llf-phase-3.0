@@ -429,7 +429,7 @@
                             approvalHtml += '<td>'+eachApproval.status__c +'</td>';
                             approvalHtml += '<td>'+eachApproval.approver_s_emails__c +'</td></tr>';      
                         })
-                        approvalHtml+=  '<td colspan="6"><center><a target="_blank" href="/procurement/getProcurementApproval/'+assetId+'">View All</a></centre></td>';
+                        approvalHtml+=  '<td colspan="6"><center><a target="_blank" href="/procurement/getProcurementApproval/'+assetId+'&'+isDisabled+'">View All</a></centre></td>';
                         $('#approvalTable').empty();
                         $('#approvalTable').append(approvalHtml);   
                     }
@@ -483,7 +483,7 @@
                         var assetId = document.getElementById('parentId').innerHTML;
                         console.log('assetId notes : '+assetId);
                         // location.assign('/procurement/upload/'+assetId);
-                        window.open('/procurement/upload/'+assetId,'_blank');
+                        window.open('/procurement/upload/'+assetId+'&'+isDisabled,'_blank');
                         })
 
 
