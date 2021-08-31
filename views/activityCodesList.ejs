@@ -694,7 +694,7 @@
                                     .attr("value",expenseHead[i])
                                     .text(expenseHead[i]))
                                 }
-                                document.forms["editActivityCode"]["expenseHead"].value = response.ActivityCodeDetail[0].expense_head_category__c;
+                                document.forms["editActivityCode"]["expenseHead"].value = response.ActivityCodeDetail[0].expenseheadcategory__c;
                                 document.forms["editActivityCode"]["name"].value = response.ActivityCodeDetail[0].name;
                                 document.forms["editActivityCode"]["project"].value = response.ActivityCodeDetail[0].project_name__c;
                                 document.forms["editActivityCode"]["description"].value = response.ActivityCodeDetail[0].description__c;

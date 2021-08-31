@@ -301,7 +301,7 @@ router.get('/getActivityCodeDetails', async (request, response) => {
     let recordDeatil = {};
     await
         pool
-            .query('select sfid ,Name,Activity_Code_Name__c,Project_Name__c,Expense_Head_Category__c,Description__c,Actual_Expense_on_Salesforce__c,Actual_Expense_from_tally__c,Estimated_Expense_from_Tasks__c,Actual_Expense_from_Procurement__c,Estimated_expenditure_till_current_date__c,Grant_Utlization__c,Actual_Hours_from_tasks__c,Planned_Annual_Budget__c,Actual_Utilization_against_annual_budget__c,Actual_Expense_on_Tally_Date__c  ' +
+            .query('select sfid ,Name,Activity_Code_Name__c,Project_Name__c,ExpenseHeadCategory__c,Expense_Head_Category__c,Description__c,Actual_Expense_on_Salesforce__c,Actual_Expense_from_tally__c,Estimated_Expense_from_Tasks__c,Actual_Expense_from_Procurement__c,Estimated_expenditure_till_current_date__c,Grant_Utlization__c,Actual_Hours_from_tasks__c,Planned_Annual_Budget__c,Actual_Utilization_against_annual_budget__c,Actual_Expense_on_Tally_Date__c  ' +
                 'FROM salesforce.Activity_Code__c where sfid =$1 ', [activityCode])
             .then((queryResult) => {
                 console.log('queryResult +>' + JSON.stringify(queryResult.rows));
