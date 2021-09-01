@@ -631,10 +631,10 @@ router.post('/insertAsssetForm',(request,response)=>{
     let body = request.body;
     let datepicker=request.body.date_from;
     console.log('Form Value =>'+JSON.stringify(body));
-   const{assetRequisitionName,project,submittedBy,act}=request.body;
+   const{assetRequisitionName,project,date_from,submittedBy,act}=request.body;
    console.log('Asset name=> '+assetRequisitionName);
    console.log('Asset project=> '+project);
-   console.log('Asset planDate=> '+datepicker);
+   console.log('Asset planDate=> '+date_from);
    console.log('Asset spocApproval=> '+submittedBy);
    console.log('Activity code '+act);
   // console.log('Asset spocApproval=> '+spocApproval);
@@ -664,7 +664,7 @@ else{
    let query ='INSERT INTO salesforce.Asset_Requisition_Form__c (name,Project_Department__c,Requested_Closure_Plan_Date__c,Activity_Code_project__c,Submitted_By_Heroku_User__c) values ($1,$2,$3,$4,$5)';
    console.log('asset Insert Query= '+query);
    pool
-   .query(query,[assetRequisitionName,project,datepicker,act,submittedBy])
+   .query(query,[assetRequisitionName,project,date_from,act,submittedBy])
    .then((assetQueryResult) => {     
             console.log('assetQueryResult.rows '+JSON.stringify(assetQueryResult));
             response.send('Successfully Inserted');
