@@ -1,0 +1,524 @@
+<% include ./partials/navbar %>
+<% include ./partials/footer %> 
+
+
+<link rel="stylesheet" href="/stylesheets/table-sortable.css">
+<script src="/scripts/table-sortable.js" ></script>
+
+<p id="activityCodeId"><%= activityCodeId %></p>
+<div class="row mt-5">
+    <div class="col-md-9 m-auto">
+        <div class="card card-body">
+              <% include ./partials/messages %>
+              <h5><center> Tasks Related To Activity <%= activityCodeId %></center></h5>
+
+              <div class="row mt-5 mb-3 align-items-center">
+                <div class="col-md-5">
+                    <i class="fa fa-refresh"  id="refresh" style="font-size:34px; margin-left: 10px; margin-top: 30px;"></i> 
+                </div>
+                <div class="col-md-3">
+                  <input type="text" class="form-control" placeholder="Search" id="searchField">
+                </div>
+                <div class="col-md-2 text-right">
+                  <span class="pr-3">Rows Per Page:</span>
+                </div>
+                <div class="col-md-2">
+                    <div class="d-flex justify-content-end">
+                        <select class="custom-select" name="rowsPerPage" id="changeRows">
+                            <option value="5" >5</option>
+                            <option value="10">10</option>
+                            <option value="15" selected>15</option>
+                        </select>
+                    </div>
+                </div>
+        </div>
+        <div class="table-responsive"  style="overflow-y: auto;" id="expenseApprovalsTableList">
+        </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="popup">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Task Details </h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+              <div class="row">
+                <div class="col-md-12">
+                    <nav>
+                        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Details</a>
+                          <!--  <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Related</a>  -->
+                        </div>
+                    </nav>
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <!-- Particular Task Details -->
+                                <table id="taskDetail" class="table table-hover striped" style="overflow-y: auto;">
+                                        <!-- Inside code is handled by Jquery to add dyanamic Content -->
+                                <div id="expenseDetailsSpinner">
+                                            <center> <img src="/spinner-gif-transparent-background-14.gif" />  </center>
+                                  </div>
+                                    
+                                </table>
+                            <!-- Particular Task Details-->
+                        </div>
+                        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                            <div class="accordion" id="accordionExample">
+                                <div class="card">
+                                    <div class="card-header" id="headingOne">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-link text-left" type="pettyCashButton"
+                                                data-toggle="collapse" data-target="#collapseOne"
+                                                aria-expanded="true" aria-controls="collapseOne">
+                                                <i class="fa fa-angle-double-right mr-3"></i>Petty Cash
+                                            </button>
+                                              <!-- <button class="btn btn-primary float-right" id="pettyCashButton" >New</button> -->
+                                            <a href="#" class="btn btn-primary float-right pettyCashButton" id="" style="color:white;" >New</a>
+                                        </h5>
+                                    </div>
+
+                                    <div id="collapseOne" class="collapse show fade"
+                                        aria-labelledby="headingOne" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <table id="pettyCashTable" class="table table-hover striped">
+                                                
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="headingTwo">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-link collapsed text-left" type="button"
+                                                data-toggle="collapse" data-target="#collapseTwo"
+                                                aria-expanded="false" aria-controls="collapseTwo">
+                                                <i class="fa fa-angle-double-right mr-3"></i>Conveyance Voucher
+                                            </button>
+                                            <!-- <button class="btn btn-primary float-right">New</button> -->
+                                            <a href="#" class="btn btn-primary float-right conveyanceVoucherButton" style="color:white;">New</a>
+                                        </h5>
+                                    </div>
+                                    <div id="collapseTwo" class="collapse fade" aria-labelledby="headingTwo"
+                                        data-parent="#accordionExample">
+                                        <div class="card-body">
+                                                <table id="conveyanceVoucherTable" class="table table-hover striped">
+                                                      
+                                                </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="headingThree">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-link collapsed text-left" type="button"
+                                                data-toggle="collapse" data-target="#collapseThree"
+                                                aria-expanded="false" aria-controls="collapseThree">
+                                                <i class="fa fa-angle-double-right mr-3"></i>Tour Bill Claim
+                                            </button>
+                                            <!-- <button class="btn btn-primary float-right">New</button> -->
+                                            <a href="#" class="btn btn-primary float-right tourBillClaim" style="color:white;" id="tourBillClaimNewButton">New</a>
+                                        </h5>
+                                    </div>
+                                    <div id="collapseThree" class="collapse fade"
+                                        aria-labelledby="headingThree" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                                <table id="tourBillClaimTable" class="table  table-hover striped">
+                                                        
+                                                </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                  <div class="card-header" id="headingFour">
+                                      <h5 class="mb-0">
+                                          <button class="btn btn-link collapsed text-left" type="button"
+                                              data-toggle="collapse" data-target="#collapseFour"
+                                              aria-expanded="false" aria-controls="collapseFour">
+                                              <i class="fa fa-angle-double-right mr-3"></i>Expense Approvals
+                                          </button>
+                                      </h5>
+                                  </div>
+                                  <div id="collapseFour" class="collapse fade"
+                                      aria-labelledby="headingFour" data-parent="#accordionExample">
+                                      <div class="card-body">
+                                              <table id="customApprovalTable" class="table  table-hover striped">
+                                                      
+                                              </table>
+                                      </div>
+                                  </div>
+                              </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </div>                          
+          </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger"
+                    data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+</section>
+</div>
+</div>
+
+
+<!--Approval Pop up-->
+
+<div id="approvalCommentModal" class="modal fade bs-example-modal-lg" tabindex ="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+    <div class="modal-header">
+    <h5 class="modal-title" id="commentModalHeading">Approval Comment</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+      <div class="">
+        <div id="approvalerrorMessages"></div>
+    <form name="approval" id="approvalpopupform">
+    <div class="form-group">
+    <label for="commentTextarea">Comment</label>
+    <textarea class="form-control" id="commentTextarea" rows="3"></textarea>
+    </div>
+    <div class="form-group"> 
+    <div class="row">
+    <div class="col-md-6">
+    <input type="hidden" class="form-control" value="" id="expenseId" name="expenseId" required>
+    </div>
+    </div>
+    </div>
+    
+    <div class="modal-footer">
+    <button type="button" class="btn btn-primary" id="submitForApproval" >Submit</button>
+    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+    </div>
+   
+    
+  </form></div>
+  </div>
+  </div>
+  </div>
+    </div> 
+  </div>
+  
+  <!--Approval Pop up end-->
+  
+
+
+
+<script>
+    $(document).ready(function(){
+        $('#expenseDetailsSpinner').hide();
+        $('#activityCodeId').hide();
+        let activityCodeId = document.getElementById('activityCodeId').innerHTML;
+      //  alert('activityCodeId  : '+activityCodeId);
+
+        let columns = {
+          //  sequence: 'Sequence',
+           // selectAction: 'Delete',
+            name: ' Project Task Name',
+            status: 'Status',
+            project: 'Project',
+            projectTaskCategory: 'Project Task Category',
+            start_date__c: 'Planned Start Date',
+            due_date__c: 'Planned End Date',
+            actual_start_date__c: 'Actual Start Date',
+            actual_end_date__c: 'Actual End Date',
+            estimated_expense__c: 'Estimated Expense (INR)',
+            createdDate: 'Created Date',
+           // editAction: 'Action'
+        }
+
+        var table = $('#expenseApprovalsTableList').tableSortable({
+            data :[],
+            columns,
+            searchField: '#searchField',
+            sorting: true,
+            rowsPerPage: 15,
+            pagination:true,
+            sorting: ['sequence','createdDate'],
+            tableWillMount: () => {
+                console.log('table will mount')
+                
+            },
+            tableDidMount: () => {
+                console.log('table did mount');
+  
+              //  $('#spinner').hide();
+            },
+            tableWillUpdate: () => {
+                console.log('table will update')
+              //  table.refresh();
+              // onLoadTask();
+            },
+            tableDidUpdate: () => {
+              console.log('table did update');
+              anchorClickFunctionalities();
+              buttonFunctionality();
+              //onLoadTask();
+            },
+            tableWillUnmount: () => console.log('table will unmount'),
+            tableDidUnmount: () => console.log('table did unmount'),
+            onPaginationChange: function(nextPage, setPage) {
+                setPage(nextPage);
+            }, 
+        });
+  
+        $.get("/activityCodes/getTasksRelatedToActivityCode",{activityCodeId : activityCodeId},
+        function(returnedData){
+            console.log('returnedData  : '+JSON.stringify(returnedData));
+            if(returnedData.length > 0)
+            {
+                table.setData(returnedData, columns);
+                anchorClickFunctionalities();
+                buttonFunctionality();
+            }
+        }).fail(function(error){
+            console.log("error "+error.stack);
+        });  
+
+       
+
+        function anchorClickFunctionalities()
+        {
+          $('a.ActivityTag').on('click', function (event) {
+            event.stopImmediatePropagation();
+            event.stopPropagation();
+            vendorIDS = this.id;
+            let vendorId = this.id;
+            //  alert('vendorTag=>'+vendorId);
+            $("#popup").modal("show");
+            $.ajax({
+                type: 'GET',
+                url: '/tasks/getTaskDetails',
+                data: {
+                    'taskCodeId': vendorId
+                },
+                dataType: 'json'
+            })
+                .done((data) => {
+                    console.log('DATA DEtails=>' + JSON.stringify(data));
+                    let recordData = data[0];
+                    console.log('DATA DEtails=>' + JSON.stringify(data.ActivityCodeDetail));
+                    let record = data.ActivityCodeDetail;
+                    console.log('DATA record=>' + JSON.stringify(record));
+                    if (data.ActivityCodeDetail.length > 0) {
+                        console.log('Inside Vendor Details');
+                        let ActivityCodeDetailRow = '';
+                        data.ActivityCodeDetail.forEach((eachRecord) => {
+                            ActivityCodeDetailRow += '<tr>';
+                            ActivityCodeDetailRow += '<td colspan="4" style="background-color:#d3d3d3;"><h5>Task Details</h5></td>';
+                            ActivityCodeDetailRow += '</tr>';
+
+                            ActivityCodeDetailRow += '<tr>';
+                            ActivityCodeDetailRow += '<td><strong> Project Task Name<span style="color: red;">*</span><strong></td>';
+                            ActivityCodeDetailRow += '<td>' + eachRecord.name + '</td>';
+                            ActivityCodeDetailRow += '<td><strong>Status<strong></td>';
+                            ActivityCodeDetailRow += '<td>' + eachRecord.task_stage__c + '</td>';
+                            ActivityCodeDetailRow += '</tr>';
+
+                            ActivityCodeDetailRow += '<tr>';
+                            ActivityCodeDetailRow += '<td><strong>Project<strong></td>';
+                            ActivityCodeDetailRow += '<td>' + eachRecord.project_name2__c + '</td>';
+                            ActivityCodeDetailRow += '<td><strong> Activity Code<strong></td>';
+                            ActivityCodeDetailRow += '<td>' + eachRecord.activity_code_name__c + '</td>';
+                            ActivityCodeDetailRow += '</tr>';
+
+                            ActivityCodeDetailRow += '<tr>';
+                            ActivityCodeDetailRow += '<td><strong> Project Task Category<strong></td>';
+                            ActivityCodeDetailRow += '<td>' + eachRecord.project_task_category_name__c + '</td>';
+                            ActivityCodeDetailRow += '<td><strong> Planned Start Date<span style="color: red;">*</span><strong></td>';
+                            ActivityCodeDetailRow += '<td>' + eachRecord.start_date__c + '</td>';
+                            ActivityCodeDetailRow += '</tr>';
+
+                            ActivityCodeDetailRow += '<tr>';
+                            ActivityCodeDetailRow += '<td><strong> Planned End Date<span style="color: red;">*</span><strong></td>';
+                            ActivityCodeDetailRow += '<td>' + eachRecord.due_date__c + '</td>';
+                            ActivityCodeDetailRow += '<td><strong>Description<strong></td>';
+                            ActivityCodeDetailRow += '<td>' + eachRecord.description__c + '</td>';
+                            //ActivityCodeDetailRow += '<td><strong>Actual Expense On Salesforce<strong></td>';
+                            ActivityCodeDetailRow += '</tr>';
+
+                            ActivityCodeDetailRow += '<tr>';
+                            ActivityCodeDetailRow += '<td><strong> Pro-Rata Calculated Expense Per Day<strong></td>';
+                            var pro_rate_analysis = eachRecord.pro_rate_analysis__c != null ? eachRecord.pro_rate_analysis__c.toFixed(2) : eachRecord.pro_rate_analysis__c;
+                            ActivityCodeDetailRow += '<td>INR ' + pro_rate_analysis + '</td>';
+                            ActivityCodeDetailRow += '<td><strong>Estimated expenditure till current date<strong></td>';
+                            var grant_utilization_on_pro_rate_basis = eachRecord.grant_utilization_on_pro_rate_basis__c != null ? eachRecord.grant_utilization_on_pro_rate_basis__c.toFixed(2) : eachRecord.grant_utilization_on_pro_rate_basis__c;
+                            ActivityCodeDetailRow += '<td>INR ' + grant_utilization_on_pro_rate_basis + '</td>';
+
+                            ActivityCodeDetailRow += '</tr>';
+                            ActivityCodeDetailRow += '<tr>';
+                            ActivityCodeDetailRow += '<td><strong> Actual Start Date<strong></td>';
+                            ActivityCodeDetailRow += '<td>' + eachRecord.actual_start_date__c + '</td>';
+                            ActivityCodeDetailRow += '<td><strong>Actual End Date<strong></td>';
+                            ActivityCodeDetailRow += '<td>' + eachRecord.actual_end_date__c + '</td>';
+
+                            ActivityCodeDetailRow += '</tr>';
+
+                            ActivityCodeDetailRow += '</tr>';
+                            ActivityCodeDetailRow += '<tr>';
+                            ActivityCodeDetailRow += '<td><strong> Today’s Date<strong></td>';
+                            ActivityCodeDetailRow += '<td>' + eachRecord.today_s_date__c + '</td>';
+                            ActivityCodeDetailRow += '<td><strong>Actual Hours<strong></td>';
+                            ActivityCodeDetailRow += '<td>' + eachRecord.actual_hours__c + '</td>';
+
+                            ActivityCodeDetailRow += '</tr>';
+
+                            ActivityCodeDetailRow += '</tr>';
+
+                            ActivityCodeDetailRow += '</tr>';
+                            ActivityCodeDetailRow += '<tr>';
+                            ActivityCodeDetailRow += '<td><strong> Estimated Hours<strong></td>';
+                            var estimated_hours = eachRecord.estimated_hours__c != null ? eachRecord.estimated_hours__c.toFixed(2) : eachRecord.estimated_hours__c
+                            ActivityCodeDetailRow += '<td>' + estimated_hours + '</td>';
+                            ActivityCodeDetailRow += '<td><strong>Estimated Expense<strong></td>';
+                            var estimated_expense = eachRecord.estimated_expense__c != null ? eachRecord.estimated_expense__c.toFixed(2) : eachRecord.estimated_expense__c;
+                            ActivityCodeDetailRow += '<td>INR ' + estimated_expense + '</td>';
+
+                            ActivityCodeDetailRow += '</tr>';
+
+
+                            $('#taskDetail').html(ActivityCodeDetailRow);
+
+                        })
+                    }
+                })
+                .fail((jqXHR, textStatus, err) => {
+                    console.log('textStatus  : ' + textStatus);
+                })
+           })
+
+        }
+
+      /*  function buttonFunctionality()
+        {
+
+            $(".approvalButton").click(function(event)
+            {
+                event.stopPropagation();
+                event.stopImmediatePropagation();
+               // alert('this.id  : '+this.id);
+                let selectedId =  this.id;
+                alert(selectedId);
+                let type = selectedId.split('-')[0];
+                let mixedIds = selectedId.split('-')[1];
+                alert(mixedIds);
+                let expenseId = mixedIds.split('@')[0];
+                let customApprovalId = mixedIds.split('@')[1];
+                alert('type  : '+type+' expenseId : '+expenseId+' customApprovalId : '+customApprovalId);
+
+
+                $.post('/approvals/handleExpenseApproval',{type: type, expenseId: expenseId, customApprovalId:customApprovalId}, function(response){
+                    console.log('response : '+response);
+                    alert(response);
+                }).fail(function(jqXHR, status, err){
+                    console.log('error '+err);
+                    console.log('jqXHR  : '+JSON.stringify(jqXHR));
+                })
+
+            });
+
+        }*/
+
+        function buttonFunctionality()
+        {
+                $('.approvalpopup').on('click',function(event){
+                
+                    event.preventDefault();
+                    event.stopPropagation();
+                    event.stopImmediatePropagation();
+                    $('#approvalCommentModal').modal('show');
+                let selectedId =  this.id;
+                //alert(selectedId);
+                let type = selectedId.split('-')[0];
+                let mixedIds = selectedId.split('-')[1];
+                //alert(mixedIds);
+                let expenseId = mixedIds.split('@')[0];
+                let customApprovalId = mixedIds.split('@')[1];
+                //alert('type  : '+type+' expenseId : '+expenseId+' customApprovalId : '+customApprovalId);
+               // let assetRequisitionFormId = this.id;
+               // $('#approvalCommentModal').modal('show');
+                $('#submitForApproval').on('click', function(e){
+
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+
+            
+                let comment = document.getElementById('commentTextarea').value;
+
+                $.post('/approvals/handleExpenseApproval',{type: type, expenseId: expenseId, customApprovalId:customApprovalId, comment: comment}, function(response){
+
+                 console.log('response : '+response);
+                 let msg = response;
+                console.log('messageeee 111'+msg);
+
+                 if(msg == 'Approved!')
+                 {
+                  let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+ msg+
+                  '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+                  '<span aria-hidden="true">&times;</span>'+
+                  '</button>'+
+                        '</div>';
+                        $('#approvalerrorMessages').empty();
+                        $('#approvalerrorMessages').append(errorHtml);
+                        document.getElementById("approvalpopupform").reset();
+                        // document.getElementById("accountsapprovalpopup").reset()
+                   }
+                   else if(msg == 'Rejected!')
+                   {
+                            //    $('#taskForm')[0].reset()
+                  let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+ msg+
+                  '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+                  '<span aria-hidden="true">&times;</span>'+
+                  '</button>'+
+                        '</div>';
+                        $('#approvalerrorMessages').empty();
+                        $('#approvalerrorMessages').append(errorHtml);
+                        document.getElementById("approvalpopupform").reset();
+                        //$('#approvalpopupform')[0].reset()
+                        // document.getElementById("accountsapprovalpopup").reset()
+                   }
+                    else
+                    {
+                    let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+ msg+
+                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+                    '<span aria-hidden="true">&times;</span>'+
+                    '</button>'+
+                    '</div>';
+                        $('#approvalerrorMessages').empty();
+                        $('#approvalerrorMessages').append(errorHtml);
+                        document.getElementById("approvalpopupform").reset();
+                       // $('#approvalpopupform')[0].reset()
+                    }
+                })
+
+
+                .fail(function(jqXHR, status, error)
+                {
+                console.log('this is for approval pop up ajax '+JSON.stringify(jqXHR));
+            
+                })
+            });
+            });
+        }
+    })
+</script>
+      

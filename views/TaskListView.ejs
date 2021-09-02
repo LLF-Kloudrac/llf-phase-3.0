@@ -206,8 +206,8 @@
                                           <div class="col-md-6">
                                             <label for="activityCode">Activity Code</label>
                                             <select id="activityCode" class="custom-select custom-select-sm form-control" name="activityCode">
-                                            <option value="">--None--</option> 
-                                            </select> 
+                                            <option value="">--None--</option>
+                                            </select>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="description">Project Task Category </label>
@@ -664,7 +664,7 @@
                         event.stopPropagation();
                         event.stopImmediatePropagation();
                         let taskCodeId = this.id;
-                        
+                       
                         $('#createTaskModal').modal('show');
                         $('#statusCreate').empty();
                         for (let i = 0; i < TaskStatus.length; i++) {
@@ -699,7 +699,7 @@
                                 console.log('rtecordDeatail ',response.project);
                                 let project = response.project;
                                 $('#projectDropdown').empty();
-                                
+                               
                                 $('#projectDropdown')
                                     .append($("<option></option>")
                                     .attr("value",'')
@@ -783,7 +783,7 @@
                                     $('#activityCode')
                                     .append($("<option></option>")
                                     .attr("value",activityCodes[i].sfid)
-                                    .text(activityCodes[i].name));	
+                                    .text(activityCodes[i].name));
                                     }
                                 document.forms["editTask"]["status"].value = response.ActivityCodeDetail[0].task_stage__c;
                                 document.forms["editTask"]["project"].value = response.ActivityCodeDetail[0].project_name2__c;
@@ -813,7 +813,7 @@
 
                                        
 
-                                        
+                                       
                                         for(let i=0; i <activityCode.length; i++)
                                         {
                                             console.log('activityCode>>>>>>>>>>>',selectedActivityCode);
@@ -934,7 +934,7 @@
                             return { 'blankActualDate': true };
                         } else if (dateType == 'plannedDate' || dateType == 'actualDate' && (startDate != "" && endDate != "")) {
                             var g1 = new Date(startDate);
-                            // (YYYY-MM-DD) 
+                            // (YYYY-MM-DD)
                             var g2 = new Date(endDate);
                             if (g1.getTime() < g2.getTime())
                                 return true;
@@ -1064,7 +1064,7 @@
                                 })
                         }
                     })
-                    //For create task 
+                    //For create task
 
                     $('#createTaskButton').on('click', function (event) {
                         $('#createErrorMessages').empty();

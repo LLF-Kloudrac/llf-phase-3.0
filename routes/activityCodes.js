@@ -10,12 +10,71 @@ const { object } = require('@hapi/joi');
 
 const router = new Router();
 
+router.get('/getRelatedTasks', verify, (request, response) => {
+    let objUser = request.user;
+    console.log('user ' + objUser);
+    let activityCodeId = request.query.activityId;
+    console.log('query activityCodeId   : '+activityCodeId);
+    response.render('relatedTasksToActivityCodePage', { objUser, activityCodeId });
+})
+
+
 router.get('/getActivityCodesListView', verify, (request, response) => {
     let objUser = request.user;
     console.log('user ' + objUser);
     response.render('activityCodesList', { objUser });
 
 })
+
+
+router.get('/getTasksRelatedToActivityCode', verify, (request, response) => {
+
+        let activityCodeId = request.query.activityCodeId;
+        console.log('line 33 activityCodeId  : '+activityCodeId);
+        pool
+        .query('SELECT sfid, Task_Stage__c,total_hours__c, Name,Project_Name2__c ,Activity_Code_Name__c,Project_Task_Category_Name__c,CreatedById,CreatedDate,Id,IsDeleted,estimated_expense__c,start_date__c,due_date__c,actual_start_date__c,actual_end_date__c,LastActivityDate,LastModifiedById,LastModifiedDate,LastReferencedDate,LastViewedDate '+
+            'FROM salesforce.Milestone1_Task__c where Activity_Codes__c=$1', [activityCodeId])
+        .then((taskListResult) => {
+            console.log('activityCodeListResult  : '+JSON.stringify(taskListResult.rows));
+            if(taskListResult.rowCount>0){
+    
+                let modifiedList = [],i =1;
+                taskListResult.rows.forEach((eachRecord) => {
+                    let obj = {};
+                    let crDate = new Date(eachRecord.createddate);
+                    crDate.setHours(crDate.getHours() + 5);
+                    crDate.setMinutes(crDate.getMinutes() + 30);
+                    let strDate = crDate.toLocaleString();
+                //    obj.sequence = i;
+                    obj.selectAction = '<input type="checkbox" id="' + eachRecord.sfid + '" name="' + eachRecord.sfid + '" value="' + eachRecord.sfid + '">'
+                    obj.editAction = '<button href="#" class="btn btn-primary editTask" id="'+eachRecord.sfid+'" >Edit</button>'
+                    obj.name = '<a href="#" class="ActivityTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
+                    obj.status = eachRecord.task_stage__c;
+                    obj.project = eachRecord.project_name2__c	;
+                    obj.activityCode = eachRecord.activity_code_name__c;
+                    obj.projectTaskCategory=eachRecord.project_task_category_name__c;
+                    obj.estimated_expense__c=eachRecord.estimated_expense__c;
+                    obj.start_date__c=eachRecord.start_date__c != null ? eachRecord.start_date__c.toLocaleString().split(',')[0]: eachRecord.start_date__c; 
+                    obj.due_date__c=eachRecord.due_date__c !=null ? eachRecord.due_date__c.toLocaleString().split(',')[0]: eachRecord.due_date__c;
+                    obj.actual_start_date__c=eachRecord.actual_start_date__c!=null ? eachRecord.actual_start_date__c.toLocaleString().split(',')[0]: eachRecord.actual_start_date__c;
+                    obj.actual_end_date__c=eachRecord.actual_end_date__c !=null ? eachRecord.actual_end_date__c.toLocaleString().split(',')[0] : eachRecord.actual_end_date__c;
+                    obj.createdDate = strDate;
+                    i= i+1;
+                    modifiedList.push(obj);
+                })
+                response.send(modifiedList);
+            }
+            else
+            {
+                response.send([]);
+            }
+        })
+        .catch((error) => {
+            console.log('error ' + error.stack);
+            response.send(error);
+        })
+});
+
 router.post('/deleteAllActivityCodes', (request, response) => {
     var projectParams = [], lstProjectId = [];
     var data = request.body['activityCodeArray[]'];
