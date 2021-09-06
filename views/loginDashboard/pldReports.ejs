@@ -206,12 +206,12 @@
                                 console.log('dateTime before edit on 193  : '+dateTime);
                                 dateTime.setHours(dateTime.getHours() + 5);
                                 dateTime.setMinutes(dateTime.getMinutes() + 30);
-                                dateTime =  dateTime.toLocaleString();
-                                console.log('dateTime after edit on 197 : '+dateTime);
+                                let planDt = dateTime.toLocaleString();
+                                console.log('dateTime after edit on 197 : '+planDt);
                                 htmlResponsesTable += '<tr>';
                                 htmlResponsesTable += '<td>'+i+' </td>';
                                 htmlResponsesTable += '<td>'+eachRecord.name+' </td>';
-                                htmlResponsesTable += '<td>'+dateTime+' </td>';
+                                htmlResponsesTable += '<td>'+planDt+' </td>';
                                 if(eachRecord.approval_status__c == 'Pending' || eachRecord.approval_status__c == 'Rejected'  || eachRecord.approval_status__c == 'Approved' )
                                 htmlResponsesTable += '<td><button class="btn btn-primary submitFormForApproval" disabled = true id="'+eachRecord.sfid+'" >Submit For Approval</a> </td>';
                                 else
