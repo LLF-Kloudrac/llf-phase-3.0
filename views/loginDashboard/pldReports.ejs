@@ -321,7 +321,7 @@
         $('#projectname').on('change',function(e){
                 let selectedProjectId = this.value;
                 console.log('selectedProjectId : '+selectedProjectId);
-               // alert('selectedProjectId  '+selectedProjectId);
+               alert('selectedProjectId  '+selectedProjectId);
 
                 $.get('/users/getRelatedProjectLibraries',{selectedProjectId: selectedProjectId}, function(response){
                     console.log('project Libraries Responses : '+JSON.stringify(response));
