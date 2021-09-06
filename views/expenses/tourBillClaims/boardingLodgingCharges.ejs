@@ -175,7 +175,7 @@ $(document).ready(function(){
               if(eachCode.sfid == taskId)
                 return eachCode;
             })
-            let label = selectedCode[0].activity_code__c;
+            let label = selectedCode[0].name;
             document.getElementById('projectTask'+cnt).value = label;
           //  $('#projectTask'+cnt).value = label;
             console.log('label  :'+label+' value : '+taskId);
@@ -318,7 +318,7 @@ $(document).ready(function(){
             if(eachCode.sfid == taskId)
               return eachCode;
           })
-          let label = selectedCode[0].activity_code__c;
+          let label = selectedCode[0].name;
           document.getElementById('projectTask'+cnt).value = label;
         //  $('#projectTask'+cnt).value = label;
           console.log('label  :'+label+' value : '+taskId);

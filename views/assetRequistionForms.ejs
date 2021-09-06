@@ -249,7 +249,10 @@
   </div>
   <div class="col-md-6">
     <label for="closurePlanDate">Target Date of Receiving</label>
-    <input type="date" class="form-control" id="closurePlanDate" value="" name="closurePlanDate" >
+    <input type="text" class="mydate form-control" id="datepicker1" value="" name="date_from1" >
+   <!--
+<input type="date" class="form-control" id="closurePlanDate" value="" name="closurePlanDate" >
+   --> 
     </div>
     <div class="col-md-6">
       <label for="activityCode">Activity Code</label>
@@ -1246,6 +1249,12 @@
       let assetId = this.id;
       console.log('Before Show Edit Modal ');
       $('#assetRequisitionEditModal').modal('show');
+      var date = new Date();
+          date.setDate(date.getDate());
+          console.log('Date picker ++ '+date);
+          $(function() {
+           $( "#datepicker1" ).datepicker({ startDate: date});
+           });
        console.log('After Show Edit Modal ');
  /*let lstActivityCodes = [];
  $.ajax({
@@ -1279,7 +1288,7 @@
       
         console.log('Validation pqass');
         $('#assetName').attr("readonly",true);
-        $('#closurePlanDate').attr("readonly",true);
+        $('#datepicker1').attr("readonly",true);
         $('#activityCode').attr("readonly",true);
         $('#quotations').attr("disabled",true);
       $('#reason').attr("readonly",true);
@@ -1362,7 +1371,7 @@
  document.forms["editAssetForm"]["assetName"].value = assetRecord.name;
  document.forms["editAssetForm"]["projectName"].value = assetRecord.projname;
 //document.forms["editAssetForm"]["closureActualDate"].value = strclousreActualDate;
- document.forms["editAssetForm"]["closurePlanDate"].value =clousrePlanDate;
+ document.forms["editAssetForm"]["datepicker1"].value =clousrePlanDate;
  if( assetRecord.activity_code_project__c!=null ){
   document.forms["editAssetForm"]["activityCode"].value = assetRecord.activity_code_project__c;
  }

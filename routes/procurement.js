@@ -678,7 +678,7 @@ else{
 
 router.post('/updateasset',(request,response)=>{
     let body = request.body;
-    let closurePlanDate =request.body.closurePlanDate;
+    let closurePlanDate =request.body.date_from1;
     let goodsDate=request.body.goodsDate;
     let deliveryTime = request.body.deliveryTime;
     console.log('body  : '+JSON.stringify(body));

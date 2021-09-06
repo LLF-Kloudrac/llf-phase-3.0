@@ -1804,7 +1804,7 @@ router.get('/tourBillClaimActivityCode', verify ,(request, response) => {
                       console.log('Inside ExpenseQuery  : '+projectId);
                     
                       pool
-                      .query('Select sfid , Name FROM salesforce.Activity_Code__c where sfid != $1 AND Project__c = $2', ['null',projectId])
+                      .query('Select sfid ,Name FROM salesforce.Activity_Code__c where sfid != $1 AND Project__c = $2', ['null',projectId])
                       .then((activityCodeQueryResult) => {
                         console.log('activityCodeQueryResult  : '+JSON.stringify(activityCodeQueryResult.rows));
                         let numberOfRows, lstActivityCode =[];

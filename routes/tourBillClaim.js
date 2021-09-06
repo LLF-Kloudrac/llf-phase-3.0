@@ -1083,115 +1083,204 @@ pool.
               console.log('fd'+result.error)
               response.send(result.error.details[0].context.label);
             }
-            if(fromDate[i] === toDate[i])
-            {
-              var starthours = Number(fromTime[i].match(/^(\d+)/)[1]);
-              var startminutes = Number(fromTime[i].match(/:(\d+)/)[1]);
-              var endhours = Number(toTime[i].match(/^(\d+)/)[1]);
-              var endminutes = Number(toTime[i].match(/:(\d+)/)[1]);
-              console.log('line 1092 starthours '+starthours);
-              console.log('line 1093 startminutes '+startminutes);
-              console.log('line 1094 endhours '+endhours);
-              console.log('line 1095 endminutes '+endminutes);
-              
-                     
-                      if(starthours > endhours){
-                        console.log('fd line 1099')
-                      response.send('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
-                      }
-                      else if(starthours === endhours){
-                        if(startminutes >= endminutes){
-                          console.log('fd line 1104')
-                        response.send('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
-                        }
-                      }
-            else
-            {
-            var lstcharges=[];
-                lstcharges.push(stayOption[i]);
-                console.log('.....1 =>'+ lstcharges);
-                lstcharges.push(placeJourney[i]);
-                lstcharges.push(tier3City[i]);
-                lstcharges.push(projectTask[i]);
-                console.log('.....2 =>'+ lstcharges);
-              
-             /*   let fromDateTime = fromDate[i]+'T'+fromTime[i]+':00';
-                lstcharges.push(fromDateTime[i]);      
-                let toDateTime = toDate[i]+'T'+toTime[i]+':00';
-                lstcharges.push(toDateTime[i]);
-                
-    */
+            else{
+              if(fromDate[i] === toDate[i])
+              {
                 var starthours = Number(fromTime[i].match(/^(\d+)/)[1]);
                 var startminutes = Number(fromTime[i].match(/:(\d+)/)[1]);
                 var endhours = Number(toTime[i].match(/^(\d+)/)[1]);
                 var endminutes = Number(toTime[i].match(/:(\d+)/)[1]);
-                console.log('starthours '+starthours);
-                console.log('startminutes '+startminutes);
-                console.log('endhours '+endhours);
-                console.log('endminutes '+endminutes);
+                console.log('line 1092 starthours '+starthours);
+                console.log('line 1093 startminutes '+startminutes);
+                console.log('line 1094 endhours '+endhours);
+                console.log('line 1095 endminutes '+endminutes);
                 
-                arrStartTime[i] = (starthours > 12) ? (starthours-12 + ':' + startminutes + ':00'+' PM') : (starthours + ':' + startminutes + ':00' +' AM');
-                arrEndTime[i] = (endhours > 12) ? (endhours-12 + ':' + endminutes + ':00'+' PM') : (endhours + ':' + endminutes + ':00'+' AM');
-    
-                console.log('startTime '+arrStartTime[i]);
-                console.log('endTime '+arrEndTime[i]);
-    
-    
-    
-    
-                let fromDateTime = fromDate[i]+' '+fromTime[i]+':00';
-                console.log('fromDateTime  : '+fromDateTime);
-    
-                let strDate = new Date(fromDateTime);
-                console.log('strDate  : '+strDate);
-    
-                strDate.setHours(strDate.getHours() + 1);
-                strDate.setMinutes(strDate.getMinutes() - 60);
-                let strartDate = strDate.toUTCString();
-                console.log('fromDateTime  : '+fromDateTime);
-                console.log('strartDate  : '+strartDate);
-    
-                lstcharges.push(strartDate);   
-    
-                let toDateTime = toDate[i]+' '+toTime[i]+':00';
-                console.log('toDateTime  : '+toDateTime);
-    
-                let endDate = new Date(toDateTime);
-                console.log('endDate  : '+endDate);
-    
-                endDate.setHours(endDate.getHours() + 1);
-                endDate.setMinutes(endDate.getMinutes() - 60);
-                let enDate = endDate.toUTCString();
-    
-                console.log('endDate  : '+endDate);
-                console.log('enDate  : '+enDate);
-                lstcharges.push(enDate);
+                       
+                        if(starthours > endhours){
+                          console.log('fd line 1099')
+                        response.send('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
+                        }
+                        else if(starthours === endhours){
+                          if(startminutes >= endminutes){
+                            console.log('fd line 1104')
+                          response.send('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
+                          }
+                        }
+              else
+              {
+              var lstcharges=[];
+                  lstcharges.push(stayOption[i]);
+                  console.log('.....1 =>'+ lstcharges);
+                  lstcharges.push(placeJourney[i]);
+                  lstcharges.push(tier3City[i]);
+                  lstcharges.push(projectTask[i]);
+                  console.log('.....2 =>'+ lstcharges);
                 
-    
-                lstcharges.push(totalOwnStay[i]); 
-                lstcharges.push(totalAllowances[i]);  
+               /*   let fromDateTime = fromDate[i]+'T'+fromTime[i]+':00';
+                  lstcharges.push(fromDateTime[i]);      
+                  let toDateTime = toDate[i]+'T'+toTime[i]+':00';
+                  lstcharges.push(toDateTime[i]);
+                  
+      */
+                  var starthours = Number(fromTime[i].match(/^(\d+)/)[1]);
+                  var startminutes = Number(fromTime[i].match(/:(\d+)/)[1]);
+                  var endhours = Number(toTime[i].match(/^(\d+)/)[1]);
+                  var endminutes = Number(toTime[i].match(/:(\d+)/)[1]);
+                  console.log('starthours '+starthours);
+                  console.log('startminutes '+startminutes);
+                  console.log('endhours '+endhours);
+                  console.log('endminutes '+endminutes);
+                  
+                  arrStartTime[i] = (starthours > 12) ? (starthours-12 + ':' + startminutes + ':00'+' PM') : (starthours + ':' + startminutes + ':00' +' AM');
+                  arrEndTime[i] = (endhours > 12) ? (endhours-12 + ':' + endminutes + ':00'+' PM') : (endhours + ':' + endminutes + ':00'+' AM');
+      
+                  console.log('startTime '+arrStartTime[i]);
+                  console.log('endTime '+arrEndTime[i]);
+      
+      
+      
+      
+                  let fromDateTime = fromDate[i]+' '+fromTime[i]+':00';
+                  console.log('fromDateTime  : '+fromDateTime);
+      
+                  let strDate = new Date(fromDateTime);
+                  console.log('strDate  : '+strDate);
+      
+                  strDate.setHours(strDate.getHours() + 1);
+                  strDate.setMinutes(strDate.getMinutes() - 60);
+                  let strartDate = strDate.toUTCString();
+                  console.log('fromDateTime  : '+fromDateTime);
+                  console.log('strartDate  : '+strartDate);
+      
+                  lstcharges.push(strartDate);   
+      
+                  let toDateTime = toDate[i]+' '+toTime[i]+':00';
+                  console.log('toDateTime  : '+toDateTime);
+      
+                  let endDate = new Date(toDateTime);
+                  console.log('endDate  : '+endDate);
+      
+                  endDate.setHours(endDate.getHours() + 1);
+                  endDate.setMinutes(endDate.getMinutes() - 60);
+                  let enDate = endDate.toUTCString();
+      
+                  console.log('endDate  : '+endDate);
+                  console.log('enDate  : '+enDate);
+                  lstcharges.push(enDate);
+                  
+      
+                  lstcharges.push(totalOwnStay[i]); 
+                  lstcharges.push(totalAllowances[i]);  
+                 
+                  lstcharges.push(dailyAllowances[i]);
+      
+                  lstcharges.push(amtForBL[i]);
+                  lstcharges.push(actualAMTForBL[i]);
+                  
+                  lstcharges.push(ownStayAmount[i]);
+      
+                  console.log('.....4 =>'+ lstcharges);
+                  if(typeof(imgpath[i] != 'undefined'))
+                  lstcharges.push(imgpath[i]);
+                  else
+                  lstcharges.push('');
+                  lstcharges.push(parentTourBillId[i]);
+                 
                
-                lstcharges.push(dailyAllowances[i]);
-    
-                lstcharges.push(amtForBL[i]);
-                lstcharges.push(actualAMTForBL[i]);
-                
-                lstcharges.push(ownStayAmount[i]);
-    
-                console.log('.....4 =>'+ lstcharges);
-                if(typeof(imgpath[i] != 'undefined'))
-                lstcharges.push(imgpath[i]);
-                else
-                lstcharges.push('');
-                lstcharges.push(parentTourBillId[i]);
-               
-             
-               console.log('.. '+lstcharges);
-    
-               parentTourBillTemp = parentTourBillId[i];
-               lstBoarding.push(lstcharges);
+                 console.log('.. '+lstcharges);
+      
+                 parentTourBillTemp = parentTourBillId[i];
+                 lstBoarding.push(lstcharges);
+              }
             }
-          }
+            else{
+              var lstcharges=[];
+              lstcharges.push(stayOption[i]);
+              console.log('.....1 =>'+ lstcharges);
+              lstcharges.push(placeJourney[i]);
+              lstcharges.push(tier3City[i]);
+              lstcharges.push(projectTask[i]);
+              console.log('.....2 =>'+ lstcharges);
+            
+           /*   let fromDateTime = fromDate[i]+'T'+fromTime[i]+':00';
+              lstcharges.push(fromDateTime[i]);      
+              let toDateTime = toDate[i]+'T'+toTime[i]+':00';
+              lstcharges.push(toDateTime[i]);
+              
+  */
+              var starthours = Number(fromTime[i].match(/^(\d+)/)[1]);
+              var startminutes = Number(fromTime[i].match(/:(\d+)/)[1]);
+              var endhours = Number(toTime[i].match(/^(\d+)/)[1]);
+              var endminutes = Number(toTime[i].match(/:(\d+)/)[1]);
+              console.log('starthours '+starthours);
+              console.log('startminutes '+startminutes);
+              console.log('endhours '+endhours);
+              console.log('endminutes '+endminutes);
+              
+              arrStartTime[i] = (starthours > 12) ? (starthours-12 + ':' + startminutes + ':00'+' PM') : (starthours + ':' + startminutes + ':00' +' AM');
+              arrEndTime[i] = (endhours > 12) ? (endhours-12 + ':' + endminutes + ':00'+' PM') : (endhours + ':' + endminutes + ':00'+' AM');
+  
+              console.log('startTime '+arrStartTime[i]);
+              console.log('endTime '+arrEndTime[i]);
+  
+  
+  
+  
+              let fromDateTime = fromDate[i]+' '+fromTime[i]+':00';
+              console.log('fromDateTime  : '+fromDateTime);
+  
+              let strDate = new Date(fromDateTime);
+              console.log('strDate  : '+strDate);
+  
+              strDate.setHours(strDate.getHours() + 1);
+              strDate.setMinutes(strDate.getMinutes() - 60);
+              let strartDate = strDate.toUTCString();
+              console.log('fromDateTime  : '+fromDateTime);
+              console.log('strartDate  : '+strartDate);
+  
+              lstcharges.push(strartDate);   
+  
+              let toDateTime = toDate[i]+' '+toTime[i]+':00';
+              console.log('toDateTime  : '+toDateTime);
+  
+              let endDate = new Date(toDateTime);
+              console.log('endDate  : '+endDate);
+  
+              endDate.setHours(endDate.getHours() + 1);
+              endDate.setMinutes(endDate.getMinutes() - 60);
+              let enDate = endDate.toUTCString();
+  
+              console.log('endDate  : '+endDate);
+              console.log('enDate  : '+enDate);
+              lstcharges.push(enDate);
+              
+  
+              lstcharges.push(totalOwnStay[i]); 
+              lstcharges.push(totalAllowances[i]);  
+             
+              lstcharges.push(dailyAllowances[i]);
+  
+              lstcharges.push(amtForBL[i]);
+              lstcharges.push(actualAMTForBL[i]);
+              
+              lstcharges.push(ownStayAmount[i]);
+  
+              console.log('.....4 =>'+ lstcharges);
+              if(typeof(imgpath[i] != 'undefined'))
+              lstcharges.push(imgpath[i]);
+              else
+              lstcharges.push('');
+              lstcharges.push(parentTourBillId[i]);
+             
+           
+             console.log('.. '+lstcharges);
+  
+             parentTourBillTemp = parentTourBillId[i];
+             lstBoarding.push(lstcharges);
+          
+            }
+            }
+         
         }console.log(' jsdkjasdkjad'+lstBoarding);
         
       }
@@ -1254,109 +1343,188 @@ pool.
             console.log('fd'+result.error)
                   response.send(result.error.details[0].context.label);
           }
-          if(fromDate === toDate)
-          {
-                    var starthours = Number(fromTime.match(/^(\d+)/)[1]);
-                    var startminutes = Number(fromTime.match(/:(\d+)/)[1]);
-                    var endhours = Number(toTime.match(/^(\d+)/)[1]);
-                    var endminutes = Number(toTime.match(/:(\d+)/)[1]);
-                    console.log('line 1234 starthours  '+starthours);
-                    console.log('line 1235 startminutes '+startminutes);
-                    console.log('line 1236 endhours '+endhours);
-                    console.log('line 1237 endminutes '+endminutes);
-                   
-                    if(starthours > endhours){
-                      console.log('fd line 1240')
-                    response.send('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
-                    }
-                    else if(starthours === endhours){
-                      if(startminutes >= startminutes){
-                        console.log('fd line 1245')
+          else{
+            if(fromDate === toDate)
+            {
+                      var starthours = Number(fromTime.match(/^(\d+)/)[1]);
+                      var startminutes = Number(fromTime.match(/:(\d+)/)[1]);
+                      var endhours = Number(toTime.match(/^(\d+)/)[1]);
+                      var endminutes = Number(toTime.match(/:(\d+)/)[1]);
+                      console.log('line 1234 starthours  '+starthours);
+                      console.log('line 1235 startminutes '+startminutes);
+                      console.log('line 1236 endhours '+endhours);
+                      console.log('line 1237 endminutes '+endminutes);
+                     
+                      if(starthours > endhours){
+                        console.log('fd line 1240')
                       response.send('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
                       }
-                    }
-                  //  startTime = (starthours > 12) ? (starthours-12 + ':' + startminutes + ':00'+' PM') : (starthours + ':' + startminutes + ':00' +' AM');
-                 //   endTime = (endhours > 12) ? (endhours-12 + ':' + endminutes + ':00'+' PM') : (endhours + ':' + endminutes + ':00'+' AM');
-                 else{
-                     
-                     
-                  var lstcharges=[];
-                  //   lstcharges.empty();
-                            lstcharges.push(stayOption);
-                            lstcharges.push(placeJourney);
-                            lstcharges.push(tier3City);
-                            lstcharges.push(projectTask);
-            
-            
-                            var starthours = Number(fromTime.match(/^(\d+)/)[1]);
-                            var startminutes = Number(fromTime.match(/:(\d+)/)[1]);
-                            var endhours = Number(toTime.match(/^(\d+)/)[1]);
-                            var endminutes = Number(toTime.match(/:(\d+)/)[1]);
-                            console.log('starthours '+starthours);
-                            console.log('startminutes '+startminutes);
-                            console.log('endhours '+endhours);
-                            console.log('endminutes '+endminutes);
-                           
-                            
-                            startTime = (starthours > 12) ? (starthours-12 + ':' + startminutes + ':00'+' PM') : (starthours + ':' + startminutes + ':00' +' AM');
-                            endTime = (endhours > 12) ? (endhours-12 + ':' + endminutes + ':00'+' PM') : (endhours + ':' + endminutes + ':00'+' AM');
-                
-                            console.log('startTime '+startTime);
-                            console.log('endTime '+endTime);
-                
-                           
-                            let fromDateTime = fromDate+' '+startTime;
-            
-                            let strDate = new Date(fromDateTime);
-                            console.log('strDate  : '+strDate);
-            
-                            strDate.setHours(strDate.getHours() + 1);
-                            strDate.setMinutes(strDate.getMinutes() - 60);
-                            let strartDate = strDate.toUTCString();
-                            console.log('fromDateTime  : '+fromDateTime);
-                            console.log('strartDate  : '+strartDate);
-                            lstcharges.push(strartDate);     
-            
-                            let toDateTime = toDate+' '+endTime;
-            
-                            let endDate = new Date(toDateTime);
-                            console.log('endDate  : '+endDate);
-            
-                            endDate.setHours(endDate.getHours() + 1);
-                            endDate.setMinutes(endDate.getMinutes() - 60);
-                            let enDate = endDate.toUTCString();
-            
-                            console.log('endDate  : '+endDate);
-                            console.log('enDate  : '+enDate);
-            
-                          
-                            console.log('toDateTime  : '+enDate);
-                            lstcharges.push(enDate);
-            
-                            lstcharges.push(totalOwnStay); 
-                            lstcharges.push(totalAllowances);
-                            lstcharges.push(dailyAllowances);
-                            lstcharges.push(amtForBL);
-            
-                            if(actualAMTForBL != 0)
-                            {
-                              lstcharges.push(actualAMTForBL);
-                            }
-                            else{
-                             var amtForBL1= 0;
-                              lstcharges.push(amtForBL1);
-                            }
-                          
-                            lstcharges.push(ownStayAmount);
-                            lstcharges.push(imgpath);
-                            lstcharges.push(parentTourBillId);
-                            console.log(JSON.stringify(lstcharges));
-                            parentTourBillTemp = parentTourBillId;
-                            lstBoarding.push(lstcharges);
+                      else if(starthours === endhours){
+                        if(startminutes >= startminutes){
+                          console.log('fd line 1245')
+                        response.send('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
+                        }
+                      }
+                    //  startTime = (starthours > 12) ? (starthours-12 + ':' + startminutes + ':00'+' PM') : (starthours + ':' + startminutes + ':00' +' AM');
+                   //   endTime = (endhours > 12) ? (endhours-12 + ':' + endminutes + ':00'+' PM') : (endhours + ':' + endminutes + ':00'+' AM');
+                   else{
+                       
+                       
+                    var lstcharges=[];
+                    //   lstcharges.empty();
+                              lstcharges.push(stayOption);
+                              lstcharges.push(placeJourney);
+                              lstcharges.push(tier3City);
+                              lstcharges.push(projectTask);
+              
+              
+                              var starthours = Number(fromTime.match(/^(\d+)/)[1]);
+                              var startminutes = Number(fromTime.match(/:(\d+)/)[1]);
+                              var endhours = Number(toTime.match(/^(\d+)/)[1]);
+                              var endminutes = Number(toTime.match(/:(\d+)/)[1]);
+                              console.log('starthours '+starthours);
+                              console.log('startminutes '+startminutes);
+                              console.log('endhours '+endhours);
+                              console.log('endminutes '+endminutes);
+                             
+                              
+                              startTime = (starthours > 12) ? (starthours-12 + ':' + startminutes + ':00'+' PM') : (starthours + ':' + startminutes + ':00' +' AM');
+                              endTime = (endhours > 12) ? (endhours-12 + ':' + endminutes + ':00'+' PM') : (endhours + ':' + endminutes + ':00'+' AM');
                   
-                }
-  
+                              console.log('startTime '+startTime);
+                              console.log('endTime '+endTime);
+                  
+                             
+                              let fromDateTime = fromDate+' '+startTime;
+              
+                              let strDate = new Date(fromDateTime);
+                              console.log('strDate  : '+strDate);
+              
+                              strDate.setHours(strDate.getHours() + 1);
+                              strDate.setMinutes(strDate.getMinutes() - 60);
+                              let strartDate = strDate.toUTCString();
+                              console.log('fromDateTime  : '+fromDateTime);
+                              console.log('strartDate  : '+strartDate);
+                              lstcharges.push(strartDate);     
+              
+                              let toDateTime = toDate+' '+endTime;
+              
+                              let endDate = new Date(toDateTime);
+                              console.log('endDate  : '+endDate);
+              
+                              endDate.setHours(endDate.getHours() + 1);
+                              endDate.setMinutes(endDate.getMinutes() - 60);
+                              let enDate = endDate.toUTCString();
+              
+                              console.log('endDate  : '+endDate);
+                              console.log('enDate  : '+enDate);
+              
+                            
+                              console.log('toDateTime  : '+enDate);
+                              lstcharges.push(enDate);
+              
+                              lstcharges.push(totalOwnStay); 
+                              lstcharges.push(totalAllowances);
+                              lstcharges.push(dailyAllowances);
+                              lstcharges.push(amtForBL);
+              
+                              if(actualAMTForBL != 0)
+                              {
+                                lstcharges.push(actualAMTForBL);
+                              }
+                              else{
+                               var amtForBL1= 0;
+                                lstcharges.push(amtForBL1);
+                              }
+                            
+                              lstcharges.push(ownStayAmount);
+                              lstcharges.push(imgpath);
+                              lstcharges.push(parentTourBillId);
+                              console.log(JSON.stringify(lstcharges));
+                              parentTourBillTemp = parentTourBillId;
+                              lstBoarding.push(lstcharges);
+                    
+                  }
+    
+            }
+            else{
+              var lstcharges=[];
+              //   lstcharges.empty();
+                        lstcharges.push(stayOption);
+                        lstcharges.push(placeJourney);
+                        lstcharges.push(tier3City);
+                        lstcharges.push(projectTask);
+        
+        
+                        var starthours = Number(fromTime.match(/^(\d+)/)[1]);
+                        var startminutes = Number(fromTime.match(/:(\d+)/)[1]);
+                        var endhours = Number(toTime.match(/^(\d+)/)[1]);
+                        var endminutes = Number(toTime.match(/:(\d+)/)[1]);
+                        console.log('starthours '+starthours);
+                        console.log('startminutes '+startminutes);
+                        console.log('endhours '+endhours);
+                        console.log('endminutes '+endminutes);
+                       
+                        
+                        startTime = (starthours > 12) ? (starthours-12 + ':' + startminutes + ':00'+' PM') : (starthours + ':' + startminutes + ':00' +' AM');
+                        endTime = (endhours > 12) ? (endhours-12 + ':' + endminutes + ':00'+' PM') : (endhours + ':' + endminutes + ':00'+' AM');
+            
+                        console.log('startTime '+startTime);
+                        console.log('endTime '+endTime);
+            
+                       
+                        let fromDateTime = fromDate+' '+startTime;
+        
+                        let strDate = new Date(fromDateTime);
+                        console.log('strDate  : '+strDate);
+        
+                        strDate.setHours(strDate.getHours() + 1);
+                        strDate.setMinutes(strDate.getMinutes() - 60);
+                        let strartDate = strDate.toUTCString();
+                        console.log('fromDateTime  : '+fromDateTime);
+                        console.log('strartDate  : '+strartDate);
+                        lstcharges.push(strartDate);     
+        
+                        let toDateTime = toDate+' '+endTime;
+        
+                        let endDate = new Date(toDateTime);
+                        console.log('endDate  : '+endDate);
+        
+                        endDate.setHours(endDate.getHours() + 1);
+                        endDate.setMinutes(endDate.getMinutes() - 60);
+                        let enDate = endDate.toUTCString();
+        
+                        console.log('endDate  : '+endDate);
+                        console.log('enDate  : '+enDate);
+        
+                      
+                        console.log('toDateTime  : '+enDate);
+                        lstcharges.push(enDate);
+        
+                        lstcharges.push(totalOwnStay); 
+                        lstcharges.push(totalAllowances);
+                        lstcharges.push(dailyAllowances);
+                        lstcharges.push(amtForBL);
+        
+                        if(actualAMTForBL != 0)
+                        {
+                          lstcharges.push(actualAMTForBL);
+                        }
+                        else{
+                         var amtForBL1= 0;
+                          lstcharges.push(amtForBL1);
+                        }
+                      
+                        lstcharges.push(ownStayAmount);
+                        lstcharges.push(imgpath);
+                        lstcharges.push(parentTourBillId);
+                        console.log(JSON.stringify(lstcharges));
+                        parentTourBillTemp = parentTourBillId;
+                        lstBoarding.push(lstcharges);
+            }
+            
           }
+         
 
     }
        console.log('lstBoarding' +lstBoarding);
