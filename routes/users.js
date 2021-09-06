@@ -85,16 +85,35 @@ router.get('/getpldForm',verify, (request, response) => {
   console.log('request.query  : '+JSON.stringify(request.query));
   let contactId = request.query.contactId;
 
-  pool.query('SELECT pld.project__c, pld.pldform_generatedURL__c, pld.createddate, pld.project_library__c ,pld.name as pldname, pro.name as proname FROM salesforce.sent_pld_form__c as pld INNER JOIN salesforce.Milestone1_Project__c as pro ON pld.project__c = pro.sfid WHERE tocontact__c = $1 AND isactive__c = $2',[userId, true])
+  pool.query('SELECT pld.sfid,pld.project__c, pld.pldform_generatedURL__c, pld.createddate, pld.project_library__c ,pld.name as pldname, pro.name as proname FROM salesforce.sent_pld_form__c as pld INNER JOIN salesforce.Milestone1_Project__c as pro ON pld.project__c = pro.sfid WHERE tocontact__c = $1 AND isactive__c = $2',[userId, true])
   .then((pldQueryResult) => {
         console.log('pldQueryResult  : '+JSON.stringify(pldQueryResult.rows));
-        if(pldQueryResult.rowCount > 0)
-        {
-          response.send(pldQueryResult.rows); 
-        }
-        else{
+        if(pldQueryResult.rowCount>0){
+
+          let modifiedList = [],i =1;
+          pldQueryResult.rows.forEach((eachRecord) => {
+            let obj = {};
+            let crDate = new Date(eachRecord.createddate);
+            crDate.setHours(crDate.getHours() + 5);
+            crDate.setMinutes(crDate.getMinutes() + 30);
+            let strDate = crDate.toLocaleString();
+            obj.sequence = i;
+            obj.formLink = '<a href="'+eachRecord.pldform_generatedurl__c+'" class="btn btn-primary editVendor" target="_blank" id="'+eachRecord.sfid+'" >Click Here</a>'
+            obj.name = eachRecord.proname;
+            obj.formName = eachRecord.pldname;
+            obj.viewResponses = '<a href="#" class="btn btn-primary vendorTag" id="'+eachRecord.project_library__c+'" >View Responses</a>'
+
+            obj.createdDate = strDate;
+            i= i+1;
+            modifiedList.push(obj);
+          })
+          response.send(modifiedList);
+      }
+      else
+      {
           response.send([]);
-        }
+      }
+        
   })
   .catch((pldQueryError) => {
       console.log('pldQueryError :  '+pldQueryError);
@@ -105,9 +124,10 @@ router.get('/getpldForm',verify, (request, response) => {
 
 
 
-router.get('/viewResponses',verify,(request,response)=>{
+router.get('/viewResponses',verify ,async(request,response)=>{
 
-  let pldFormId = request.query.pldformid;
+ // let pldFormId = request.query.formId;
+  let pldFormId=request.query.formId;
   console.log('pldFormId : '+pldFormId );
 
   console.log('Expense request.user '+JSON.stringify(request.user));
