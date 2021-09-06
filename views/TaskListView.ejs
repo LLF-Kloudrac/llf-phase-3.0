@@ -87,7 +87,8 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="expenseHead"> Activity Code </label>
-                                                <select id="activitycodes" name="activitycodes" class="form-control item_unit">
+                                                <select id="activitycodes" name="activitycodes" 
+                                                class="form-control item_unit" >
                                                     <option value="">Select</option>
                                                 </select>
                                             </div>
@@ -181,7 +182,7 @@
 
                                             <div class="col-md-6">
                                                 <label for="activityCodeName">Status </label>
-                                                <select id="status" name="status" class="form-control item_unit">
+                                                <select id="status" name="status" class="form-control item_unit" >
                                                     <option value="Select">Select</option>
                                                 </select>
                                             </div>
@@ -205,7 +206,7 @@
                                           -->  
                                           <div class="col-md-6">
                                             <label for="activityCode">Activity Code</label>
-                                            <select id="activityCode" class="custom-select custom-select-sm form-control" name="activityCode">
+                                            <select id="activityCode" class="custom-select custom-select-sm form-control" name="activityCode" onchange="updateSelectedValues()"> 
                                             <option value="">--None--</option> 
                                             </select> 
                                             </div>
@@ -390,6 +391,13 @@
                 </div>
             </div>
             <script>
+
+               $('#activityCode').on('change', function(){
+                var x = document.getElementById("activityCode").value;
+                $("#activityCode").val(x);
+              //  alert('selected value : '+x);
+               });
+
                 var projectTaskCategory = ["Project Initiation", "Project Implementation", "Project Closure", "Content Development", "Trainings", "Monitoring & Evaluation"];
                 var TaskStatus = ['Started', 'On hold', 'Completed']
                 $(document).ready(function () {
@@ -485,6 +493,8 @@
                     if (k == 32 && event.target.selectionStart === 0) return false;
                 }
                 var vendorIDS;
+
+               
                 function getActivityCodes(value){
                     console.log('calleddddd activitycodess>>>>>>>>>>',value)
                     //getActivityCode
@@ -524,7 +534,11 @@
                             console.log('error  : ' + error);
                         })
                 }
+
+               
                 function anchorClickFunctionalities() {
+
+                    
                     $('a.ActivityTag').on('click', function (event) {
                         event.stopImmediatePropagation();
                         event.stopPropagation();
@@ -636,6 +650,7 @@
 
                 function additionalEditFunctionality() {
 
+                   
                     $("#projectDropdown").change(function () {
                     /*    var selectedValue = this.value;
                         alert('selectedValue  : '+selectedValue);
@@ -727,6 +742,9 @@
                                 console.log('error  : ' + error);
                             })
                     })
+
+                  
+
 
                     //for edit the task
                     $('.editTask').on('click', function (event) {
@@ -907,7 +925,7 @@
 
                                 })
                                     .done((data) => {
-                                        console.log('data ' + JSON.stringify(data))
+                                        console.log('data '+ JSON.stringify(data))
                                         if (data == 'Success') {
                                             $("#deleteTaskListButton").attr("disabled", false);
                                             window.location.reload()

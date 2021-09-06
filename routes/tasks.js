@@ -269,8 +269,9 @@ router.post('/deleteAllTaskList', (request, response) => {
 router.post('/updateTask',(request,response)=>{
     let body = request.body;
     console.log('body  : '+JSON.stringify(body));
-    const { name,status,project,projecttaskcategory,StartDate,DueDate,Description,Actual_Start_Date,Actual_End_Date,Estimated_Hours,Estimated_Expense,hide} = request.body;
+    const { name,status,project,activityCode,projecttaskcategory,StartDate,DueDate,Description,Actual_Start_Date,Actual_End_Date,Estimated_Hours,Estimated_Expense,hide} = request.body;
     console.log('ActivityCode id  '+hide);
+    console.log('activityCode  : '+activityCode);
     console.log('request body=======  ',request.body);
     schema = joi.object({
         name: joi.string().required().label('Please Fill Project Task Name')
@@ -286,6 +287,7 @@ router.post('/updateTask',(request,response)=>{
             updateQuerry = 'UPDATE salesforce.Milestone1_Task__c SET '+
             'Name = \''+name+'\', '+
             'Task_Stage__c = \''+status+'\', '+
+            'Activity_Codes__c = \''+activityCode+'\', '+
             'Project_Task_Category__c = \''+projecttaskcategory+'\', '+
             'Start_Date__c = \''+StartDate+'\', '+
             'Due_Date__c = \''+DueDate+'\', '+
@@ -297,6 +299,7 @@ router.post('/updateTask',(request,response)=>{
             updateQuerry = 'UPDATE salesforce.Milestone1_Task__c SET '+
                                  'Name = \''+name+'\', '+
                                  'Task_Stage__c = \''+status+'\', '+
+                                 'Activity_Codes__c = \''+activityCode+'\', '+
                                  'Project_Task_Category__c = \''+projecttaskcategory+'\', '+
                                  'Start_Date__c = \''+StartDate+'\', '+
                                  'Due_Date__c = \''+DueDate+'\', '+
