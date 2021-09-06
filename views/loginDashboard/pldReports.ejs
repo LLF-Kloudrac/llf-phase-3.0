@@ -204,9 +204,9 @@
                                 console.log('type  : '+typeof(eachRecord.createddate));
                                 let dateTime = new Date(eachRecord.createddate);
                                 console.log('dateTime before edit on 193  : '+dateTime);
-                                dateTime.setHours(dateTime.getHours() - 5);
-                                dateTime.setMinutes(dateTime.getMinutes() - 30);
-                                let planDt = dateTime.toLocaleString().split(',')[0];
+                                dateTime.setHours(dateTime.getHours());
+                                dateTime.setMinutes(dateTime.getMinutes());
+                                let planDt = dateTime.toLocaleString();
                                 console.log('dateTime after edit on 197 : '+planDt);
                                 htmlResponsesTable += '<tr>';
                                 htmlResponsesTable += '<td>'+i+' </td>';
