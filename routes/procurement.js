@@ -286,7 +286,7 @@ router.get('/assetEditDetails',verify ,async(request, response) =>{
                                    projectId = activity.project_department__c;
                                    console.log('Inside Procurement query  : '+projectId);
                                    pool
-                                   .query('Select sfid , Name FROM salesforce.Activity_Code__c where Project__c = $1', [projectId])
+                                   .query('Select sfid , Name FROM salesforce.Activity_Code__c where sfid != $1 AND Project__c = $2', ['null',projectId])
                                    .then((activityCodeQueryResult) => {
                                      console.log('activityCodeQueryResult  : '+JSON.stringify(activityCodeQueryResult.rows));
                                      let numberOfRows, lstActivityCode =[];
@@ -433,7 +433,7 @@ router.get('/fetchActivityCode', verify ,(request, response) => {
                                           console.log('start activity code ++++');
                                         //  console.log('lstProjectId ++++  '+lstProjectId);
                                           pool
-                                          .query('Select sfid , Name FROM salesforce.Activity_Code__c where Project__c = $1', [projId])
+                                          .query('Select sfid , Name FROM salesforce.Activity_Code__c where sfid != $1 AND Project__c = $2', ['null',projId])
                                           .then((activityCodeQueryResult) => {
                                             console.log('activityCodeQueryResult  : '+JSON.stringify(activityCodeQueryResult.rows));
                                             let numberOfRows;
@@ -682,7 +682,7 @@ router.post('/updateasset',(request,response)=>{
     let goodsDate=request.body.goodsDate;
     let deliveryTime = request.body.deliveryTime;
     console.log('body  : '+JSON.stringify(body));
-    const {assetsfid, assetName,activityCode,paymentStatus,status,payement,receiverName,receivedQuantity,quotations,reason,pricing,deliveryPlace,deliveryCost,attachment,totamt} = request.body;
+    let {assetsfid, assetName,activityCode,paymentStatus,status,payement,receiverName,receivedQuantity,quotations,reason,pricing,deliveryPlace,deliveryCost,attachment,totamt} = request.body;
     console.log('assetsfid    '+assetsfid);
     console.log('closurePlanDate  '+closurePlanDate);
     console.log('activityCode  '+activityCode);
@@ -719,6 +719,13 @@ router.post('/updateasset',(request,response)=>{
         console.log('deliveryTime'+deliveryTime)
     } 
 
+    if(deliveryCost==''){
+        console.log('deliveryCost 724');
+        deliveryCost= 0;
+        console.log('deliveryCost 725'+deliveryCost)
+    } 
+    
+
     console.log('goodsDate'+goodsDate);
     console.log('deliveryTime'+deliveryTime);
 
@@ -727,7 +734,7 @@ router.post('/updateasset',(request,response)=>{
     'Requested_Closure_Plan_Date__c = \''+closurePlanDate+'\', '+
     'Activity_Code_Project__c = \''+activityCode+'\', '+
     'p_o_attachment__c = \''+attachment+'\', '+
-   // 'Payment_Status__c = \''+paymentStatus+'\', '+
+    'Payment_Status__c = \''+paymentStatus+'\', '+
     'Status__c = \''+status+'\', '+
     'Payment_Received_Acknowledgement__c = \''+payement+'\', '+
     'Receiver_Name__c = \''+receiverName+'\', '+
@@ -736,7 +743,7 @@ router.post('/updateasset',(request,response)=>{
     'pricing_terms_cost_comparison__c= \''+pricing+'\', '+
     'delivery_terms_delivery_place__c= \''+deliveryPlace+'\', '+
     'delivery_terms_delivery_time__c= \''+deliveryTime+'\', '+
-    'delivery_cost_incl__c= \''+deliveryCost+'\', '+
+   'delivery_cost_incl__c= \''+deliveryCost+'\', '+
     'Received_Quantity_Goods__c= \''+receivedQuantity+'\', '+
     'Date_of_Receiving_Goods__c= \''+goodsDate+'\' '+
     'WHERE sfid = $1';
@@ -748,7 +755,7 @@ router.post('/updateasset',(request,response)=>{
     'Requested_Closure_Plan_Date__c = \''+closurePlanDate+'\', '+
     'Activity_Code_Project__c = \''+activityCode+'\', '+
     'p_o_attachment__c = \''+attachment+'\', '+
-   // 'Payment_Status__c = \''+paymentStatus+'\', '+
+ //  // 'Payment_Status__c = \''+paymentStatus+'\', '+
     'Status__c = \''+status+'\', '+
     'Payment_Received_Acknowledgement__c = \''+payement+'\', '+
     'Receiver_Name__c = \''+receiverName+'\', '+
@@ -756,8 +763,9 @@ router.post('/updateasset',(request,response)=>{
     'reason_for_non_registered_gst_Vendor__c= \''+reason+'\', '+
     'pricing_terms_cost_comparison__c= \''+pricing+'\', '+
     'delivery_terms_delivery_place__c= \''+deliveryPlace+'\', '+
-   // 'delivery_terms_delivery_time__c= \''+deliveryTime+'\', '+
+  // // 'delivery_terms_delivery_time__c= \''+deliveryTime+'\', '+
     'delivery_cost_incl__c= \''+deliveryCost+'\', '+
+  //  'delivery_cost_incl__c= \''+deliveryCost+'\', '+
     'Received_Quantity_Goods__c= \''+receivedQuantity+'\', '+
     'Date_of_Receiving_Goods__c= \''+goodsDate+'\' '+
     'WHERE sfid = $1';
