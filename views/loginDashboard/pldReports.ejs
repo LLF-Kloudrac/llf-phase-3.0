@@ -192,7 +192,7 @@
                             htmlResponsesTable += '<thead><tr>';
                             htmlResponsesTable += '<th>Serial </th>';
                             htmlResponsesTable += '<th>Response Name</th>';
-                            htmlResponsesTable += '<th>Response Date Time</th>';
+                            htmlResponsesTable += '<th>Response Date</th>';
                             htmlResponsesTable += '<th>Submit Approval</th>';
                             htmlResponsesTable += '<th>Status</th>';
                             htmlResponsesTable += '<th>Preview</th>';
@@ -206,7 +206,7 @@
                                 console.log('dateTime before edit on 193  : '+dateTime);
                                 dateTime.setHours(dateTime.getHours() - 5);
                                 dateTime.setMinutes(dateTime.getMinutes() - 30);
-                                let planDt = dateTime.toLocaleString();
+                                let planDt = dateTime.toLocaleString().split(',')[0];
                                 console.log('dateTime after edit on 197 : '+planDt);
                                 htmlResponsesTable += '<tr>';
                                 htmlResponsesTable += '<td>'+i+' </td>';
