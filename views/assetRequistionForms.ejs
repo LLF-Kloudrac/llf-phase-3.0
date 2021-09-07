@@ -1252,6 +1252,7 @@
       var date = new Date();
           date.setDate(date.getDate());
           console.log('Date picker ++ '+date);
+         
           $(function() {
            $( "#datepicker1" ).datepicker({ startDate: date});
            });
@@ -1460,6 +1461,13 @@ $('#editassetForm').on('click',function(event){
 // console.log('assetId : '+assetId);
  
  //alert('Save Button Clicked !' );
+ let dateValue = $( "#datepicker1" ).val();
+         // alert('Date value : '+dateValue);
+          if(dateValue == ''){
+            alert('Please fill Target Date of Receiving');
+            return;
+          }
+         
  var $inputs = $('#editAssetForm :input');
  // not sure if you wanted this, but I thought I'd add it.
  // get an associative array of just the values.
