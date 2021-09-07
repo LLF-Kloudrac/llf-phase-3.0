@@ -449,7 +449,7 @@ router.post('/airRailBusCharges',verify, (request, response) => {
             numberOfRows = request.body.arrival_Date.length;
             for(let i=0; i<numberOfRows ;i++)
             {
-  
+              console.log('Inside 452 line if ');
               const schema = joi.object({
                 arrival_Dted:joi.date().required().label('Please enter Arrival Date'),
                 arrival_Dt:joi.date().max('now').label('Arrival Date must be less than or equals to Today '),
@@ -489,7 +489,7 @@ router.post('/airRailBusCharges',verify, (request, response) => {
        }
         else
         {
-           
+           console.log('Inside 492 line else');
               const schema = joi.object({
                 arrival_Dted:joi.date().required().label('Please enter Arrival Date'),
                 arrival_Dt:joi.date().max('now').label('Arrival Date must be less than or equals to Today '),

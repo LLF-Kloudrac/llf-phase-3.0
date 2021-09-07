@@ -683,29 +683,29 @@ router.post('/updateasset',(request,response)=>{
     let deliveryTime = request.body.deliveryTime;
     console.log('body  : '+JSON.stringify(body));
     let {assetsfid, assetName,activityCode,paymentStatus,status,payement,receiverName,receivedQuantity,quotations,reason,pricing,deliveryPlace,deliveryCost,attachment,totamt} = request.body;
-    console.log('assetsfid    '+assetsfid);
-    console.log('closurePlanDate  '+closurePlanDate);
-    console.log('activityCode  '+activityCode);
-    console.log('paymentStatus  '+paymentStatus);
-    console.log('status  '+status);
-    console.log('payement  '+payement);
-    console.log('receiverName  '+receiverName);
-    console.log('receivedQuantity  '+receivedQuantity);
-    console.log('goodsDate  '+goodsDate);
-    console.log('assetName  '+assetName);
-    console.log('quotations  '+quotations);
-    console.log('reason  '+reason);
-    console.log('pricing  '+pricing);
-    console.log('deliveryPlace  '+deliveryPlace);
-    console.log('deliveryTime  '+deliveryTime);
-    console.log('deliveryCost  '+deliveryCost);
-    console.log('attachment  '+attachment);
-    console.log('totamt    '+totamt);
+    //console.log('assetsfid    '+assetsfid);
+   // console.log('closurePlanDate  '+closurePlanDate);
+//console.log('activityCode  '+activityCode);
+//console.log('paymentStatus  '+paymentStatus);
+  //  console.log('status  '+status);
+    //console.log('payement  '+payement);
+    //console.log('receiverName  '+receiverName);
+    //console.log('receivedQuantity  '+receivedQuantity);
+    //console.log('goodsDate  '+goodsDate);
+    //console.log('assetName  '+assetName);
+    //console.log('quotations  '+quotations);
+    //console.log('reason  '+reason);
+    //console.log('pricing  '+pricing);
+    //console.log('deliveryPlace  '+deliveryPlace);
+    //console.log('deliveryTime  '+deliveryTime);
+    //console.log('deliveryCost  '+deliveryCost);
+    //console.log('attachment  '+attachment);
+    //console.log('totamt    '+totamt);
     
 
     if(closurePlanDate==''){
         console.log('plan');
-        closurePlanDate='1970-01-02';
+        closurePlanDate='';
     }
   
      if(goodsDate==''){
@@ -719,13 +719,6 @@ router.post('/updateasset',(request,response)=>{
         console.log('deliveryTime'+deliveryTime)
     } 
 
-    if(deliveryCost==''){
-        console.log('deliveryCost 724');
-        deliveryCost= 0;
-        console.log('deliveryCost 725'+deliveryCost)
-    } 
-    
-
     console.log('goodsDate'+goodsDate);
     console.log('deliveryTime'+deliveryTime);
 
@@ -734,22 +727,29 @@ router.post('/updateasset',(request,response)=>{
     'Requested_Closure_Plan_Date__c = \''+closurePlanDate+'\', '+
     'Activity_Code_Project__c = \''+activityCode+'\', '+
     'p_o_attachment__c = \''+attachment+'\', '+
-    'Payment_Status__c = \''+paymentStatus+'\', '+
     'Status__c = \''+status+'\', '+
     'Payment_Received_Acknowledgement__c = \''+payement+'\', '+
     'Receiver_Name__c = \''+receiverName+'\', '+
     'if_3_quotations_specify_reason__c= \''+quotations+'\', '+
     'reason_for_non_registered_gst_Vendor__c= \''+reason+'\', '+
     'pricing_terms_cost_comparison__c= \''+pricing+'\', '+
-    'delivery_terms_delivery_place__c= \''+deliveryPlace+'\', '+
-    'delivery_terms_delivery_time__c= \''+deliveryTime+'\', '+
-   'delivery_cost_incl__c= \''+deliveryCost+'\', '+
-    'Received_Quantity_Goods__c= \''+receivedQuantity+'\', '+
+    'delivery_terms_delivery_place__c= \''+deliveryPlace+'\', ';
+    
+    if(totamt >= 1) {
+        updateQuerry += 'Payment_Status__c = \''+paymentStatus+'\', '+
+        'delivery_terms_delivery_time__c= \''+deliveryTime+'\', ';
+    }
+
+    if(deliveryCost != '') {
+        updateQuerry += 'delivery_cost_incl__c= \''+deliveryCost+'\', ';
+    }
+
+    updateQuerry += 'Received_Quantity_Goods__c= \''+receivedQuantity+'\', '+
     'Date_of_Receiving_Goods__c= \''+goodsDate+'\' '+
     'WHERE sfid = $1';
     console.log('updateQuerry '+updateQuerry);
 
-    if(totamt<1){
+   /* if(totamt<1){
         updateQuerry = 'UPDATE salesforce.Asset_Requisition_Form__c SET '+
     'Name = \''+assetName+'\', '+
     'Requested_Closure_Plan_Date__c = \''+closurePlanDate+'\', '+
@@ -762,17 +762,17 @@ router.post('/updateasset',(request,response)=>{
     'if_3_quotations_specify_reason__c= \''+quotations+'\', '+
     'reason_for_non_registered_gst_Vendor__c= \''+reason+'\', '+
     'pricing_terms_cost_comparison__c= \''+pricing+'\', '+
-    'delivery_terms_delivery_place__c= \''+deliveryPlace+'\', '+
-  // // 'delivery_terms_delivery_time__c= \''+deliveryTime+'\', '+
-    'delivery_cost_incl__c= \''+deliveryCost+'\', '+
-  //  'delivery_cost_incl__c= \''+deliveryCost+'\', '+
-    'Received_Quantity_Goods__c= \''+receivedQuantity+'\', '+
+    'delivery_terms_delivery_place__c= \''+deliveryPlace+'\', ';
+    if(deliveryCost != ''){
+        updateQuerry += 'delivery_cost_incl__c= \''+deliveryCost+'\', ';
+    }
+    updateQuerry += 'Received_Quantity_Goods__c= \''+receivedQuantity+'\', '+
     'Date_of_Receiving_Goods__c= \''+goodsDate+'\' '+
     'WHERE sfid = $1';
-    console.log('updateQuerry '+updateQuerry);
+    console.log('updateQuerry line no 773 '+updateQuerry);
 
 
-    }
+    }*/
 
     var payPass='';
     var attchPass='';
@@ -846,12 +846,6 @@ router.post('/updateasset',(request,response)=>{
             if(payPass=='true' || payPass=='false'){
                 console.log('@@@@@1111');
                 if(quant == 'true'){
-
-
-
-
-
-
                     const schema=joi.object({
                         assetName:joi.string().min(3).required().label('Please Fill Asset Requisition Name'),
                     })

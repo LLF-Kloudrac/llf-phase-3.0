@@ -170,10 +170,10 @@ router.get('/activityCodesList', verify,async(request, response) => {
                     obj.expenseHead = eachRecord.expense_head_category__c;
                     obj.description = eachRecord.description__c;
                     if(eachRecord.actual_expense_from_tally__c != null){
-                        obj.actualExpenseFromTally = '<span id="amount'+eachRecord.sfid+'" >'+ eachRecord.actual_expense_from_tally__c.toFixed(2)+'</span>';
+                        obj.actualExpenseFromTally = '<span id="amount'+eachRecord.sfid+'" ><h6>INR</h6>'+ eachRecord.actual_expense_from_tally__c.toFixed(2)+'</span>';
                     }
                     else{
-                        obj.actualExpenseFromTally = '<span id="amount'+eachRecord.sfid+'" >'+ eachRecord.actual_expense_from_tally__c+'</span>';
+                        obj.actualExpenseFromTally = '<span id="amount'+eachRecord.sfid+'" ><h6>INR</h6>'+ eachRecord.actual_expense_from_tally__c+'</span>';
 
                     }
                  
@@ -281,7 +281,7 @@ router.post('/createActivityCode', (request, response) => {
     }
     else {
         pool
-            .query('INSERT INTO salesforce.Activity_Code__c (Name, Activity_Code_Name__c, Expense_Head_Category__c, Description__c,Project__c ) values ($1,$2,$3,$4,$5)',[name, activityCodeName, expenseHeadDropdown, description,projectDropdown])
+            .query('INSERT INTO salesforce.Activity_Code__c (Name, Activity_Code_Name__c, ExpenseHeadCategory__c, Description__c,Project__c ) values ($1,$2,$3,$4,$5)',[name, activityCodeName, expenseHeadDropdown, description,projectDropdown])
             .then((updateQuerryResult) => {
                 console.log('updateQuerryResult =>>' + JSON.stringify(updateQuerryResult));
                 response.send('Success');
@@ -301,7 +301,7 @@ router.get('/getActivityCodeDetails', async (request, response) => {
     let recordDeatil = {};
     await
         pool
-            .query('select sfid ,Name,Activity_Code_Name__c,Project_Name__c,Expense_Head_Category__c,Description__c,Actual_Expense_on_Salesforce__c,Actual_Expense_from_tally__c,Estimated_Expense_from_Tasks__c,Actual_Expense_from_Procurement__c,Estimated_expenditure_till_current_date__c,Grant_Utlization__c,Actual_Hours_from_tasks__c,Planned_Annual_Budget__c,Actual_Utilization_against_annual_budget__c,Actual_Expense_on_Tally_Date__c  ' +
+            .query('select sfid ,Name,Activity_Code_Name__c,Project_Name__c,ExpenseHeadCategory__c,Expense_Head_Category__c,Description__c,Actual_Expense_on_Salesforce__c,Actual_Expense_from_tally__c,Estimated_Expense_from_Tasks__c,Actual_Expense_from_Procurement__c,Estimated_expenditure_till_current_date__c,Grant_Utlization__c,Actual_Hours_from_tasks__c,Planned_Annual_Budget__c,Actual_Utilization_against_annual_budget__c,Actual_Expense_on_Tally_Date__c  ' +
                 'FROM salesforce.Activity_Code__c where sfid =$1 ', [activityCode])
             .then((queryResult) => {
                 console.log('queryResult +>' + JSON.stringify(queryResult.rows));
