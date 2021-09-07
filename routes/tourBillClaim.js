@@ -1933,7 +1933,7 @@ router.get('/telephoneFoodCharge/:parentTourBillId&:isDisabled',verify,(request,
           obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" disabled = "true" id="'+eachRecord.sfid+'" >Delete</button>'
           } else{
           console.log('++Inside else check ++ '+isDisabled);
-          obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" disabled = "true" id="'+eachRecord.sfid+'" >Delete</button>'
+          obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" id="'+eachRecord.sfid+'" >Delete</button>'
            }
           // obj.editAction = '<button href="#" class="btn btn-primary editFooding" id="'+eachRecord.sfid+'" >Edit</button>'
              i= i+1;
