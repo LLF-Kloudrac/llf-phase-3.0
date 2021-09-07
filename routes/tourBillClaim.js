@@ -597,7 +597,7 @@ router.get('/conveyanceCharges/:parentTourBillId&:isDisabled',verify, (request, 
     response.render('./expenses/tourBillClaims/tourBillConveyanceCharges',{objUser,isDisabled, parentTourBillId :parentTourBillId});
 });
 
-router.post('/conveyanceCharges/:parentTourBillId&:isDisabled',verify, (request, response) => {
+router.post('/conveyanceCharges',verify, (request, response) => {
 
   let bodyResult =  request.body;
   console.log('conveyanceCharges bodyResult  : '+JSON.stringify(bodyResult));
