@@ -443,32 +443,36 @@ router.post('/airRailBusCharges',verify, (request, response) => {
       else{
         let parentTourBillClaimId='';
         let numberOfRows; let lstAirRailBus= [];
+        const schema = joi.object({
+          arrival_Dted:joi.date().required().label('Please enter Arrival Date'),
+          arrival_Dt:joi.date().max('now').label('Arrival Date must be less than or equals to Today '),
+          departure_Dated:joi.date().required().label('Please enter Departure Date'),
+          departure_Date:joi.date().max('now').label('Departure Date must be less than or equals to Today '),
+          arrival_Date:joi.date().max(joi.ref('departure_Dated')).label('Departure date should be greater than or equal to Arrival date.'),
+          projectTask:joi.string().required().label('Please select Activity Code '),
+          arrival_Station:joi.string().min(3).required().label(' Please select Arrival Station.'),
+          departure_Station:joi.string().min(3).required().label('Please select Departure Station'),
+          amount:joi.number().required().label('Please enter Amount'),
+          amt:joi.number().min(0).label('Amount cannot be negative.'),
+          imgpath:joi.string().invalid('demo').required().label('Please Upload File/Attachment'),
+      })
         if(typeof(bodyResult.arrival_Date) == 'object')
         {
-            console.log('Inside tour bill cliam for object type of data');
+            console.log('Line Inside tour bill cliam for object type of data');
             numberOfRows = request.body.arrival_Date.length;
+            console.log('line no 450 '+request.body.arrival_Date.length);
             for(let i=0; i<numberOfRows ;i++)
             {
               console.log('Inside 452 line if ');
-              const schema = joi.object({
-                arrival_Dted:joi.date().required().label('Please enter Arrival Date'),
-                arrival_Dt:joi.date().max('now').label('Arrival Date must be less than or equals to Today '),
-                departure_Dated:joi.date().required().label('Please enter Departure Date'),
-                departure_Date:joi.date().max('now').label('Departure Date must be less than or equals to Today '),
-                arrival_Date:joi.date().max(joi.ref('departure_Dated')).label('Departure date should be greater than or equal to Arrival date.'),
-                projectTask:joi.string().required().label('Please select Activity Code '),
-                arrival_Station:joi.string().min(3).required().label(' Please select Arrival Station.'),
-                departure_Station:joi.string().min(3).required().label('Please select Departure Station'),
-                amount:joi.number().required().label('Please enter Amount'),
-                amt:joi.number().min(0).label('Amount cannot be negative.'),
-                imgpath:joi.string().invalid('demo').required().label('Please Upload File/Attachment'),
-            })
+             
             let Result=schema.validate({arrival_Dted:bdy.arrival_Date[i],arrival_Dt:bdy.arrival_Date[i],departure_Dated:bdy.departure_Date[i],arrival_Date:bdy.arrival_Date[i],departure_Date:bdy.departure_Date[i],arrival_Date:bdy.arrival_Date[i],projectTask:bdy.projectTask[i],amount:bdy.amount[i],amt:bdy.amount[i],arrival_Station:bdy.arrival_Station[i],departure_Station:bdy.departure_Station[i],imgpath:bdy.imgpath[i]});
             console.log('validaton result '+JSON.stringify(Result.error));
                   if(Result.error)
                   {
                     console.log('fd'+Result.error);
+                    lstAirRailBus = [];
                      response.send(Result.error.details[0].context.label);
+                     return ;
                  }
   
                  else
@@ -489,32 +493,18 @@ router.post('/airRailBusCharges',verify, (request, response) => {
        }
         else
         {
-           console.log('Inside 492 line else');
-              const schema = joi.object({
-                arrival_Dted:joi.date().required().label('Please enter Arrival Date'),
-                arrival_Dt:joi.date().max('now').label('Arrival Date must be less than or equals to Today '),
-                departure_Dated:joi.date().required().label('Please enter Departure Date'),
-                departure_Date:joi.date().max('now').label('Departure Date must be less than or equals to Today '),
-                arrival_Date:joi.date().max(joi.ref('departure_Dated')).label('Departure date should be greater than or equal to Arrival date.'),
-                projectTask:joi.string().required().label('Please select Activity Code '),
-                arrival_Station:joi.string().min(3).required().label(' Please select Arrival Station.'),
-                departure_Station:joi.string().min(3).required().label('Please select Departure Station'),
-                amount:joi.number().required().label('Please enter Amount'),
-                amt:joi.number().min(0).label('Amount cannot be negative.'),
-                imgpath:joi.string().invalid('demo').required().label('Please Upload File/Attachment'),
-            })
+         
             let Result=schema.validate({projectTask:bdy.projectTask,arrival_Dted:bdy.arrival_Date,arrival_Dt:bdy.arrival_Date,arrival_Date:bdy.arrival_Date,departure_Dated:bdy.departure_Date,departure_Date:bdy.departure_Date,amount:bdy.amount,amt:bdy.amount,arrival_Station:bdy.arrival_Station,departure_Station:bdy.departure_Station,imgpath:bdy.imgpath});
             console.log('validaton result '+JSON.stringify(Result.error));
             if(Result.error)
             {
                 console.log('fd'+Result.error)
                 response.send(Result.error.details[0].context.label);
+                return ;
             } 
             else
             {    
-              numberOfRows = 1;
-              for(let i=0; i<numberOfRows ;i++)
-              {  
+              console.log('Inside 516 line else');  
               let airRailBusSingleRecordValues = [];
               parentTourBillClaimId = bodyResult.parentTourBillId;
               airRailBusSingleRecordValues.push(bodyResult.arrival_Date);
@@ -526,27 +516,26 @@ router.post('/airRailBusCharges',verify, (request, response) => {
               airRailBusSingleRecordValues.push(bodyResult.imgpath);
               airRailBusSingleRecordValues.push(bodyResult.parentTourBillId);
               lstAirRailBus.push(airRailBusSingleRecordValues);
-  
-            }
-     
             }
         }
         console.log('lstAirRailBus Final Result  '+JSON.stringify(lstAirRailBus));
-        let airRailBusInsertQuery = format('INSERT INTO salesforce.Air_Rail_Bus_Fare__c (Arrival_Date__c, Departure_Date__c,Activity_Code_Project__c,Arrival_Station__c,Departure_Station__c,Amount__c,heroku_image_url__c,Tour_Bill_Claim__c) VALUES %L returning id', lstAirRailBus);
+        console.log(' List size on line no 526 : '+lstAirRailBus.length);
+        if(lstAirRailBus.length > 0){
+          let airRailBusInsertQuery = format('INSERT INTO salesforce.Air_Rail_Bus_Fare__c (Arrival_Date__c, Departure_Date__c,Activity_Code_Project__c,Arrival_Station__c,Departure_Station__c,Amount__c,heroku_image_url__c,Tour_Bill_Claim__c) VALUES %L returning id', lstAirRailBus);
     
-        pool.query(airRailBusInsertQuery)
-        .then((airRailBusQueryResult) => {
-                console.log('airRailBusQueryResult  '+JSON.stringify(airRailBusQueryResult.rows));
-              response.send('AirRailBus Form Saved Successfully !');
-              //  request.flash('success_msg', 'Air Rail Bus Created Successfully');
-             //   response.redirect('/expense/tourBillClaim/getAirBusListView?tourBillClaimId='+parentTourBillClaimId);
-        })
-        .catch((airRailBusQueryError) => {
-                console.log('airRailBusQueryError  '+airRailBusQueryError.stack);
-                response.send('Error Occured While Saving !');
-        })
-  
-
+          pool.query(airRailBusInsertQuery)
+          .then((airRailBusQueryResult) => {
+                  console.log('airRailBusQueryResult  '+JSON.stringify(airRailBusQueryResult.rows));
+                response.send('AirRailBus Form Saved Successfully !');
+                //  request.flash('success_msg', 'Air Rail Bus Created Successfully');
+               //   response.redirect('/expense/tourBillClaim/getAirBusListView?tourBillClaimId='+parentTourBillClaimId);
+          })
+          .catch((airRailBusQueryError) => {
+                  console.log('airRailBusQueryError  '+airRailBusQueryError.stack);
+                  response.send('Error Occured While Saving !');
+          })
+        }
+    
       }  
 
     })
