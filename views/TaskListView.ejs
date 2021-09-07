@@ -87,7 +87,8 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="expenseHead"> Activity Code </label>
-                                                <select id="activitycodes" name="activitycodes" class="form-control item_unit">
+                                                <select id="activitycodes" name="activitycodes" 
+                                                class="form-control item_unit" >
                                                     <option value="">Select</option>
                                                 </select>
                                             </div>
@@ -181,7 +182,7 @@
 
                                             <div class="col-md-6">
                                                 <label for="activityCodeName">Status </label>
-                                                <select id="status" name="status" class="form-control item_unit">
+                                                <select id="status" name="status" class="form-control item_unit" >
                                                     <option value="Select">Select</option>
                                                 </select>
                                             </div>
@@ -205,9 +206,9 @@
                                           -->  
                                           <div class="col-md-6">
                                             <label for="activityCode">Activity Code</label>
-                                            <select id="activityCode" class="custom-select custom-select-sm form-control" name="activityCode">
-                                            <option value="">--None--</option>
-                                            </select>
+                                            <select id="activityCode" class="custom-select custom-select-sm form-control" name="activityCode" onchange="updateSelectedValues()"> 
+                                            <option value="">--None--</option> 
+                                            </select> 
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="description">Project Task Category </label>
@@ -390,6 +391,13 @@
                 </div>
             </div>
             <script>
+
+               $('#activityCode').on('change', function(){
+                var x = document.getElementById("activityCode").value;
+                $("#activityCode").val(x);
+              //  alert('selected value : '+x);
+               });
+
                 var projectTaskCategory = ["Project Initiation", "Project Implementation", "Project Closure", "Content Development", "Trainings", "Monitoring & Evaluation"];
                 var TaskStatus = ['Started', 'On hold', 'Completed']
                 $(document).ready(function () {
@@ -409,7 +417,7 @@
                         due_date__c: 'Planned End Date',
                         actual_start_date__c: 'Actual Start Date',
                         actual_end_date__c: 'Actual End Date',
-                        estimated_expense__c: 'Estimated Expense (INR)',
+                        estimated_expense__c: 'Estimated Expense',
                         createdDate: 'Created Date',
                         editAction: 'Action'
                     }
@@ -485,6 +493,8 @@
                     if (k == 32 && event.target.selectionStart === 0) return false;
                 }
                 var vendorIDS;
+
+               
                 function getActivityCodes(value){
                     console.log('calleddddd activitycodess>>>>>>>>>>',value)
                     //getActivityCode
@@ -524,7 +534,11 @@
                             console.log('error  : ' + error);
                         })
                 }
+
+               
                 function anchorClickFunctionalities() {
+
+                    
                     $('a.ActivityTag').on('click', function (event) {
                         event.stopImmediatePropagation();
                         event.stopPropagation();
@@ -586,10 +600,10 @@
                                         ActivityCodeDetailRow += '<tr>';
                                         ActivityCodeDetailRow += '<td><strong> Pro-Rata Calculated Expense Per Day<strong></td>';
                                         var pro_rate_analysis = eachRecord.pro_rate_analysis__c != null ? eachRecord.pro_rate_analysis__c.toFixed(2) : eachRecord.pro_rate_analysis__c;
-                                        ActivityCodeDetailRow += '<td>INR ' + pro_rate_analysis + '</td>';
+                                        ActivityCodeDetailRow += '<td>' + pro_rate_analysis + '</td>';
                                         ActivityCodeDetailRow += '<td><strong>Estimated expenditure till current date<strong></td>';
                                         var grant_utilization_on_pro_rate_basis = eachRecord.grant_utilization_on_pro_rate_basis__c != null ? eachRecord.grant_utilization_on_pro_rate_basis__c.toFixed(2) : eachRecord.grant_utilization_on_pro_rate_basis__c;
-                                        ActivityCodeDetailRow += '<td>INR ' + grant_utilization_on_pro_rate_basis + '</td>';
+                                        ActivityCodeDetailRow += '<td>' + grant_utilization_on_pro_rate_basis + '</td>';
 
                                         ActivityCodeDetailRow += '</tr>';
                                         ActivityCodeDetailRow += '<tr>';
@@ -618,7 +632,7 @@
                                         ActivityCodeDetailRow += '<td>' + estimated_hours + '</td>';
                                         ActivityCodeDetailRow += '<td><strong>Estimated Expense<strong></td>';
                                         var estimated_expense = eachRecord.estimated_expense__c != null ? eachRecord.estimated_expense__c.toFixed(2) : eachRecord.estimated_expense__c;
-                                        ActivityCodeDetailRow += '<td>INR ' + estimated_expense + '</td>';
+                                        ActivityCodeDetailRow += '<td>' + estimated_expense + '</td>';
 
                                         ActivityCodeDetailRow += '</tr>';
 
@@ -636,6 +650,7 @@
 
                 function additionalEditFunctionality() {
 
+                   
                     $("#projectDropdown").change(function () {
                     /*    var selectedValue = this.value;
                         alert('selectedValue  : '+selectedValue);
@@ -664,7 +679,7 @@
                         event.stopPropagation();
                         event.stopImmediatePropagation();
                         let taskCodeId = this.id;
-                       
+                        
                         $('#createTaskModal').modal('show');
                         $('#statusCreate').empty();
                         for (let i = 0; i < TaskStatus.length; i++) {
@@ -699,7 +714,7 @@
                                 console.log('rtecordDeatail ',response.project);
                                 let project = response.project;
                                 $('#projectDropdown').empty();
-                               
+                                
                                 $('#projectDropdown')
                                     .append($("<option></option>")
                                     .attr("value",'')
@@ -727,6 +742,9 @@
                                 console.log('error  : ' + error);
                             })
                     })
+
+                  
+
 
                     //for edit the task
                     $('.editTask').on('click', function (event) {
@@ -783,7 +801,7 @@
                                     $('#activityCode')
                                     .append($("<option></option>")
                                     .attr("value",activityCodes[i].sfid)
-                                    .text(activityCodes[i].name));
+                                    .text(activityCodes[i].name));	
                                     }
                                 document.forms["editTask"]["status"].value = response.ActivityCodeDetail[0].task_stage__c;
                                 document.forms["editTask"]["project"].value = response.ActivityCodeDetail[0].project_name2__c;
@@ -813,7 +831,7 @@
 
                                        
 
-                                       
+                                        
                                         for(let i=0; i <activityCode.length; i++)
                                         {
                                             console.log('activityCode>>>>>>>>>>>',selectedActivityCode);
@@ -907,7 +925,7 @@
 
                                 })
                                     .done((data) => {
-                                        console.log('data ' + JSON.stringify(data))
+                                        console.log('data '+ JSON.stringify(data))
                                         if (data == 'Success') {
                                             $("#deleteTaskListButton").attr("disabled", false);
                                             window.location.reload()
@@ -934,7 +952,7 @@
                             return { 'blankActualDate': true };
                         } else if (dateType == 'plannedDate' || dateType == 'actualDate' && (startDate != "" && endDate != "")) {
                             var g1 = new Date(startDate);
-                            // (YYYY-MM-DD)
+                            // (YYYY-MM-DD) 
                             var g2 = new Date(endDate);
                             if (g1.getTime() < g2.getTime())
                                 return true;
@@ -1064,7 +1082,7 @@
                                 })
                         }
                     })
-                    //For create task
+                    //For create task 
 
                     $('#createTaskButton').on('click', function (event) {
                         $('#createErrorMessages').empty();

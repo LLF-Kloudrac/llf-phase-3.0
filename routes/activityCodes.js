@@ -170,10 +170,10 @@ router.get('/activityCodesList', verify,async(request, response) => {
                     obj.expenseHead = eachRecord.expense_head_category__c;
                     obj.description = eachRecord.description__c;
                     if(eachRecord.actual_expense_from_tally__c != null){
-                        obj.actualExpenseFromTally = '<span id="amount'+eachRecord.sfid+'" ><h6>INR</h6>'+ eachRecord.actual_expense_from_tally__c.toFixed(2)+'</span>';
+                        obj.actualExpenseFromTally = '<span id="amount'+eachRecord.sfid+'" >'+ eachRecord.actual_expense_from_tally__c.toFixed(2)+'</span>';
                     }
                     else{
-                        obj.actualExpenseFromTally = '<span id="amount'+eachRecord.sfid+'" ><h6>INR</h6>'+ eachRecord.actual_expense_from_tally__c+'</span>';
+                        obj.actualExpenseFromTally = '<span id="amount'+eachRecord.sfid+'" >'+ eachRecord.actual_expense_from_tally__c+'</span>';
 
                     }
                  

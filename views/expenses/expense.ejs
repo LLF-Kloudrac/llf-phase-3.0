@@ -733,7 +733,7 @@
           name: 'Expense Name',
           projectName: 'Project Name',
          // approvalStatus: 'Manager approval Status',
-          totalAmount: 'Total Amount (INR)',
+          totalAmount: 'Total Amount ',
           projManagerStatus:'Project Manager Status',
           reportManagerstatus:'Reporting Manager Status',
           accStatus:'Account Status',
@@ -1163,19 +1163,19 @@
             expenseTableRows += '</tr>';
             expenseTableRows += '<tr>';
             expenseTableRows += '<td><strong>Amount Claimed<strong></td>';
-            expenseTableRows += '<td>INR '+expenseRecord.amount_claimed__c+'</td>';
+            expenseTableRows += '<td>'+expenseRecord.amount_claimed__c+'</td>';
             expenseTableRows += '<td><strong>Petty Cash Amount<strong></td>';
-            expenseTableRows += '<td>INR '+expenseRecord.petty_cash_amount__c+'</td>';
+            expenseTableRows += '<td>'+expenseRecord.petty_cash_amount__c+'</td>';
             expenseTableRows += '</tr>'; 
             expenseTableRows += '<tr>';
             expenseTableRows += '<td><strong>Conveyance Amount<strong></td>';
-            expenseTableRows += '<td>INR '+expenseRecord.conveyance_amount__c+'</td>';
+            expenseTableRows += '<td>'+expenseRecord.conveyance_amount__c+'</td>';
             expenseTableRows += '<td><strong>Tour Bill Claim Amount<strong></td>';
-            expenseTableRows += '<td>INR '+expenseRecord.tour_bill_claim__c+'</td>';
+            expenseTableRows += '<td>'+expenseRecord.tour_bill_claim__c+'</td>';
             expenseTableRows += '</tr>';
             expenseTableRows += '<tr>';
             expenseTableRows += '<td><strong>Extra Amount for BL<strong></td>';
-            expenseTableRows += '<td>INR '+expenseRecord.extra_amount__c+'</td>';
+            expenseTableRows += '<td>'+expenseRecord.extra_amount__c+'</td>';
             expenseTableRows += '<td><strong><strong></td>';
             expenseTableRows += '<td></td>';
             expenseTableRows += '</tr>';    
@@ -1203,7 +1203,7 @@
               var strDate = pettyCashList[i].bill_date__c.toString().split('T')[0];
               pettyCashTableRows += '<tr>';
               pettyCashTableRows += '<td>'+pettyCashList[i].name+'</td>';
-              pettyCashTableRows += '<td>INR '+pettyCashList[i].amount__c+'</td>';
+              pettyCashTableRows += '<td>'+pettyCashList[i].amount__c+'</td>';
             //  pettyCashTableRows += '<td>'+pettyCashList[i].activity_code__c+'</td>';
               pettyCashTableRows += '<td>'+pettyCashList[i].nature_of_exp__c+'</td>';
               pettyCashTableRows += '<td>'+strDate+'</td>';
@@ -1234,7 +1234,7 @@
               }
               conveyanceVoucherTableRows += '<tr>';
               conveyanceVoucherTableRows += '<td>'+conveyanceVoucherList[i].name+'</td>';
-              conveyanceVoucherTableRows += '<td>INR '+conveyanceVoucherList[i].amount__c+'</td>';
+              conveyanceVoucherTableRows += '<td>'+conveyanceVoucherList[i].amount__c+'</td>';
               conveyanceVoucherTableRows += '<td>'+conveyanceVoucherList[i].mode_of_conveyance__c+'</td>';
               conveyanceVoucherTableRows += '<td>'+strDate+'</td>';
               conveyanceVoucherTableRows += '</tr>';
@@ -1263,7 +1263,7 @@
               }
               tourBillClaimTableRows += '<tr>';
               tourBillClaimTableRows += '<td>'+tourBillClaimList[i].name+'</td>';
-              tourBillClaimTableRows += '<td>INR '+tourBillClaimList[i].grand__c+'</td>';
+              tourBillClaimTableRows += '<td>'+tourBillClaimList[i].grand__c+'</td>';
               tourBillClaimTableRows += '</tr>';
             }
             if(tourBillClaimListLength>0){
