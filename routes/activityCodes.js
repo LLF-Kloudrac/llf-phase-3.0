@@ -170,10 +170,10 @@ router.get('/activityCodesList', verify,async(request, response) => {
                     obj.expenseHead = eachRecord.expense_head_category__c;
                     obj.description = eachRecord.description__c;
                     if(eachRecord.actual_expense_from_tally__c != null){
-                        obj.actualExpenseFromTally = '<span id="amount'+eachRecord.sfid+'" ><h6>INR</h6>'+ eachRecord.actual_expense_from_tally__c.toFixed(2)+'</span>';
+                        obj.actualExpenseFromTally = '<span id="amount'+eachRecord.sfid+'" ><h6></h6>'+ eachRecord.actual_expense_from_tally__c.toFixed(2)+'</span>';
                     }
                     else{
-                        obj.actualExpenseFromTally = '<span id="amount'+eachRecord.sfid+'" ><h6>INR</h6>'+ eachRecord.actual_expense_from_tally__c+'</span>';
+                        obj.actualExpenseFromTally = '<span id="amount'+eachRecord.sfid+'" ><h6></h6>'+ eachRecord.actual_expense_from_tally__c+'</span>';
 
                     }
                  
@@ -212,15 +212,18 @@ router.post('/updateActivityCode', (request, response) => {
         response.send(result.error.details[0].context.label);
     }
     else {
-        let updateQuerry = 'UPDATE salesforce.Activity_Code__c SET ' +
-            'Name = \'' + name + '\', ' +
-            'Activity_Code_Name__c = \'' + activityCodeName + '\', ' +
-            'ExpenseHeadCategory__c = \'' + expenseHead + '\', ' + 'Description__c = \'' + description + '\' , ' + 'Planned_Annual_Budget__c = \'' + approvedactivitycodebudget + '\'' + 'WHERE sfid = $1';
-        console.log('updateQuerry  ' + updateQuerry);
+        let updateQuerry = 'UPDATE salesforce.Activity_Code__c SET ' + 'Name = \'' + name + '\', ' + 'Activity_Code_Name__c = \'' + activityCodeName + '\', ' +
+            'ExpenseHeadCategory__c = \'' + expenseHead + '\', ' +
+            'Description__c = \'' + description + '\' ';
+        //Need to add the default 0 value in the number field if not added then it will throw exception
+        let budgetApp = approvedactivitycodebudget != '' ? approvedactivitycodebudget : 0;
+        updateQuerry += ', Planned_Annual_Budget__c = \'' + budgetApp + '\' WHERE sfid = $1';
+
+        console.log('--- 223 activityCodes.js updateQuerry  ' + updateQuerry);
         pool
             .query(updateQuerry, [hide])
             .then((updateQuerryResult) => {
-                console.log('updateQuerryResult =>>' + JSON.stringify(updateQuerryResult));
+                //console.log('updateQuerryResult =>>' + JSON.stringify(updateQuerryResult));
                 response.send('Success');
             })
             .catch((updatetError) => {
