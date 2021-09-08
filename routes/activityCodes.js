@@ -10,12 +10,14 @@ const { object } = require('@hapi/joi');
 
 const router = new Router();
 
-router.get('/getRelatedTasks', verify, (request, response) => {
+router.get('/getRelatedTasks/:activityCodeId&:activityCodeName', verify, (request, response) => {
     let objUser = request.user;
     console.log('user ' + objUser);
-    let activityCodeId = request.query.activityId;
-    console.log('query activityCodeId   : '+activityCodeId);
-    response.render('relatedTasksToActivityCodePage', { objUser, activityCodeId });
+    let activityCodeId = request.params.activityCodeId;
+    console.log('--- 18 activityCodes.js activityCodeId:  '+activityCodeId);
+    activityCodeName = request.params.activityCodeName;
+    console.log('--- 20 activityCodes.js activityCodeName: ' + activityCodeName);
+    response.render('relatedTasksToActivityCodePage', { objUser, activityCodeId, activityCodeName});
 })
 
 
