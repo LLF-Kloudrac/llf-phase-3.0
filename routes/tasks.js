@@ -346,7 +346,7 @@ router.get('/getActivityCode',async(request,response)=>{
     let recordDeatil={};
     pool
          .query('SELECT id,sfid, name, activity_code_name__c '+
-         'FROM salesforce.activity_code__c WHERE project__c =$1',[projectId])
+         'FROM salesforce.activity_code__c WHERE sfid != \'null\' AND project__c =$1',[projectId])
     .then((queryResult)=>{
         console.log('queryResult +>'+JSON.stringify(queryResult.rows));
         recordDeatil.ActivityCodeDetail=queryResult.rows;  
