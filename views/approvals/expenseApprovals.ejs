@@ -423,7 +423,7 @@
               pettyCashTableRows += '<td>'+strDate+'</td>';
               pettyCashTableRows += '</tr>';
             }
-            pettyCashTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/pettycashlistview?expenseId='+expenseId+'" >View All</a></center></td></tr>';
+            pettyCashTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/pettycashlistview/'+expenseId+'&true" >View All</a></center></td></tr>';
             $('#pettyCashTable').empty();
             $('#pettyCashTable').html(pettyCashTableRows);
           
@@ -453,7 +453,7 @@
               conveyanceVoucherTableRows += '<td>'+strDate+'</td>';
               conveyanceVoucherTableRows += '</tr>';
             }
-            conveyanceVoucherTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/ConveyanceListView?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
+            conveyanceVoucherTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/ConveyanceListView/'+expenseId+'&true" >View All</a></center></td></tr></tbody>';
             $('#conveyanceVoucherTable').empty();
             $('#conveyanceVoucherTable').html(conveyanceVoucherTableRows);
             
@@ -478,7 +478,7 @@
               tourBillClaimTableRows += '<td>'+tourBillClaimList[i].grand__c+'</td>';
               tourBillClaimTableRows += '</tr>';
             }
-            tourBillClaimTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/tourBillClaimListview?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
+            tourBillClaimTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/tourBillClaimListview/'+expenseId+'&true" >View All</a></center></td></tr></tbody>';
             $('#tourBillClaimTable').empty();
             $('#tourBillClaimTable').html(tourBillClaimTableRows);
 
@@ -505,7 +505,7 @@
 
                 customApprovalTableRows += '</tr>';
             }
-            customApprovalTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/getExpenseApproval?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
+            customApprovalTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/getExpenseApproval/'+expenseId+'&true" >View All</a></center></td></tr></tbody>';
             $('#customApprovalTable').empty();
             $('#customApprovalTable').html(customApprovalTableRows);
             
