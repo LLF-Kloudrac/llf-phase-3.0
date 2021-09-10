@@ -100,6 +100,7 @@
                                                     <option value="">Select</option>
                                                 </select>
                                             </div>
+                                            <div class="col-md-6"></div>
                                             <div class="col-md-6">
                                                 <label for="actualexpenseonsalesforce">Planned Start Date <span
                                                         style="color: red;">*</span></label>
@@ -111,11 +112,6 @@
                                                         style="color: red;">*</span></label>
                                                 <input type="date" class="form-control" id="DueDate" value=""
                                                     name="DueDate">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="estimatedexpensefromtasks">Description </label>
-                                                <textarea id="Description" maxlength="5000" name="Description" rows="4"
-                                                    cols="45" onkeypress="return AvoidSpace(event)"></textarea>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="estimatedexpensefromtasks">Actual Start Date </label>
@@ -139,6 +135,11 @@
                                                     id="Estimated_Expense" value="" name="Estimated_Expense"
                                                     onkeypress="return AvoidSpace(event)" min=0
                                                     oninput="validity.valid||(value='');">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="estimatedexpensefromtasks">Description </label>
+                                                <textarea id="Description" maxlength="5000" name="Description" rows="4"
+                                                    cols="45" onkeypress="return AvoidSpace(event)"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -246,11 +247,6 @@
                                                     value="" name="today_s_date">
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="estimatedexpensefromtasks">Description </label>
-                                                <textarea id="Description" maxlength="5000" name="Description" rows="4"
-                                                    cols="45" onkeypress="return AvoidSpace(event)"></textarea>
-                                            </div>
-                                            <div class="col-md-6">
                                                 <label for="estimatedexpensefromtasks">Actual Start Date </label>
                                                 <input type="date" class="form-control" id="Actual_Start_Date" value=""
                                                     name="Actual_Start_Date">
@@ -277,6 +273,11 @@
                                                     id="Estimated_Expense" value="" name="Estimated_Expense"
                                                     onkeypress="return AvoidSpace(event)" min=0
                                                     oninput="validity.valid||(value='');">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="estimatedexpensefromtasks">Description </label>
+                                                <textarea id="Description" maxlength="5000" name="Description" rows="4"
+                                                    cols="45" onkeypress="return AvoidSpace(event)"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -600,10 +601,10 @@
                                         ActivityCodeDetailRow += '<tr>';
                                         ActivityCodeDetailRow += '<td><strong> Pro-Rata Calculated Expense Per Day<strong></td>';
                                         var pro_rate_analysis = eachRecord.pro_rate_analysis__c != null ? eachRecord.pro_rate_analysis__c.toFixed(2) : eachRecord.pro_rate_analysis__c;
-                                        ActivityCodeDetailRow += '<td>INR ' + pro_rate_analysis + '</td>';
+                                        ActivityCodeDetailRow += '<td> ' + pro_rate_analysis + '</td>';
                                         ActivityCodeDetailRow += '<td><strong>Estimated expenditure till current date<strong></td>';
                                         var grant_utilization_on_pro_rate_basis = eachRecord.grant_utilization_on_pro_rate_basis__c != null ? eachRecord.grant_utilization_on_pro_rate_basis__c.toFixed(2) : eachRecord.grant_utilization_on_pro_rate_basis__c;
-                                        ActivityCodeDetailRow += '<td>INR ' + grant_utilization_on_pro_rate_basis + '</td>';
+                                        ActivityCodeDetailRow += '<td> ' + grant_utilization_on_pro_rate_basis + '</td>';
 
                                         ActivityCodeDetailRow += '</tr>';
                                         ActivityCodeDetailRow += '<tr>';
@@ -632,7 +633,7 @@
                                         ActivityCodeDetailRow += '<td>' + estimated_hours + '</td>';
                                         ActivityCodeDetailRow += '<td><strong>Estimated Expense<strong></td>';
                                         var estimated_expense = eachRecord.estimated_expense__c != null ? eachRecord.estimated_expense__c.toFixed(2) : eachRecord.estimated_expense__c;
-                                        ActivityCodeDetailRow += '<td>INR ' + estimated_expense + '</td>';
+                                        ActivityCodeDetailRow += '<td>' + estimated_expense + '</td>';
 
                                         ActivityCodeDetailRow += '</tr>';
 
@@ -1003,18 +1004,23 @@
                         }
                         let resp;
                         if (typeof checkPlannedDate == 'object') {
-                            resp = 'Planned Start Date & Planned End Date  cannot be blank.'
+                            resp = 'Planned Start Date & Planned End Date  cannot be blank.';
                         }
                         else if (!checkPlannedDate) {
-                            resp = 'Planned Start Date must be less than Planned End Date.'
+                            resp = 'Planned Start Date must be less than Planned End Date.';
                         } else if (typeof checkActualDate == 'object') {
-                            resp = 'please fill Actual start date/end date as these are mandatory field.'
+                            resp = 'please fill Actual start date/end date as these are mandatory field.';
                         } else if (!checkActualDate) {
-                            resp = 'Actual Start Date must be less than Actual End Date.'
+                            resp = 'Actual Start Date must be less than Actual End Date.';
                         }
                         else if (!checkActual_End_Date) {
-                            resp = 'Actual End Date should not be of future date'
-
+                            resp = 'Actual End Date should not be of future date';
+                        }
+                        else if(values.Actual_Start_Date != "" && values.Actual_End_Date == "") {
+                            resp = 'Actual Start Date & Planned End Date cannot be blank.';
+                        }
+                        else if(values.Actual_Start_Date == "" && values.Actual_End_Date != "") {
+                            resp = 'Actual Start Date & Planned End Date cannot be blank.';
                         }
                         if (resp) {
                             let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' + resp +
@@ -1105,18 +1111,23 @@
                         }
                         let resp;
                         if (typeof checkPlannedDate == 'object') {
-                            resp = 'Planned Start Date & Planned End Date  cannot be blank.'
+                            resp = 'Planned Start Date & Planned End Date  cannot be blank.';
                         }
                         else if (!checkPlannedDate) {
-                            resp = 'Planned Start Date must be less than Planned End Date.'
+                            resp = 'Planned Start Date must be less than Planned End Date.';
                         } else if (typeof checkActualDate == 'object') {
-                            resp = 'please fill Actual start date/end date as these are mandatory field.'
+                            resp = 'please fill Actual start date/end date as these are mandatory field.';
                         } else if (!checkActualDate) {
-                            resp = 'Actual Start Date must be less than Actual End Date.'
+                            resp = 'Actual Start Date must be less than Actual End Date.';
                         }
                         else if (!checkActual_End_Date) {
-                            resp = 'Actual End Date should not be of future date'
-
+                            resp = 'Actual End Date should not be of future date';
+                        }
+                        else if(values.Actual_Start_Date != "" && values.Actual_End_Date == "") {
+                            resp = 'Actual Start Date & Planned End Date cannot be blank.';
+                        }
+                        else if(values.Actual_Start_Date == "" && values.Actual_End_Date != "") {
+                            resp = 'Actual Start Date & Planned End Date cannot be blank.';
                         }
                         if (resp) {
                             let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' + resp +
