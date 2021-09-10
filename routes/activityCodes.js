@@ -35,7 +35,7 @@ router.get('/getTasksRelatedToActivityCode', verify, (request, response) => {
         console.log('line 33 activityCodeId  : '+activityCodeId);
         pool
         .query('SELECT sfid, Task_Stage__c,total_hours__c, Name,Project_Name2__c ,Activity_Code_Name__c,Project_Task_Category_Name__c,CreatedById,CreatedDate,Id,IsDeleted,estimated_expense__c,start_date__c,due_date__c,actual_start_date__c,actual_end_date__c,LastActivityDate,LastModifiedById,LastModifiedDate,LastReferencedDate,LastViewedDate '+
-            'FROM salesforce.Milestone1_Task__c where Activity_Codes__c=$1', [activityCodeId])
+            'FROM salesforce.Milestone1_Task__c where sfid != \'null\' AND Activity_Codes__c=$1', [activityCodeId])
         .then((taskListResult) => {
             console.log('activityCodeListResult  : '+JSON.stringify(taskListResult.rows));
             if(taskListResult.rowCount>0){
@@ -307,7 +307,7 @@ router.get('/getActivityCodeDetails', async (request, response) => {
     await
         pool
             .query('select sfid ,Name,Activity_Code_Name__c,Project_Name__c,ExpenseHeadCategory__c,Expense_Head_Category__c,Description__c,Actual_Expense_on_Salesforce__c,Actual_Expense_from_tally__c,Estimated_Expense_from_Tasks__c,Actual_Expense_from_Procurement__c,Estimated_expenditure_till_current_date__c,Grant_Utlization__c,Actual_Hours_from_tasks__c,Planned_Annual_Budget__c,Actual_Utilization_against_annual_budget__c,Actual_Expense_on_Tally_Date__c  ' +
-                'FROM salesforce.Activity_Code__c where sfid =$1 ', [activityCode])
+                'FROM salesforce.Activity_Code__c where sfid != \'null\' AND sfid =$1 ', [activityCode])
             .then((queryResult) => {
                 console.log('queryResult +>' + JSON.stringify(queryResult.rows));
                 recordDeatil.ActivityCodeDetail = queryResult.rows;
@@ -330,7 +330,7 @@ router.get('/getActivityCodeDetails', async (request, response) => {
     await
         pool
             .query('select sfid ,name,Task_Stage__c,Project_Name2__c	,Activity_Codes__c,Activity_Code_Name__c,Project_Task_Category_Name__c ' +
-                'FROM salesforce.Milestone1_Task__c where Activity_Codes__c=$1', [activityCode])
+                'FROM salesforce.Milestone1_Task__c where sfid != \'null\' AND Activity_Codes__c=$1', [activityCode])
             .then((taskdescriptionQueryy) => {
                 console.log('ten description =>' + JSON.stringify(taskdescriptionQueryy.rows));
                 recordDeatil.task = taskdescriptionQueryy.rows;
