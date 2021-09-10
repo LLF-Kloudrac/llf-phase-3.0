@@ -188,10 +188,6 @@
                                                 <input type="text" disabled class="form-control" id="actualhoursfromtasks" value="" name="actualhoursfromtasks">
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="estimatedexpensefromtasks">Approved Annual Budget </label>
-                                                <input type="text" disabled class="form-control" id="plannedannualbudget" value="" name="plannedannualbudget">
-                                            </div>
-                                            <div class="col-md-6">
                                                 <label for="estimatedexpensefromtasks">Actual Utilization Against Annual Budget </label>
                                                 <input type="text" disabled class="form-control" id="actualutilizationagainstannualbudget" value="" name="actualutilizationagainstannualbudget">
                                             </div>
@@ -322,7 +318,7 @@
                        // project: 'Project',
                        // expenseHead: ' Expense Head Category',
                         actualExpenseFromTally: 'Actual Expense from Tally',
-                        planned_annual_budget__c: 'Approved Annual Budget',
+                        planned_annual_budget__c: 'Approved Activity Code Budget',
                         estimated_expense_from_tasks: 'Estimated Expense from Tasks',
                         createdDate: 'Created Date',
                         editAction: 'Action'
@@ -469,18 +465,17 @@
 
                                         ActivityCodeDetailRow += '<tr>';
                                         ActivityCodeDetailRow += '<td><strong>Approved Annual Budget<strong></td>';
-                                        var planned_annual_budget = eachRecord.planned_annual_budget__c != null ? eachRecord.planned_annual_budget__c.toFixed(2): eachRecord.planned_annual_budget__c;    
-                                        ActivityCodeDetailRow += '<td> ' + planned_annual_budget + '</td>';
-                                        ActivityCodeDetailRow += '<td><strong>Actual Utilization Against Annual Budget<strong></td>';
                                         var actual_utilization_against_annual_budget = eachRecord.actual_utilization_against_annual_budget__c != null ? eachRecord.actual_utilization_against_annual_budget__c+'%': eachRecord.actual_utilization_against_annual_budget__c;
                                         ActivityCodeDetailRow += '<td> ' + actual_utilization_against_annual_budget + '</td>';
+                                        ActivityCodeDetailRow += '<td><strong>Actual Expense on Tally Date<strong></td>';
+                                        ActivityCodeDetailRow += '<td> ' + eachRecord.actual_expense_on_tally_date__c + '</td>';
                                         ActivityCodeDetailRow += '</tr>';
 
                                         ActivityCodeDetailRow += '<tr>';
-                                        ActivityCodeDetailRow += '<td><strong>Actual Expense on Tally Date<strong></td>';
-                                        ActivityCodeDetailRow += '<td> ' + eachRecord.actual_expense_on_tally_date__c + '</td>';
                                         ActivityCodeDetailRow += '<td><strong>Approved Activity Code Budget<strong></td>';
                                         ActivityCodeDetailRow += '<td> ' + eachRecord.planned_annual_budget__c + '</td>';
+                                        ActivityCodeDetailRow += '<td></td>';
+                                        ActivityCodeDetailRow += '<td></td>';
                                         ActivityCodeDetailRow += '</tr>';
                                         
                                         $('#activityCodeDetail').html(ActivityCodeDetailRow);
@@ -703,7 +698,7 @@
                                 document.forms["editActivityCode"]["estimatedexpensefromtasks"].value = response.ActivityCodeDetail[0].estimated_expense_from_tasks__c!=null ? response.ActivityCodeDetail[0].estimated_expense_from_tasks__c.toFixed(2): response.ActivityCodeDetail[0].estimated_expense_from_tasks__c;
                                 document.forms["editActivityCode"]["actualutilizationagainstannualbudget"].value = response.ActivityCodeDetail[0].actual_utilization_against_annual_budget__c != null ? response.ActivityCodeDetail[0].actual_utilization_against_annual_budget__c+'%': response.ActivityCodeDetail[0].actual_utilization_against_annual_budget__c;
                                 document.forms["editActivityCode"]["tallyDate"].value = response.ActivityCodeDetail[0].actual_expense_on_tally_date__c;
-                                document.forms["editActivityCode"]["plannedannualbudget"].value = response.ActivityCodeDetail[0].planned_annual_budget__c !=null ? response.ActivityCodeDetail[0].planned_annual_budget__c.toFixed(2): response.ActivityCodeDetail[0].planned_annual_budget__c;
+                                //document.forms["editActivityCode"]["plannedannualbudget"].value = response.ActivityCodeDetail[0].planned_annual_budget__c !=null ? response.ActivityCodeDetail[0].planned_annual_budget__c.toFixed(2): response.ActivityCodeDetail[0].planned_annual_budget__c;
                                 if(response.ActivityCodeDetail[0].actual_hours_from_tasks__c != null){
                                     document.forms["editActivityCode"]["actualhoursfromtasks"].value= response.ActivityCodeDetail[0].actual_hours_from_tasks__c.toFixed(2)
                                 }else {
