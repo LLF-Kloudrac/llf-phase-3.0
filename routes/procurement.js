@@ -637,8 +637,6 @@ router.post('/insertAsssetForm',(request,response)=>{
    console.log('Asset planDate=> '+date_from);
    console.log('Asset spocApproval=> '+submittedBy);
    console.log('Activity code '+act);
-  // console.log('Asset spocApproval=> '+spocApproval);
-  // console.log('availableInStock=> '+availableInStock);
    if(datepicker==''){
        console.log('dsjjd');
        datepicker=null;      
@@ -649,11 +647,7 @@ const schema=joi.object({
     assetRequisitionName:joi.string().min(3).required().label('Please Fill Asset Requisition Name'),
     asset: joi.string().max(255).required().label('Asset Requisition Name is too long'),
     project:joi.string().required().label('Please choose Project/Department'),
-    plandte:joi.date().required().label('Please Fill Target Date'),
-   // planDatee:joi.date().min('now').required().label('Target Date should be greater than or equals to today date'),
- // planDate:joi.date().required().less(joi.ref('date2')).label('Target Date should be greater than or equals to today date'),
-  //  planDate:joi.string().required().label('Please fill Target Date of Receiving'),
-   // act:joi.string().required().label('Pleasse Chose Activity'),
+    plandte:joi.date().required().label('Please Fill Target Date')
 })
 let result=schema.validate({assetRequisitionName,project,asset:assetRequisitionName,plandte:datepicker});
 if(result.error){
@@ -681,35 +675,15 @@ router.post('/updateasset',(request,response)=>{
     let closurePlanDate =request.body.date_from1;
     let goodsDate=request.body.goodsDate;
     let deliveryTime = request.body.deliveryTime;
-    console.log('body  : '+JSON.stringify(body));
-    let {assetsfid, assetName,activityCode,paymentStatus,status,payement,receiverName,receivedQuantity,quotations,reason,pricing,deliveryPlace,deliveryCost,attachment,totamt} = request.body;
-    //console.log('assetsfid    '+assetsfid);
-   // console.log('closurePlanDate  '+closurePlanDate);
-//console.log('activityCode  '+activityCode);
-//console.log('paymentStatus  '+paymentStatus);
-  //  console.log('status  '+status);
-    //console.log('payement  '+payement);
-    //console.log('receiverName  '+receiverName);
-    //console.log('receivedQuantity  '+receivedQuantity);
-    //console.log('goodsDate  '+goodsDate);
-    //console.log('assetName  '+assetName);
-    //console.log('quotations  '+quotations);
-    //console.log('reason  '+reason);
-    //console.log('pricing  '+pricing);
-    //console.log('deliveryPlace  '+deliveryPlace);
-    //console.log('deliveryTime  '+deliveryTime);
-    //console.log('deliveryCost  '+deliveryCost);
-    //console.log('attachment  '+attachment);
-    //console.log('totamt    '+totamt);
-    
+    console.log('---- 678 procurement.js body  : '+JSON.stringify(body));
 
+    let {assetsfid, assetName,activityCode,paymentStatus,status,payement,receiverName,receivedQuantity,quotations,reason,pricing,deliveryPlace,deliveryCost,attachment,totamt} = request.body;
+    
     if(closurePlanDate==''){
-        console.log('plan');
         closurePlanDate='';
     }
   
      if(goodsDate==''){
-        console.log('dsjjd goods ');
         goodsDate= closurePlanDate;
     } 
 
@@ -719,8 +693,8 @@ router.post('/updateasset',(request,response)=>{
         console.log('deliveryTime'+deliveryTime)
     } 
 
-    console.log('goodsDate'+goodsDate);
-    console.log('deliveryTime'+deliveryTime);
+    console.log('--- 697 procurement.js goodsDate'+goodsDate);
+    console.log('--- 698 procurement.js deliveryTime'+deliveryTime);
 
     let updateQuerry = 'UPDATE salesforce.Asset_Requisition_Form__c SET '+
     'Name = \''+assetName+'\', '+
@@ -747,38 +721,14 @@ router.post('/updateasset',(request,response)=>{
     updateQuerry += 'Received_Quantity_Goods__c= \''+receivedQuantity+'\', '+
     'Date_of_Receiving_Goods__c= \''+goodsDate+'\' '+
     'WHERE sfid = $1';
-    console.log('updateQuerry '+updateQuerry);
-
-   /* if(totamt<1){
-        updateQuerry = 'UPDATE salesforce.Asset_Requisition_Form__c SET '+
-    'Name = \''+assetName+'\', '+
-    'Requested_Closure_Plan_Date__c = \''+closurePlanDate+'\', '+
-    'Activity_Code_Project__c = \''+activityCode+'\', '+
-    'p_o_attachment__c = \''+attachment+'\', '+
- //  // 'Payment_Status__c = \''+paymentStatus+'\', '+
-    'Status__c = \''+status+'\', '+
-    'Payment_Received_Acknowledgement__c = \''+payement+'\', '+
-    'Receiver_Name__c = \''+receiverName+'\', '+
-    'if_3_quotations_specify_reason__c= \''+quotations+'\', '+
-    'reason_for_non_registered_gst_Vendor__c= \''+reason+'\', '+
-    'pricing_terms_cost_comparison__c= \''+pricing+'\', '+
-    'delivery_terms_delivery_place__c= \''+deliveryPlace+'\', ';
-    if(deliveryCost != ''){
-        updateQuerry += 'delivery_cost_incl__c= \''+deliveryCost+'\', ';
-    }
-    updateQuerry += 'Received_Quantity_Goods__c= \''+receivedQuantity+'\', '+
-    'Date_of_Receiving_Goods__c= \''+goodsDate+'\' '+
-    'WHERE sfid = $1';
-    console.log('updateQuerry line no 773 '+updateQuerry);
-
-
-    }*/
+    console.log('---- 725 procurement.js updateQuerry: ' + updateQuerry);
 
     var payPass='';
     var attchPass='';
     var quant='';
-
-    if(receivedQuantity >0 || receivedQuantity == null || receivedQuantity == '')
+    
+    console.log('---- 731 procurement.js receivedQuantity: ' + receivedQuantity);
+    if(receivedQuantity > 0 || receivedQuantity == null || receivedQuantity == '')
     {
         quant = true;
     }
@@ -792,9 +742,7 @@ router.post('/updateasset',(request,response)=>{
             payPass='true';
             console.log('status :'+status+' paymetStatus :'+paymentStatus+' payPass:'+payPass);
         } 
-          
     }
-    
     else{
         if(status!='Closed'){
             payPass='false';
@@ -826,26 +774,24 @@ router.post('/updateasset',(request,response)=>{
          console.log('queryResultUpdate '+JSON.stringify(queryResultUpdate));
          response.send('Successfully Updated!');
         }).catch((eroor)=>{console.log(JSON.stringify(eroor.stack))})
-
             }
-
-
-        
      }
-
-
-
      else{
-         response.send('Final Payment Status can be chosen as Closed only when Final Payment Status is Released.')
+         response.send('Final Payment Status can be chosen as Closed only when Final Payment Status is Released.');
+         return;
      }
-    
     }
     else{
-        console.log('@@@@@');
-        if(attchPass=='true'){
-            if(payPass=='true' || payPass=='false'){
-                console.log('@@@@@1111');
-                if(quant == 'true'){
+        console.log('---- 785 procurement.js quant: ' + quant);
+        console.log('---- 786 procurement.js attchPass: ' + attchPass);
+        console.log('---- 787 procurement.js payPass: ' + payPass);
+        if(attchPass=='true')
+        {
+            if(payPass=='true' || payPass=='false')
+            {
+                console.log('---- 792 procurement.js (quant == \'true\'): ' + (quant == 'true'));
+                if(quant == true || quant == 'true')
+                {
                     const schema=joi.object({
                         assetName:joi.string().min(3).required().label('Please Fill Asset Requisition Name'),
                     })
@@ -859,76 +805,26 @@ router.post('/updateasset',(request,response)=>{
                     .then((queryResultUpdate)=>{
                     console.log('queryResultUpdate '+JSON.stringify(queryResultUpdate));
                     response.send('Successfully Updated!');
-                    }).catch((eroor)=>{console.log(JSON.stringify(eroor.stack))})  
-                    
-
+                    }).catch((eroor)=>{console.log(JSON.stringify(eroor.stack));})
                     }
-
-        
-                    
-
                 }
                 else{
-                    response.send('Received Quantity(Goods) should not be negative.')
+                    response.send('Received Quantity(Goods) should not be negative.');
+                    return;
                 }
-               
             }
             else{
-                response.send('Choose Status Closed only When payment is Released !!!')
-
+                response.send('Choose Status Closed only When payment is Released !!!');
+                return;
             }
-           
-        }  
+        }
         else{
             response.send('Please fill all field in Purchase Order Checklist');
-        }        
-    }
-
-
-})
-
-
-
-   
-    
-    /* 
-    else if(paymentStatus=='Rejected'){
-        if(status=='' && payement=='' && receiverName=='' && receivedQuantity==''){
-            console.log('VAlidation passed for REJECTED payments');
-            let updateQuerry = 'UPDATE salesforce.Asset_Requisition_Form__c SET '+
-    'Name = \''+assetName+'\', '+
-    'Requested_Closure_Actual_Date__c = \''+closureActualDate+'\', '+
-    'Requested_Closure_Plan_Date__c = \''+closurePlanDate+'\', '+
-    'Activity_Code_Project__c = \''+activityCode+'\', '+
-    'p_o_attachment__c = \''+attachment+'\', '+
-  //  'Payment_Status__c = \''+paymentStatus+'\', '+
-    'Status__c = \''+status+'\', '+
-    'Payment_Received_Acknowledgement__c = \''+payement+'\', '+
-    'Receiver_Name__c = \''+receiverName+'\', '+
-    'Received_Quantity_Goods__c= \''+receivedQuantity+'\', '+
-    'if_3_quotations_specify_reason__c= \''+quotations+'\', '+
-    'reason_for_non_registered_gst_Vendor__c= \''+reason+'\', '+
-    'pricing_terms_cost_comparison__c= \''+pricing+'\', '+
-    'delivery_terms_delivery_place__c= \''+deliveryPlace+'\', '+
-    'delivery_terms_delivery_time__c= \''+deliveryTime+'\', '+
-    'delivery_cost_incl__c= \''+deliveryCost+'\', '+
-    'Date_of_Receiving_Goods__c= \''+goodsDate+'\' '+
-    'WHERE sfid = $1';
-    console.log('updateQuerry '+updateQuerry);
-   pool.query(updateQuerry,[assetid])
-   .then((queryResultUpdate)=>{
-       console.log('queryResultUpdate '+JSON.stringify(queryResultUpdate));
-       response.send('succesfully inserted');
-   }).catch((eroor)=>{console.log(JSON.stringify(eroor.stack))})
+            return;
         }
-        else{response.send('LEAVE raiser fields blank')}
+    }
+})
  
-    }
-    else {
-        response.send('Updates error ');
-    }
-    */
-    
    router.get('/nonItProducts/:parentAssetId&:isDisabled',verify, (request,response) => {
 
     let parentAssetId = request.params.parentAssetId;
@@ -938,17 +834,6 @@ router.post('/updateasset',(request,response)=>{
     console.log('Expense userId : '+userId);
     isDisabled = request.params.isDisabled;
     console.log(' ++++ isDisabled ++++ '+isDisabled); 
-  /*   let qry ='SELECT sfid ,	State__c,District__c,Items__c Form salesforce.Impaneled_Vendor__c';
-    pool
-    .query()
-    .then((queryResult)=>{
-        console.log('queryResult=>'+JSON.stringify(queryResult.rows));
-        let state =[];
-        queryResult.forEach((each)=>{
-            state.push(each.state);
-        })
-        response.render('procurementIT',{name: request.user.name, email: request.user.email, parentAssetId: parentAssetId});
-    }) */
     response.render('procurementNonIT',{name: request.user.name,objUser: objUser, email: request.user.email,isDisabled: isDisabled, parentAssetId: parentAssetId});
 
 });
@@ -962,29 +847,12 @@ router.post('/nonItProducts', (request,response) => {
     console.log('nonItFormResult  '+JSON.stringify(nonItFormResult));
     let parentProcurementId = nonItFormResult.parentProcurementId;
     console.log('parent Id Asset Requisition Form '+parentProcurementId);
-   /*  let img1=request.body.imgpath1;
-    console.log('=>>'+img1);
-    let img2=request.body.imgpath2;
-    console.log('=>>'+img2);
-    let img3=request.body.imgpath3;
-    console.log('=>>'+img3);
-    let justify=request.body.justification;
-    console.log('justified'+justify); */
  
     const{state,district,unit,unitCost,vendor,itemsCategory,items,itemSpecification,quantity,budget}=request.body;
     let numberOfRows,lstNonItProcurement = [];
-   
- 
- 
- 
- 
- 
- 
- 
     
     if(typeof(nonItFormResult.quantity) != 'object')
-    {
- 
+    { 
          let schema=joi.object({
              state:joi.string().required().label('Please select State.'),
               district:joi.string().required().label('Please select District.'),
@@ -1135,19 +1003,7 @@ router.get('/itProducts/:parentAssetId&:isDisabled',verify, (request,response) =
     console.log('Expense userId : '+userId);
     isDisabled = request.params.isDisabled;
     console.log(' ++++ isDisabled ++++ '+isDisabled); 
-  /*   let qry ='SELECT sfid ,	State__c,District__c,Items__c Form salesforce.Impaneled_Vendor__c';
-    pool
-    .query()
-    .then((queryResult)=>{
-        console.log('queryResult=>'+JSON.stringify(queryResult.rows));
-        let state =[];
-        queryResult.forEach((each)=>{
-            state.push(each.state);
-        })
-        response.render('procurementIT',{name: request.user.name, email: request.user.email, parentAssetId: parentAssetId});
-    }) */
     response.render('procurementIT',{name: request.user.name,objUser: objUser, email: request.user.email,isDisabled: isDisabled, parentAssetId: parentAssetId});
-
 });
 router.post('/itProducts', (request,response) => {
 
@@ -1323,18 +1179,9 @@ router.post('/itProducts', (request,response) => {
     .catch((error)=>{
         console.log('Error in validation Parent Objct Asset REquisition Form '+JSON.stringify(error.stack));
     })
-
-
-
-
-
-
-   
 });
 
-
 router.get('/getRelatedQuote',(request, response) => {
-
     let filterValues = request.query.filtervalues;
     console.log('filtervalues  '+JSON.stringify(filterValues));
     console.log('filterValues.itemsCategoryValue '+filterValues.itemsCategoryValue);
@@ -1351,14 +1198,13 @@ router.get('/getRelatedQuote',(request, response) => {
             console.log('Else Block');
             response.send('Not Found');
         }
-            
     })
     .catch((QuoteQueryError) => {
         console.log('QuoteQueryError  '+QuoteQueryError.stack);
         response.send('Not Found');
     })
-
 });
+
 router.get('/getCostandGSt',async(request,response)=>{
     let data=request.query.data;
     console.log('Data requiremet'+JSON.stringify(data));
@@ -1421,8 +1267,6 @@ router.get('/getCostandGSt',async(request,response)=>{
          console.log('querryError '+querryError.stack);
          response.send(querryError);
      })
-     
-    
 })
 
 router.get('/getCostPerUnit',(request,response)=>{
@@ -1530,8 +1374,6 @@ router.get('/getProjectList', verify ,(request,response) => {
                             { 
                               console.error('Error executing contact query', contactQueryError.stack);
                             })
-    
-
     }
     else {
         pool
@@ -1613,9 +1455,7 @@ router.get('/getProjectList', verify ,(request,response) => {
                             { 
                               console.error('Error executing contact query', contactQueryError.stack);
                             })
-    
     }
-   
 })
 
 router.get('/getProcurementApproval/:parentAssetId&:isDisabled',verify,(request,response)=>{
@@ -2338,23 +2178,8 @@ router.post('/sendProcurementApproval',verify, (request, response) => {
     let trueValue = true;
     let falseValue = false;
 
-  /*  let updateProcurementQuery = 'UPDATE salesforce.Asset_Requisition_Form__c SET '+  
-    'isSentForApprovalFromHeroku__c = true , '+
-    'Heroku_Approval_Comment__c = $1 '+
-    'WHERE sfid = $2';
-    pool
-    .query(updateProcurementQuery,[body.comment, body.assetRequisitionFormId])
-    .then((requisitionQueryResult) =>{
-        console.log('requisitionQueryResult  : '+JSON.stringify(requisitionQueryResult));
-        response.send('Approval Sent Successfully !');
-    })
-    .catch((requisitionQueryError) =>{
-        response.send('Error occured while sending approval !');
-    })  */
     const schema=joi.object({
         comment:joi.string().min(4).required().label('Please Fill Comment'),
-
-
     })
 
    let result=schema.validate({comment:comment});
@@ -2377,15 +2202,11 @@ router.post('/sendProcurementApproval',verify, (request, response) => {
 });
 
 router.post('/sendProcurementAccountsApproval',verify,(request, response) => {
-
-    
-
     let objUser = request.user;
     let body = request.body;
     console.log('body  : '+JSON.stringify(body));
     let comment = body.comment;
     let sendAccountsApproval = true;
-
 
     pool
     .query('SELECT id, sfid, isSentForAccountsApprovalFromHeroku__c from salesforce.Asset_Requisition_Form__c where sfid = $1',[body.assetRequisitionFormId])
@@ -2471,14 +2292,6 @@ router.post('/sendProcurementAccountsApproval',verify,(request, response) => {
                           }
                         }
                       })
-                
-                  /*  pool
-                    .query('UPDATE salesforce.Asset_Requisition_Form__c SET isSentForApprovalFromHeroku__c = $1 ,Heroku_Approval_Comment__c =$2 WHERE sfid= $3;',[true, body.comment, body.assetRequisitionFormId])
-                    .then((requisitionQueryResult) =>{
-                        console.log('requisitionQueryResult  : '+JSON.stringify(requisitionQueryResult));
-                        response.send('Accounts Approval Sent Successfully !');
-                    })
-                    */
                     .catch((requisitionQueryError) =>{
                         console.log('requisitionQueryError   '+requisitionQueryError);
                         response.send('Error occured while sending approval !');
@@ -2491,14 +2304,7 @@ router.post('/sendProcurementAccountsApproval',verify,(request, response) => {
         console.log('assetQueryError  : '+assetQueryError.stack);
         response.send('Error occured while sending approval !');
     })
-    
-   
-
-    
 });
-
-
-
 
 router.post('/updateVendor',(request,response)=>{
     let body = request.body;
@@ -2537,7 +2343,6 @@ router.post('/updateVendor',(request,response)=>{
     }
     else
     {
-
         schema=joi.object({
            state:joi.string().required().label('Please Choose State'),
            district:joi.string().required().label('Please Choose District'),
