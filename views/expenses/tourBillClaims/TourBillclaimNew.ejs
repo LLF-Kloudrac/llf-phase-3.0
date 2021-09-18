@@ -124,7 +124,7 @@
                           if(jqXHR.responseText== "Saved Successfully !")
                              {
                                   alert('Successfully Inserted!');
-                                  window.open('/expense/tourBillClaim/tourBillClaimListview?expenseId='+expenseId,'_blank');
+                                  window.open('/expense/tourBillClaim/tourBillClaimListview/'+expenseId + '&' + isDisabled,'_blank');
                                 $('#tourBillClaimForm')[0].reset()
                                 let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+jqXHR.responseText+
                                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
