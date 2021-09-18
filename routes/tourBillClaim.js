@@ -5,26 +5,28 @@ const verify = require('../config/verifyToken');
 const format = require('pg-format');
 const joi = require('@hapi/joi');
 
-
-router.get('/tourBillClaimListview',verify,(request, response) => {
+var isDisabled = false;
+router.get('/tourBillClaimListview/:expenseId&:isDisabled',verify,(request, response) => {
 
     let objUser = request.user;
-    let expenseId = request.query.expenseId;
+    let expenseId = request.params.expenseId;
 
     console.log('Tour Bill expenseId  :'+expenseId);
     console.log('Tour Bill objUser  :'+JSON.stringify(objUser));
-
+    isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
+    
     pool.query('SELECT Id, sfid, Name, Expense__c,Grand__c FROM salesforce.Tour_Bill_Claim__c WHERE Expense__c = $1 ',[expenseId])
     .then((tourBillClaimResult) => {
         console.log('tourBillClaimResult '+JSON.stringify(tourBillClaimResult.rows));
         //response.send(tourBillClaimResult.rows);
         //response.render('tourBillExpenses',{ name : request.use r.name, email : request.user.email, tourBillClaimRows : tourBillClaimResult.rows ,parentExpenseId : parentExpenseId});
-        response.render('./expenses/tourBillClaims/TourBillClaimListView',{objUser,expenseId});
+        response.render('./expenses/tourBillClaims/TourBillClaimListView',{objUser,isDisabled,expenseId});
     })
     .catch((tourBillClaimError) => {
         console.log('Tour Bill Claim Query Error '+tourBillClaimError.stack);
         //response.render('tourBillExpenses',{ name : request.user.name, email : request.user.email, tourBillClaimRows : [] ,parentExpenseId : ''});
-        response.render('./expenses/tourBillClaims/TourBillClaimListView',{objUser,expenseId});
+        response.render('./expenses/tourBillClaims/TourBillClaimListView',{objUser,isDisabled,expenseId});
     }) 
 
    
@@ -74,7 +76,6 @@ router.post('/saveTourBillClaim',(request, response) => {
     console.log('okok' + JSON.stringify(request.body));
     let tourBillClaimName = request.body.tourBillClaimName;
     let parentExpenseId ='';
-    let flag ='false';
     console.log('tourBillClaimName  '+tourBillClaimName);
     console.log('tourBillClaimFormData  '+JSON.stringify(request.body));
     if(typeof(request.body.parentExpenseId)!='object'){
@@ -84,22 +85,13 @@ router.post('/saveTourBillClaim',(request, response) => {
      parentExpenseId = request.body.parentExpenseId[0];
      console.log('parentExpenseId '+parentExpenseId);
    }
-  
 
     pool.
-    query('Select sfid,name,Approval_Status__c,accounts_status__c,Project_Manager_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[parentExpenseId])
+    query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[parentExpenseId])
     .then((ExpenseQuerryResult)=>{
       console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
-      if(ExpenseQuerryResult.rows[0].approval_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Rejected')
-      {
-        console.log('Flag  = > '+flag);
-        flag='true';
-        console.log('Flag  = > '+flag);
-      }
-      console.log('Flag x = > '+flag);
-      if((ExpenseQuerryResult.rows[0].approval_status__c == 'Pending' || ExpenseQuerryResult.rows[0].approval_status__c == 'Approved' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Pending' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Approved' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Pending' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Approved') && flag == 'false')
-      {
-         console.log('sddjs');
+      if(ExpenseQuerryResult.rows[0].approval_status__c=='Approved' || ExpenseQuerryResult.rows[0].approval_status__c=='Pending'){
+        console.log('sddjs');
         response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
       }
       else{
@@ -270,15 +262,16 @@ router.get('/getRelatedTourBillClaimDetails/:tourBillClaimId', async (request, r
 /************************************* Start Air Rail Bus ******************************************************************* */
 
 
-router.get('/getAirBusListView',verify,(request,response)=>{
+router.get('/getAirBusListView/:parentTourBillId&:isDisabled',verify,(request,response)=>{
     let objUser = request.user;
     console.log('objUser  : '+JSON.stringify(objUser));
-    let tourbillId = request.query.tourBillClaimId;
+    let tourbillId = request.params.parentTourBillId;
   
     console.log('getAirBusListView tourbillId:'+tourbillId);
-    
+    isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
   
-    response.render('./expenses/tourBillClaims/airRailBusListView', {objUser, tourbillId});
+    response.render('./expenses/tourBillClaims/airRailBusListView', {objUser,isDisabled, tourbillId});
 });
 
   
@@ -288,7 +281,7 @@ router.get('/getAirBusListView',verify,(request,response)=>{
     let tourbillId = request.query.tourbillId;
     console.log('TourbillId'+tourbillId);
     pool
-    .query('SELECT sfid, name, Amount__c,Departure_Station__c,Arrival_Station__c , departure_date__c, arrival_date__c, createddate from salesforce.Air_Rail_Bus_Fare__c WHERE Tour_Bill_Claim__c = $1 AND sfid IS NOT NULL',[tourbillId])
+    .query('SELECT sfid, name, Amount__c,Departure_Station__c,Arrival_Station__c , departure_date__c, arrival_date__c, createddate from salesforce.Air_Rail_Bus_Fare__c WHERE Tour_Bill_Claim__c = $1',[tourbillId])
     .then((airBusQueryResult)=>{
       console.log('airBusQueryResult '+airBusQueryResult.rows);
       if(airBusQueryResult.rowCount>0)
@@ -316,8 +309,14 @@ router.get('/getAirBusListView',verify,(request,response)=>{
           obj.createDdate = strDate;
           obj.arrival=eachRecord.arrival_station__c;
         //  obj.editAction = '<button href="#" class="btn btn-primary editAirRailBus" id="'+eachRecord.sfid+'" >Edit</button>'
-         obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" id="'+eachRecord.sfid+'" >Delete</button>'
-
+        if(isDisabled == 'true')
+        {
+        console.log('++Inside if check ++ '+isDisabled);
+        obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" disabled = "true" id="'+eachRecord.sfid+'" >Delete</button>'
+        } else{
+        console.log('++Inside else check ++ '+isDisabled);
+        obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" id="'+eachRecord.sfid+'" >Delete</button>'
+         }
           i= i+1;
           modifiedAirBuslList.push(obj);
         })
@@ -399,11 +398,13 @@ router.get('/getAirBusListView',verify,(request,response)=>{
   })
   
 
-router.get('/airRailBusCharges/:parentTourBillId',verify,(request, response) => {
+router.get('/airRailBusCharges/:parentTourBillId&:isDisabled',verify,(request, response) => {
     
      let objUser=request.user;
+     let isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
      let parentTourBillId = request.params.parentTourBillId; 
-     response.render('./expenses/tourBillClaims/airRailBusCharges',{objUser, parentTourBillId :parentTourBillId});
+     response.render('./expenses/tourBillClaims/airRailBusCharges',{objUser,isDisabled, parentTourBillId :parentTourBillId});
 
 });
 
@@ -413,7 +414,7 @@ router.post('/airRailBusCharges',verify, (request, response) => {
   var bdy = request.body;
   var bodyResult = request.body;  
   let parentTourBillId = '';
-  let flag = 'false';
+  console.log('airRailBusCharges Body 1 '+JSON.stringify(request.body));
   console.log('airRailBusCharges Body'+JSON.stringify(bodyResult));
   if(typeof(request.body.parentTourBillId)!='object'){
     parentTourBillId =request.body.parentTourBillId;
@@ -432,48 +433,46 @@ router.post('/airRailBusCharges',verify, (request, response) => {
     let expenseId =tourBillQueryResult.rows[0].expense__c;
     console.log('expense ID for Validation  = '+expenseId);
     pool.
-    query('Select sfid,name,Approval_Status__c,Project_Manager_Status__c,Accounts_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId])
+    query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId])
     .then((ExpenseQuerryResult)=>{
       console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
-      if(ExpenseQuerryResult.rows[0].approval_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Rejected')
-      {
-        console.log('Flag  = > '+flag);
-        flag='true';
-        console.log('Flag  = > '+flag);
-      }
-      if((ExpenseQuerryResult.rows[0].approval_status__c == 'Pending' || ExpenseQuerryResult.rows[0].approval_status__c == 'Approved' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Pending' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Approved' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Pending' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Approved') && flag == 'false')
-      {
-         console.log('sddjs');
+      if(ExpenseQuerryResult.rows[0].approval_status__c=='Approved' || ExpenseQuerryResult.rows[0].approval_status__c=='Pending'){
+        console.log('sddjs');
         response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
       }
       else{
         let parentTourBillClaimId='';
         let numberOfRows; let lstAirRailBus= [];
+        const schema = joi.object({
+          arrival_Dted:joi.date().required().label('Please enter Arrival Date'),
+          arrival_Dt:joi.date().max('now').label('Arrival Date must be less than or equals to Today '),
+          departure_Dated:joi.date().required().label('Please enter Departure Date'),
+          departure_Date:joi.date().max('now').label('Departure Date must be less than or equals to Today '),
+          arrival_Date:joi.date().max(joi.ref('departure_Dated')).label('Departure date should be greater than or equal to Arrival date.'),
+          projectTask:joi.string().required().label('Please select Activity Code '),
+          arrival_Station:joi.string().min(3).required().label(' Please select Arrival Station.'),
+          departure_Station:joi.string().min(3).required().label('Please select Departure Station'),
+          amount:joi.number().required().label('Please enter Amount'),
+          amt:joi.number().min(0).label('Amount cannot be negative.'),
+          imgpath:joi.string().invalid('demo').required().label('Please Upload File/Attachment'),
+      })
         if(typeof(bodyResult.arrival_Date) == 'object')
         {
-            numberOfRows = bodyResult.arrival_Date.length;
+            console.log('Line Inside tour bill cliam for object type of data');
+            numberOfRows = request.body.arrival_Date.length;
+            console.log('line no 450 '+request.body.arrival_Date.length);
             for(let i=0; i<numberOfRows ;i++)
             {
-  
-              const schema = joi.object({
-                arrival_Dted:joi.date().required().label('Please enter Arrival Date'),
-                arrival_Dt:joi.date().max('now').label('Arrival Date must be less than or equals to Today '),
-                departure_Dated:joi.date().required().label('Please enter Departure Date'),
-                departure_Date:joi.date().max('now').label('Departure Date must be less than or equals to Today '),
-                arrival_Date:joi.date().max(joi.ref('departure_Dated')).label('Departure date should be greater than or equal to Arrival date.'),
-                projectTask:joi.string().required().label('Please select Activity Code '),
-                arrival_Station:joi.string().min(3).required().label(' Please select Arrival Station.'),
-                departure_Station:joi.string().min(3).required().label('Please select Departure Station'),
-                amount:joi.number().required().label('Please enter Amount'),
-                amt:joi.number().min(0).label('Amount cannot be negative.'),
-                imgpath:joi.string().invalid('demo').required().label('Please Upload File/Attachment'),
-            })
+              console.log('Inside 452 line if ');
+             
             let Result=schema.validate({arrival_Dted:bdy.arrival_Date[i],arrival_Dt:bdy.arrival_Date[i],departure_Dated:bdy.departure_Date[i],arrival_Date:bdy.arrival_Date[i],departure_Date:bdy.departure_Date[i],arrival_Date:bdy.arrival_Date[i],projectTask:bdy.projectTask[i],amount:bdy.amount[i],amt:bdy.amount[i],arrival_Station:bdy.arrival_Station[i],departure_Station:bdy.departure_Station[i],imgpath:bdy.imgpath[i]});
             console.log('validaton result '+JSON.stringify(Result.error));
                   if(Result.error)
                   {
                     console.log('fd'+Result.error);
+                    lstAirRailBus = [];
                      response.send(Result.error.details[0].context.label);
+                     return ;
                  }
   
                  else
@@ -482,7 +481,7 @@ router.post('/airRailBusCharges',verify, (request, response) => {
                    let airRailBusSingleRecordValues = [];
                    airRailBusSingleRecordValues.push(bodyResult.arrival_Date[i]);
                    airRailBusSingleRecordValues.push(bodyResult.departure_Date[i]);
-                    airRailBusSingleRecordValues.push(bodyResult.projectTask[i]);               
+                   airRailBusSingleRecordValues.push(bodyResult.projectTask[i]);
                    airRailBusSingleRecordValues.push(bodyResult.arrival_Station[i]);
                    airRailBusSingleRecordValues.push(bodyResult.departure_Station[i]);
                    airRailBusSingleRecordValues.push(bodyResult.amount[i]);
@@ -494,32 +493,18 @@ router.post('/airRailBusCharges',verify, (request, response) => {
        }
         else
         {
-           
-              const schema = joi.object({
-                arrival_Dted:joi.date().required().label('Please enter Arrival Date'),
-                arrival_Dt:joi.date().max('now').label('Arrival Date must be less than or equals to Today '),
-                departure_Dated:joi.date().required().label('Please enter Departure Date'),
-                departure_Date:joi.date().max('now').label('Departure Date must be less than or equals to Today '),
-                arrival_Date:joi.date().max(joi.ref('departure_Dated')).label('Departure date should be greater than or equal to Arrival date.'),
-                projectTask:joi.string().required().label('Please select Activity Code '),
-                arrival_Station:joi.string().min(3).required().label(' Please select Arrival Station.'),
-                departure_Station:joi.string().min(3).required().label('Please select Departure Station'),
-                amount:joi.number().required().label('Please enter Amount'),
-                amt:joi.number().min(0).label('Amount cannot be negative.'),
-                imgpath:joi.string().invalid('demo').required().label('Please Upload File/Attachment'),
-            })
+         
             let Result=schema.validate({projectTask:bdy.projectTask,arrival_Dted:bdy.arrival_Date,arrival_Dt:bdy.arrival_Date,arrival_Date:bdy.arrival_Date,departure_Dated:bdy.departure_Date,departure_Date:bdy.departure_Date,amount:bdy.amount,amt:bdy.amount,arrival_Station:bdy.arrival_Station,departure_Station:bdy.departure_Station,imgpath:bdy.imgpath});
             console.log('validaton result '+JSON.stringify(Result.error));
             if(Result.error)
             {
                 console.log('fd'+Result.error)
                 response.send(Result.error.details[0].context.label);
+                return ;
             } 
             else
             {    
-              numberOfRows = 1;
-              for(let i=0; i<numberOfRows ;i++)
-              {  
+              console.log('Inside 516 line else');  
               let airRailBusSingleRecordValues = [];
               parentTourBillClaimId = bodyResult.parentTourBillId;
               airRailBusSingleRecordValues.push(bodyResult.arrival_Date);
@@ -531,35 +516,26 @@ router.post('/airRailBusCharges',verify, (request, response) => {
               airRailBusSingleRecordValues.push(bodyResult.imgpath);
               airRailBusSingleRecordValues.push(bodyResult.parentTourBillId);
               lstAirRailBus.push(airRailBusSingleRecordValues);
-  
-            }
-     
             }
         }
         console.log('lstAirRailBus Final Result  '+JSON.stringify(lstAirRailBus));
-
-        if(numberOfRows == lstAirRailBus.length){
-          console.log('Inside AirRailBus Qwery');
-          
-        let airRailBusInsertQuery = format('INSERT INTO salesforce.Air_Rail_Bus_Fare__c (Arrival_Date__c, Departure_Date__c,Activity_Code_Project__c,Arrival_Station__c,Departure_Station__c,Amount__c,heroku_image_url__c,Tour_Bill_Claim__c) VALUES %L returning id', lstAirRailBus);
+        console.log(' List size on line no 526 : '+lstAirRailBus.length);
+        if(lstAirRailBus.length > 0){
+          let airRailBusInsertQuery = format('INSERT INTO salesforce.Air_Rail_Bus_Fare__c (Arrival_Date__c, Departure_Date__c,Activity_Code_Project__c,Arrival_Station__c,Departure_Station__c,Amount__c,heroku_image_url__c,Tour_Bill_Claim__c) VALUES %L returning id', lstAirRailBus);
     
-        pool.query(airRailBusInsertQuery)
-        .then((airRailBusQueryResult) => {
-                console.log('airRailBusQueryResult  '+JSON.stringify(airRailBusQueryResult.rows));
-              response.send('AirRailBus Form Saved Successfully !');
-              //  request.flash('success_msg', 'Air Rail Bus Created Successfully');
-             //   response.redirect('/expense/tourBillClaim/getAirBusListView?tourBillClaimId='+parentTourBillClaimId);
-        })
-        .catch((airRailBusQueryError) => {
-                console.log('airRailBusQueryError  '+airRailBusQueryError.stack);
-                response.send('Error Occured While Saving !');
-        })
-
+          pool.query(airRailBusInsertQuery)
+          .then((airRailBusQueryResult) => {
+                  console.log('airRailBusQueryResult  '+JSON.stringify(airRailBusQueryResult.rows));
+                response.send('AirRailBus Form Saved Successfully !');
+                //  request.flash('success_msg', 'Air Rail Bus Created Successfully');
+               //   response.redirect('/expense/tourBillClaim/getAirBusListView?tourBillClaimId='+parentTourBillClaimId);
+          })
+          .catch((airRailBusQueryError) => {
+                  console.log('airRailBusQueryError  '+airRailBusQueryError.stack);
+                  response.send('Error Occured While Saving !');
+          })
         }
-
-
-  
-
+    
       }  
 
     })
@@ -599,12 +575,13 @@ router.post('/airRailBusCharges',verify, (request, response) => {
 /*************************************End Air Rail Bus ******************************************************************* */
 
 /*************************************Start  tourBillConveyanceCharges ******************************************************************* */
-router.get('/conveyanceCharges/:parentTourBillId',verify, (request, response) => {
+router.get('/conveyanceCharges/:parentTourBillId&:isDisabled',verify, (request, response) => {
 
     let objUser=request.user;
     let parentTourBillId = request.params.parentTourBillId;
     console.log('conveyanceCharges parentTourBillId  : '+request.params.parentTourBillId);
-
+    let isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
     var conveyanceChargesQuery = 'SELECT sfid, Name, Date__c, Amount__c, Place__c,'+ 
                           'Remarks__c, Tour_Bill_Claim__c '+
                           'FROM salesforce.Conveyance_Charges__c WHERE Tour_Bill_Claim__c = $1';
@@ -617,7 +594,7 @@ router.get('/conveyanceCharges/:parentTourBillId',verify, (request, response) =>
         console.log('conveyanceChargesQueryError '+conveyanceChargesQueryError.stack);
     })
 
-    response.render('./expenses/tourBillClaims/tourBillConveyanceCharges',{objUser, parentTourBillId :parentTourBillId});
+    response.render('./expenses/tourBillClaims/tourBillConveyanceCharges',{objUser,isDisabled, parentTourBillId :parentTourBillId});
 });
 
 router.post('/conveyanceCharges',verify, (request, response) => {
@@ -626,7 +603,6 @@ router.post('/conveyanceCharges',verify, (request, response) => {
   console.log('conveyanceCharges bodyResult  : '+JSON.stringify(bodyResult));
   console.log('typeof(request.body.date)   : '+typeof(request.body.date));
   let parentTourBillId = '';
-  let flag = 'false';
  // console.log('parentTourBillId conveyanceCharge '+parentTourBillId);
 
   if(typeof(request.body.parentTourBillId)!='object'){
@@ -649,18 +625,11 @@ router.post('/conveyanceCharges',verify, (request, response) => {
     let expenseId =tourBillQueryResult.rows[0].expense__c;
     console.log('expense ID for Validation  = '+expenseId);
     pool.
-    query('Select sfid,name,Approval_Status__c,Project_Manager_Status__c,Accounts_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId ])
+    query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId ])
     .then((ExpenseQuerryResult)=>{
       console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
-      if(ExpenseQuerryResult.rows[0].approval_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Rejected')
-      {
-        console.log('Flag  = > '+flag);
-        flag='true';
-        console.log('Flag  = > '+flag);
-      }
-      if((ExpenseQuerryResult.rows[0].approval_status__c == 'Pending' || ExpenseQuerryResult.rows[0].approval_status__c == 'Approved' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Pending' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Approved' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Pending' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Approved') && flag == 'false')
-      {
-         console.log('sddjs');
+      if(ExpenseQuerryResult.rows[0].approval_status__c=='Approved' || ExpenseQuerryResult.rows[0].approval_status__c=='Pending'){
+        console.log('sddjs');
         response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
       }
       else{
@@ -776,14 +745,15 @@ router.post('/conveyanceCharges',verify, (request, response) => {
 
 });
 
- router.get('/conveyanceChargesListView',verify,(request,response)=>{
+ router.get('/conveyanceChargesListView/:parentTourBillId&:isDisabled',verify,(request,response)=>{
     let objUser = request.user;
     console.log('objUser  : '+JSON.stringify(objUser));
-    let tourbillId = request.query.tourBillClaimId;
+    let tourbillId = request.params.parentTourBillId;
   
     console.log('getConveyanceView tourbillId:'+tourbillId);
-  
-    response.render('./expenses/tourBillClaims/ConveyanceView', {objUser, tourbillId});
+    isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
+    response.render('./expenses/tourBillClaims/ConveyanceView', {objUser,isDisabled, tourbillId});
   })
   
   router.get('/getConveyanceDetalList',verify,(request,response)=>{
@@ -815,8 +785,15 @@ router.post('/conveyanceCharges',verify, (request, response) => {
           obj.createDdate = strDate;
           obj.dated=strDate3;
        //   obj.editAction = '<button href="#" class="btn btn-primary editConveyance" id="'+eachRecord.sfid+'" >Edit</button>'
-         obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" id="'+eachRecord.sfid+'" >Delete</button>'
-
+        //  obj.editAction = '<button href="#" class="btn btn-primary editAirRailBus" id="'+eachRecord.sfid+'" >Edit</button>'
+        if(isDisabled == 'true')
+        {
+        console.log('++Inside if check ++ '+isDisabled); 
+       obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" disabled = "true" id="'+eachRecord.sfid+'" >Delete</button>'
+      } else{
+        console.log('++Inside else check ++ '+isDisabled);
+        obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" id="'+eachRecord.sfid+'" >Delete</button>'
+      }
              i= i+1;
           modifiedAirBuslList.push(obj);
         })
@@ -920,12 +897,13 @@ router.post('/conveyanceCharges',verify, (request, response) => {
 
 /************************************* Start boardingLodgingCharges ******************************************************************* */
 
-router.get('/boardingLodgingCharges/:parentTourBillId', verify, (request, response) => {
+router.get('/boardingLodgingCharges/:parentTourBillId&:isDisabled', verify, (request, response) => {
 
     let objUser =request.user;
     let parentTourBillId = request.params.parentTourBillId;
-    console.log(' boardingLodgingCharges parentTourBillId  : '+request.params.parentTourBillId);
-
+    console.log(' boardingLodgingCharges parentTourBillId  : '+parentTourBillId);
+    let isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
     var boardingLodgingChargesQuery = 'SELECT sfid, Name, Tour_Bill_Claim__c, Stay_Option__c, Place_Journey__c,'+ 
                           'Correspondence_City__c,   Own_Stay_Amount__c , From__c, To__c,'+
                           'No_of_Days__c, Total_time__c, Actual_Amount_for_boarding_and_lodging__c, Amount_for_boarding_and_lodging__c,'+
@@ -940,12 +918,12 @@ router.get('/boardingLodgingCharges/:parentTourBillId', verify, (request, respon
        // console.log('querryResuklt '+JSON.stringify(queryResult.rows));
         var city=JSON.stringify(queryResult.rows);
         console.log(city[0]);
-        response.render('./expenses/tourBillClaims/boardingLodgingCharges',{objUser,city, parentTourBillId :parentTourBillId});
+        response.render('./expenses/tourBillClaims/boardingLodgingCharges',{objUser,isDisabled,city, parentTourBillId :parentTourBillId});
     }).catch((error)=>{console.log(Json.stringify(error.stack))})
     })
     .catch((boardingLodgingChargesQueryError) => {
         console.log('boardingLodgingChargesQueryError '+boardingLodgingChargesQueryError.stack);
-        response.render('./expenses/tourBillClaims/boardingLodgingCharges',{objUser,city :'', parentTourBillId :parentTourBillId});
+        response.render('./expenses/tourBillClaims/boardingLodgingCharges',{objUser,isDisabled,city :'', parentTourBillId :parentTourBillId});
     })
 });
 
@@ -984,25 +962,16 @@ var startTime,endTime;
 var arrStartTime = [], arrEndTime = [];
 let parentTourBillId = request.body.parentTourBillId;
 let parentTourBillIdid ='';
-let flag = 'false';
 console.log('body Boarding Charges '+JSON.stringify(request.body));
-let actualrow =0;
 
 if(typeof(request.body.parentTourBillId)!='object'){
   parentTourBillIdid =request.body.parentTourBillId;
   console.log('parentTourBillIdid '+parentTourBillIdid);
-
-  actualrow=1;
-
-  console.log('parentTourBillIdid '+parentTourBillIdid);
-
 }
 else{
   parentTourBillIdid = request.body.parentTourBillId[0];
  console.log('parentTourBillId  object '+parentTourBillIdid);
- actualrow=request.body.parentTourBillId.length;
 }
-console.log('actual Rows '+actualrow);
 
 console.log('typeof(request.body.date)   : '+typeof(request.body.stayOption));
 const {stayOption,projectTask,placeJourney,tier3City,fromDate ,fromTime,toDate,toTime,totalOwnStay,totalAllowances,dailyAllowances, amtForBL,actualAMTForBL,policyamtForBL, ownStayAmount,activity_code,imgpath} =request.body;
@@ -1029,24 +998,22 @@ pool
   .then((tourBillQueryResult)=>{
     console.log('tourBillQueryResult => '+JSON.stringify(tourBillQueryResult.rows));
     let expenseId =tourBillQueryResult.rows[0].expense__c;
-    console.log('expense ID for Validation  = '+expenseId);
+    console.log('--- 1001 tourBillClaim.js expense ID for Validation: ' + expenseId);
 pool.
-    query('Select sfid,name,Approval_Status__c,project_manager_status__c ,accounts_status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId ])
+    query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId ])
     .then((ExpenseQuerryResult)=>{
       console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
-      if(ExpenseQuerryResult.rows[0].approval_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Rejected')
-      {
-        console.log('Flag  = > '+flag);
-        flag='true';
-        console.log('Flag  = > '+flag);
-      }
-      if((ExpenseQuerryResult.rows[0].approval_status__c == 'Pending' || ExpenseQuerryResult.rows[0].approval_status__c == 'Approved' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Pending' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Approved' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Pending' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Approved') && flag == 'false')
-      {
-          console.log('sddjs');
+      if(ExpenseQuerryResult.rows[0].approval_status__c=='Approved' || ExpenseQuerryResult.rows[0].approval_status__c=='Pending'){
+        console.log('sddjs');
         response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
       }
       else{
         let numberOfRows ;  var lstBoarding = [] , parentTourBillTemp ='';
+        console.log('--- 1012 tourBillClaim.js JSON.stringify(request.body): ' + JSON.stringify(request.body));
+        console.log('--- 1013 tourBillClaim.js typeof(request.body.stayOption): ' + typeof(request.body.stayOption));
+        console.log('--- 1014 tourBillClaim.js JSON.stringify(request.body.stayOption): ' + JSON.stringify(request.body.stayOption));
+
+        //======================= This will run for list of records =======================
         if(typeof(request.body.stayOption) == 'object')
         {
            numberOfRows = request.body.stayOption.length;
@@ -1059,7 +1026,6 @@ pool.
             {
                schema =joi.object({
                 stayOption:joi.string().required().label('Please select Stay Option'),
-             
               })
               result=schema.validate({stayOption:stayOption[i]});
               }    
@@ -1074,7 +1040,7 @@ pool.
                fromTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select FROM(Departure Time from Residence) Time'),
                toDated:joi.date().required().label('Please select TO(Arrival Time to Residence)'),
                toDate:joi.date().max('now').required().label('TO(Arrival Time to Residence must be less than or equals to Today'),
-               fromDate:joi.date().required().less(joi.ref('toDate')).label('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)'),
+               fromDate:joi.date().required().less(joi.ref('toDate')).label('WITH JOI 1043: From(Departure Time from Residence) must be less than To (Arrival Time to Residence)'),
                toTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select TO (Arrival Time to Residence)Time'),
                actualAMTForBL:joi.number().required().label('Please enter Actual Boarding lodging Amount'),
                amt:joi.number().min(0).label('Actual Boarding lodging Amount cannot be negative.'),
@@ -1085,7 +1051,6 @@ pool.
             }
             else if(stayOption[i] == 'Own Stay')
             {
-    
                schema =joi.object({
              //   stayOption:joi.string().required().label('Please Choose Stay Option'),
              projectTask:joi.string().required().label('Please select Activity Code.'),
@@ -1095,111 +1060,222 @@ pool.
               fromTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select FROM(Departure Time from Residence) Time'),
               toDated:joi.date().required().label('Please select TO(Arrival Time to Residence)'),
               toDate:joi.date().max('now').required().label('TO(Arrival Time to Residence must be less than or equals to Today'),
-              fromDate:joi.date().required().less(joi.ref('toDate')).label('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)'),
+            //  fromDate:joi.date().required().less(joi.ref('toDate')).label('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)'),
               toTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select TO (Arrival Time to Residence)Time'),
                // imgpath:joi.string().invalid('demo').label('Please Upload File/Attachments').required(),
               })
     
-              result=schema.validate({projectTask:projectTask[i],fromDated:fromDate[i],fromDat:fromDate[i],fromTimes:fromTime[i],placeJourney:placeJourney[i], fromDate:fromDate[i],toDated:toDate[i],toDate:toDate[i],toTimes:toTime[i]});
+              result=schema.validate({projectTask:projectTask[i],fromDated:fromDate[i],fromDat:fromDate[i],fromTimes:fromTime[i],placeJourney:placeJourney[i],toDated:toDate[i],toDate:toDate[i],toTimes:toTime[i]});
             }
            
           //  result=schema.validate({stayOption:stayOption[i],projectTask:projectTask[i],placeJourney:placeJourney[i], toDate:toDate[i],fromDate:fromDate[i],actualAMTForBL:actualAMTForBL[i],imgpath:imgpath[i]});
-            console.log('Validations'+JSON.stringify(result));
+            console.log('--- 1073 Validations: '+JSON.stringify(result));
             if(result.error)
             {
               console.log('fd'+result.error)
               response.send(result.error.details[0].context.label);
             }
-            else
-            {
-            var lstcharges=[];
-                lstcharges.push(stayOption[i]);
-                console.log('.....1 =>'+ lstcharges);
-                lstcharges.push(placeJourney[i]);
-                lstcharges.push(tier3City[i]);
-                lstcharges.push(projectTask[i]);
-                console.log('.....2 =>'+ lstcharges);
-              
-             /*   let fromDateTime = fromDate[i]+'T'+fromTime[i]+':00';
-                lstcharges.push(fromDateTime[i]);      
-                let toDateTime = toDate[i]+'T'+toTime[i]+':00';
-                lstcharges.push(toDateTime[i]);
-                
-    */
+            else{
+              if(fromDate[i] === toDate[i])
+              {
                 var starthours = Number(fromTime[i].match(/^(\d+)/)[1]);
                 var startminutes = Number(fromTime[i].match(/:(\d+)/)[1]);
                 var endhours = Number(toTime[i].match(/^(\d+)/)[1]);
                 var endminutes = Number(toTime[i].match(/:(\d+)/)[1]);
-                console.log('starthours '+starthours);
-                console.log('startminutes '+startminutes);
-                console.log('endhours '+endhours);
-                console.log('endminutes '+endminutes);
+                console.log('line 1092 starthours '+starthours);
+                console.log('line 1093 startminutes '+startminutes);
+                console.log('line 1094 endhours '+endhours);
+                console.log('line 1095 endminutes '+endminutes);
                 
-                arrStartTime[i] = (starthours > 12) ? (starthours-12 + ':' + startminutes + ':00'+' PM') : (starthours + ':' + startminutes + ':00' +' AM');
-                arrEndTime[i] = (endhours > 12) ? (endhours-12 + ':' + endminutes + ':00'+' PM') : (endhours + ':' + endminutes + ':00'+' AM');
-    
-                console.log('startTime '+arrStartTime[i]);
-                console.log('endTime '+arrEndTime[i]);
-    
-    
-    
-    
-                let fromDateTime = fromDate[i]+' '+fromTime[i]+':00';
-                console.log('fromDateTime  : '+fromDateTime);
-    
-                let strDate = new Date(fromDateTime);
-                console.log('strDate  : '+strDate);
-    
-                strDate.setHours(strDate.getHours() + 1);
-                strDate.setMinutes(strDate.getMinutes() - 60);
-                let strartDate = strDate.toUTCString();
-                console.log('fromDateTime  : '+fromDateTime);
-                console.log('strartDate  : '+strartDate);
-    
-                lstcharges.push(strartDate);   
-    
-                let toDateTime = toDate[i]+' '+toTime[i]+':00';
-                console.log('toDateTime  : '+toDateTime);
-    
-                let endDate = new Date(toDateTime);
-                console.log('endDate  : '+endDate);
-    
-                endDate.setHours(endDate.getHours() + 1);
-                endDate.setMinutes(endDate.getMinutes() - 60);
-                let enDate = endDate.toUTCString();
-    
-                console.log('endDate  : '+endDate);
-                console.log('enDate  : '+enDate);
-                lstcharges.push(enDate);
+                       
+                        if(starthours > endhours){
+                          console.log('fd line 1099')
+                        response.send('WITHOUT JOI 1093: From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
+                        }
+                        else if(starthours === endhours){
+                          if(startminutes >= endminutes){
+                            console.log('fd line 1104')
+                          response.send('WITHOUT JOI 1098: From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
+                          }
+                        }
+              else
+              {
+              var lstcharges=[];
+                  lstcharges.push(stayOption[i]);
+                  console.log('.....1106 lstcharges => '+ lstcharges);
+                  lstcharges.push(placeJourney[i]);
+                  lstcharges.push(tier3City[i]);
+                  lstcharges.push(projectTask[i]);
+                  console.log('.....1110 lstcharges => ' + lstcharges);
                 
-    
-                lstcharges.push(totalOwnStay[i]); 
-                lstcharges.push(totalAllowances[i]);  
+               /*   let fromDateTime = fromDate[i]+'T'+fromTime[i]+':00';
+                  lstcharges.push(fromDateTime[i]);      
+                  let toDateTime = toDate[i]+'T'+toTime[i]+':00';
+                  lstcharges.push(toDateTime[i]);
+                  
+      */
+                  var starthours = Number(fromTime[i].match(/^(\d+)/)[1]);
+                  var startminutes = Number(fromTime[i].match(/:(\d+)/)[1]);
+                  var endhours = Number(toTime[i].match(/^(\d+)/)[1]);
+                  var endminutes = Number(toTime[i].match(/:(\d+)/)[1]);
+                  console.log('starthours '+starthours);
+                  console.log('startminutes '+startminutes);
+                  console.log('endhours '+endhours);
+                  console.log('endminutes '+endminutes);
+                  
+                  arrStartTime[i] = (starthours > 12) ? (starthours-12 + ':' + startminutes + ':00'+' PM') : (starthours + ':' + startminutes + ':00' +' AM');
+                  arrEndTime[i] = (endhours > 12) ? (endhours-12 + ':' + endminutes + ':00'+' PM') : (endhours + ':' + endminutes + ':00'+' AM');
+      
+                  console.log('startTime '+arrStartTime[i]);
+                  console.log('endTime '+arrEndTime[i]);
+      
+      
+      
+      
+                  let fromDateTime = fromDate[i]+' '+fromTime[i]+':00';
+                  console.log('fromDateTime  : '+fromDateTime);
+      
+                  let strDate = new Date(fromDateTime);
+                  console.log('strDate  : '+strDate);
+      
+                  strDate.setHours(strDate.getHours() + 1);
+                  strDate.setMinutes(strDate.getMinutes() - 60);
+                  let strartDate = strDate.toUTCString();
+                  console.log('fromDateTime  : '+fromDateTime);
+                  console.log('strartDate  : '+strartDate);
+      
+                  lstcharges.push(strartDate);   
+      
+                  let toDateTime = toDate[i]+' '+toTime[i]+':00';
+                  console.log('toDateTime  : '+toDateTime);
+      
+                  let endDate = new Date(toDateTime);
+                  console.log('endDate  : '+endDate);
+      
+                  endDate.setHours(endDate.getHours() + 1);
+                  endDate.setMinutes(endDate.getMinutes() - 60);
+                  let enDate = endDate.toUTCString();
+      
+                  console.log('endDate  : '+endDate);
+                  console.log('enDate  : '+enDate);
+                  lstcharges.push(enDate);
+                  
+      
+                  lstcharges.push(totalOwnStay[i]); 
+                  lstcharges.push(totalAllowances[i]);  
+                 
+                  lstcharges.push(dailyAllowances[i]);
+      
+                  lstcharges.push(amtForBL[i]);
+                  lstcharges.push(actualAMTForBL[i]);
+                  
+                  lstcharges.push(ownStayAmount[i]);
+      
+                  console.log('.....1175 lstcharges => '+ lstcharges);
+                  if(typeof(imgpath[i] != 'undefined'))
+                  lstcharges.push(imgpath[i]);
+                  else
+                  lstcharges.push('');
+                  lstcharges.push(parentTourBillId[i]);
+                 
                
-                lstcharges.push(dailyAllowances[i]);
-    
-                lstcharges.push(amtForBL[i]);
-                lstcharges.push(actualAMTForBL[i]);
-                
-                lstcharges.push(ownStayAmount[i]);
-    
-                console.log('.....4 =>'+ lstcharges);
-                if(typeof(imgpath[i] != 'undefined'))
-                lstcharges.push(imgpath[i]);
-                else
-                lstcharges.push('');
-                lstcharges.push(parentTourBillId[i]);
-               
-             
-               console.log('.. '+lstcharges);
-    
-               parentTourBillTemp = parentTourBillId[i];
-               lstBoarding.push(lstcharges);
+                 console.log('.. '+lstcharges);
+      
+                 parentTourBillTemp = parentTourBillId[i];
+                 lstBoarding.push(lstcharges);
+              }
             }
-          }console.log(' jsdkjasdkjad'+lstBoarding);
-        }
+            else if(fromDate[i] > toDate[i]) {
+              response.send('WITHOUT JOI 1190: From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
+              return;
+            }
+            else{
+              var lstcharges=[];
+              lstcharges.push(stayOption[i]);
+              console.log('.....1192 => '+ lstcharges);
+              lstcharges.push(placeJourney[i]);
+              lstcharges.push(tier3City[i]);
+              lstcharges.push(projectTask[i]);
+              console.log('.....1196 lstcharges => '+ lstcharges);
+            
+           /*   let fromDateTime = fromDate[i]+'T'+fromTime[i]+':00';
+              lstcharges.push(fromDateTime[i]);      
+              let toDateTime = toDate[i]+'T'+toTime[i]+':00';
+              lstcharges.push(toDateTime[i]);
+              
+  */
+              var starthours = Number(fromTime[i].match(/^(\d+)/)[1]);
+              var startminutes = Number(fromTime[i].match(/:(\d+)/)[1]);
+              var endhours = Number(toTime[i].match(/^(\d+)/)[1]);
+              var endminutes = Number(toTime[i].match(/:(\d+)/)[1]);
+              console.log('starthours '+starthours);
+              console.log('startminutes '+startminutes);
+              console.log('endhours '+endhours);
+              console.log('endminutes '+endminutes);
+              
+              arrStartTime[i] = (starthours > 12) ? (starthours-12 + ':' + startminutes + ':00'+' PM') : (starthours + ':' + startminutes + ':00' +' AM');
+              arrEndTime[i] = (endhours > 12) ? (endhours-12 + ':' + endminutes + ':00'+' PM') : (endhours + ':' + endminutes + ':00'+' AM');
+  
+              console.log('startTime '+arrStartTime[i]);
+              console.log('endTime '+arrEndTime[i]);
+  
+              let fromDateTime = fromDate[i]+' '+fromTime[i]+':00';
+              console.log('fromDateTime  : '+fromDateTime);
+  
+              let strDate = new Date(fromDateTime);
+              console.log('strDate  : '+strDate);
+  
+              strDate.setHours(strDate.getHours() + 1);
+              strDate.setMinutes(strDate.getMinutes() - 60);
+              let strartDate = strDate.toUTCString();
+              console.log('fromDateTime  : '+fromDateTime);
+              console.log('strartDate  : '+strartDate);
+  
+              lstcharges.push(strartDate);   
+  
+              let toDateTime = toDate[i]+' '+toTime[i]+':00';
+              console.log('toDateTime  : '+toDateTime);
+  
+              let endDate = new Date(toDateTime);
+              console.log('endDate  : '+endDate);
+  
+              endDate.setHours(endDate.getHours() + 1);
+              endDate.setMinutes(endDate.getMinutes() - 60);
+              let enDate = endDate.toUTCString();
+  
+              console.log('endDate  : '+endDate);
+              console.log('enDate  : '+enDate);
+              lstcharges.push(enDate);
+  
+              lstcharges.push(totalOwnStay[i]); 
+              lstcharges.push(totalAllowances[i]);  
+             
+              lstcharges.push(dailyAllowances[i]);
+  
+              lstcharges.push(amtForBL[i]);
+              lstcharges.push(actualAMTForBL[i]);
+              
+              lstcharges.push(ownStayAmount[i]);
+  
+              console.log('.....1261 lstcharges => '+ lstcharges);
+              if(typeof(imgpath[i] != 'undefined'))
+              lstcharges.push(imgpath[i]);
+              else
+              lstcharges.push('');
+              lstcharges.push(parentTourBillId[i]);
+           
+             console.log('.. 1269 lstcharges: '+lstcharges);
+  
+             parentTourBillTemp = parentTourBillId[i];
+             lstBoarding.push(lstcharges);
+            }
+            }
+         
+        }console.log(' jsdkjasdkjad'+lstBoarding);
+        
+      }
         else{
-    
+          //======================= This will run for single record =======================
           let schema, result;
     
           if(stayOption == null || stayOption == '' )
@@ -1242,105 +1318,206 @@ pool.
               fromTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select FROM(Departure Time from Residence) Time'),
               toDated:joi.date().required().label('Please select TO(Arrival Time to Residence)'),
               toDate:joi.date().max('now').required().label('TO(Arrival Time to Residence must be less than or equals to Today'),
-              fromDate:joi.date().required().less(joi.ref('toDate')).label('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)'),
+              //fromDate:joi.date().required().less(joi.ref('toDate')).label('JOI LIBRARY: From(Departure Time from Residence) must be less than To (Arrival Time to Residence)'),
               toTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select TO (Arrival Time to Residence)Time'),
               
             })
-             result=schema.validate({projectTask:projectTask,placeJourney:placeJourney,fromDated:fromDate,fromDat:fromDate,fromTimes:fromTime,toDated:toDate,fromDate:fromDate,toDate:toDate,toTimes:toTime});
-    
+             result=schema.validate({projectTask:projectTask,placeJourney:placeJourney,fromDated:fromDate,fromDat:fromDate,fromTimes:fromTime,toDated:toDate,toDate:toDate,toTimes:toTime});
           }
           
          // let result=schema.validate({stayOption,projectTask,placeJourney, toDate,fromDate,actualAMTForBL});
-          console.log('Validations'+JSON.stringify(result));
+          console.log('--- 1332 Validations: ' + JSON.stringify(result));
           if(result.error)
           {
-            console.log('fd'+result.error)
-                  response.send(result.error.details[0].context.label);
+            console.log('---- 1335 tourBillClaim.js result.error: ' + result.error)
+            response.send(result.error.details[0].context.label);
+            return;
           }
           else{
-          var lstcharges=[];
-          //   lstcharges.empty();
-                    lstcharges.push(stayOption);
-                    lstcharges.push(placeJourney);
-                    lstcharges.push(tier3City);
-                    lstcharges.push(projectTask);
-    
-    
-                    var starthours = Number(fromTime.match(/^(\d+)/)[1]);
-                    var startminutes = Number(fromTime.match(/:(\d+)/)[1]);
-                    var endhours = Number(toTime.match(/^(\d+)/)[1]);
-                    var endminutes = Number(toTime.match(/:(\d+)/)[1]);
-                    console.log('starthours '+starthours);
-                    console.log('startminutes '+startminutes);
-                    console.log('endhours '+endhours);
-                    console.log('endminutes '+endminutes);
+            if(fromDate === toDate)
+            {
+                      var starthours = Number(fromTime.match(/^(\d+)/)[1]);
+                      var startminutes = Number(fromTime.match(/:(\d+)/)[1]);
+                      var endhours = Number(toTime.match(/^(\d+)/)[1]);
+                      var endminutes = Number(toTime.match(/:(\d+)/)[1]);
+                      console.log('--- 1345 tourBillClaim.js starthours: '+starthours);
+                      console.log('--- 1346 tourBillClaim.js startminutes: '+startminutes);
+                      console.log('--- 1347 tourBillClaim.js endhours: '+endhours);
+                      console.log('--- 1348 tourBillClaim.js endminutes: '+endminutes);
+                     
+                      if(starthours > endhours){
+                        console.log('---- 1351 tourBillClaim.js (starthours > endhours): ' + (starthours > endhours));
+                        response.send('WITHOUT JOI 1352: From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
+                      }
+                      else if(starthours === endhours){
+                        if(startminutes >= startminutes){
+                          console.log('---- 1356 tourBillClaim.js (startminutes >= startminutes): ' + (startminutes >= startminutes));
+                          response.send('WITHOUT JOI 1357: From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
+                        }
+                      }
+                    //  startTime = (starthours > 12) ? (starthours-12 + ':' + startminutes + ':00'+' PM') : (starthours + ':' + startminutes + ':00' +' AM');
+                   //   endTime = (endhours > 12) ? (endhours-12 + ':' + endminutes + ':00'+' PM') : (endhours + ':' + endminutes + ':00'+' AM');
+                   else{
+                       
+                       
+                    var lstcharges=[];
+                    //   lstcharges.empty();
+                              lstcharges.push(stayOption);
+                              lstcharges.push(placeJourney);
+                              lstcharges.push(tier3City);
+                              lstcharges.push(projectTask);
+              
+              
+                              var starthours = Number(fromTime.match(/^(\d+)/)[1]);
+                              var startminutes = Number(fromTime.match(/:(\d+)/)[1]);
+                              var endhours = Number(toTime.match(/^(\d+)/)[1]);
+                              var endminutes = Number(toTime.match(/:(\d+)/)[1]);
+                              console.log('starthours '+starthours);
+                              console.log('startminutes '+startminutes);
+                              console.log('endhours '+endhours);
+                              console.log('endminutes '+endminutes);
+                             
+                              
+                              startTime = (starthours > 12) ? (starthours-12 + ':' + startminutes + ':00'+' PM') : (starthours + ':' + startminutes + ':00' +' AM');
+                              endTime = (endhours > 12) ? (endhours-12 + ':' + endminutes + ':00'+' PM') : (endhours + ':' + endminutes + ':00'+' AM');
+                  
+                              console.log('startTime '+startTime);
+                              console.log('endTime '+endTime);
+                  
+                             
+                              let fromDateTime = fromDate+' '+startTime;
+              
+                              let strDate = new Date(fromDateTime);
+                              console.log('strDate  : '+strDate);
+              
+                              strDate.setHours(strDate.getHours() + 1);
+                              strDate.setMinutes(strDate.getMinutes() - 60);
+                              let strartDate = strDate.toUTCString();
+                              console.log('fromDateTime  : '+fromDateTime);
+                              console.log('strartDate  : '+strartDate);
+                              lstcharges.push(strartDate);     
+              
+                              let toDateTime = toDate+' '+endTime;
+              
+                              let endDate = new Date(toDateTime);
+                              console.log('endDate  : '+endDate);
+              
+                              endDate.setHours(endDate.getHours() + 1);
+                              endDate.setMinutes(endDate.getMinutes() - 60);
+                              let enDate = endDate.toUTCString();
+              
+                              console.log('endDate  : '+endDate);
+                              console.log('enDate  : '+enDate);
+              
+                            
+                              console.log('toDateTime  : '+enDate);
+                              lstcharges.push(enDate);
+              
+                              lstcharges.push(totalOwnStay); 
+                              lstcharges.push(totalAllowances);
+                              lstcharges.push(dailyAllowances);
+                              lstcharges.push(amtForBL);
+              
+                              if(actualAMTForBL != 0)
+                              {
+                                lstcharges.push(actualAMTForBL);
+                              }
+                              else{
+                               var amtForBL1= 0;
+                                lstcharges.push(amtForBL1);
+                              }
+                            
+                              lstcharges.push(ownStayAmount);
+                              lstcharges.push(imgpath);
+                              lstcharges.push(parentTourBillId);
+                              console.log(JSON.stringify(lstcharges));
+                              parentTourBillTemp = parentTourBillId;
+                              lstBoarding.push(lstcharges);
                     
-                    startTime = (starthours > 12) ? (starthours-12 + ':' + startminutes + ':00'+' PM') : (starthours + ':' + startminutes + ':00' +' AM');
-                    endTime = (endhours > 12) ? (endhours-12 + ':' + endminutes + ':00'+' PM') : (endhours + ':' + endminutes + ':00'+' AM');
+                  }
+    
+            }
+            else if(toDate < fromDate) {
+              response.send('WITHOUT JOI 1443: From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
+              return;
+            }
+            else{
+              var lstcharges=[];
+              //   lstcharges.empty();
+                        lstcharges.push(stayOption);
+                        lstcharges.push(placeJourney);
+                        lstcharges.push(tier3City);
+                        lstcharges.push(projectTask);
+                        var starthours = Number(fromTime.match(/^(\d+)/)[1]);
+                        var startminutes = Number(fromTime.match(/:(\d+)/)[1]);
+                        var endhours = Number(toTime.match(/^(\d+)/)[1]);
+                        var endminutes = Number(toTime.match(/:(\d+)/)[1]);
+                        console.log('---- 1453 tourBillClaim.js starthours '+starthours);
+                        console.log('---- 1454 tourBillClaim.js startminutes '+startminutes);
+                        console.log('---- 1455 tourBillClaim.js endhours '+endhours);
+                        console.log('---- 1456 tourBillClaim.js endminutes '+endminutes);
+
+                        startTime = (starthours > 12) ? (starthours-12 + ':' + startminutes + ':00'+' PM') : (starthours + ':' + startminutes + ':00' +' AM');
+                        endTime = (endhours > 12) ? (endhours-12 + ':' + endminutes + ':00'+' PM') : (endhours + ':' + endminutes + ':00'+' AM');
+            
+                        console.log('---- 1461 tourBillClaim.js startTime '+startTime);
+                        console.log('---- 1462 tourBillClaim.js endTime '+endTime);
+                        
+                        let fromDateTime = fromDate+' '+startTime;
         
-                    console.log('startTime '+startTime);
-                    console.log('endTime '+endTime);
+                        let strDate = new Date(fromDateTime);
+                        console.log('---- 1467 tourBillClaim.js strDate  : '+strDate);
         
-                  
-                    let fromDateTime = fromDate+' '+startTime;
-    
-                    let strDate = new Date(fromDateTime);
-                    console.log('strDate  : '+strDate);
-    
-                    strDate.setHours(strDate.getHours() + 1);
-                    strDate.setMinutes(strDate.getMinutes() - 60);
-                    let strartDate = strDate.toUTCString();
-                    console.log('fromDateTime  : '+fromDateTime);
-                    console.log('strartDate  : '+strartDate);
-                    lstcharges.push(strartDate);     
-    
-                    let toDateTime = toDate+' '+endTime;
-    
-                    let endDate = new Date(toDateTime);
-                    console.log('endDate  : '+endDate);
-    
-                    endDate.setHours(endDate.getHours() + 1);
-                    endDate.setMinutes(endDate.getMinutes() - 60);
-                    let enDate = endDate.toUTCString();
-    
-                    console.log('endDate  : '+endDate);
-                    console.log('enDate  : '+enDate);
-    
-                  
-                    console.log('toDateTime  : '+enDate);
-                    lstcharges.push(enDate);
-    
-                    lstcharges.push(totalOwnStay); 
-                    lstcharges.push(totalAllowances);
-                    lstcharges.push(dailyAllowances);
-                    lstcharges.push(amtForBL);
-    
-                    if(actualAMTForBL != 0)
-                    {
-                      lstcharges.push(actualAMTForBL);
-                    }
-                    else{
-                     var amtForBL1= 0;
-                      lstcharges.push(amtForBL1);
-                    }
-                  
-                    lstcharges.push(ownStayAmount);
-                    lstcharges.push(imgpath);
-                    lstcharges.push(parentTourBillId);
-                    console.log(JSON.stringify(lstcharges));
-                    parentTourBillTemp = parentTourBillId;
-                    lstBoarding.push(lstcharges);
+                        strDate.setHours(strDate.getHours() + 1);
+                        strDate.setMinutes(strDate.getMinutes() - 60);
+                        let strartDate = strDate.toUTCString();
+                        console.log('---- 1472 tourBillClaim.js fromDateTime  : '+fromDateTime);
+                        console.log('---- 1473 tourBillClaim.js strartDate  : '+strartDate);
+                        lstcharges.push(strartDate);     
+        
+                        let toDateTime = toDate+' '+endTime;
+        
+                        let endDate = new Date(toDateTime);
+                        console.log('---- 1479 tourBillClaim.js endDate  : '+endDate);
+        
+                        endDate.setHours(endDate.getHours() + 1);
+                        endDate.setMinutes(endDate.getMinutes() - 60);
+                        let enDate = endDate.toUTCString();
+        
+                        console.log('---- 1485 tourBillClaim.js endDate  : '+endDate);
+                        console.log('---- 1486 tourBillClaim.js enDate  : '+enDate);
+                        console.log('---- 1487 tourBillClaim.js toDateTime  : '+enDate);
+
+                        lstcharges.push(enDate);
+                        lstcharges.push(totalOwnStay); 
+                        lstcharges.push(totalAllowances);
+                        lstcharges.push(dailyAllowances);
+                        lstcharges.push(amtForBL);
+        
+                        if(actualAMTForBL != 0)
+                        {
+                          lstcharges.push(actualAMTForBL);
+                        }
+                        else{
+                         var amtForBL1= 0;
+                          lstcharges.push(amtForBL1);
+                        }
+                      
+                        lstcharges.push(ownStayAmount);
+                        lstcharges.push(imgpath);
+                        lstcharges.push(parentTourBillId);
+                        console.log(JSON.stringify(lstcharges));
+                        parentTourBillTemp = parentTourBillId;
+                        lstBoarding.push(lstcharges);
+            }
+            
           }
     }
-       console.log('lstBoarding' +lstBoarding);
-       console.log('lstBoarding length' +lstBoarding.length+' Actual no of Row '+actualrow);
+       console.log('--- 1515 tourBillClaim.js lstBoarding: ' +lstBoarding);
+    
+       // let lodgingboarding = format('INSERT INTO salesforce.Boarding_Lodging__c (, ,,, , ,,,,, 	,,,) VALUES %L returning id',lstBoarding);
+        let lodgingboarding = format('INSERT INTO salesforce.Boarding_Lodging__c (Stay_Option__c, Place_Journey__c,Correspondence_City__c,Activity_Code_Project__c,From__c,To__c,Total_Own_Stay_Amount__c, Total_Allowance__c, Daily_Allowance__c, Amount_for_boarding_and_lodging__c,Actual_Amount_for_boarding_and_lodging__c,Own_Stay_Amount__c,Heroku_Image_URL__c,Tour_Bill_Claim__c) VALUES %L returning id',lstBoarding);
 
-
-
-
-       if(actualrow == lstBoarding.length){
-         console.log('Inside B&L insert Query');
-        let lodgingboarding = format('INSERT INTO salesforce.Boarding_Lodging__c (Stay_Option__c, Place_Journey__c,Correspondence_City__c,Activity_Code_Project__c, From__c, To__c,Total_Own_Stay_Amount__c,Total_Allowance__c,Daily_Allowance__c,Amount_for_boarding_and_lodging__c, Actual_Amount_for_boarding_and_lodging__c	,Own_Stay_Amount__c,Heroku_Image_URL__c,Tour_Bill_Claim__c) VALUES %L returning id',lstBoarding);
         console.log('qyyy '+lodgingboarding);
         pool
         .query(lodgingboarding)
@@ -1352,42 +1529,33 @@ pool.
         .catch((error)=>{
           console.log('Error '+error.stack);
           response.send(error);
+          return;
         })
-
-       }
-      
 
       }  
 
     })
     .catch((Error)=>{
       console.log('Error in Expense validation in TourBill Claim'+JSON.stringify(Error.stack));
+      return;
     })            
 
 })
     .catch((Error)=>{
       console.log('Error in Expense validation in TourBill Claim'+JSON.stringify(Error.stack));
-    })            
-
-
-
-
-
-
-
-
-
-   
+      return;
+    }) 
 });
 
-router.get('/boardingLodgingListView',verify,(request,response)=>{
+router.get('/boardingLodgingListView/:parentTourBillId&:isDisabled',verify,(request,response)=>{
     let objUser = request.user;
     console.log('objUser  : '+JSON.stringify(objUser));
-    let tourbillId = request.query.tourBillClaimId;
+    let tourbillId = request.params.parentTourBillId;
   
     console.log('Boarding/Lodging tourbillId:'+tourbillId);
-  
-    response.render('./expenses/tourBillClaims/boardingLodging', {objUser, tourbillId});
+    isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
+    response.render('./expenses/tourBillClaims/boardingLodging', {objUser,isDisabled, tourbillId});
   
   });
   router.get('/getBoardingLodgingDetalList',verify,(request,response)=>{
@@ -1399,34 +1567,41 @@ router.get('/boardingLodgingListView',verify,(request,response)=>{
     pool
     .query('SELECT sfid, name, Total_Amount__c,From__c,	To__c,Place_Journey__c ,createddate from salesforce.Boarding_Lodging__c WHERE Tour_Bill_Claim__c = $1',[tourbillId])
     .then((BoardingQueryResult)=>{
-      console.log('BoardingQueryResult '+JSON.stringify(BoardingQueryResult.rows));
+      console.log('BoardingQueryResult '+BoardingQueryResult.rows);
       if(BoardingQueryResult.rowCount>0)
       {
             let modifiedAirBuslList = [],i =1; 
             BoardingQueryResult.rows.forEach((eachRecord) => {
-          let obj = {};
-          let createdDate = new Date(eachRecord.createddate);
-          createdDate.setHours(createdDate.getHours() + 5);
-          createdDate.setMinutes(createdDate.getMinutes() + 30);
-          let strDate = createdDate.toLocaleString();
-  
-          let strFrom = new Date(eachRecord.from__c);
-          let strDateFrom = strFrom.toLocaleString();
-          let strto = new Date(eachRecord.to__c);
-          let strDateTo = strto.toLocaleString();
-          obj.sequence = i;
-          obj.place=eachRecord.place_journey__c;
-          obj.name = '<a href="#" class="boardingTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
-          obj.amount = eachRecord.total_amount__c;
-          obj.from=strDateFrom;
-          obj.to=strDateTo;
-          obj.createDdate = strDate;
-          obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" id="'+eachRecord.sfid+'" >Delete</button>'
-      //    obj.editAction = '<button href="#" class="btn btn-primary editBoarding" id="'+eachRecord.sfid+'" >Edit</button>'
-          i= i+1;
-          modifiedAirBuslList.push(obj);
-        })
-        response.send(modifiedAirBuslList); 
+              let obj = {};
+              let createdDate = new Date(eachRecord.createddate);
+              createdDate.setHours(createdDate.getHours() + 5);
+              createdDate.setMinutes(createdDate.getMinutes() + 30);
+              let strDate = createdDate.toLocaleString();
+      
+              let strFrom = new Date(eachRecord.from__c);
+              let strDateFrom = strFrom.toLocaleString();
+              let strto = new Date(eachRecord.to__c);
+              let strDateTo = strto.toLocaleString();
+              obj.sequence = i;
+              obj.place=eachRecord.place_journey__c;
+              obj.name = '<a href="#" class="boardingTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
+              obj.amount = eachRecord.total_amount__c;
+              obj.from=strDateFrom;
+              obj.to=strDateTo;
+              obj.createDdate = strDate;
+              if(isDisabled == 'true')
+              {
+              console.log('++Inside if check ++ '+isDisabled); 
+              obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" disabled = "true" id="'+eachRecord.sfid+'" >Delete</button>'
+              } else{
+              console.log('++Inside else check ++ '+isDisabled);
+              obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" id="'+eachRecord.sfid+'" >Delete</button>'
+              }
+              //    obj.editAction = '<button href="#" class="btn btn-primary editBoarding" id="'+eachRecord.sfid+'" >Edit</button>'
+              i= i+1;
+              modifiedAirBuslList.push(obj);
+          })
+          response.send(modifiedAirBuslList); 
       }
       else{
         response.send([]);
@@ -1542,11 +1717,13 @@ router.get('/boardingLodgingListView',verify,(request,response)=>{
 
 
 /************************************* start telephoneFoodCharges ******************************************************************* */
-router.get('/telephoneFood/:parentTourBillId',verify, (request, response) => {
+router.get('/telephoneFood/:tourbillId&:isDisabled',verify, (request, response) => {
 
     let objUser=request.user;
-    let parentTourBillId = request.params.parentTourBillId;
+    let parentTourBillId = request.params.tourbillId;
     console.log('telephoneFood  parentTourBillId  : '+request.params.parentTourBillId);
+    let isDisabled = request.params.isDisabled;
+    console.log('telephoneFood  isDisabled  : '+request.params.isDisabled);
 
     var telephoneFoodQuery = 'SELECT sfid, Name, Laundry_Expense__c, Fooding_Expense__c, Remarks__c,'+ 
                           'Tour_Bill_Claim__c, Total_Amount__c '+
@@ -1560,7 +1737,7 @@ router.get('/telephoneFood/:parentTourBillId',verify, (request, response) => {
         console.log('telephoneFoodQueryError '+telephoneFoodQueryError.stack);
     })
 
-    response.render('./expenses/tourBillClaims/telephoneFoodCharges',{objUser, parentTourBillId : parentTourBillId});
+    response.render('./expenses/tourBillClaims/telephoneFoodCharges',{objUser,isDisabled, parentTourBillId : parentTourBillId});
 });
 
 
@@ -1569,7 +1746,6 @@ router.get('/telephoneFood/:parentTourBillId',verify, (request, response) => {
     let body = request.body;
       console.log('request.body  :  '+JSON.stringify(body));
       let parentTourBillId ='';
-      let flag ='false';
      
       if(typeof(request.body.parentTourBillId)!='object'){
         parentTourBillId =request.body.parentTourBillId;
@@ -1588,18 +1764,11 @@ router.get('/telephoneFood/:parentTourBillId',verify, (request, response) => {
     let expenseId =tourBillQueryResult.rows[0].expense__c;
     console.log('expense ID for Validation  = '+expenseId);
 pool.
-    query('Select sfid,name,Approval_Status__c,Project_Manager_Status__c,Accounts_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId ])
+    query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId ])
     .then((ExpenseQuerryResult)=>{
       console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
-      if(ExpenseQuerryResult.rows[0].approval_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Rejected')
-      {
-        console.log('Flag  = > '+flag);
-        flag='true';
-        console.log('Flag  = > '+flag);
-      }
-      if((ExpenseQuerryResult.rows[0].approval_status__c == 'Pending' || ExpenseQuerryResult.rows[0].approval_status__c == 'Approved' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Pending' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Approved' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Pending' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Approved') && flag == 'false')
-      {
-         console.log('sddjs');
+      if(ExpenseQuerryResult.rows[0].approval_status__c=='Approved' || ExpenseQuerryResult.rows[0].approval_status__c=='Pending'){
+        console.log('sddjs');
         response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
       }
       else{
@@ -1668,25 +1837,19 @@ pool.
                          }
              }
          }
-         console.log('lstTelephoneFood  '+JSON.stringify(lstTelephoneFood));
-         console.log('lstTelephoneFood  '+JSON.stringify(lstTelephoneFood.length)+'actual No. of Row '+request.body.foodingExpenses.length);
-         if(request.body.foodingExpenses.length == lstTelephoneFood.length) {
-           console.log('Inside Telephone Queryy');
-           
+        console.log('lstTelephoneFood  '+JSON.stringify(lstTelephoneFood));
         let telephoneFoodInsertQuery = format('INSERT INTO salesforce.Telephone_Fooding_Laundry_Expenses__c (Fooding_Expense__c, Laundry_Expense__c, Activity_Code_Project__c,Remarks__c,heroku_image_url__c, Tour_Bill_Claim__c) VALUES %L returning id',lstTelephoneFood);
     
         pool.query(telephoneFoodInsertQuery)
         .then((telephoneFoodInsertQueryResult) => {
             console.log('telephoneFoodInsertQueryResult  '+JSON.stringify(telephoneFoodInsertQueryResult.rows));
-            response.send('Fooding & Laundry Form Saved Successfully !');
+            response.send('Telephone & Food Form Saved Successfully !');
         })
         .catch((telephoneFoodInsertQueryError) => {
             console.log('telephoneFoodInsertQueryError  '+telephoneFoodInsertQueryError.stack);
             response.send('Error Occured !');
         })
 
-
-         }
       }  
 
     })
@@ -1718,13 +1881,15 @@ pool.
   
   
 
-router.get('/telephoneFoodCharge',verify,(request,response)=>{
+router.get('/telephoneFoodCharge/:parentTourBillId&:isDisabled',verify,(request,response)=>{
     let objUser = request.user;
     console.log('objUser  : '+JSON.stringify(objUser));
-    let tourbillId = request.query.tourBillClaimId;
+    let tourbillId = request.params.parentTourBillId;
   
     console.log('telephoneFoodCharge tourbillId:'+tourbillId);
-    response.render('./expenses/tourBillClaims/telephoneFoodChargeView', {objUser,tourbillId});
+    isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
+    response.render('./expenses/tourBillClaims/telephoneFoodChargeView', {objUser,isDisabled,tourbillId});
   });
   
   router.get('/gettelephoneFoodChargeDetalList',verify,(request,response)=>{
@@ -1751,8 +1916,15 @@ router.get('/telephoneFoodCharge',verify,(request,response)=>{
           obj.fooding=eachRecord.fooding_expense__c;
           obj.laundry=eachRecord.laundry_expense__c;
           obj.createDdate = strDate;
+          if(isDisabled == 'true')
+          {
+          console.log('++Inside if check ++ '+isDisabled);
+          obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" disabled = "true" id="'+eachRecord.sfid+'" >Delete</button>'
+          } else{
+          console.log('++Inside else check ++ '+isDisabled);
           obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" id="'+eachRecord.sfid+'" >Delete</button>'
-         // obj.editAction = '<button href="#" class="btn btn-primary editFooding" id="'+eachRecord.sfid+'" >Edit</button>'
+           }
+          // obj.editAction = '<button href="#" class="btn btn-primary editFooding" id="'+eachRecord.sfid+'" >Edit</button>'
              i= i+1;
              modifiedFoodChargeList.push(obj);
         })
@@ -1860,12 +2032,13 @@ router.get('/telephoneFoodCharge',verify,(request,response)=>{
 
 
 /************************************* Start Miscellaneous Charges ******************************************************************* */
-router.get('/miscellenousCharges/:parentTourBillId', verify, (request, response) => {
+router.get('/miscellenousCharges/:parentTourBillId&:isDisabled', verify, (request, response) => {
 
     let objUser=request.user;
     let parentTourBillId = request.params.parentTourBillId;
     console.log('miscellenousCharges  parentTourBillId  : '+request.params.parentTourBillId);
-
+    let isDisabled = request.params.isDisabled;
+    console.log('miscellenousCharges  isDisabled  : '+isDisabled);
     var miscellenousChargesQuery = 'SELECT sfid, Name, Date__c, Amount__c, Particulars_Mode__c,'+ 
                                     'Remarks__c, Activity_Code_Project__c, Tour_Bill_Claim__c '+
                                     'FROM salesforce.Miscellaneous_Expenses__c WHERE Tour_Bill_Claim__c = $1';
@@ -1879,18 +2052,19 @@ router.get('/miscellenousCharges/:parentTourBillId', verify, (request, response)
     console.log('miscellenousChargesQueryError '+miscellenousChargesQueryError.stack);
     })
 
-    response.render('./expenses/tourBillClaims/miscellenousCharges',{objUser, parentTourBillId : parentTourBillId});
+    response.render('./expenses/tourBillClaims/miscellenousCharges',{objUser,isDisabled, parentTourBillId : parentTourBillId});
 });
 
 
-router.get('/miscellaneousCharge',verify,(request,response)=>{
-    let objUser = request.user;
-    console.log('objUser  : '+JSON.stringify(objUser));
-    let tourbillId = request.query.tourBillClaimId;
+router.get('/miscellaneousCharge/:parentTourBillId&:isDisabled',verify,(request,response)=>{
+  let objUser=request.user;
+  let isDisabled = request.params.isDisabled;
+ console.log(' ++++ isDisabled ++++ '+isDisabled);
+    let tourbillId = request.params.parentTourBillId;
   
     console.log('Miscellaneous tourbillId:'+tourbillId);
-    
-    response.render('./expenses/tourBillClaims/MiscellaneousView', {objUser, tourbillId});
+   
+    response.render('./expenses/tourBillClaims/MiscellaneousView', {objUser,isDisabled, tourbillId});
   
   });
   
@@ -1910,7 +2084,6 @@ router.get('/miscellaneousCharge',verify,(request,response)=>{
           let obj = {};
           let strDated = new Date(eachRecord.date__c);
           let dated = strDated.toLocaleString();
-          console.log('dfsd '+dated);
           let createdDate = new Date(eachRecord.createddate);
           createdDate.setHours(createdDate.getHours() + 5);
           createdDate.setMinutes(createdDate.getMinutes() + 30);
@@ -1921,9 +2094,15 @@ router.get('/miscellaneousCharge',verify,(request,response)=>{
           obj.mode=eachRecord.particulars_mode__c;
           obj.remarks=eachRecord.remarks__c;
           obj.createDdate = strDate;
-          obj.date=strDated.toLocaleString().split(',')[0];
+          obj.date=dated.slice(0, 10);
+          if(isDisabled == 'true')
+          {
+              console.log('++Inside if check ++ '+isDisabled);
+          obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" disabled = "true" id="'+eachRecord.sfid+'" >Delete</button>'
+          } else{
+          console.log('++Inside else check ++ '+isDisabled);
           obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" id="'+eachRecord.sfid+'" >Delete</button>'
-        //  obj.editAction = '<button href="#" class="btn btn-primary editMiscellanous" id="'+eachRecord.sfid+'" >Edit</button>'
+           }//  obj.editAction = '<button href="#" class="btn btn-primary editMiscellanous" id="'+eachRecord.sfid+'" >Edit</button>'
       
               i= i+1;
              modifiedList.push(obj);
@@ -2007,7 +2186,6 @@ router.get('/miscellaneousCharge',verify,(request,response)=>{
 
     console.log('miscellaneous Expenses Body '+JSON.stringify(request.body));
     let parentTourBillId ='';
-    let flag = 'false';
    
 
     if(typeof(request.body.parentTourBillId)!='object'){
@@ -2025,19 +2203,12 @@ router.get('/miscellaneousCharge',verify,(request,response)=>{
     console.log('tourBillQueryResult => '+JSON.stringify(tourBillQueryResult.rows));
     let expenseId =tourBillQueryResult.rows[0].expense__c;
     console.log('expense ID for Validation  = '+expenseId);
-pool.
-    query('Select sfid,name,Approval_Status__c,Project_Manager_Status__c,Accounts_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId ])
+    pool.
+    query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[expenseId ])
     .then((ExpenseQuerryResult)=>{
       console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
-      if(ExpenseQuerryResult.rows[0].approval_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Rejected')
-      {
-        console.log('Flag  = > '+flag);
-        flag='true';
-        console.log('Flag  = > '+flag);
-      }
-      if((ExpenseQuerryResult.rows[0].approval_status__c == 'Pending' || ExpenseQuerryResult.rows[0].approval_status__c == 'Approved' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Pending' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Approved' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Pending' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Approved') && flag == 'false')
-      {
-          console.log('sddjs');
+      if(ExpenseQuerryResult.rows[0].approval_status__c=='Approved' || ExpenseQuerryResult.rows[0].approval_status__c=='Pending'){
+        console.log('sddjs');
         response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
       }
       else{
@@ -2113,26 +2284,19 @@ pool.
              }
             }  
         }
-        console.log('listMIscellaneous'+JSON.stringify(lstMiscellaneousCharges.length));
-
-        console.log('listMIscellaneous'+JSON.stringify(lstMiscellaneousCharges));
+            console.log('listMIscellaneous'+JSON.stringify(lstMiscellaneousCharges));
  
-        if(numberOfRows == lstMiscellaneousCharges.length){
-          console.log('inside Run Queryy ');
-          let miscellenousChargesInsertQuery = format('INSERT INTO salesforce.Miscellaneous_Expenses__c (Date__c,Particulars_Mode__c,Activity_Code_Project__c,Remarks__c,Amount__c, Heroku_Image_URL__c, Tour_Bill_Claim__c) VALUES %L returning id', lstMiscellaneousCharges);
-          console.log('Querrrrrrrrrrrrrrrrrryyyyyyyyyyyyy'+miscellenousChargesInsertQuery);
-          pool.query(miscellenousChargesInsertQuery)
-          .then((miscellenousChargesInsertQueryResult) => {
-              console.log('miscellenousChargesInsertQueryResult  '+JSON.stringify(miscellenousChargesInsertQueryResult.rows));
-              response.send('Miscellenous Charges Form Saved Succesfully');
-          })
-          .catch((miscellenousChargesInsertQueryError) => {
-              console.log('miscellenousChargesInsertQueryError  '+miscellenousChargesInsertQueryError.stack);
-              response.send('Error Occurred !');
-          })
-        }
-
-       
+        let miscellenousChargesInsertQuery = format('INSERT INTO salesforce.Miscellaneous_Expenses__c (Date__c,Particulars_Mode__c,Activity_Code_Project__c,Remarks__c,Amount__c, Heroku_Image_URL__c, Tour_Bill_Claim__c) VALUES %L returning id', lstMiscellaneousCharges);
+        console.log('Querrrrrrrrrrrrrrrrrryyyyyyyyyyyyy'+miscellenousChargesInsertQuery);
+        pool.query(miscellenousChargesInsertQuery)
+        .then((miscellenousChargesInsertQueryResult) => {
+            console.log('miscellenousChargesInsertQueryResult  '+JSON.stringify(miscellenousChargesInsertQueryResult.rows));
+            response.send('Miscellenous Charges Form Saved Succesfully');
+        })
+        .catch((miscellenousChargesInsertQueryError) => {
+            console.log('miscellenousChargesInsertQueryError  '+miscellenousChargesInsertQueryError.stack);
+            response.send('Error Occurred !');
+        })
     
 
       }  
@@ -2321,19 +2485,23 @@ router.get('/fetchAllowence',verify,(request,response)=>{
   })
 })
 
-router.get('/tourBillViewRelated/:parentExpenseId',verify,(request, response) => {
-  var tourbillId = request.params.parentExpenseId;
-  console.log('tourbillId  '+tourbillId);
+router.get('/tourBillViewRelated/:parentTourBillId&:isDisabled',verify,(request, response) => {
+  var tourbillId = request.params.parentTourBillId;
+  console.log('tourbillId line no 2278  '+tourbillId);
 let objUser=request.user;
       console.log('user '+objUser);  
-      response.render('./expenses/tourBillClaims/tourBillViewRelated', {objUser, tourbillId});
+      isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
+      response.render('./expenses/tourBillClaims/tourBillViewRelated', {objUser,isDisabled, tourbillId});
 })
 
-router.get('/expenseLanding/:parentExpenseId',verify,(request, response) => {
+router.get('/expenseLanding/:parentExpenseId&:isDisabled',verify,(request, response) => {
   var tourbillId = request.params.parentExpenseId;
   console.log('tourbillId  bbbb'+tourbillId);
   let objUser=request.user;
   console.log('user '+objUser); 
+  isDisabled = request.params.isDisabled;
+  console.log(' ++++ isDisabled ++++ '+isDisabled);
   let qry ='SELECT sfid,name,Expense__c	 FROM salesforce.Tour_Bill_Claim__c WHERE  sfid = $1';
   pool.query(qry,[tourbillId])
   .then((testQueryResult) => {
@@ -2341,7 +2509,7 @@ router.get('/expenseLanding/:parentExpenseId',verify,(request, response) => {
      if(testQueryResult.rowCount>0){
        console.log('testQueryResult[0].sfid; '+JSON.stringify(testQueryResult.rows[0].expense__c));
        let parentExpenseId=testQueryResult.rows[0].expense__c;
-      response.render('./expenses/expensePageRealted',{objUser,parentExpenseId:parentExpenseId}); 
+      response.render('./expenses/expensePageRealted',{objUser,isDisabled,parentExpenseId:parentExpenseId}); 
      }
   })
   .catch((testQueryError) => {
@@ -2349,9 +2517,5 @@ router.get('/expenseLanding/:parentExpenseId',verify,(request, response) => {
   })
   
 })
-
-
-
-
 
 module.exports = router;
