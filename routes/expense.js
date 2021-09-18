@@ -1371,18 +1371,18 @@ router.get('/activityCode', verify ,(request, response) => {
   let projectId ;
  
   pool
-  .query('SELECT sfid, project_name__c FROM salesforce.Milestone1_Expense__c WHERE  sfid = $1',[expenseId])
+  .query('SELECT sfid, project_name__c FROM salesforce.Milestone1_Expense__c WHERE sfid != \'null\' AND sfid = $1',[expenseId])
   .then((expenseQueryResult) => {
-    console.log('expenseQueryResult :' +JSON.stringify(expenseQueryResult.rows));
+    console.log('---- 1376 expense.js expenseQueryResult :' +JSON.stringify(expenseQueryResult.rows));
     if(expenseQueryResult.rowCount > 0)
     {
       projectId = expenseQueryResult.rows[0].project_name__c;
-      console.log('Inside ExpenseQuery  : '+projectId);
+      console.log('---- 1380 expense.js Inside ExpenseQuery  : '+projectId);
     
       pool
-      .query('Select sfid , Name FROM salesforce.Activity_Code__c where Project__c = $1', [projectId])
+      .query('Select sfid , Name FROM salesforce.Activity_Code__c where sfid != \'null\' AND Project__c = $1', [projectId])
        .then((activityCodeQueryResult) => {
-        console.log('activityCodeQueryResult  : '+JSON.stringify(activityCodeQueryResult.rows));
+        console.log('--- 1385 expense.js activityCodeQueryResult  : '+JSON.stringify(activityCodeQueryResult.rows));
         let numberOfRows, lstActivityCode =[];
         if(activityCodeQueryResult.rowCount > 0)
         {
@@ -1395,7 +1395,7 @@ router.get('/activityCode', verify ,(request, response) => {
         }
       })
       .catch((activityCodeQueryError) => {
-        console.log('activityCodeQueryError  : '+activityCodeQueryError.stack);
+        console.log('---- 1398 activityCodeQueryError  : '+activityCodeQueryError.stack);
         response.send([]);
       })
     }
@@ -1404,7 +1404,7 @@ router.get('/activityCode', verify ,(request, response) => {
 
   })
   .catch((expenseQueryError) => {
-    console.log('expenseQueryError  : '+expenseQueryError.stack);
+    console.log('--- 1407 expenseQueryError  : '+expenseQueryError.stack);
 })
 
 })
