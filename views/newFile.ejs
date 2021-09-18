@@ -1001,7 +1001,7 @@
                 tourBillClaimTableRows += '<td>'+tourBillClaimList[i].grand__c+'</td>';
                 tourBillClaimTableRows += '</tr>';
               }
-              tourBillClaimTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/tourBillClaimListview?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
+              tourBillClaimTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/tourBillClaimListview/'+expenseId+'&false" >View All</a></center></td></tr></tbody>';
               $('#tourBillClaimTable').empty();
               $('#tourBillClaimTable').html(tourBillClaimTableRows);
 
