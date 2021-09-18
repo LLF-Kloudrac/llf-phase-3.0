@@ -318,7 +318,8 @@
      <div class="row">
      <div class="col-md-6">
      <label for="deliveryTime">Expected Delivery Date</label>
-     <input type="date" class="form-control" id="deliveryTime" value="" name="deliveryTime" >
+     <!--<input type="date" class="form-control" id="deliveryTime" value="" name="deliveryTime" >-->
+      <input type="text" class="mydate form-control" id="deliveryTime" value="" name="deliveryTime" >
      </div>
      
      <div class="col-md-6">
@@ -455,7 +456,9 @@
   <div class="row">
   <div class="col-md-6">
   <label for="goodsDate">Date Of Receiving(Goods)</label>
-  <input type="date" class="form-control" id="goodsDate" value="" name="goodsDate" >
+  <!--<input type="date" class="form-control" id="goodsDate" value="" name="goodsDate" >-->
+  <input type="text" class="mydate form-control" id="goodsDate" value="" name="date_from3" >
+  
   </div>
   
   <div class="col-md-6">
@@ -1253,9 +1256,11 @@
           date.setDate(date.getDate());
           console.log('Date picker ++ '+date);
          
-          $(function() {
+        $(function() {
            $( "#datepicker1" ).datepicker({ startDate: date});
-           });
+           $( "#deliveryTime" ).datepicker({ startDate: date});
+           $( "#goodsDate" ).datepicker({ startDate: date});
+        });
        console.log('After Show Edit Modal ');
  /*let lstActivityCodes = [];
  $.ajax({
@@ -1286,7 +1291,6 @@
     {
       console.log('hdjsj');
       
-      
         console.log('Validation pqass');
         $('#assetName').attr("readonly",true);
         $('#datepicker1').attr("readonly",true);
@@ -1297,12 +1301,7 @@
       $('#deliveryPlace').attr("readonly",true);
       $('#deliveryTime').attr("readonly",true);
       $('#deliveryCost').attr("readonly",true);
-    
-
     }
-
-
-
 
     if(assetRecord.total_amount__c==0){
       $('#quotations').attr("disabled",true);
@@ -1311,7 +1310,6 @@
       $('#deliveryPlace').attr("disabled",true);
       $('#deliveryTime').attr("disabled",true);
       $('#deliveryCost').attr("disabled",true);
-
     }
       
     //let activityCodes = assetDetailsRecord.activity[0];
@@ -1337,7 +1335,7 @@
       clousrePlanDate = assetRecord.requested_closure_plan_date__c.split('T')[0];
       }
       if(assetRecord.date_of_receiving_goods__c!=null){
-      strReceivingGoodsDate = assetRecord.date_of_receiving_goods__c.split('T')[0];
+      //strReceivingGoodsDate = assetRecord.date_of_receiving_goods__c.split('T')[0];
       console.log('strReceivingGoodsDate : '+strReceivingGoodsDate +' :clousrePlanDate '+ clousrePlanDate);
       }
       
@@ -1466,7 +1464,7 @@ $('#editassetForm').on('click',function(event){
           if(dateValue == ''){
             alert('Please fill Target Date of Receiving');
             return;
-          }
+          }        
          
  var $inputs = $('#editAssetForm :input');
  // not sure if you wanted this, but I thought I'd add it.
@@ -1485,7 +1483,6 @@ $('#editassetForm').on('click',function(event){
  })
  .done((response) => {
  console.log('resonse :'+response);
- 
  })
  .fail((jqXHR, status, error) => {
  console.log('jqXHR '+JSON.stringify(jqXHR));
