@@ -1040,7 +1040,7 @@ pool.
                fromTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select FROM(Departure Time from Residence) Time'),
                toDated:joi.date().required().label('Please select TO(Arrival Time to Residence)'),
                toDate:joi.date().max('now').required().label('TO(Arrival Time to Residence must be less than or equals to Today'),
-               fromDate:joi.date().required().less(joi.ref('toDate')).label('WITH JOI 1043: From(Departure Time from Residence) must be less than To (Arrival Time to Residence)'),
+               fromDate:joi.date().required().less(joi.ref('toDate')).label('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)'),
                toTimes:joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required().label('Please select TO (Arrival Time to Residence)Time'),
                actualAMTForBL:joi.number().required().label('Please enter Actual Boarding lodging Amount'),
                amt:joi.number().min(0).label('Actual Boarding lodging Amount cannot be negative.'),
@@ -1090,12 +1090,12 @@ pool.
                        
                         if(starthours > endhours){
                           console.log('fd line 1099')
-                        response.send('WITHOUT JOI 1093: From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
+                        response.send('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
                         }
                         else if(starthours === endhours){
                           if(startminutes >= endminutes){
                             console.log('fd line 1104')
-                          response.send('WITHOUT JOI 1098: From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
+                          response.send('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
                           }
                         }
               else
@@ -1186,7 +1186,7 @@ pool.
               }
             }
             else if(fromDate[i] > toDate[i]) {
-              response.send('WITHOUT JOI 1190: From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
+              response.send('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
               return;
             }
             else{
@@ -1347,12 +1347,12 @@ pool.
                      
                       if(starthours > endhours){
                         console.log('---- 1351 tourBillClaim.js (starthours > endhours): ' + (starthours > endhours));
-                        response.send('WITHOUT JOI 1352: From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
+                        response.send('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
                       }
                       else if(starthours === endhours){
                         if(startminutes >= startminutes){
                           console.log('---- 1356 tourBillClaim.js (startminutes >= startminutes): ' + (startminutes >= startminutes));
-                          response.send('WITHOUT JOI 1357: From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
+                          response.send('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
                         }
                       }
                     //  startTime = (starthours > 12) ? (starthours-12 + ':' + startminutes + ':00'+' PM') : (starthours + ':' + startminutes + ':00' +' AM');
@@ -1438,7 +1438,7 @@ pool.
     
             }
             else if(toDate < fromDate) {
-              response.send('WITHOUT JOI 1443: From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
+              response.send('From(Departure Time from Residence) must be less than To (Arrival Time to Residence)');
               return;
             }
             else{
