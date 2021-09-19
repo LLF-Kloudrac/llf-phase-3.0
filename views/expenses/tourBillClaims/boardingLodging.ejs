@@ -8,19 +8,14 @@
 <link rel="stylesheet" href="/stylesheets/table-sortable.css">
 <script src="/scripts/table-sortable.js" ></script>
 
-
-<div>
-  <a href="#" class="btn btn-primary float-right" style="margin-right: 3%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
-</div>
-
 <h3 style="text-align: center; margin-top: 20px;">Boarding and Lodging</h3>
 <p1 id='tourbillId'><%=tourbillId%></p1>
 <div class="container">
     <div class="row mt-5 mb-3 align-items-center">
         <div class="col-md-6">
-            <a href="/expense/tourBillClaim/boardingLodgingCharges/<%= tourbillId %>" class="btn btn-primary"  style="color:white;" >Create New</a>
-            <a class="btn btn-primary btn-md bg-gray" href="/expense/tourBillClaim/tourBillViewRelated/<%= tourbillId %>"  >Go To TourBill</a>
-            <a class="btn btn-primary btn-md bg-gray" href="/expense/tourBillClaim/expenseLanding/<%= tourbillId %>"  >Go To Expense</a>
+            <a href="/expense/tourBillClaim/boardingLodgingCharges/<%= tourbillId %>&<%= isDisabled %>" class="btn btn-primary"  style="color:white;" >Create New</a>
+            <a class="btn btn-primary btn-md bg-gray" href="/expense/tourBillClaim/tourBillViewRelated/<%= tourbillId %>&<%= isDisabled %>"  >Go To TourBill</a>
+            <a class="btn btn-primary btn-md bg-gray" href="/expense/tourBillClaim/expenseLanding/<%= tourbillId %>&<%= isDisabled %>"  >Go To Expense</a>
            <!--  <button class="btn btn-primary btn-md bg-gray"  id="AirBustour">New Boarding/Loadging Expense</button>
             <button class="btn btn-primary btn-md" id="refresh">Refresh</button> -->
         </div>
@@ -41,12 +36,11 @@
         </div>
     </div>
     
-    <div id="BoardingLodginTable" class="table-responsive " class="row mt-5 mb-3 align-items-center">
+    <div id="BoardingLodginTable" class="responsive " class="row mt-5 mb-3 align-items-center">
     
     </div>
     
     </div>
-    <!--Modal Detail page-->
     <div id="boardingModal" class="modal modal-md fade">
       <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
@@ -57,24 +51,19 @@
               </button>
             </div>
             <div class="modal-body">
-              
+              <div class="row">
+              <div class="col-12">
               <div id="detailLoadingSpinner">
                 <center> <img src="/spinner-gif-transparent-background-14.gif" />  </center>
             </div>
-            
-             <div>
-              
-             <div style="overflow-y: auto;">
-                <table id="boardingTable" class="table">     
+            <table id="boardingTable" class="table">
+    
             </table>
-          </div>
             </div>
-          </div>
-            <br>
-            <div class="modal-footer" >
-              <button type="button" class="btn btn-danger"  data-dismiss="modal">Close</button>
+            </div></div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
-          
           </div>
         </div>
       </div>
@@ -156,22 +145,22 @@
 
 <script>
     $(document).ready(function(){
-        $('#tourbillId').hide();
-        let tourbillId=document.getElementById('tourbillId').innerHTML;
+      $('#tourbillId').hide();
+       
+
+       let tourbillId=document.getElementById('tourbillId').innerHTML;
+     //  alert('tour bill id ++'+tourbillId);
        // alert(tourbillId);
-       $('#ref').click(function() {
-       window.location.reload();
-        })
         let columns ={
             sequence : 'Sequence',
-            deleteAction: 'Action',
             //editAction : 'Edit',
             name: 'Boarding/Loading Name ',
             place : 'Place Of Journey',
             from:'From(Dep. Time from Residence)',
             amount : 'Amount',
             to:'To(Arrival Time to Residence)',
-            createDdate : 'Created Date'
+            createDdate : 'Created Date',
+            deleteAction: 'Action'
         }
 
         
@@ -281,11 +270,10 @@
                           let strCreatedDate = createdDate.toLocaleString();
 
                           htmlTable += '<tr>';
-                              htmlTable += '<td><strong>Boarding & Lodging Number</strong></td>';
+                              htmlTable += '<td><strong>Boarding Lodging Number</strong></td>';
                               htmlTable += '<td>'+boardingRecord.boardingname+'</td>';
                               htmlTable += '<td><strong>Tour Bill Claim</strong></td>';
                               htmlTable += '<td>'+boardingRecord.tourbillname+'</td>';
-                             
                           htmlTable += '</tr>';
                            
                           htmlTable += '<tr>';
@@ -308,7 +296,8 @@
                                   else
                                       htmlTable += '<td></td>';
                                   
-                                      
+                                      htmlTable += '<td><strong></strong></td>';
+                                      htmlTable += '<td></td>';
                           htmlTable += '</tr>';
 
                           htmlTable += '<tr>';
@@ -316,9 +305,10 @@
                           if(boardingRecord.correspondence_city__c != null)
                             htmlTable += '<td>'+boardingRecord.correspondence_city__c+'</td>';
                             else
-                            htmlTable += '<td>Null</td>';
+                            htmlTable += '<td></td>';
                             
-                            
+                            htmlTable += '<td><strong></strong></td>';
+                            htmlTable += '<td></td>';
                             htmlTable += '</tr>';
 
                             htmlTable += '<tr style="background-color:#d3d3d3";>';
@@ -393,7 +383,7 @@
                           htmlTable += '<td><strong>Extra Amount for B&L (Stay)</strong></td>';
                           htmlTable += '<td>'+boardingRecord.extra_amount__c+'</td>'; 
                           htmlTable += '</tr>';
-                          
+                          htmlTable += '<tr>';
 
                             htmlTable += '<tr style="background-color:#d3d3d3";>';
                                 htmlTable += '<td><h5 >Voucher(Amount)Information:</h5></td>';
@@ -404,13 +394,22 @@
 
                             htmlTable += '<td><strong>Total Amount</strong></td>';
                             htmlTable += '<td>'+boardingRecord.total_amount__c+'</td>'; 
-                           
+                            htmlTable += '<td></td>';
+                            htmlTable += '<td></td>';
+                            htmlTable += '</tr>';
 
-                            
+                            htmlTable += '<tr style="background-color:#d3d3d3";>';
+                                htmlTable += '<td><h5 >System Information:</h5></td>';
+                                htmlTable += '<td></td>';
+                                htmlTable += '<td></td>';
+                                htmlTable += '<td></td>';
+                            htmlTable += '</tr>';
                           
                              /*  htmlTable += '<td><strong>Created Date</strong></td>';
                               htmlTable += '<td>'+strCreatedDate+'</td>'; */
-                            
+                              htmlTable += '<td></td>';
+                                htmlTable += '<td></td>';
+                          htmlTable += '</tr>';
 
                           
     
