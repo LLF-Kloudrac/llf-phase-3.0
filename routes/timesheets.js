@@ -411,11 +411,9 @@ router.post('/fillactuals',(request, response) => {
         actualStartTimeTimesheet = fillActualsFormData.plannedStartTimeTimesheet,
         actualEndTimeTimesheet = fillActualsFormData.plannedEndTimeTimesheet,
         descriptionTimesheet = fillActualsFormData.descriptionTimesheet,
-        representative = fillActualsFormData.representative;        
+        representative = fillActualsFormData.representative;
 
-        var strtime = actualStartTimeTimesheet.split(':')[0]+actualStartTimeTimesheet.split(':')[1];
-        var endtime = actualEndTimeTimesheet.split(':')[0]+actualEndTimeTimesheet.split(':')[1];
-        console.log('actualEndTimeTimesheet + '+endtime + ' actualStartTimeTimesheet '+strtime);
+
     console.log('projectName  : '+projectName);
     console.log('dateIncurred   : '+dateIncurred);
     console.log('selectedTask   : '+selectedTask);
@@ -424,7 +422,6 @@ router.post('/fillactuals',(request, response) => {
     console.log('actualStartTimeTimesheet   : '+actualStartTimeTimesheet);
     console.log('actualEndTimeTimesheet  :  '+actualEndTimeTimesheet);
     console.log('descriptionTimesheet  :  '+descriptionTimesheet);
-
 
     const schema=joi.object({
       projectname:joi.string().required().label('Please select Project Name !'),
@@ -439,7 +436,7 @@ router.post('/fillactuals',(request, response) => {
       descriptionTimesheet:joi.string().required().label('Please enter Description !'),
       descriptionTimesheets:joi.string().min(3).required().label('Please enter Description !'),
       description:joi.string().invalid('').required().label('Please enter Description !'),
-      descr:joi.string().min(1).max(255).required().label('Description too long. !'),
+      descr:joi.string().min(1).max(80).required().label('Description too long. !'),
    
   
      // depart:joi.string().min(1).max(255).required().label('Department value too long.'),
@@ -448,9 +445,6 @@ router.post('/fillactuals',(request, response) => {
   if(result.error){
       console.log('fd'+result.error);
       response.send(result.error.details[0].context.label);    
-  }
-  if(endtime == strtime){
-    response.send('Actual Start Time cannot be same as Actual End Time');
   }
     else{
     pool
@@ -1316,7 +1310,13 @@ router.get('/getTeamdetails',verify,async(request,response)=>{
          lstTaskOfRelatedDate.forEach((eachTask) => {
                let taskDetail = {};
                taskDetail.name = eachTask.tskname;
-               taskDetail.plannedHours = eachTask.planned_hours__c.toFixed(2);
+               if(eachTask.planned_hours__c != null || achTask.planned_hours__c != '' ){
+                taskDetail.plannedHours = eachTask.planned_hours__c.toFixed(2);
+               }
+               else{
+                taskDetail.plannedHours = eachTask.planned_hours__c
+               }
+             
            //    taskDetail.status = eachTask.task_stage__c;
    
                if(actualHoursMap.has(eachTask.sfid))
