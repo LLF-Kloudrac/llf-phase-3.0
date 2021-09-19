@@ -679,15 +679,15 @@ router.post('/updateasset',(request,response)=>{
 
     let {assetsfid, assetName,activityCode,paymentStatus,status,payement,receiverName,receivedQuantity,quotations,reason,pricing,deliveryPlace,deliveryCost,attachment,totamt} = request.body;
     
-    if(closurePlanDate==''){
+    if(closurePlanDate=='' || typeof(closurePlanDate) == "undefined"){
         closurePlanDate='';
     }
   
-     if(goodsDate==''){
+     if(goodsDate == '' || typeof(goodsDate) == "undefined"){
         goodsDate= closurePlanDate;
     } 
 
-    if(deliveryTime==''){
+    if(deliveryTime=='' || typeof(deliveryTime) == "undefined"){
         console.log('deliveryTime ');
         deliveryTime= closurePlanDate;
         console.log('deliveryTime'+deliveryTime)
