@@ -6,18 +6,15 @@
 
 <link rel="stylesheet" href="/stylesheets/table-sortable.css">
 <script src="/scripts/table-sortable.js" ></script>
-<div>
-  <a href="#" class="btn btn-primary float-right" style="margin-right: 3%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
-</div>
 
 <h3 style="text-align: center; margin-top: 20px;">Conveyance Charges </h3>
 <p1 id='tourbillId'><%=tourbillId%></p1>
 <div class="container">
     <div class="row mt-5 mb-3 align-items-center">
         <div class="col-md-6">
-            <a href="/expense/tourBillClaim/conveyanceCharges/<%= tourbillId %>" class="btn btn-primary"  style="color:white;" >Create New</a>
-            <a class="btn btn-primary btn-md bg-gray" href="/expense/tourBillClaim/tourBillViewRelated/<%= tourbillId %>"  >Go To TourBill</a>
-            <a class="btn btn-primary btn-md bg-gray" href="/expense/tourBillClaim/expenseLanding/<%= tourbillId %>"  >Go To Expense</a>
+            <a href="/expense/tourBillClaim/conveyanceCharges/<%= tourbillId %>&<%= isDisabled %>" class="btn btn-primary"  style="color:white;" >Create New</a>
+            <a class="btn btn-primary btn-md bg-gray" href="/expense/tourBillClaim/tourBillViewRelated/<%= tourbillId %>&<%= isDisabled %>"  >Go To TourBill</a>
+            <a class="btn btn-primary btn-md bg-gray" href="/expense/tourBillClaim/expenseLanding/<%= tourbillId %>&<%= isDisabled %>"  >Go To Expense</a>
             <!-- <button class="btn btn-primary btn-md bg-gray"  id="AirBustour">Create New Conveyance Expense</button>
             <button class="btn btn-primary btn-md" id="refresh">Refresh</button> -->
         </div>
@@ -47,7 +44,7 @@
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Conveyance Charges View</h5>
+              <h5 class="modal-title">Conveyance Charges</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -145,18 +142,15 @@
         $('#tourbillId').hide();
         let tourbillId=document.getElementById('tourbillId').innerHTML;
 //        alert(tourbillId);
-$('#ref').click(function() {
-       window.location.reload();
-        })
         let columns ={
             sequence : 'Sequence',
-            deleteAction: 'Action',
            // editAction: 'edit',
             name: 'Conveyance Name ',
             place : 'Place',
             dated:'Date',
             amount : 'Amount',
-            createDdate : 'Created Date'
+            createDdate : 'Created Date',
+            deleteAction: 'Action'
         }
 
         
@@ -256,7 +250,7 @@ $('#ref').click(function() {
                               htmlTable += '<tr>';
                                   htmlTable += '<td><strong>Name</strong></td>';
                                   htmlTable += '<td>'+conveyanceRecord.conveyname+'</td>';
-                                  htmlTable += '<td><strong>Tour Bill Claim</strong></td>';
+                                  htmlTable += '<td><strong>TourBillClaim Name</strong></td>';
                                   htmlTable += '<td>'+conveyanceRecord.tourbillname+'</td>';
                               htmlTable += '</tr>';
                               htmlTable += '<tr>';
@@ -289,8 +283,14 @@ $('#ref').click(function() {
                                 /*   htmlTable += '<td><strong>Create Date</strong></td>';
                                 htmlTable += '<td>'+strCreatedDate+'</td>'; */
 
-                          htmlTable += '</tr>'; 
+                          htmlTable += '</tr>';
+                               htmlTable += '</tr>';
+                              htmlTable += '<tr>';  
                               
+                                                            
+                                  htmlTable += '<td><strong></strong></td>';
+                                  htmlTable += '<td></td>';
+                              htmlTable += '</tr>';
 
                               $('#conveyTable').empty();
                               $('#conveyTable').html(htmlTable);
