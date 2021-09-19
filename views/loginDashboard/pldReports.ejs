@@ -1,11 +1,14 @@
 <% include ../partials/navbar %>
+<% include ../partials/messages %>
 <% include ../partials/footer %>
+<link rel="stylesheet" href="/stylesheets/table-sortable.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="/scripts/table-sortable.js" ></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<div>
-  <a href="#" class="btn btn-primary float-right" style="margin-right: 3%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
-</div>
-<h3 style="text-align: center; margin-top: 40px;">M&E Forms</h3>
+<h3 style="text-align: center; margin-top: 20px;">M&E Forms</h3>
 <% if(showExcelReport){ %>
+  <p id="demo"></p>
   <div class="row mt-4">
         <div class="col-md-6 m-auto">
            <div class="card card-body">
@@ -30,151 +33,157 @@
 <% } %>
 
 <br/>
+<div class="container">
+    <div class="row mt-5 mb-3 align-items-center">
+        <div class="col-md-5">
+            <a  href="/users/pldReports" style="color: #555;" id="ref" ><i class="fa fa-refresh" style="font-size:34px; margin-left: 10px; margin-top: 30px;"></i> </a>
+               </div>
+        <div class="col-md-4">
+        <input type="text" class="form-control" placeholder="Search by Form Name " id="searchField" style="margin-top: 5px;">
+        </div>
+        <div class="col-md-2 text-right">
+        <span class="pr-2">Rows Per Page:</span>
+        </div>
+        <div class="col-md-1">
+            <div class="d-flex justify-content-end">
+                <select class="custom-select" name="rowsPerPage" id="changeRows">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15" selected>15</option>
+                </select>
+            </div>
+        </div>
+ </div>
+
+ <div id="vendorListViewTable" class="responsive ">
+
+ </div>
+
+</div>
+
+
 
 <!-- Pld Forms Modal -->
 
-<div class="row mt-4">
-    <div class="col-md-8 m-auto">
-      <div class="card card-body">
-       
-          <div  class="table-responsive">
-            <div id="spinnerPldForm">
-                <center> <img src="/spinner-gif-transparent-background-14.gif" />  </center>
-            </div>
+
+  <!-- Responses Modal -->
+  <div id="responsesModal" class="modal fade bs-example-modal-xl" tabindex ="-1" role="dialog" aria-labelledby="myLargeModalLabel" >
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="createTaskModal">View Responses</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="table-responsive">
+              <div id="spinner">
+                 <center> <img src="/spinner-gif-transparent-background-14.gif" />  </center>
+              </div>
+            <table id="responsesTable" class="table ">
   
-           <table class="table table-striped" id="pldTable" style="overflow-x:auto;">
-            <h4><center>Available M&E Forms </center></h4>
-           </table>
+            </table>
           </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+         
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Responses Modal -->
-  <div id="responsesModal" class="modal fade bs-example-modal-xl" tabindex ="-1" role="dialog" aria-labelledby="myLargeModalLabel" >
-        <div class="modal-dialog modal-xl" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="createTaskModal">View Responses</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <div class="table-responsive">
-                  <div id="spinner">
-                     <center> <img src="/spinner-gif-transparent-background-14.gif" />  </center>
-                  </div>
-                <table id="responsesTable" class="table ">
-      
-                </table>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-             
-            </div>
-          </div>
-        </div>
-      </div>
-
 <script>
     $(document).ready(function(){
+      
+      let columns ={
+            sequence : 'Serial',
+            name: ' Project Name',
+            formName: 'Form Name',
+            formLink:'Form Link',
+            createdDate:' Sent Date Time',
+            viewResponses:'View Responses'
+        }
+        var table = $('#vendorListViewTable').tableSortable({
+            data :[],
+            columns,
+            searchField: '#searchField',
+            sorting: true,
+            rowsPerPage: 15,
+            pagination:true,
+            sorting: ['sequence','createdDate'],
+            tableWillMount: () => {
+                console.log('table will mount')
+                
+            },
+            tableDidMount: () => {
+                console.log('table did mount');
 
-      $('#ref').click(function() {
-       window.location.reload();
-        })
-        
-        $.get('/users/getProjectReportsAccessbility',function(response){
-            console.log('getProjects response  '+JSON.stringify(response));
-            if(response.length > 0)
-            {
-                    let projectDropdown = document.getElementById('projectname');
-                    response.forEach((eachRecord)=>{
-                            let option = new Option(eachRecord.name,eachRecord.sfid, false, false);
-                            projectDropdown.appendChild(option);
-                    });
-            }
-
+                $('#spinner').hide();
+            },
+            tableWillUpdate: () => {
+                console.log('table will update')
+            //  table.refresh();
+            // onLoadTask();
+            },
+            tableDidUpdate: () => {
+            console.log('table did update');
+             anchorClickFunctionalities();
+         //   additionalEditFunctionality();
             
-        }).fail(function(jqXHR,status,err){
-            console.log('jqXHR : '+JSON.stringify(jqXHR));
-            console.log('error : '+err);
-        })
-
-
-
-
-        $('#spinner').hide();
-        $('#spinnerPldForm').hide();
-          $.ajax({
-              url : '/users/getpldForm',
-              type: 'get',
-              dataType :'json',
-              beforeSend: function () { // Before we send the request, remove the .hidden class from the spinner and default to inline-block.
-                //$('#loader').removeClass('hidden');
-                $('#htmlTable').empty();
-                 $('#spinnerPldForm').show();
-              },
-          })
-          .done((response)=>{
-              console.log('response  '+JSON.stringify(response));
-              $('#spinnerPldForm').hide();
-              if(response.length > 0)
-              {
-                let htmlTable = '';
-                htmlTable += '<thead><tr>';
-                htmlTable += '<th>Serial </th>';
-                htmlTable += '<th>Project Name</th>';
-                htmlTable += '<th>Form Name</th>';
-                htmlTable += '<th>Form Link</th>';
-                htmlTable += '<th>Sent Date Time</th>';
-                htmlTable += '<th>View Responses</th>';
-                htmlTable += '</tr></thead>';
-                htmlTable += '<tbody>';
-                let i=1;
-                response.forEach((eachRecord) => {
-                  console.log('type  : '+typeof(eachRecord.createddate));
-                  console.log('eachRecord.pldform_generatedurl__c  : '+eachRecord.pldform_generatedurl__c);
-                  let dateTime = new Date(eachRecord.createddate);
-                /*   dateTime.setHours(dateTime.getHours() + 5);
-                  dateTime.setMinutes(dateTime.getMinutes() + 30); */
-                  dateTime =  dateTime.toLocaleString();
-                  console.log('dateTime  : '+dateTime);
-                  htmlTable += '<tr>';
-                  htmlTable += '<td>'+i+' </td>';
-                  htmlTable += '<td>'+eachRecord.proname+' </td>';
-                  htmlTable += '<td>'+eachRecord.pldname+' </td>';
-                  htmlTable += '<td><a class="btn btn-primary" style="color:white;" href="'+eachRecord.pldform_generatedurl__c+'" target="_blank" >Click Here</a></td>';
-                  htmlTable += '<td>'+dateTime+' </td>';
-                  htmlTable += '<td><a class="btn btn-primary responseModalAnchorId" id="'+eachRecord.project_library__c+'"  style="color:white;" href="#"  >View Responses</a> </td>';
-                  htmlTable += '</tr>';
-                  i++;
-                })
-                htmlTable += '</tbody>';
-                $('#spinnerPldForm').hide();
-                $('#pldTable').html(htmlTable);
-  
-                $("a.responseModalAnchorId").click(function(e){
-                  e.preventDefault();
-                  console.log('Sharma');
-                  $('#responsesModal').modal('show');
-                  let formId = $(this).attr('id');
-                 
-                  $.ajax({
-                      url : '/users/viewResponses',
-                      type: 'get',
-                      data : {
-                        pldformid : formId
-                      },
-                      dataType : 'json',
-                      beforeSend: function () { // Before we send the request, remove the .hidden class from the spinner and default to inline-block.
-                        
-                        $('#responsesTable').empty();
-                         $('#spinner').show();
-                      },
-                  })
-                  .done(function(response){
+            },
+            tableWillUnmount: () => console.log('table will unmount'),
+            tableDidUnmount: () => console.log('table did unmount'),
+            onPaginationChange: function(nextPage, setPage) {
+                setPage(nextPage);
+            },
+        
+        });
+        $('#changeRows').on('change', function() {
+            table.updateRowsPerPage(parseInt($(this).val()));
+            })
+    
+            $('#refresh').click(function() {
+                table.refresh(true);
+                onLoadTask();
+            })    
+            $.ajax({
+                url : '/users/getpldForm',
+                type:'get',
+                dataType: 'json'
+           })
+           .done((response) => {
+               console.log('response it : '+JSON.stringify(response));
+               table.setData(response, columns);
+               anchorClickFunctionalities();
+              
+              
+            })
+          .fail((jqXHR, status, error) =>{
+              console.log('jqXHR  : '+JSON.stringify(jqXHR));
+              console.log('error  : '+error);
+            })
+    })
+    function anchorClickFunctionalities()
+    {
+        $('a.vendorTag').on('click',function(event){
+            event.stopImmediatePropagation();
+            event.stopPropagation();
+           
+           let formId  = this.id;
+           // let vendorId = this.id;
+      //     alert('Form Id=>'+formId);
+            $("#responsesModal").modal("show");
+            $.ajax({
+                type : 'GET',
+                url  : '/users/viewResponses',
+                data : {
+                    'formId' : formId
+                },
+                dataType : 'json'
+            })
+             .done(function(response){
                       console.log('response  '+JSON.stringify(response));
   
                       let htmlResponsesTable = '';
@@ -183,7 +192,7 @@
                             htmlResponsesTable += '<thead><tr>';
                             htmlResponsesTable += '<th>Serial </th>';
                             htmlResponsesTable += '<th>Response Name</th>';
-                            htmlResponsesTable += '<th>Response Date Time</th>';
+                            htmlResponsesTable += '<th>Response Date</th>';
                             htmlResponsesTable += '<th>Submit Approval</th>';
                             htmlResponsesTable += '<th>Status</th>';
                             htmlResponsesTable += '<th>Preview</th>';
@@ -194,22 +203,26 @@
                             response.forEach((eachRecord)=> {
                                 console.log('type  : '+typeof(eachRecord.createddate));
                                 let dateTime = new Date(eachRecord.createddate);
-                                dateTime.setHours(dateTime.getHours() + 5);
-                                dateTime.setMinutes(dateTime.getMinutes() + 30);
-                                dateTime =  dateTime.toLocaleString();
-                                console.log('dateTime  : '+dateTime);
+                                console.log('dateTime before edit on 193  : '+dateTime);
+                                dateTime.setHours(dateTime.getHours());
+                                dateTime.setMinutes(dateTime.getMinutes());
+                                let planDt = dateTime.toLocaleString();
+                                console.log('dateTime after edit on 197 : '+planDt);
                                 htmlResponsesTable += '<tr>';
                                 htmlResponsesTable += '<td>'+i+' </td>';
                                 htmlResponsesTable += '<td>'+eachRecord.name+' </td>';
-                                htmlResponsesTable += '<td>'+dateTime+' </td>';
-                                htmlResponsesTable += '<td><button class="btn btn-primary submitFormForApproval" id="'+eachRecord.sfid+'" >Submit For Approval</a> </td>';
-                                if(eachRecord.status__c == 'Approved' || eachRecord.status__c == 'Rejected' || eachRecord.status__c != 'Pending' )
-                                  htmlResponsesTable += '<td>'+eachRecord.status__c+'</td>';
+                                htmlResponsesTable += '<td>'+planDt+' </td>';
+                                if(eachRecord.approval_status__c == 'Pending' || eachRecord.approval_status__c == 'Rejected'  || eachRecord.approval_status__c == 'Approved' )
+                                htmlResponsesTable += '<td><button class="btn btn-primary submitFormForApproval" disabled = true id="'+eachRecord.sfid+'" >Submit For Approval</a> </td>';
                                 else
-                                htmlResponsesTable += '<td></td>';
-                                if(eachRecord.status__c != null && eachRecord.status__c != 'Pending' )
+                                htmlResponsesTable += '<td><button class="btn btn-primary submitFormForApproval" id="'+eachRecord.sfid+'" >Submit For Approval</a> </td>';
+                                if(eachRecord.approval_status__c == 'Approved' || eachRecord.approval_status__c == 'Rejected' || eachRecord.approval_status__c != 'Pending' )
+                                  htmlResponsesTable += '<td>'+eachRecord.approval_status__c+'</td>';
+                                else
+                                htmlResponsesTable += '<td>'+eachRecord.approval_status__c+'</td>';
+                                if(eachRecord.approval_status__c != null && eachRecord.approval_status__c != 'Pending' )
                                 {
-                                  htmlResponsesTable += '<td><a class="btn btn-primary " href="https://llfdev1-llf1.cs74.force.com/responsepdf?Id='+eachRecord.sfid+'" target="_blank" style="color:white;"  >Preview</a> </td>';
+                                  htmlResponsesTable += '<td><a class="btn btn-primary " href="https://learninglinksfoundationdonor.secure.force.com/responsepdf?Id='+eachRecord.sfid+'" target="_blank" style="color:white;"  >Preview</a> </td>';
                                   htmlResponsesTable += '<td><button class="btn btn-danger deleteResponse" id="'+eachRecord.sfid+'" >Delete</a> </td>';
                                 }
   
@@ -236,12 +249,12 @@
                             event.stopImmediatePropagation();
                             event.stopPropagation();
                             
-                         //   let reponseId = this.id;
-                            alert('Hello I am clicked '+reponseId);
+                            let reponseId = this.id;
+                          //  alert('Hello I am clicked '+reponseId);
   
                             $.post('/users/deletePldResponse',{reponseId : reponseId},function(response){
                                   console.log('reponse '+response);
-                                //  alert(response);
+                                  alert(response);
                             }).fail((error) => {
                                   console.log('Error');
                             })
@@ -287,31 +300,28 @@
                   //alert($(this).attr('id')+' clicked!');
                 })
               }
-              else  //If there are no pld form
-              {
+        $.get('/users/getProjectReportsAccessbility',function(response){
+            console.log('getProjects response  '+JSON.stringify(response));
+            if(response.length > 0)
+            {
+                    let projectDropdown = document.getElementById('projectname');
+                    response.forEach((eachRecord)=>{
+                            let option = new Option(eachRecord.name,eachRecord.sfid, false, false);
+                            projectDropdown.appendChild(option);
+                    });
+            }
 
-                let htmlTable = '';
-                htmlTable += '<thead><tr>';
-                htmlTable += '<th colspan="6"><center><h6>No M&E Form Available<h6><center></th>';
-               
-                htmlTable += '</tr></thead>';
-                htmlTable += '<tbody>';
-                $('#pldTable').html(htmlTable);
-              }
-             
-          })
-          .fail((jqXHR, status, error) => {
-              $('#spinnerPldForm').hide();
-              console.log('Error '+error);
-              console.log('status '+status);
-          })
-
+            
+        }).fail(function(jqXHR,status,err){
+            console.log('jqXHR : '+JSON.stringify(jqXHR));
+            console.log('error : '+err);
+        })
 
 
         $('#projectname').on('change',function(e){
                 let selectedProjectId = this.value;
                 console.log('selectedProjectId : '+selectedProjectId);
-               // alert('selectedProjectId  '+selectedProjectId);
+               alert('selectedProjectId  '+selectedProjectId);
 
                 $.get('/users/getRelatedProjectLibraries',{selectedProjectId: selectedProjectId}, function(response){
                     console.log('project Libraries Responses : '+JSON.stringify(response));
@@ -364,7 +374,7 @@
         })
 
 
-    });
+    
     function generateReport()
     {
         let selectedProjectId =  $('#projectname :selected').val();
@@ -386,7 +396,7 @@
         }
         else
         {
-            location.assign('http://llfdev1-llf1.cs74.force.com/PldColumnReport?id='+selectedProjectAndLibraryId);
+            location.assign('https://learninglinksfoundationdonor.secure.force.com/PldColumnReport?id='+selectedProjectAndLibraryId);
         }
 
 
