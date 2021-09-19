@@ -1,46 +1,18 @@
-<style>
-.navbar-dark .navbar-nav .nav-link {
-    color: blue;
-}
-.bg-primary {
-    background-color: white!important;
-    font-weight: bolder;
-    font-size:larger;
-}
-.bg-primary .navbar-nav .active>.nav-link {
-    color: blue!important;
-}
-.nav-link:hover {
-    color: #18bc9c!important;
-}
-.navbar-dark .navbar-nav .show>.nav-link {
-    color: #18bc9c;
-}
-.nav-link {
-    display: block;
-    padding: .5rem .1rem;
-}
-</style>
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-
     <!--   <a class="navbar-brand" href="#">LLF</a> -->
-   
-    <a class="nav-link" href="/users/home"> <img src="/image/logo.png" width="50px;height:40px" /> <span class="sr-only">(current)</span></a>
-    
-      <button class="navbar-toggler" style ="background:blue!important" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"  > </span>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
       </button>
-    
       
       <div class="collapse navbar-collapse" id="navbarColor01">
           <ul class="navbar-nav mr-auto">
               <li  class="nav-item active">
-               <!--  <img src="/image/logo.png" width="50px;height:50px" /> -->
+                <img src="/image/logo.png" width="50px;height:50px" /> 
               </li>
-          <!-- <li class="nav-item">
-              <a class="nav-link" href="/users/home"> <img src="/image/logo.png" width="60px;height:50px" /> <span class="sr-only">(current)</span></a>
-          </li> -->
+          <li class="nav-item active">
+            
+              <a class="nav-link" href="/users/home">Home <span class="sr-only">(current)</span></a>
+          </li>
           <li class="nav-item ">
                   <a class="nav-link" href="/users/pldReports">M &amp; E</a>
               </li>
@@ -70,24 +42,19 @@
               <div class="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
               <a class="dropdown-item" href="/approvals/pldFormApprovals">M&E Form Approval</a>
               <a class="dropdown-item" href="/approvals/expenseApprovals">Expense Approval</a>
-              <a class="dropdown-item" href="#">Procurement Approval</a>
               </div>
           </li>
           <% } %>
-          
+          <li class="nav-item">
+            <a class="nav-link" href="/activityCodes/getActivityCodesListView">Activity Code</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/tasks/TaskListView">Task</a>
+          </li>
           </ul>
           <form class="form my-2 my-lg-0">
           
               <ul class="my-2 my-sm-0 navbar-nav">
-
-               <!--  <li>
-                    <a href="#" class="btn btn-primary float-right refId" style="color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">
-                      Ref
-                        <i class="fa fa-refresh" aria-hidden="true" style="color: red;"></i> -->
-                  </a>
-                 <!--  <button class="btn btn-primary btn-md bg-gray"  id="refresh"></button>  -->
-              </li>
-
                   <li class="nav-item dropdown" style="float:right">
                       <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown" aria-haspopup="true"
                       aria-expanded="false">
@@ -97,26 +64,9 @@
                       <a class="dropdown-item" href="/users/logout">Log out</a>
                       </div>
                   </li>
-              
-              <li>
-
-        </ul>
+              </ul>
+          
           </form>
-         
+      
       </div>
       </nav>
-    
-
-
-<!-- <script>
-$(document).ready(function(){
-
-           $("a.refId").click(function(){
-              
-               window.location.reload();
-
-           })
-
-        })
-      </script> -->
-     
