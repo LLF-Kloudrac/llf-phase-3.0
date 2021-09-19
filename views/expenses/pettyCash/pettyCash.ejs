@@ -25,8 +25,8 @@
        
       <div class="col-md-10 m-auto">
         <div class="col-md-10">
-          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/pettycashlistview?expenseId=<%= parentExpenseId %>" id="createNewPettyCashButton">Go To Petty Cash</a>
-          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/expenseViewRel/<%= parentExpenseId %>" >Go To Expense </a>
+          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/pettycashlistview/<%= parentExpenseId %>&<%= isDisabled %>" id="createNewPettyCashButton">Go To Petty Cash</a>
+          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/expenseViewRel/<%= parentExpenseId %>&<%= isDisabled %>" >Go To Expense </a>
           <a class="btn btn-primary btn-md bg-gray mb-mobile" href="https://res.cloudinary.com/hfmqrflec/image/upload/v1600428034/expense%20document/LLF_-_Travel_Policy_rbojui.pdf" target="_blank" >Petty Cash Policy Document </a>
         </div>
         </div>
@@ -45,15 +45,15 @@
             <table class="table table-bordered" id="item_table">
               <tr>
               <th>SLIP NO </th>
-              <th>BILL NO.<label style="color: red;" for="validationTooltip01">*</label></th>
-              <th>BILL DATE<label style="color: red;" for="validationTooltip01">*</label></th>
-              <th>ACTIVITY CODE<label style="color: red;" for="validationTooltip01">*</label></th>
-              <th>DESCRIPTION OF ACTIVITY EXPENSES<label style="color: red;" for="validationTooltip01">*</label></th>
+              <th>BILL NO. <span style="color: red;">*</span></th>
+              <th>BILL DATE <span style="color: red;">*</span></th>
+              <th>ACTIVITY CODE <span style="color: red;">*</span></th>
+              <th>DESCRIPTION OF ACTIVITY EXPENSES <span style="color: red;">*</span></th>
               
 
-              <th>NATURE OF EXPENSE<label style="color: red;" for="validationTooltip01">*</label></th>
-              <th>AMOUNT<label style="color: red;" for="validationTooltip01">*</label></th>
-              <th>UPLOAD FILE<label style="color: red;" for="validationTooltip01">*</label></th>
+              <th>NATURE OF EXPENSE <span style="color: red;">*</span></th>
+              <th>AMOUNT <span style="color: red;">*</span></th>
+              <th>FILE <span style="color: red;">*</span></th>
               <th><button type="button" style="background-color:#2C3E50;" id="addButton" name="add" class="btn btn-success btn-sm add">Add Row</button></th>
               <th style="display:none;"></th>
               </tr>
@@ -79,6 +79,7 @@ $(document).ready(function(){
  $('#addButton').hide();
  var count = 1
  let expenseId = document.getElementById('expenseId').innerHTML; 
+
  let lstActivityCodes = [];
 
   $.ajax({
@@ -100,12 +101,12 @@ $(document).ready(function(){
     var html = '';
     html += '<tr>';
     html += '<td>'+cnt+'</td>';
-    html += '<td><input type="text" name="bill_no" class="form-control" maxlength="255" value=" " /></td>';
+    html += '<td><input type="text" name="bill_no" class="form-control" value=" " /></td>';
     html += '<td><input type="date" name="bill_date" class="form-control " /></td>';
     html += '<td><select id="activity_code'+cnt+'"  name="projectTask"  class="form-control item_unit"></select></td>';
-    html += '<td><textarea  name="desc"  maxlength="255" class="form-control"></textarea></td>';
-    html += '<td><input type="text"  maxlength="255" name="nature_exp" class="form-control" /></td>';
-    html += '<td><input type="number" max="9999999999.99" step="0.01"  name="amount" class="form-control" /></td>';
+    html += '<td><textarea  name="desc" class="form-control"></textarea></td>';
+    html += '<td><input type="text" name="nature_exp" class="form-control" /></td>';
+    html += '<td><input type="number" name="amount" class="form-control" /></td>';
     html += '<td class="ow-break-word"><input type="file" onChange="chkFile(this,'+cnt+')" style="overflow:hidden;width:auto" name="fileprety" id="fileprety" class="form-control" /><input type="hidden" value="demo" name="imgpath" id="file_'+cnt+'"></td>';
     html += '<td style="display:none;"><input  type="hidden" name="parentExpenseId" value="<%= parentExpenseId %>" class="form-control" /></td>';
     html += '<td style="display:none;"><input  type="hidden" id="projectTask'+cnt+'"  name="activity_code"  class="form-control" /></td>';
@@ -149,12 +150,12 @@ $(document).ready(function(){
     var html = '';
     html += '<tr>';
     html += '<td>'+cnt+'</td>';
-    html += '<td><input type="text" name="bill_no" class="form-control" maxlength="255" value=" " /></td>';
+    html += '<td><input type="text" name="bill_no" class="form-control" value=" " /></td>';
     html += '<td><input type="date" name="bill_date" class="form-control " /></td>';
     html += '<td><select id="activity_code'+cnt+'"  name="projectTask"  class="form-control item_unit"></select></td>';
-    html += '<td><textarea  name="desc" maxlength="255" class="form-control"></textarea></td>';
-    html += '<td><input type="text" name="nature_exp" maxlength="255" class="form-control" /></td>';
-    html += '<td><input type="number" name="amount"max="9999999999.99" step="0.01" class="form-control" /></td>';
+    html += '<td><textarea  name="desc" class="form-control"></textarea></td>';
+    html += '<td><input type="text" name="nature_exp" class="form-control" /></td>';
+    html += '<td><input type="number" name="amount" class="form-control" /></td>';
     html += '<td><input type="file" onChange="chkFile(this,'+cnt+')" name="fileprety" id="fileprety" style="overflow:hidden;width:auto;" class="form-control ow-break-word" /><input type="hidden" value="demo" name="imgpath" id="file_'+cnt+'"></td>';
     html += '<td style="display:none;"><input  type="hidden" name="parentExpenseId" value="<%= parentExpenseId %>" class="form-control" /></td>';
     html += '<td style="display:none;"><input  type="hidden" id="projectTask'+cnt+'"  name="activity_code"  class="form-control" /></td>';
@@ -267,6 +268,5 @@ function chkFile(file1,id) {
      }
   });
 }
-
 
 </script>
