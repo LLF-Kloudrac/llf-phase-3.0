@@ -4,12 +4,56 @@ const nodemailer = require("nodemailer");
 //var router = express.Router();
 const Router = require('express-promise-router');
 const router = new Router()
-const pool = require('../db/dbConfig');
+const {pool} = require('../db/dbConfig');
 const verify = require('../config/verifyToken');
 const jwt = require('jsonwebtoken');
 const joi = require('@hapi/joi');
 const { response } = require('express');
+const { Client } = require('pg');
 // const {check, validationResult }=require('express-validator');
+
+router.get('/testByAmit',(request,response) =>{
+ 
+  /*pool.query('INSERT INTO salesforce.Milestone1_Task__c (Name,RecordTypeId,Project_Name__c,Project_Task_Category__c) VALUES($1,$2,$3,$4) RETURNING *',['Test With RKKKK And Amit','0120p000000C8pqAAC','a030p000001low4AAA','Project Initiation'])
+  .then((result)=>{
+    console.log('result : '+JSON.stringify(result));
+    response.send(result);
+  })
+  .catch((error)=>{
+    console.log('error  '+error.stack);
+  }) */
+
+
+  pool.query('DELETE FROM salesforce.custom_approval__c WHERE id = $1',['131'])
+  .then((deleteResponseResult) => {
+      console.log('deleteResponseResult  : '+JSON.stringify(deleteResponseResult));
+      response.send('Deleted Successfully !');
+  })
+  .catch((deleteResponseError) => {
+    console.log('deleteResponseError  : '+deleteResponseError.stack);
+     response.send('Error Occured !');
+  })
+ 
+ })
+
+ router.get('/testByAmitClient',(request,response) =>{
+
+   const dbConfig = {
+    connectionString: process.env.DATABASE_URL,
+    ssl:true,
+  }
+  const client = new Client(dbConfig);
+  client.query('select id,sfid, name from salesforce.contact;')
+  .then((result)=>{
+    console.log('result : '+JSON.stringify(result));
+    response.send(result);
+  })
+  .catch((error)=>{
+    console.log('error  '+error.stack);
+  })
+ 
+ })
+ 
 router.post('/savePldForm',(request, response) => {
 
   console.log('request.body  : '+JSON.stringify(request.body));
@@ -38,20 +82,38 @@ router.get('/getpldForm',verify, (request, response) => {
 
   console.log('Expense request.user '+JSON.stringify(request.user));
   var userId = request.user.sfid; 
-
   console.log('request.query  : '+JSON.stringify(request.query));
   let contactId = request.query.contactId;
 
-  pool.query('SELECT pld.project__c, pld.pldform_generatedURL__c, pld.createddate, pld.project_library__c ,pld.name as pldname, pro.name as proname FROM salesforce.sent_pld_form__c as pld INNER JOIN salesforce.Milestone1_Project__c as pro ON pld.project__c = pro.sfid WHERE tocontact__c = $1 AND isactive__c = $2',[userId, true])
+  pool.query('SELECT pld.sfid,pld.project__c, pld.pldform_generatedURL__c, pld.createddate, pld.project_library__c ,pld.name as pldname, pro.name as proname FROM salesforce.sent_pld_form__c as pld INNER JOIN salesforce.Milestone1_Project__c as pro ON pld.project__c = pro.sfid WHERE tocontact__c = $1 AND isactive__c = $2',[userId, true])
   .then((pldQueryResult) => {
         console.log('pldQueryResult  : '+JSON.stringify(pldQueryResult.rows));
-        if(pldQueryResult.rowCount > 0)
-        {
-          response.send(pldQueryResult.rows); 
-        }
-        else{
+        if(pldQueryResult.rowCount>0){
+
+          let modifiedList = [],i =1;
+          pldQueryResult.rows.forEach((eachRecord) => {
+            let obj = {};
+            let crDate = new Date(eachRecord.createddate);
+            crDate.setHours(crDate.getHours() + 5);
+            crDate.setMinutes(crDate.getMinutes() + 30);
+            let strDate = crDate.toLocaleString();
+            obj.sequence = i;
+            obj.formLink = '<a href="'+eachRecord.pldform_generatedurl__c+'" class="btn btn-primary editVendor" target="_blank" id="'+eachRecord.sfid+'" >Click Here</a>'
+            obj.name = eachRecord.proname;
+            obj.formName = eachRecord.pldname;
+            obj.viewResponses = '<a href="#" class="btn btn-primary vendorTag" id="'+eachRecord.project_library__c+'" >View Responses</a>'
+
+            obj.createdDate = strDate;
+            i= i+1;
+            modifiedList.push(obj);
+          })
+          response.send(modifiedList);
+      }
+      else
+      {
           response.send([]);
-        }
+      }
+        
   })
   .catch((pldQueryError) => {
       console.log('pldQueryError :  '+pldQueryError);
@@ -61,16 +123,18 @@ router.get('/getpldForm',verify, (request, response) => {
 });
 
 
-router.get('/viewResponses',verify,(request,response)=>{
 
-  let pldFormId = request.query.pldformid;
+router.get('/viewResponses',verify ,async(request,response)=>{
+
+ // let pldFormId = request.query.formId;
+  let pldFormId=request.query.formId;
   console.log('pldFormId : '+pldFormId );
 
   console.log('Expense request.user '+JSON.stringify(request.user));
   var userId = request.user.sfid; 
 
   pool
-  .query('SELECT psr.sfid, psr.name, psr.createdDate, ca.status__c from salesforce.Project_Survey_Response__c as psr LEFT JOIN salesforce.Custom_Approval__c as ca ON  psr.sfid = ca.expense__c WHERE Project_Library__c = $1 AND Response_By__c = $2',[pldFormId, userId])
+  .query('SELECT psr.sfid, psr.name, psr.createdDate,ca.id, psr.approval_status__c, ca.status__c from salesforce.Project_Survey_Response__c as psr LEFT JOIN salesforce.Custom_Approval__c as ca ON  psr.sfid = ca.expense__c WHERE Project_Library__c = $1 AND Response_By__c = $2',[pldFormId, userId])
   .then((pldResponseQueryResult) => {
     console.log('pldResponseQueryResult  '+JSON.stringify(pldResponseQueryResult.rows));
     if(pldResponseQueryResult.rowCount > 0)
@@ -84,7 +148,7 @@ router.get('/viewResponses',verify,(request,response)=>{
 
   })
   .catch((pldResponseQueryError) => {
-    console.log('pldResponseQueryError : '+pldResponseQueryError.error);
+    console.log('pldResponseQueryError : '+pldResponseQueryError.stack);
     response.send([]);
   });
 
@@ -96,41 +160,80 @@ router.get('/login', function(req, response, next) {
 });
 
 
-router.post('/login', async (request,response)=>{
-
-  const {email, password} = request.body;
-  console.log('email : '+email+' passoword '+password);
-
-  let errors = [], userId, objUser, isUserExist = false;
-
-  if (!email || !password) {
-    errors.push({ msg: 'Please enter all fields' });
-    response.render('login',{errors});
-  }
-
-  await
+router.get('/testApi', (request,response)=>{
   pool
-  .query('SELECT Id, sfid, Name, email,PM_email__c FROM salesforce.Contact WHERE email = $1 AND password2__c = $2',[email,password])
-  .then((loginResult) => {
-        console.log('loginResult.rows[0]  '+JSON.stringify(loginResult.rows));
-        if(loginResult.rowCount > 0)
-        {
-          userId = loginResult.rows[0].sfid;
-          objUser = loginResult.rows[0];
-          isUserExist = true;
-        }
-        else
-        {
-          isUserExist = false;
-        }      
+  .query('SELECT Id, sfid, name  FROM salesforce.account')
+  .then((queryResult) => {
+       console.log('loginResult  : '+JSON.stringify(queryResult));  
+       response.send(queryResult);
   }) 
-  .catch((loginError) =>{
+  .catch((loginError)=>{
     console.log('loginError   :  '+loginError.stack);
     isUserExist = false;
   })
 
-  await 
-  pool.query('SELECT sfid FROM salesforce.Team__c WHERE Manager__c =  $1 ',[userId])
+});
+
+router.post('/login', async (request,response)=>{
+
+//////////////////////////////////////////////////////////////////////////////////////
+/*
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
+client.connect();
+console.log('MYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY',client);
+client.query('SELECT id,sfid,name  FROM salesforce.contact;', (err, res) => {
+  if (err) throw err;
+  for (let row of res.rows) {
+    console.log(JSON.stringify(row));
+  }
+  client.end();
+});
+
+return  */
+//////////////////////////////////////////////////////////////////////////////////////
+
+
+
+   const {email, password} = request.body;
+   console.log('email : '+email+' passoword '+password);
+
+  let errors = [], userId, objUser, isUserExist = false;
+
+   if (!email || !password) {
+     errors.push({ msg: 'Please enter all fields' });
+     response.render('login',{errors});
+    }
+   console.log('pool.query : '+pool.query);
+  
+    await
+    pool
+   .query('SELECT Id, sfid, Name, email,PM_email__c FROM salesforce.Contact WHERE email = $1 AND password2__c = $2',[email,password])
+   .then((loginResult) => {
+         console.log('loginResult.rows[0]  '+JSON.stringify(loginResult.rows));
+         if(loginResult.rowCount > 0)
+         {
+           userId = loginResult.rows[0].sfid;
+           objUser = loginResult.rows[0];
+           isUserExist = true;
+         }
+         else
+         {
+           isUserExist = false;
+         }      
+   }) 
+   .catch((loginError) =>{
+     console.log('loginError   :  '+loginError.stack);
+     isUserExist = false;
+   })
+
+   
+  await pool.query('SELECT sfid FROM salesforce.Team__c WHERE Manager__c =  $1 ',[userId])
   .then((teamQueryResult) => {
         if(teamQueryResult.rowCount > 0)
               objUser.isManager = true;
@@ -1736,7 +1839,60 @@ router.post('/sendResponseForApproval',verify, (request, response) => {
             managerId = lstManagerId[0].manager__c;
             console.log('managerId   : '+managerId);
 
-            pool.query('INSERT INTO salesforce.Custom_Approval__c (Approval_Type__c,Submitter__c, Assign_To__c ,Expense__c, Comment__c, Status__c, Record_Name__c,amount__c) values($1, $2, $3, $4, $5, $6, $7, $8) ',['PldForm',objUser.sfid, managerId, reponseId, '', 'Pending', '', 0 ])
+            
+
+              pool.query('SELECT id, sfid, Approval_Status__c FROM salesforce.Project_Survey_Response__c WHERE sfid = $1',[reponseId])
+              .then((responseStatusQuery) => {
+                   if(responseStatusQuery.rowCount > 0)
+                   {
+                        console.log('responseStatusQuery.rows  : '+JSON.stringify(responseStatusQuery.rows));
+                        if(responseStatusQuery.rows[0].approval_status__c == 'Pending' || responseStatusQuery.rows[0].approval_status__c == 'Approved' || responseStatusQuery.rows[0].approval_status__c == 'Rejected')
+                        {
+                          response.send('Approval already sent !');
+                          return;
+                        }
+                        else
+                        {
+                           pool.query('UPDATE salesforce.Project_Survey_Response__c SET Approval_Status__c = $1 WHERE sfid = $2',['Pending',reponseId])
+                          .then((responseUpdateQuery) => {
+                                if(responseUpdateQuery.rowCount > 0)
+                                {
+
+                                    pool.query('INSERT INTO salesforce.Custom_Approval__c (Approval_Type__c,Submitter__c, Assign_To__c ,Expense__c, Comment__c, Status__c, Record_Name__c,amount__c) values($1, $2, $3, $4, $5, $6, $7, $8) ',['PldForm',objUser.sfid, managerId, reponseId, '', 'Pending', '', 0 ])
+                                    .then((customApprovalQueryResult) => {
+                                            console.log('customApprovalQueryResult  '+JSON.stringify(customApprovalQueryResult));
+                                            response.send('Sent For Approval !');
+                                    })
+                                    .catch((customApprovalQueryError) => {
+                                            console.log('customApprovalQueryError  '+customApprovalQueryError.stack);
+                                            response.send('Error Occured while sending for approval !');
+                                    })
+
+                                }
+
+                          })
+                          .catch((responseUpdateQueryError) =>{
+                                console.log('responseUpdateQueryError  '+responseUpdateQueryError.stack);
+                                response.send('Error Occured while sending for approval !');
+                          })
+
+                        }
+                   }
+                   
+
+              })
+              .catch((responseStatusQueryError) =>{
+                  console.log('responseStatusQueryError  : '+responseStatusQueryError.stack);
+                  response.send('Error Occured while sending for approval !');
+              })
+
+            
+
+             
+            
+
+
+        /*    pool.query('INSERT INTO salesforce.Custom_Approval__c (Approval_Type__c,Submitter__c, Assign_To__c ,Expense__c, Comment__c, Status__c, Record_Name__c,amount__c) values($1, $2, $3, $4, $5, $6, $7, $8) ',['PldForm',objUser.sfid, managerId, reponseId, '', 'Pending', '', 0 ])
             .then((customApprovalQueryResult) => {
                     console.log('customApprovalQueryResult  '+JSON.stringify(customApprovalQueryResult));
                     response.send('Sent For Approval !');
@@ -1744,7 +1900,7 @@ router.post('/sendResponseForApproval',verify, (request, response) => {
             .catch((customApprovalQueryError) => {
                     console.log('customApprovalQueryError  '+customApprovalQueryError.stack);
                     response.send('Error Occured while sending for approval !');
-            })
+            })   */
           }
     })
     .catch((teamMemberQueryError) => {
