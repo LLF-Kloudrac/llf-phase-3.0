@@ -166,7 +166,7 @@ router.get('/expenseAllRecords',verify, async (request, response) => {
 
   let objUser = request.user;
   console.log('objUser   : '+JSON.stringify(objUser));
-
+  var isEnableNewButton;
   pool
   .query('SELECT exp.id, exp.sfid, exp.Name,exp.Project_Manager_Status__c ,exp.Accounts_Status__c, exp.isHerokuEditButtonDisabled__c, exp.Project_Name__c, exp.Approval_Status__c, exp.Amount_Claimed__c, exp.petty_cash_amount__c, exp.Conveyance_Amount__c, exp.createddate, pro.sfid as prosfid, pro.name as proname FROM salesforce.Milestone1_Expense__c as exp JOIN salesforce.Milestone1_Project__c as pro ON exp.Project_name__c = pro.sfid WHERE exp.Incurred_By_Heroku_User__c = $1 AND exp.sfid != \'\'',[objUser.sfid])
   .then((expenseQueryResult) => {
@@ -203,28 +203,20 @@ router.get('/expenseAllRecords',verify, async (request, response) => {
                 obj.createdDate = strDate;
                 obj.print='<button    data-toggle="modal" data-target="#popupPrint" class="btn btn-primary printexp" id="print'+expenseQueryResult.rows[i].sfid+'" >Print</button>';
                   obj.editButton = '<button    data-toggle="modal" data-target="#popupEdit" class="btn btn-primary expIdEditMode"   id="edit'+expenseQueryResult.rows[i].sfid+'" >Edit</button>';
-               
-                  if(expenseQueryResult.rows[i].approval_status__c == 'Pending' || expenseQueryResult.rows[i].approval_status__c == 'Approved' || expenseQueryResult.rows[i].project_manager_status__c == 'Pending' || expenseQueryResult.rows[i].project_manager_status__c == 'Approved' || expenseQueryResult.rows[i].accounts_status__c == 'Pending' || expenseQueryResult.rows[i].accounts_status__c == 'Approved')
+                if(expenseQueryResult.rows[i].project_manager_status__c == 'Rejected' || expenseQueryResult.rows[i].approval_status__c == 'Rejected' || expenseQueryResult.rows[i].accounts_status__c == 'Rejected' ){
+                  obj.editButton = '<button    data-toggle="modal" data-target="#popupEdit" class="btn btn-primary expIdEditMode" id="edit'+expenseQueryResult.rows[i].sfid+'" >Edit</button>';
+                  obj.approvalButton = '<button   class="btn btn-primary expIdApproval" style="color:white;" id="'+expenseQueryResult.rows[i].sfid+'" >Approval</button>';
+                }
+                 else if(expenseQueryResult.rows[i].approval_status__c == 'Pending' || expenseQueryResult.rows[i].approval_status__c == 'Approved' || expenseQueryResult.rows[i].project_manager_status__c == 'Pending' || expenseQueryResult.rows[i].project_manager_status__c == 'Approved' )
                   {
-                    console.log('pending/approal');
-                    if(expenseQueryResult.rows[i].approval_status__c == 'Rejected' || expenseQueryResult.rows[i].project_manager_status__c == 'Rejected' || expenseQueryResult.rows[i].accounts_status__c == 'Rejected')
-                   {
-                    obj.editButton = '<button    data-toggle="modal" data-target="#popupEdit" class="btn btn-primary expIdEditMode" id="edit'+expenseQueryResult.rows[i].sfid+'" >Edit</button>';
-                    obj.approvalButton = '<button   class="btn btn-primary expIdApproval" style="color:white;" id="'+expenseQueryResult.rows[i].sfid+'" >Approval</button>';
-                     
-                   }
-                   else{
                     obj.editButton = '<button    data-toggle="modal" data-target="#popupEdit" class="btn btn-primary expIdEditMode" disabled = "true"  id="edit'+expenseQueryResult.rows[i].sfid+'" >Edit</button>';
                     obj.approvalButton = '<button   class="btn btn-primary expIdApproval" disabled = "true" style="color:white;" id="'+expenseQueryResult.rows[i].sfid+'" >Approval</button>';
-                       }
-
+                    obj.isEnableNewButton = true;
                   }
                  else
                  {
-                  console.log('Rejected');
-                    obj.editButton = '<button    data-toggle="modal" data-target="#popupEdit" class="btn btn-primary expIdEditMode" id="edit'+expenseQueryResult.rows[i].sfid+'" >Edit</button>';
-                    obj.approvalButton = '<button   class="btn btn-primary expIdApproval" style="color:white;" id="'+expenseQueryResult.rows[i].sfid+'" >Approval</button>';
-                    
+                  obj.editButton = '<button    data-toggle="modal" data-target="#popupEdit" class="btn btn-primary expIdEditMode" id="edit'+expenseQueryResult.rows[i].sfid+'" >Edit</button>';
+                  obj.approvalButton = '<button   class="btn btn-primary expIdApproval" style="color:white;" id="'+expenseQueryResult.rows[i].sfid+'" >Approval</button>';
                  }
                   expenseList.push(obj);
                 /* disabled="'+expenseQueryResult.rows[i].isherokueditbuttondisabled__c+'" */
@@ -463,11 +455,11 @@ router.post('/createExpense',(request, response) => {
    // var {expenseName, projectName} = request.body;
     console.log('request.body  '+JSON.stringify(request.body));
 
-   const {taskname,proj , empCategory, incurredBy} = request.body;
+   const {taskname,proj , incurredBy} = request.body;
    console.log('taskname  '+taskname);
    console.log('proj  '+proj);
   // console.log('department  '+department);
-   console.log('empCategory  '+empCategory);
+  // console.log('empCategory  '+empCategory);
    console.log('incurredBy  '+incurredBy);
 
    const schema=joi.object({
@@ -486,7 +478,7 @@ if(result.error){
 }
   else{
     pool
-    .query('INSERT INTO salesforce.Milestone1_Expense__c (name,project_name__c,Conveyance_Employee_Category_Band__c,Incurred_By_Heroku_User__c) values ($1,$2,$3,$4)',[taskname,proj,empCategory,incurredBy])
+    .query('INSERT INTO salesforce.Milestone1_Expense__c (name,project_name__c,Incurred_By_Heroku_User__c) values ($1,$2,$3)',[taskname,proj,incurredBy])
     .then((expenseInsertResult) => {     
              console.log('expenseInsertResult.rows '+JSON.stringify(expenseInsertResult.rows));
              response.send('Successfully Inserted');
@@ -651,7 +643,7 @@ router.get('/details', async (request, response) => {
 
   var expenseQueryText = 'SELECT exp.id,exp.sfid,exp.Name, proj.name as projname, proj.sfid as projId, exp.Department__c, exp.Designation__c, '+
   ' exp.Conveyance_Employee_Category_Band__c,exp.Employee_ID__c, exp.Project_Manager_Status__c, exp.Accounts_Status__c , '+
-  'exp.Approval_Status__c, exp.Amount_Claimed__c, exp.petty_cash_amount__c, exp.Conveyance_Amount__c, exp.Tour_Bill_Claim__c FROM salesforce.Milestone1_Expense__c exp '+
+  'exp.Approval_Status__c, exp.Amount_Claimed__c, exp.Extra_Amount__c, exp.petty_cash_amount__c, exp.Conveyance_Amount__c, exp.Tour_Bill_Claim__c FROM salesforce.Milestone1_Expense__c exp '+
   'INNER JOIN salesforce.Milestone1_Project__c proj '+
   'ON exp.Project_Name__c =  proj.sfid '+
   'WHERE exp.sfid = $1';
@@ -716,15 +708,17 @@ router.get('/details', async (request, response) => {
 });
 
 
-router.get('/getExpenseApproval',verify,(request,response)=>{
+router.get('/getExpenseApproval/:expenseId&:isDisabled',verify,(request,response)=>{
 
   console.log('About to render expense Approval Page');
   let objUser=request.user;
   console.log('user '+objUser);
  // let expenseId = request.query.expenseId;
-  let parentExpenseId = request.query.expenseId;
+  let parentExpenseId = request.params.expenseId;
   console.log('parentExpenseId  '+parentExpenseId);
-  response.render('./expenses/expenseApprovalList',{objUser,parentExpenseId:parentExpenseId});
+  isDisabled = request.params.isDisabled;
+  console.log(' ++++ isDisabled ++++ '+isDisabled);
+  response.render('./expenses/expenseApprovalList',{objUser,isDisabled,parentExpenseId:parentExpenseId});
 //  response.render('./expenses/conveyanceVoucher/ConveyanceListView',{objUser,expenseId});
 
 })
@@ -955,7 +949,7 @@ var storage = multer.diskStorage({
 
 var imageFilter = function (req, file, cb) {
     // accept image files only
-    if (!file.originalname.match(/\.(jpg|jpeg|png|gif|PNG|JPG|GIF|pdf|doc|docx)$/i)) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif|PNG|JPG|GIF|pdf|doc|docx|xlsx)$/i)) {
         return cb(new Error('Only image files are allowed!'), false);
     }
     cb(null, true);
@@ -976,7 +970,7 @@ cloudinary.config({
 
 
 
-router.get('/pettyCash/:parentExpenseId',verify,(request, response) => {
+router.get('/pettyCash/:parentExpenseId&:isDisabled',verify,(request, response) => {
 
   var parentExpenseId = request.params.parentExpenseId;
   console.log('parentExpenseId  '+parentExpenseId);
@@ -984,8 +978,9 @@ router.get('/pettyCash/:parentExpenseId',verify,(request, response) => {
   var userId = request.user.sfid; 
   var objUser = request.user;
   console.log('Expense userId : '+userId);
-
-  response.render('expenses/pettyCash/pettyCash',{objUser, parentExpenseId: parentExpenseId });
+  isDisabled = request.params.isDisabled;
+  console.log(' ++++ isDisabled ++++ '+isDisabled);
+  response.render('expenses/pettyCash/pettyCash',{objUser,isDisabled, parentExpenseId: parentExpenseId });
  // response.render('expenses/pettyCash/pettyCash',{objUser, parentExpenseId:parentExpenseId });
 });
 
@@ -997,7 +992,7 @@ router.post('/savePettyCashForm', (request, response) => {
   console.log('Now For Each   lllllllllLoop !');
   console.log('Hello Work done !');
   let parentExpenseId='';
-  let flag='false';
+
 
   const{bill_no,bill_date,projectTask,desc,nature_exp,amount,imgpath}=request.body;
   if(typeof(request.body.parentExpenseId)!='object'){
@@ -1011,19 +1006,12 @@ router.post('/savePettyCashForm', (request, response) => {
   
   console.log('parentExpenseId pettyCash '+parentExpenseId);
     pool.
-    query('Select sfid,name,project_manager_status__c,accounts_status__c,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[parentExpenseId])
+    query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[parentExpenseId])
     .then((ExpenseQuerryResult)=>{
       console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
-      if(ExpenseQuerryResult.rows[0].approval_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Rejected')
-      {
-        console.log('Flag  = > '+flag);
-        flag='true';
-        console.log('Flag  = > '+flag);
-      }
-      if((ExpenseQuerryResult.rows[0].approval_status__c == 'Pending' || ExpenseQuerryResult.rows[0].approval_status__c == 'Approved' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Pending' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Approved' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Pending' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Approved') && flag == 'false')
-      {
-          console.log('sddjs');
-          response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
+      if(ExpenseQuerryResult.rows[0].approval_status__c=='Approved' || ExpenseQuerryResult.rows[0].approval_status__c=='Pending'){
+        console.log('sddjs');
+        response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
       }
       
       else {
@@ -1171,7 +1159,7 @@ router.post('/uploadImage',upload.any(),async (request, response) => {
 
 
 
-router.get('/conveyanceVoucher/:parentExpenseId',verify,(request, response) => {
+router.get('/conveyanceVoucher/:parentExpenseId&:isDisabled',verify,(request, response) => {
 
   var parentExpenseId = request.params.parentExpenseId;
   console.log('conveyanceVoucher parentExpenseId '+parentExpenseId);
@@ -1179,11 +1167,12 @@ router.get('/conveyanceVoucher/:parentExpenseId',verify,(request, response) => {
   var userId = request.user.sfid; 
   var objUser = request.user;
   console.log('Expense userId : '+userId);
-
-  response.render('expenses/conveyanceVoucher/conveyanceVoucher',{objUser, parentExpenseId: parentExpenseId });
+  isDisabled = request.params.isDisabled;
+  console.log(' ++++ isDisabled ++++ '+isDisabled);
+  response.render('expenses/conveyanceVoucher/conveyanceVoucher',{objUser,isDisabled, parentExpenseId: parentExpenseId });
 
 }); 
-router.get('/tourBillNewPage/:parentExpenseId',verify,(request, response) => {
+router.get('/tourBillNewPage/:parentExpenseId&:isDisabled',verify,(request, response) => {
 
   var parentExpenseId = request.params.parentExpenseId;
   console.log(' parentExpenseId '+parentExpenseId);
@@ -1191,6 +1180,8 @@ router.get('/tourBillNewPage/:parentExpenseId',verify,(request, response) => {
   var userId = request.user.sfid; 
   var objUser = request.user;
   console.log('Expense userId : '+userId);
+  isDisabled = request.params.isDisabled;
+  console.log(' ++++ isDisabled ++++ '+isDisabled);
   pool
   .query('SELECT sfid, name from salesforce.Tour_Bill_Claim__c WHERE expense__c = $1',[parentExpenseId])
   .then((querryResult) => {
@@ -1198,10 +1189,10 @@ router.get('/tourBillNewPage/:parentExpenseId',verify,(request, response) => {
 
     console.log('tourbillquerryResult :  '+JSON.stringify(querryResult.rows));
     if(querryResult.rowCount>0){
-      response.render('expenses/tourBillClaims/TourBillclaimNew',{objUser, parentExpenseId: parentExpenseId,tourbillId:querryResult.rows[0].sfid });
+      response.render('expenses/tourBillClaims/TourBillclaimNew',{objUser,isDisabled, parentExpenseId: parentExpenseId,tourbillId:querryResult.rows[0].sfid });
     }
     else{
-      response.render('expenses/tourBillClaims/TourBillclaimNew',{objUser, parentExpenseId: parentExpenseId ,tourbillId:'true'});
+      response.render('expenses/tourBillClaims/TourBillclaimNew',{objUser,isDisabled, parentExpenseId: parentExpenseId ,tourbillId:'true'});
     }
     
 })
@@ -1216,7 +1207,6 @@ router.get('/tourBillNewPage/:parentExpenseId',verify,(request, response) => {
 router.post('/conveyanceform',(request,response) => {  
   let body = request.body;
   let parentExpenseId ='';
-  let flag='false';
   console.log('parentExpenseId conveyance '+parentExpenseId);
     console.log('conveyanceform Body Result  : '+JSON.stringify(request.body));
     if(typeof(request.body.parentExpenseId)!='object'){
@@ -1226,25 +1216,15 @@ router.post('/conveyanceform',(request,response) => {
      parentExpenseId = request.body.parentExpenseId[0];
      console.log('parentExpenseId '+parentExpenseId);
    }
- 
-
    
 
     pool.
-    query('Select sfid,name,project_manager_status__c,accounts_status__c,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[parentExpenseId])
+    query('Select sfid,name,Approval_Status__c from salesforce.Milestone1_Expense__c where sfid=$1',[parentExpenseId])
     .then((ExpenseQuerryResult)=>{
-     
       console.log('ExpenseQuerryResult => '+JSON.stringify(ExpenseQuerryResult.rows));
-      if(ExpenseQuerryResult.rows[0].approval_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Rejected' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Rejected')
-      {
-        console.log('Flag  = > '+flag);
-        flag='true';
-        console.log('Flag  = > '+flag);
-      }
-      if((ExpenseQuerryResult.rows[0].approval_status__c == 'Pending' || ExpenseQuerryResult.rows[0].approval_status__c == 'Approved' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Pending' || ExpenseQuerryResult.rows[0].project_manager_status__c == 'Approved' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Pending' || ExpenseQuerryResult.rows[0].accounts_status__c == 'Approved') && flag == 'false')
-      {
-            console.log('sddjs');
-            response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
+      if(ExpenseQuerryResult.rows[0].approval_status__c=='Approved' || ExpenseQuerryResult.rows[0].approval_status__c=='Pending'){
+        console.log('sddjs');
+        response.send('The record cannot be created as the Expense status is PENDING/APPROVED');
       } 
       else{
         let numberOfRows ,lstConveyance = [];
@@ -1391,18 +1371,18 @@ router.get('/activityCode', verify ,(request, response) => {
   let projectId ;
  
   pool
-  .query('SELECT sfid, project_name__c FROM salesforce.Milestone1_Expense__c WHERE  sfid = $1',[expenseId])
+  .query('SELECT sfid, project_name__c FROM salesforce.Milestone1_Expense__c WHERE sfid != \'null\' AND sfid = $1',[expenseId])
   .then((expenseQueryResult) => {
-    console.log('expenseQueryResult :' +JSON.stringify(expenseQueryResult.rows));
+    console.log('---- 1376 expense.js expenseQueryResult :' +JSON.stringify(expenseQueryResult.rows));
     if(expenseQueryResult.rowCount > 0)
     {
       projectId = expenseQueryResult.rows[0].project_name__c;
-      console.log('Inside ExpenseQuery  : '+projectId);
+      console.log('---- 1380 expense.js Inside ExpenseQuery  : '+projectId);
     
       pool
-      .query('Select sfid , Name FROM salesforce.Activity_Code__c where Project__c = $1', [projectId])
+      .query('Select sfid , Name FROM salesforce.Activity_Code__c where sfid != \'null\' AND Project__c = $1', [projectId])
        .then((activityCodeQueryResult) => {
-        console.log('activityCodeQueryResult  : '+JSON.stringify(activityCodeQueryResult.rows));
+        console.log('--- 1385 expense.js activityCodeQueryResult  : '+JSON.stringify(activityCodeQueryResult.rows));
         let numberOfRows, lstActivityCode =[];
         if(activityCodeQueryResult.rowCount > 0)
         {
@@ -1415,7 +1395,7 @@ router.get('/activityCode', verify ,(request, response) => {
         }
       })
       .catch((activityCodeQueryError) => {
-        console.log('activityCodeQueryError  : '+activityCodeQueryError.stack);
+        console.log('---- 1398 activityCodeQueryError  : '+activityCodeQueryError.stack);
         response.send([]);
       })
     }
@@ -1424,7 +1404,7 @@ router.get('/activityCode', verify ,(request, response) => {
 
   })
   .catch((expenseQueryError) => {
-    console.log('expenseQueryError  : '+expenseQueryError.stack);
+    console.log('--- 1407 expenseQueryError  : '+expenseQueryError.stack);
 })
 
 })
@@ -1584,14 +1564,17 @@ router.post('/sendForApproval',verify, async(request, response) => {
             }
 });
 
-router.get('/pettycashlistview',verify,(request, response) => {
+var isDisabled = false;
+router.get('/pettycashlistview/:expenseId&:isDisabled',verify,(request, response) => {
 
   let objUser = request.user;
   console.log('objUser  : '+JSON.stringify(objUser));
-  let expenseId = request.query.expenseId;
+  let expenseId = request.params.expenseId;
   console.log('expenseId  '+expenseId);
+  isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
 
-  response.render('./expenses/pettyCash/pettycashlistview',{objUser,expenseId});
+  response.render('./expenses/pettyCash/pettycashlistview',{objUser,isDisabled,expenseId});
 })
 
 
@@ -1623,8 +1606,15 @@ router.get('/getpettycashlist',verify,(request, response) => {
                 obj.total=eachRecord.amount__c;
                 obj.billDate = strBillDate.split(',')[0];
                 obj.createDdate = strDate;
+                obj.isDisabled = isDisabled;
+                if(isDisabled == 'true')
+                {
+                    console.log('++Inside if check ++ '+isDisabled);
+                obj.deleteAction = '<button href="#" class="btn btn-primary deletePetty" disabled = "true" id="'+eachRecord.sfid+'" >Delete</button>'
+              } else{
+                console.log('++Inside else check ++ '+isDisabled);
                 obj.deleteAction = '<button href="#" class="btn btn-primary deletePetty" id="'+eachRecord.sfid+'" >Delete</button>'
-
+            }
                 i= i+1;
                 modifiedPettyCashList.push(obj);
               })
@@ -1678,14 +1668,15 @@ router.get('/getpettycashDetail',verify,(request, response) => {
 })
 /*****  Anukarsh Conveyance ListView */
 
-router.get('/ConveyanceListView',verify,(request, response) => {
+router.get('/ConveyanceListView/:expenseId&:isDisabled',verify,(request, response) => {
 
   let objUser = request.user;
   console.log('objUser  : '+JSON.stringify(objUser));
-  let expenseId = request.query.expenseId;
+  let expenseId = request.params.expenseId;
   console.log('expenseId  '+expenseId);
-
-  response.render('./expenses/conveyanceVoucher/ConveyanceListView',{objUser,expenseId});
+  isDisabled = request.params.isDisabled;
+  console.log(' ++++ isDisabled ++++ '+isDisabled);
+  response.render('./expenses/conveyanceVoucher/ConveyanceListView',{objUser,isDisabled,expenseId});
 })
 
 router.get('/getconveyancelist' ,verify,(request,response) => {
@@ -1714,8 +1705,14 @@ router.get('/getconveyancelist' ,verify,(request,response) => {
         obj.createDdate = strDate;
         obj.BillAmt=eachRecord.amount__c;
         obj.modeOfTravel = eachRecord.mode_of_conveyance__c;
+        if(isDisabled == 'true')
+        {
+            console.log('++Inside if check ++ '+isDisabled);
+        obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" disabled = "true" id="'+eachRecord.sfid+'" >Delete</button>'
+      } else{
+        console.log('++Inside else check ++ '+isDisabled);
         obj.deleteAction = '<button href="#" class="btn btn-primary deleteButton" id="'+eachRecord.sfid+'" >Delete</button>'
-
+    }
         i= i+1;
         modifiedConveyanceList.push(obj);
       })
@@ -1731,13 +1728,14 @@ router.get('/getconveyancelist' ,verify,(request,response) => {
   })
 } )
 
-router.get('/TourBillClaimListView',verify,(request,response)=>{
+router.get('/TourBillClaimListView/:expenseId&:isDisabled',verify,(request,response)=>{
   let objUser = request.user;
   console.log('objUser  : '+JSON.stringify(objUser));
-  let expenseId = request.query.expenseId;
+  let expenseId = request.params.expenseId;
   console.log('expenseId  '+expenseId);
-
-  response.render('TourBillClaimListView',{objUser,expenseId});
+  isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
+  response.render('TourBillClaimListView',{objUser,isDisabled,expenseId});
 })
 
 
@@ -1784,6 +1782,8 @@ router.get('/tourBillClaimActivityCode', verify ,(request, response) => {
   let tourbillId = request.query.tourbillId;
 
   console.log('tourbillId :' +tourbillId)
+  isDisabled = request.query.isDisabled;
+  console.log(' ++++ isDisabled ++++ '+isDisabled);
   let expenseId;
   let projectId ;
 
@@ -1804,7 +1804,7 @@ router.get('/tourBillClaimActivityCode', verify ,(request, response) => {
                       console.log('Inside ExpenseQuery  : '+projectId);
                     
                       pool
-                      .query('Select sfid , Name FROM salesforce.Activity_Code__c where Project__c = $1', [projectId])
+                      .query('Select sfid ,Name FROM salesforce.Activity_Code__c where sfid != $1 AND Project__c = $2', ['null',projectId])
                       .then((activityCodeQueryResult) => {
                         console.log('activityCodeQueryResult  : '+JSON.stringify(activityCodeQueryResult.rows));
                         let numberOfRows, lstActivityCode =[];
@@ -1837,12 +1837,14 @@ router.get('/tourBillClaimActivityCode', verify ,(request, response) => {
   })
 
 
-  router.get('/expenseViewRel/:parentExpenseId',verify,(request, response) => {
+  router.get('/expenseViewRel/:parentExpenseId&:isDisabled',verify,(request, response) => {
     var parentExpenseId = request.params.parentExpenseId;
     console.log('parentExpenseId  '+parentExpenseId);
   let objUser=request.user;
         console.log('user '+objUser);  
-        response.render('./expenses/expensePageRealted',{objUser,parentExpenseId:parentExpenseId}); 
+        isDisabled = request.params.isDisabled;
+        console.log(' ++++ isDisabled ++++ '+isDisabled);
+        response.render('./expenses/expensePageRealted',{objUser,isDisabled,parentExpenseId:parentExpenseId}); 
 })
 
     router.get('/deletepetty/:parentId',(request,response)=>{
