@@ -2,17 +2,18 @@
 <% include ./partials/footer %>
 <% include ./partials/messages %>
 <p id ="parentId"><%=parentAssetId %></p>
+<p id ="isDisabled"><%=isDisabled %></p>
+
+
 <link rel="stylesheet" href="/stylesheets/table-sortable.css">
 <script src="/scripts/table-sortable.js" ></script>
-<div>
-  <a href="#" class="btn btn-primary float-right" style="margin-right: 3%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
-</div>
-<h3 style="text-align: center; margin-top: 40px;">PROCUREMENT IT </h3>
+
+<h3 style="text-align: center; margin-top: 20px;">PROCUREMENT IT </h3>
 
 <div class="container">
     <div class="row mt-5 mb-3 align-items-center">
         <div class="col-md-5">
-          <a class="btn btn-primary btn-md bg-gray" href="/procurement/assetRequisitionViewRel/<%=parentAssetId %>" >Go To Asset Requisition </a>
+          <a class="btn btn-primary btn-md bg-gray" href="/procurement/assetRequisitionViewRel/<%=parentAssetId %>&<%= isDisabled %>" >Go To Asset Requisition </a>
          <!--    <a class="btn btn-primary btn-md bg-gray" href="#" id="">Create New It Procurement</a> -->
          <!--    <a class="btn btn-primary btn-md bg-gray" href="/procurement/getProcurementItListView/"+<%=parentAssetId %> >Refresh</a> -->
         </div>
@@ -192,16 +193,17 @@
 <script>
     $(document).ready(function(){
       $('#parentId').hide();
+      $('#isDisabled').hide();
+
       let parentId=document.getElementById('parentId').innerHTML;
-      $('#ref').click(function() {
-       window.location.reload();
-        })
   //    alert('parentId '+parentId);
+         let isDisabled = document.getElementById('isDisabled').innerHTML;
+      // alert('isDisabled1 '+isDisabled1);
+      
     /**************Table Sortable Start ***********/
 
         let columns ={
             sequence : 'Sequence',
-            deleteAction: 'Action',
             name: 'Procurement-IT ID',
             item : 'Items',
             quantity: 'Quantity',
@@ -209,6 +211,7 @@
           //  no:'Number of quotes',
           //  vendor:'Impaneled Vendor',
             createdDate:'Created Date',
+            deleteAction: 'Action'
           //  editAction:'Action',
         }
       
