@@ -19,8 +19,8 @@
        
           <div class="col-md-10 m-auto">
       <div class="col-md-10">
-          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/ConveyanceListView?expenseId=<%= parentExpenseId %>" id="createNewPettyCashButton">Go To Conveyance</a>
-          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/expenseViewRel/<%= parentExpenseId %>" >Go To Expense </a>
+          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/ConveyanceListView/<%= parentExpenseId %>&<%= isDisabled %>" id="createNewPettyCashButton">Go To Conveyance</a>
+          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/expenseViewRel/<%= parentExpenseId %>&<%= isDisabled %>" >Go To Expense </a>
           <a class="btn btn-primary btn-md bg-gray mb-mobile" href="https://res.cloudinary.com/hfmqrflec/image/upload/v1600428120/expense%20document/LLF_-_Local_Conveyance_and_Reimbursement_Policy_eptz2u.pdf" target="_blank" >Conveyance Voucher Policy Document </a>
 
       </div>
@@ -38,16 +38,16 @@
      <table class="table table-bordered" id="item_table">
       <tr>
        <th>SLIP NO</th>
-       <th>FROM<label style="color: red;" for="validationTooltip01">*</label></th>
-       <th>TO<label style="color: red;" for="validationTooltip01">*</label></th>
-       <th>ACTIVITY CODE<label style="color: red;" for="validationTooltip01">*</label></th>
-       <th>PURPOSE OF TRAVEL<label style="color: red;" for="validationTooltip01">*</label></th>
+       <th>FROM <span style="color: red;">*</span></th>
+       <th>TO <span style="color: red;">*</span></th>
+       <th>ACTIVITY CODE <span style="color: red;">*</span></th>
+       <th>PURPOSE OF TRAVEL <span style="color: red;">*</span></th>
        
 
-       <th>MODE OF CONVEYANCE<label style="color: red;" for="validationTooltip01">*</label></th>
-       <th>KM. TRAVELLED<label style="color: red;" for="validationTooltip01">*</label></th>
-       <th>AMOUNT<label style="color: red;" for="validationTooltip01">*</label></th>
-       <th>UPLOAD FILE<label style="color: red;" for="validationTooltip01">*</label></th>
+       <th>MODE OF CONVEYANCE <span style="color: red;">*</span></th>
+       <th>KM. TRAVELLED <span style="color: red;">*</span></th>
+       <th>AMOUNT <span style="color: red;">*</span></th>
+       <th>FILE <span style="color: red;">*</span></th>
        <th><button type="button" id="addButton" style="background-color:#2C3E50;" name="add" class="btn btn-success btn-sm add">Add Row</button></th>
        <th style="display:none;"></th>
       </tr>
@@ -97,10 +97,10 @@ $(document).ready(function(){
   html += '<td><input type="date" name="from" class="form-control" /></td>';
   html += '<td><input type="date" name="to" class="form-control " /></td>';
   html += '<td><select id="activity_code'+cnt+'"  name="projectTask"  class="form-control item_unit"></select></td>';
-  html += '<td><textarea  name="purposeoftravel" maxlength="255" class="form-control"></textarea></td>';
-  html += '<td><input type="text" name="modeofconveyance"  maxlength="255" class="form-control" /></td>';
-  html += '<td><input type="number" name="kmtravelled" max="9999999999.99" step="0.01" class="form-control" /></td>';
-  html += '<td><input type="number" name="amount"max="9999999999.99" step="0.01" class="form-control" /></td>';
+  html += '<td><textarea  name="purposeoftravel" class="form-control"></textarea></td>';
+  html += '<td><input type="text" name="modeofconveyance" class="form-control" /></td>';
+  html += '<td><input type="number" name="kmtravelled" class="form-control" /></td>';
+  html += '<td><input type="number" name="amount" class="form-control" /></td>';
   html += '<td><input type="file" onChange="chkFile(this,'+cnt+')" name="fileprety" id="fileprety" style="overflow:hidden" class="form-control" /><input type="hidden" value="demo" name="imgpath" id="file_'+cnt+'"></td>';
   html += '<td style="display:none;"><input  type="hidden" name="parentExpenseId" value="<%= parentExpenseId %>" class="form-control" /></td>';
   html += '<td style="display:none;"><input  type="hidden" id="projectTask'+cnt+'"  name="activity_code"  class="form-control" /></td>';
@@ -146,10 +146,10 @@ $(document).ready(function(){
   html += '<td><input type="date" name="from" class="form-control" /></td>';
   html += '<td><input type="date" name="to" class="form-control " /></td>';
   html += '<td><select id="activity_code'+cnt+'"  name="projectTask"  class="form-control item_unit"></select></td>';
-  html += '<td><textarea  name="purposeoftravel" maxlength="255" class="form-control"></textarea></td>';
-  html += '<td><input type="text" name="modeofconveyance" maxlength="255" class="form-control" /></td>';
-  html += '<td><input type="number" name="kmtravelled"  max="9999999999.99" step="0.01" class="form-control" /></td>';
-  html += '<td><input type="number" name="amount" max="9999999999.99" step="0.01" class="form-control" /></td>';
+  html += '<td><textarea  name="purposeoftravel" class="form-control"></textarea></td>';
+  html += '<td><input type="text" name="modeofconveyance" class="form-control" /></td>';
+  html += '<td><input type="number" name="kmtravelled" class="form-control" /></td>';
+  html += '<td><input type="number" name="amount" class="form-control" /></td>';
   html += '<td><input type="file" onChange="chkFile(this,'+cnt+')" name="fileprety" id="fileprety" style="overflow:hidden" class="form-control" /><input type="hidden" value="demo" name="imgpath" id="file_'+cnt+'"></td>';
   html += '<td style="display:none;"><input  type="hidden" name="parentExpenseId" value="<%= parentExpenseId %>" class="form-control" /></td>';
   html += '<td style="display:none;"><input  type="hidden" id="projectTask'+cnt+'"  name="activity_code"  class="form-control" /></td>';
