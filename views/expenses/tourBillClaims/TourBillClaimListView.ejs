@@ -138,16 +138,15 @@
 
 
 <p id="expenseId"><%= expenseId %></p>
+<p id= "isDisabled"><%=isDisabled %></p>
 <p id="tourBillId"></p>
-<div>
-  <a href="#" class="btn btn-primary float-right" style="margin-right: 3%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
-</div>
+
 <center><h3 style="text-align: center; margin-top: 20px;">Tour Bill Claim Expenses</h3></center>     
 <div class="container">
 <div class="row mt-5 mb-3 align-items-center">
     <div class="col-md-6">
         <button class="btn btn-primary btn-md bg-gray"  id="tourBillClaimButton">Create New</button>
-        <a class="btn btn-primary btn-md bg-gray" href="/expense/expenseViewRel/<%= expenseId %>" >Go To Expense</a>
+        <a class="btn btn-primary btn-md bg-gray" href="/expense/expenseViewRel/<%= expenseId %>&<%= isDisabled %>" >Go To Expense</a>
        <!--  <button class="btn btn-primary btn-md" id="refresh">Refresh</button> -->
     </div>
     <div class="col-md-2">
@@ -206,12 +205,12 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h4 class="modal-title">Tour Bill Claim View </h4>
+                <h4 class="modal-title">Tour Bill  Claim Name </h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
             <!-- Modal body -->
-            <div class="modal-body" style="overflow-y: auto;">
+            <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
                         <nav>
@@ -223,7 +222,7 @@
                         <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                                 <!-- Particular Expense Details -->
-                                <table id="tourBillClaimTable1" class="table table-hover striped" style="overflow-y:auto;">
+                                <table id="tourBillClaimTable" class="table table-hover striped" style="overflow-x: auto;">
                                     <!-- Inside code is handled by Jquery to add dyanamic Content -->
                                     <div id="tourBillClaimTableSpinner">
                                             <center> <img src="/spinner-gif-transparent-background-14.gif" />  </center>
@@ -235,7 +234,7 @@
                                 <div class="accordion" id="accordionExample">
 
                                     <div class="card">
-                                        <div class="card-header" id="headingOne" sty>
+                                        <div class="card-header" id="headingOne">
                                             <h5 class="mb-0">
                                             <button class="btn btn-link text-left collapsed" type="pettyCashButton"
                                                 data-toggle="collapse" data-target="#collapseOne"
@@ -249,11 +248,9 @@
                                         <div id="collapseOne" class="collapse  fade" aria-labelledby="headingOne" data-parent="#accordionExample">
                                             <div class="card-body">
                                                 <!-- Need to show Table -->
-                                                <div style="overflow-y: auto;">
                                                 <table id="airRailBusTable" class="table table-striped">
 
                                                 </table>
-                                              </div>
                                             </div>
                                         </div>
                                     </div>
@@ -273,11 +270,9 @@
                                         <div id="collapseTwo" class="collapse fade" aria-labelledby="headingTwo" data-parent="#accordionExample">
                                             <div class="card-body">
                                                 <!-- Need to show Table -->
-                                                <div style="overflow-y: auto;">
                                                 <table id="conveyanceChargesTable" class="table table-striped">
 
                                                 </table>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -298,11 +293,9 @@
                                         <div id="collapseThree" class="collapse  fade" aria-labelledby="headingThree" data-parent="#accordionExample">
                                             <div class="card-body">
                                                 <!-- Need to show Table -->
-                                                <div style="overflow-y: auto;">
                                                 <table id="boardingLodgingChargesTable" class="table table-striped">
-                                                  
+
                                                 </table>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -313,7 +306,7 @@
                                             <button class="btn btn-link collapsed text-left" type="button"
                                                 data-toggle="collapse" data-target="#collapseFour"
                                                 aria-expanded="false" aria-controls="collapseFour">
-                                                <i class="fa fa-angle-double-right mr-3"></i>Fooding & Laundary Charges
+                                                <i class="fa fa-angle-double-right mr-3"></i>Telephone & Food Charges
                                             </button>
                                             <!-- <button class="btn btn-primary float-right">New</button> -->
                                             <a href="#" class="btn btn-primary float-right telephoneFood" style="color:white;">New</a>
@@ -322,11 +315,9 @@
                                         <div id="collapseFour" class="collapse fade" aria-labelledby="headingFour" data-parent="#accordionExample">
                                             <div class="card-body">
                                                 <!-- Need to create table here -->
-                                                <div style="overflow-y: auto;">
                                                 <table id="telephoneFoodChargesTable" class="table table-striped">
 
                                                 </table>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -346,11 +337,9 @@
                                         <div id="collapseFive" class="collapse fade" aria-labelledby="headingFive" data-parent="#accordionExample">
                                             <div class="card-body">
                                                 <!-- Need to create table here -->
-                                                <div style="overflow-y: auto;">
                                                 <table id="miscellaneousChargesTable" class="table table-striped">
 
                                                 </table>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -384,7 +373,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body" style="overflow-y: auto;">
+        <div class="modal-body">
           <div class="">
             <div id="errorMessages"></div>
           <form  id="tourBillClaimForm" class="needs-validation" novalidate >
@@ -423,11 +412,10 @@
     $(document).ready(function() { 
         $('#expenseId').hide();
         $('#tourBillId').hide();
+        $('#isDisabled').hide();
         $('#tourBillClaimTableSpinner').hide();
         let expenseId =document.getElementById('expenseId').innerHTML;
-        $('#ref').click(function() {
-       window.location.reload();
-        })
+           let isDisabled = document.getElementById('isDisabled').innerHTML;
       //  alert(expenseId);
 
         
@@ -534,7 +522,7 @@
                   tourBillClaimTableHtml += '<td>Name</td>';
                   tourBillClaimTableHtml += '<td style="word-break: break-all">'+tourBillClaim.name+'</td>';
                   tourBillClaimTableHtml += '<td>Expense </td>';
-                  tourBillClaimTableHtml += '<td style="word-break: break-all">'+tourBillClaim.expname+'</td>';
+                  tourBillClaimTableHtml += '<td>'+tourBillClaim.expname+'</td>';
                   tourBillClaimTableHtml += '</tr>'; 
                   tourBillClaimTableHtml += '<tr>'; 
                   tourBillClaimTableHtml += '<td>Grand Total</td>';
@@ -544,7 +532,7 @@
                   tourBillClaimTableHtml += '</tr>';
 
                   
-                  $('#tourBillClaimTable1').html(tourBillClaimTableHtml);
+                  $('#tourBillClaimTable').html(tourBillClaimTableHtml);
     
     
                   let airBusRailFare = responseData.airBusRailFare;
@@ -572,7 +560,7 @@
                       airBusRailFareHtml += '<td>'+eachAirRailBus.amount__c+'</td>';
                       airBusRailFareHtml += '</tr>';
                     });
-                    airBusRailFareHtml += '<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/getAirBusListView?tourBillClaimId='+tourBillClaimId+'" >View All</a></center></td></tr>';
+                    airBusRailFareHtml += '<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/getAirBusListView/'+tourBillClaimId+'&'+isDisabled+'" >View All</a></center></td></tr>';
                     airBusRailFareHtml += '</tbody>';
                     
                     $('#airRailBusTable').html(airBusRailFareHtml);
@@ -601,7 +589,7 @@
                       conveyanceChargesHtml += '<td>'+eachConveyanceCharge.amount__c+'</td>';  
                       conveyanceChargesHtml += '</tr>';
                     });
-                    conveyanceChargesHtml += '<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/conveyanceChargesListView?tourBillClaimId='+tourBillClaimId+'" >View All</a></center></td></tr>';
+                    conveyanceChargesHtml += '<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/conveyanceChargesListView/'+tourBillClaimId+'&'+isDisabled+'" >View All</a></center></td></tr>';
                     conveyanceChargesHtml += '</tbody>';
                     
                     $('#conveyanceChargesTable').html(conveyanceChargesHtml);
@@ -628,7 +616,7 @@
                         boardingLodgingChargesHtml += '<td>'+eachBoardingLodging.total_amount__c+'</td>';  
                         boardingLodgingChargesHtml += '</tr>';
                     });
-                    boardingLodgingChargesHtml+='<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/boardingLodgingListView?tourBillClaimId='+tourBillClaimId+'" >View All</a></center></td></tr>';
+                    boardingLodgingChargesHtml+='<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/boardingLodgingListView/'+tourBillClaimId+'&'+isDisabled+'" >View All</a></center></td></tr>';
                     boardingLodgingChargesHtml += '</tbody>'
 
                     $('#boardingLodgingChargesTable').html(boardingLodgingChargesHtml);
@@ -655,7 +643,7 @@
                           telephoneFoodChargesHtml += '<td>'+eachTelephoneFoodCharge.remarks__c+'</td>';  
                           telephoneFoodChargesHtml += '</tr>';
                     });
-                    telephoneFoodChargesHtml+='<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/telephoneFoodCharge?tourBillClaimId='+tourBillClaimId+'" >View All</a></center></td></tr>';
+                    telephoneFoodChargesHtml+='<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/telephoneFoodCharge/'+tourBillClaimId+'&'+isDisabled+'" >View All</a></center></td></tr>';
                     telephoneFoodChargesHtml += '</tbody>'
 
                     $('#telephoneFoodChargesTable').html(telephoneFoodChargesHtml);
@@ -683,7 +671,7 @@
                         miscellenousChargesHtml += '</tr>';
                     });
                     
-                    miscellenousChargesHtml+='<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/miscellaneousCharge?tourBillClaimId='+tourBillClaimId+'" >View All</a></center></td></tr>';
+                    miscellenousChargesHtml+='<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/miscellaneousCharge/'+tourBillClaimId+'&'+isDisabled+'" >View All</a></center></td></tr>';
                     miscellenousChargesHtml += '</tbody>'
                     $('#miscellaneousChargesTable').html(miscellenousChargesHtml);
                   } 
@@ -705,7 +693,7 @@
           //  alert('tourBillId  '+tourBillId);
             console.log('tourBillId   '+tourBillId);
            // location.assign('/expense/tourBillClaim/airRailBusCharges/'+tourBillId);
-            window.open('/expense/tourBillClaim/airRailBusCharges/'+tourBillId,'_blank');
+            window.open('/expense/tourBillClaim/airRailBusCharges/'+tourBillId+'&'+isDisabled,'_blank');
           });
   
           $('a.conveyanceCharges').click(() => {
@@ -713,7 +701,7 @@
             var tourBillId = document.getElementById('tourBillId').innerHTML;
             console.log('tourBillId   '+tourBillId);
          //   location.assign('/expense/tourBillClaim/conveyanceCharges/'+tourBillId);
-            window.open('/expense/tourBillClaim/conveyanceCharges/'+tourBillId,'_blank');
+            window.open('/expense/tourBillClaim/conveyanceCharges/'+tourBillId+'&'+isDisabled,'_blank');
           });
   
           $('a.boardingLodgingCharges').click(() => {
@@ -721,7 +709,7 @@
             var tourBillId = document.getElementById('tourBillId').innerHTML;
             console.log('tourBillId   : '+tourBillId);
            // location.assign('/expense/tourBillClaim/boardingLodgingCharges/'+tourBillId);
-            window.open('/expense/tourBillClaim/boardingLodgingCharges/'+tourBillId,'_blank');
+            window.open('/expense/tourBillClaim/boardingLodgingCharges/'+tourBillId+'&'+isDisabled,'_blank');
           });
   
           $('a.telephoneFood').click(() => {
@@ -729,7 +717,7 @@
             var tourBillId = document.getElementById('tourBillId').innerHTML;
             console.log('tourBillId   '+tourBillId);
          //   location.assign('/expense/tourBillClaim/telephoneFood/'+tourBillId);
-            window.open('/expense/tourBillClaim/telephoneFood/'+tourBillId,'_blank');
+            window.open('/expense/tourBillClaim/telephoneFood/'+tourBillId+'&'+isDisabled,'_blank');
           });
   
           $('a.miscellaneousCharges').click(() => {
@@ -737,7 +725,7 @@
             var tourBillId = document.getElementById('tourBillId').innerHTML;
             console.log('tourBillId   '+tourBillId);
           //  location.assign('/expense/tourBillClaim/miscellenousCharges/'+tourBillId);
-            window.open('/expense/tourBillClaim/miscellenousCharges/'+tourBillId,'_blank');
+            window.open('/expense/tourBillClaim/miscellenousCharges/'+tourBillId+'&'+isDisabled,'_blank');
           });
 
 
