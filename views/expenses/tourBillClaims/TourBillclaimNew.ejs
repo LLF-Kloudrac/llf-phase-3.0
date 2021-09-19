@@ -2,17 +2,17 @@
 <% include ../../partials/footer %>
 
 <p id='expenseId'><%= parentExpenseId %></p>
-
+<p id= "isDisabled"><%=isDisabled %></p>
 <div>
   <br>
 </div>
 
 <div class="col-md-10 m-auto">
   <div class="col-md-5">
-    <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/tourBillClaim/tourBillClaimListview?expenseId=<%= parentExpenseId %>" >Go To TourBill</a>
+    <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/tourBillClaim/tourBillClaimListview/<%= parentExpenseId %>&<%= isDisabled %>" >Go To TourBill</a>
                   <!-- 
 <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/expense/tourBillClaim/tourBillViewRelated/<%= tourbillId %>"  >Go To TourBill</a> -->
-<a class="btn btn-primary btn-md bg-gray" href="/expense/tourBillClaim/expenseLanding/<%= tourbillId %>"  >Go To Expense</a>
+<a class="btn btn-primary btn-md bg-gray" href="/expense/tourBillClaim/expenseLanding/<%= tourbillId %>&<%= isDisabled %>"  >Go To Expense</a>
   </div>
 
 </div><!-- Create Tour Bill Claim Modal Start -->
@@ -60,14 +60,14 @@
   </div>
  **/
  -->  <div class="" style="margin-top: 25px;margin-left: 30px;">
-    <div id="errorMessages"></div>
+    <div id="errorMessagesss"></div>
   <form  id="tourBillClaimForm" class="needs-validation" novalidate >
 
   <div class="form-group">  
       <div class="row">
         <div class="col-md-6">
-          <label for="validationTooltip01">Tour Bill Claim Name</label><label style="color: red;" for="validationTooltip01">*</label>
-          <input type="text" class="form-control" maxlength="80" id="validationTooltip01" value="" placeholder="Tour Bill Claim Name"  name="tourBillClaimName" required>
+          <label for="validationTooltip01">Tour Bill Claim Name</label>
+          <input type="text" class="form-control" id="validationTooltip01" value="" placeholder="Tour Bill Claim Name"  name="tourBillClaimName" required>
         </div>
     </div>
   </div> 
@@ -93,8 +93,9 @@
      $(document).ready(function(){
 
       $('#expenseId').hide();
+      $('#isDisabled').hide();
         let expenseId = document.getElementById('expenseId').innerHTML;
-
+        let isDisabled = document.getElementById('isDisabled').innerHTML;
         $('#createTourBillClaimModal').modal('show');
         $('#tourBillClaimSubmitbutton').on('click',function(event){
                 event.stopImmediatePropagation();
@@ -122,8 +123,8 @@
 
                           if(jqXHR.responseText== "Saved Successfully !")
                              {
-                                 // alert('Successfully Inserted!');
-                                  window.open('/expense/tourBillClaim/tourBillClaimListview?expenseId='+expenseId,'_blank');
+                                  alert('Successfully Inserted!');
+                                  window.open('/expense/tourBillClaim/tourBillClaimListview/'+expenseId + '&' + isDisabled,'_blank');
                                 $('#tourBillClaimForm')[0].reset()
                                 let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+jqXHR.responseText+
                                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
@@ -137,7 +138,7 @@
                               else
                               {
                                 console.log('jqXHR   '+JSON.stringify(jqXHR));
-                                 // alert('Error: '+jqXHR.responseText);
+                                  alert('Error: '+jqXHR.responseText);
                                 let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+jqXHR.responseText+
                                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
                                 '<span aria-hidden="true">&times;</span>'+
