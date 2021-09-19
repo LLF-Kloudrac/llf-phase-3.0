@@ -3,9 +3,7 @@
 
 <link rel="stylesheet" href="/stylesheets/table-sortable.css">
 <script src="/scripts/table-sortable.js" ></script>
-<div>
-  <a href="#" class="btn btn-primary float-right" style="margin-right: 3%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
-</div>
+
 
 <div class="row mt-5">
     <div class="col-md-9 m-auto">
@@ -230,9 +228,6 @@
 <script>
     $(document).ready(function(){
         $('#expenseDetailsSpinner').hide();
-        $('#ref').click(function() {
-       window.location.reload();
-        })
 
         let columns = {
             sequence: 'Sr No.',
@@ -428,7 +423,7 @@
               pettyCashTableRows += '<td>'+strDate+'</td>';
               pettyCashTableRows += '</tr>';
             }
-            pettyCashTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/pettycashlistview?expenseId='+expenseId+'" >View All</a></center></td></tr>';
+            pettyCashTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/pettycashlistview/'+expenseId+'&true" >View All</a></center></td></tr>';
             $('#pettyCashTable').empty();
             $('#pettyCashTable').html(pettyCashTableRows);
           
@@ -458,7 +453,7 @@
               conveyanceVoucherTableRows += '<td>'+strDate+'</td>';
               conveyanceVoucherTableRows += '</tr>';
             }
-            conveyanceVoucherTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/ConveyanceListView?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
+            conveyanceVoucherTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/ConveyanceListView/'+expenseId+'&true" >View All</a></center></td></tr></tbody>';
             $('#conveyanceVoucherTable').empty();
             $('#conveyanceVoucherTable').html(conveyanceVoucherTableRows);
             
@@ -483,7 +478,7 @@
               tourBillClaimTableRows += '<td>'+tourBillClaimList[i].grand__c+'</td>';
               tourBillClaimTableRows += '</tr>';
             }
-            tourBillClaimTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/tourBillClaimListview?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
+            tourBillClaimTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/tourBillClaimListview/'+expenseId+'&false" >View All</a></center></td></tr></tbody>';
             $('#tourBillClaimTable').empty();
             $('#tourBillClaimTable').html(tourBillClaimTableRows);
 
@@ -510,7 +505,7 @@
 
                 customApprovalTableRows += '</tr>';
             }
-            customApprovalTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/getExpenseApproval?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
+            customApprovalTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/getExpenseApproval/'+expenseId+'&true" >View All</a></center></td></tr></tbody>';
             $('#customApprovalTable').empty();
             $('#customApprovalTable').html(customApprovalTableRows);
             
@@ -601,7 +596,7 @@
                    else if(msg == 'Rejected!')
                    {
                             //    $('#taskForm')[0].reset()
-                  let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+ msg+
+                  let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+ msg+
                   '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
                   '<span aria-hidden="true">&times;</span>'+
                   '</button>'+
