@@ -20,6 +20,8 @@ router.get('/assetDetails',verify,(request, response)=> {
     console.log('Asset request.user '+JSON.stringify(request.user));
     var userId = request.user.sfid;
     var objUser = request.user;
+    var isEnableNewButton;
+   
     console.log('Asset userId : '+userId);
     let qry ='SELECT asset.sfid, asset.isHerokuApprovalButtonDisabled__c,asset.Activity_Code_project__c,asset.accounts_approval__c,asset.Requested_Closure_Plan_Date__c,asset.Status__c,asset.Name, proj.name as projname, proj.sfid as projId,'+
             'asset.Manager_Approval__c, asset.Procurement_Head_Approval__c, asset.Procurement_Committee_Approval__c, '+
@@ -42,6 +44,7 @@ router.get('/assetDetails',verify,(request, response)=> {
             console.log('assetQueryResult   : '+JSON.stringify(assetQueryResult.rows));
             for(let i=0 ; i < assetQueryResult.rows.length; i++)
             {
+                let isNull = false,isApproved = false,isPending = false,isRejected = false,accountApprovalEnabled = false;
                 let obj = {};
                 let crDate = new Date(assetQueryResult.rows[i].createddate);
                 crDate.setHours(crDate.getHours() + 5);
@@ -62,28 +65,162 @@ router.get('/assetDetails',verify,(request, response)=> {
               obj.nononit = assetQueryResult.rows[i].number_of_non_it_product__c;
               obj.itamount = assetQueryResult.rows[i].procurement_it_total_amount__c;
               obj.nonitamount = assetQueryResult.rows[i].procurement_non_it_total_amount__c;
-              obj.totalamount = assetQueryResult.rows[i].total_amount__c;
+             // obj.totalamount = '<span id="amount'+expenseQueryResult.rows[i].sfid+'" ><h6>INR</h6>'+assetQueryResult.rows[i].total_amount__c+'</span>';
+              obj.totalamount  = '<span id="amount'+assetQueryResult.rows[i].sfid+'" >'+assetQueryResult.rows[i].total_amount__c+'</span>';
               obj.dateofRec = strDateOfRecev.toLocaleString().split(',')[0];
               obj.actCode = assetQueryResult.rows[i].actname;
               obj.accAppStatus=assetQueryResult.rows[i].accounts_approval__c;
               obj.status = assetQueryResult.rows[i].status__c
-              if(assetQueryResult.rows[i].manager_approval__c == 'Pending' || assetQueryResult.rows[i].procurement_head_approval__c == 'Pending' ||
-                 assetQueryResult.rows[i].procurement_committee_approval__c == 'Pending' || assetQueryResult.rows[i].procurement_comt_approval_for_fortnight__c == 'Pending' || 
-                 assetQueryResult.rows[i].management_approval__c == 'Pending' || assetQueryResult.rows[i].chairperson_approval__c == 'Pending' ||
-                 assetQueryResult.rows[i].management_approval_less_than_3_quotes__c == 'Pending' || assetQueryResult.rows[i].management_approval_for_fortnight_limit__c == 'Pending' || 
-                 assetQueryResult.rows[i].management_approval_activity_code__c == 'Pending'
-              )
-              {
-                obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
-                obj.editbutton = '<button href="#" disabled="true" class="btn btn-primary assetRequisitionEditModal" id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
-            }
-             else
-             {
-                obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
-                obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
-            }
-              obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
-              obj.createdDate = strDate;
+
+              if(assetQueryResult.rows[i].manager_approval__c == 'Approved' || assetQueryResult.rows[i].procurement_head_approval__c == 'Approved' ||
+              assetQueryResult.rows[i].procurement_committee_approval__c == 'Approved' || assetQueryResult.rows[i].procurement_comt_approval_for_fortnight__c == 'Approved' || 
+              assetQueryResult.rows[i].management_approval__c == 'Approved' || assetQueryResult.rows[i].chairperson_approval__c == 'Approved' ||
+              assetQueryResult.rows[i].management_approval_less_than_3_quotes__c == 'Approved' || assetQueryResult.rows[i].management_approval_for_fortnight_limit__c == 'Approved' || 
+              assetQueryResult.rows[i].management_approval_activity_code__c == 'Approved') 
+                {
+                 isApproved = true;
+                }
+                if(assetQueryResult.rows[i].manager_approval__c == 'Pending' || assetQueryResult.rows[i].procurement_head_approval__c == 'Pending' ||
+                assetQueryResult.rows[i].procurement_committee_approval__c == 'Pending' || assetQueryResult.rows[i].procurement_comt_approval_for_fortnight__c == 'Pending' || 
+                assetQueryResult.rows[i].management_approval__c == 'Pending' || assetQueryResult.rows[i].chairperson_approval__c == 'Pending' ||
+                assetQueryResult.rows[i].management_approval_less_than_3_quotes__c == 'Pending' || assetQueryResult.rows[i].management_approval_for_fortnight_limit__c == 'Pending' || 
+                assetQueryResult.rows[i].management_approval_activity_code__c == 'Pending') 
+                  {
+                  isPending = true;
+                  }
+               if(assetQueryResult.rows[i].manager_approval__c == 'Rejected' || assetQueryResult.rows[i].procurement_head_approval__c == 'Rejected' ||
+                  assetQueryResult.rows[i].procurement_committee_approval__c == 'Rejected' || assetQueryResult.rows[i].procurement_comt_approval_for_fortnight__c == 'Rejected' || 
+                  assetQueryResult.rows[i].management_approval__c == 'Rejected' || assetQueryResult.rows[i].chairperson_approval__c == 'Rejected' ||
+                  assetQueryResult.rows[i].management_approval_less_than_3_quotes__c == 'Rejected' || assetQueryResult.rows[i].management_approval_for_fortnight_limit__c == 'Rejected' || 
+                  assetQueryResult.rows[i].management_approval_activity_code__c == 'Rejected') 
+                    {
+                        isRejected = true;
+                    }
+               else{
+                        isNull = true;
+                   }
+               
+                   console.log('isApproved 103 '+i+': '+assetQueryResult.rows[i].name+': : : '+isApproved);
+                   console.log('isRejected 104 '+i+': '+isRejected);
+                   console.log('isPending 105 '+i+': '+isPending);
+                   console.log('accountApprovalEnabled '+i+': '+accountApprovalEnabled);
+                   console.log('line : 107 (isPending == true && isApproved == false && isRejected == false ) '+(isPending == true && isApproved == false && isRejected == false ));
+                if(isRejected == true && isPending == false && isApproved == false)
+                {
+                   console.log(' +++ Inside is rejected 109  +++ ')
+                  obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
+                  obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" disabled = "true"  id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
+                  obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal"  id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
+                  obj.isEnableNewButton = false;
+                  accountApprovalEnabled = false;
+                }
+               else if(isPending == true && isApproved == false && isRejected == false)
+                {
+                    console.log(' +++ Inside is Pending 119  +++ ')
+                  obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
+                  obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" disabled = "true"  id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
+                  obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" disabled = "true"  id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
+                  obj.isEnableNewButton = false;
+                  accountApprovalEnabled = false;
+                }        
+                else if(isApproved == true && isRejected == true && isPending == false)
+                {
+                    
+                    console.log(' +++ Inside is Pending 129  +++ ')
+                  obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup"  id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
+                  obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
+                  obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal"  id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
+                  obj.isEnableNewButton = true;
+                  accountApprovalEnabled = false;
+                }
+                else if(isApproved == true && isRejected == false && isPending == true)
+                {    
+                    console.log(' +++ Inside is Pending 138 +++ ')
+                  obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" disabled = "true"  id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
+                  obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" disabled = "true"  id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
+                  obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" disabled = "true"  id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
+                  obj.isEnableNewButton = false;
+                  accountApprovalEnabled = false;
+                }    
+                else if(isApproved == true && isPending == false && isRejected == false)
+                {
+                    console.log(' +++ Inside is Approved 147 +++ '+i);
+                  obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
+                  obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup"  id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
+                  obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" disabled = "true"  id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
+                  obj.isEnableNewButton = false;
+                  accountApprovalEnabled = true;
+                  console.log('accountApprovalEnabled '+i+': '+accountApprovalEnabled);
+                }
+                else if(isApproved == true && isPending == true && isRejected == true)
+                {
+                    console.log(' +++ Inside is Approved 157 +++ '+i);
+                  obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
+                  obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
+                  obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
+                  obj.isEnableNewButton = false;
+                  accountApprovalEnabled = false;
+                  console.log('accountApprovalEnabled '+i+': '+accountApprovalEnabled);
+                }
+                else if(isApproved == false && isPending == true && isRejected == true)
+                {
+                    console.log(' +++ Inside is Approved 167 +++ '+i);
+                  obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
+                  obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
+                  obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
+                  obj.isEnableNewButton = false;
+                  accountApprovalEnabled = false;
+                  console.log('accountApprovalEnabled '+i+': '+accountApprovalEnabled);
+                }
+                 if(accountApprovalEnabled == true && (assetQueryResult.rows[i].accounts_approval__c == null)  )
+                {
+                    console.log(' +++ Inside is Approveddddd 177 +++ ')
+                  obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
+                  obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup"  id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
+                  obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" disabled = "true"  id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
+                  obj.isEnableNewButton = true;
+                }
+               
+                else if(assetQueryResult.rows[i].accounts_approval__c == 'Pending' )
+                {
+                    console.log(' +++ Inside is Accounts approval Pending  186 +++ ')
+                  obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
+                  obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
+                  obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal" disabled = "true"  id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
+                  obj.isEnableNewButton = true;
+                }
+                else if(assetQueryResult.rows[i].accounts_approval__c == 'Approved' )
+                {
+                    console.log(' +++ Inside is Accounts approval Approved 194 +++ ')
+                  obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
+                  obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
+                  obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal"  id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
+                  obj.isEnableNewButton = true;
+                }
+                else if(assetQueryResult.rows[i].accounts_approval__c == 'Rejected' )
+                {
+                    console.log(' +++ Inside is Accounts approval rejected 202 +++ ')
+                  obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
+                  obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
+                  obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal"  id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
+                  obj.isEnableNewButton = false;
+                }    
+                else{
+                    console.log(' +++ Inside else  +++ ')
+                    console.log('isApproved 176 '+i+': '+isApproved);
+                    console.log('isRejected 177 '+i+': '+isRejected);
+                    console.log('isPending 178 '+i+': '+isPending);
+                    console.log('accountApprovalEnabled 196 '+i+': '+accountApprovalEnabled);
+                    if(isApproved == false && isRejected == false && isPending == false ){
+                        obj.approvalbutton = '<button href="#" class="btn btn-primary approvalpopup" id="'+assetQueryResult.rows[i].sfid+'" >1st Stage Approval</button>'
+                        obj.accountsapprovalbutton = '<button href="#" class="btn btn-primary accountsapprovalpopup" disabled = "true" id="'+assetQueryResult.rows[i].sfid+'" >Accounts Approval</button>'
+                        obj.editbutton = '<button href="#" class="btn btn-primary assetRequisitionEditModal"  id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
+                        obj.isEnableNewButton = false;
+    
+                    }
+                   
+                }
+               obj.createdDate = strDate;
               modifiedList.push(obj);
               }
               response.send(modifiedList);
@@ -145,10 +282,11 @@ router.get('/assetEditDetails',verify ,async(request, response) =>{
                                  if(ProcurementQueryResult.rowCount > 0)
                                  {
                                     activity = ProcurementQueryResult.rows[0] ;
+                                    console.log('activity ++ '+activity);
                                    projectId = activity.project_department__c;
                                    console.log('Inside Procurement query  : '+projectId);
                                    pool
-                                   .query('Select sfid , Name FROM salesforce.Activity_Code__c where Project__c = $1', [projectId])
+                                   .query('Select sfid , Name FROM salesforce.Activity_Code__c where sfid != $1 AND Project__c = $2', ['null',projectId])
                                    .then((activityCodeQueryResult) => {
                                      console.log('activityCodeQueryResult  : '+JSON.stringify(activityCodeQueryResult.rows));
                                      let numberOfRows, lstActivityCode =[];
@@ -295,7 +433,7 @@ router.get('/fetchActivityCode', verify ,(request, response) => {
                                           console.log('start activity code ++++');
                                         //  console.log('lstProjectId ++++  '+lstProjectId);
                                           pool
-                                          .query('Select sfid , Name FROM salesforce.Activity_Code__c where Project__c = $1', [projId])
+                                          .query('Select sfid , Name FROM salesforce.Activity_Code__c where sfid != $1 AND Project__c = $2', ['null',projId])
                                           .then((activityCodeQueryResult) => {
                                             console.log('activityCodeQueryResult  : '+JSON.stringify(activityCodeQueryResult.rows));
                                             let numberOfRows;
@@ -332,8 +470,16 @@ router.get('/fetchActivityCode', verify ,(request, response) => {
                                                {
                                                  {
                                                   console.log('assetQueryResult.rows[i].if_3_quotations_specify_reason__c '+assetQueryResult.rows[i].if_3_quotations_specify_Reason__c );
-                                                if(assetQueryResult.rows[i].if_3_quotations_specify_reason__c == null  || assetQueryResult.rows[i].reason_for_non_registered_gst_vendor__c == null || assetQueryResult.rows[i].pricing_terms_cost_comparison__c == null || assetQueryResult.rows[i].delivery_terms_delivery_place__c == null || assetQueryResult.rows[i].delivery_terms_delivery_time__c == null || assetQueryResult.rows[i].delivery_cost_incl__c == null)
+                                               /* if(assetQueryResult.rows[i].if_3_quotations_specify_reason__c == null  || assetQueryResult.rows[i].reason_for_non_registered_gst_vendor__c == null || assetQueryResult.rows[i].pricing_terms_cost_comparison__c == null || assetQueryResult.rows[i].delivery_terms_delivery_place__c == null || assetQueryResult.rows[i].delivery_terms_delivery_time__c == null || assetQueryResult.rows[i].delivery_cost_incl__c == null)
                                                    {
+                                                    response.send('Unless and until , the purchase order checklist is not filled completely, the form can not be sent for approval.');
+                                                   } */
+                                                  // if((assetQueryResult.rows[i].if_3_quotations_specify_reason__c == null  && assetQueryResult.rows[i].reason_for_non_registered_gst_vendor__c == null && assetQueryResult.rows[i].pricing_terms_cost_comparison__c == null && assetQueryResult.rows[i].delivery_terms_delivery_place__c == null && assetQueryResult.rows[i].delivery_terms_delivery_time__c == null && assetQueryResult.rows[i].delivery_cost_incl__c == null) || 
+                                                    if(assetQueryResult.rows[i].if_3_quotations_specify_reason__c == null  || assetQueryResult.rows[i].reason_for_non_registered_gst_vendor__c == null || assetQueryResult.rows[i].pricing_terms_cost_comparison__c == null || assetQueryResult.rows[i].delivery_terms_delivery_place__c == null || assetQueryResult.rows[i].delivery_terms_delivery_time__c == null || assetQueryResult.rows[i].delivery_cost_incl__c == null || 
+                                                        assetQueryResult.rows[i].if_3_quotations_specify_reason__c == ""  || assetQueryResult.rows[i].reason_for_non_registered_gst_vendor__c == "" || assetQueryResult.rows[i].pricing_terms_cost_comparison__c == "" || assetQueryResult.rows[i].delivery_terms_delivery_place__c == "" || assetQueryResult.rows[i].delivery_terms_delivery_time__c == "" || assetQueryResult.rows[i].delivery_cost_incl__c == "" ||
+                                                        assetQueryResult.rows[i].if_3_quotations_specify_reason__c == 'None'  || assetQueryResult.rows[i].reason_for_non_registered_gst_vendor__c == 'None' || assetQueryResult.rows[i].pricing_terms_cost_comparison__c == 'None' || assetQueryResult.rows[i].delivery_terms_delivery_place__c == 'None' || assetQueryResult.rows[i].delivery_terms_delivery_time__c == 'None' || assetQueryResult.rows[i].delivery_cost_incl__c == 'None' ) 
+                                                   {
+                                                    console.log('Inside if loop for approval check list');   
                                                     response.send('Unless and until , the purchase order checklist is not filled completely, the form can not be sent for approval.');
                                                    }
                                                  else{
@@ -359,7 +505,7 @@ router.get('/details',verify, async(request, response) => {
 
     var assetId = request.query.assetId;
     console.log('assetId   '+assetId);
-
+    var isEnableNewButton ;
     var assetFormAndRelatedRecords = {};
 
     let qyr1='SELECT asset.id, asset.sfid,asset.name as name ,asset.Requested_Closure_Plan_Date__c,asset.Project_Department__c,asset.Activity_Code_Project__c as actname, '+
@@ -483,38 +629,27 @@ router.get('/details',verify, async(request, response) => {
 
 router.post('/insertAsssetForm',(request,response)=>{
     let body = request.body;
-    let planDate=request.body.planDate;
+    let datepicker=request.body.date_from;
     console.log('Form Value =>'+JSON.stringify(body));
-   const{assetRequisitionName,project,submittedBy,act}=request.body;
+   const{assetRequisitionName,project,date_from,submittedBy,act}=request.body;
    console.log('Asset name=> '+assetRequisitionName);
    console.log('Asset project=> '+project);
-   console.log('Asset planDate=> '+planDate);
+   console.log('Asset planDate=> '+date_from);
    console.log('Asset spocApproval=> '+submittedBy);
    console.log('Activity code '+act);
-  // console.log('Asset spocApproval=> '+spocApproval);
-  // console.log('availableInStock=> '+availableInStock);
-   if(planDate==''){
+   if(datepicker==''){
        console.log('dsjjd');
-       planDate=null;      
+       datepicker=null;      
    }
-   var dt = new Date(planDate);
-   dt.setHours(dt.getHours()+24);
-   dt=new Date(dt);
- /* var todayDate = new Date();
- todayDate.getHours()-18.5;
- var dt =new Date(todayDate);
- 
-console.log('Date>>>' +JSON.stringify(dt));
-  dt = dt.toLocaleDateString.split('T')[0];*/
-  console.log('Date=====' +JSON.stringify(dt)); 
+
+
 const schema=joi.object({
     assetRequisitionName:joi.string().min(3).required().label('Please Fill Asset Requisition Name'),
     asset: joi.string().max(255).required().label('Asset Requisition Name is too long'),
     project:joi.string().required().label('Please choose Project/Department'),
-    dt:joi.date().min("now").label('Date must not be less than Today'),
-   // act:joi.string().required().label('Pleasse Chose Activity'),
+    plandte:joi.date().required().label('Please Fill Target Date')
 })
-let result=schema.validate({assetRequisitionName,project,asset:assetRequisitionName,dt:dt});
+let result=schema.validate({assetRequisitionName,project,asset:assetRequisitionName,plandte:datepicker});
 if(result.error){
     console.log('fd'+result.error);
     response.send(result.error.details[0].context.label);    
@@ -523,7 +658,7 @@ else{
    let query ='INSERT INTO salesforce.Asset_Requisition_Form__c (name,Project_Department__c,Requested_Closure_Plan_Date__c,Activity_Code_project__c,Submitted_By_Heroku_User__c) values ($1,$2,$3,$4,$5)';
    console.log('asset Insert Query= '+query);
    pool
-   .query(query,[assetRequisitionName,project,planDate,act,submittedBy])
+   .query(query,[assetRequisitionName,project,date_from,act,submittedBy])
    .then((assetQueryResult) => {     
             console.log('assetQueryResult.rows '+JSON.stringify(assetQueryResult));
             response.send('Successfully Inserted');
@@ -537,91 +672,63 @@ else{
 
 router.post('/updateasset',(request,response)=>{
     let body = request.body;
-    let closurePlanDate =request.body.closurePlanDate;
+    let closurePlanDate =request.body.date_from1;
     let goodsDate=request.body.goodsDate;
-    console.log('body  : '+JSON.stringify(body));
-    const {assetsfid, assetName,activityCode,paymentStatus,status,payement,receiverName,receivedQuantity,quotations,reason,pricing,deliveryPlace,deliveryTime,deliveryCost,attachment,totamt} = request.body;
-    console.log('assetsfid    '+assetsfid);
-    console.log('closurePlanDate  '+closurePlanDate);
-    console.log('activityCode  '+activityCode);
-    console.log('paymentStatus  '+paymentStatus);
-    console.log('status  '+status);
-    console.log('payement  '+payement);
-    console.log('receiverName  '+receiverName);
-    console.log('receivedQuantity  '+receivedQuantity);
-    console.log('goodsDate  '+goodsDate);
-    console.log('assetName  '+assetName);
-    console.log('quotations  '+quotations);
-    console.log('reason  '+reason);
-    console.log('pricing  '+pricing);
-    console.log('deliveryPlace  '+deliveryPlace);
-    console.log('deliveryTime  '+deliveryTime);
-    console.log('deliveryCost  '+deliveryCost);
-    console.log('attachment  '+attachment);
-    console.log('totamt    '+totamt);
-    
+    let deliveryTime = request.body.deliveryTime;
+    console.log('---- 678 procurement.js body  : '+JSON.stringify(body));
 
-    if(closurePlanDate==''){
-        console.log('plan');
-        closurePlanDate='1970-01-02';
+    let {assetsfid, assetName,activityCode,paymentStatus,status,payement,receiverName,receivedQuantity,quotations,reason,pricing,deliveryPlace,deliveryCost,attachment,totamt} = request.body;
+    
+    if(closurePlanDate=='' || typeof(closurePlanDate) == "undefined"){
+        closurePlanDate='';
     }
   
-     if(goodsDate==''){
-        console.log('dsjjd goods ');
-        goodsDate='1970-01-02';
+     if(goodsDate == '' || typeof(goodsDate) == "undefined"){
+        goodsDate= closurePlanDate;
     } 
 
-    console.log('goodsDate'+goodsDate);
+    if(deliveryTime=='' || typeof(deliveryTime) == "undefined"){
+        console.log('deliveryTime ');
+        deliveryTime= closurePlanDate;
+        console.log('deliveryTime'+deliveryTime)
+    } 
+
+    console.log('--- 697 procurement.js goodsDate'+goodsDate);
+    console.log('--- 698 procurement.js deliveryTime'+deliveryTime);
 
     let updateQuerry = 'UPDATE salesforce.Asset_Requisition_Form__c SET '+
     'Name = \''+assetName+'\', '+
     'Requested_Closure_Plan_Date__c = \''+closurePlanDate+'\', '+
     'Activity_Code_Project__c = \''+activityCode+'\', '+
     'p_o_attachment__c = \''+attachment+'\', '+
-   // 'Payment_Status__c = \''+paymentStatus+'\', '+
     'Status__c = \''+status+'\', '+
     'Payment_Received_Acknowledgement__c = \''+payement+'\', '+
     'Receiver_Name__c = \''+receiverName+'\', '+
     'if_3_quotations_specify_reason__c= \''+quotations+'\', '+
     'reason_for_non_registered_gst_Vendor__c= \''+reason+'\', '+
     'pricing_terms_cost_comparison__c= \''+pricing+'\', '+
-    'delivery_terms_delivery_place__c= \''+deliveryPlace+'\', '+
-    'delivery_terms_delivery_time__c= \''+deliveryTime+'\', '+
-    'delivery_cost_incl__c= \''+deliveryCost+'\', '+
-    'Received_Quantity_Goods__c= \''+receivedQuantity+'\', '+
-    'Date_of_Receiving_Goods__c= \''+goodsDate+'\' '+
-    'WHERE sfid = $1';
-    console.log('updateQuerry '+updateQuerry);
-
-    if(totamt<1){
-        updateQuerry = 'UPDATE salesforce.Asset_Requisition_Form__c SET '+
-    'Name = \''+assetName+'\', '+
-    'Requested_Closure_Plan_Date__c = \''+closurePlanDate+'\', '+
-    'Activity_Code_Project__c = \''+activityCode+'\', '+
-    'p_o_attachment__c = \''+attachment+'\', '+
-   // 'Payment_Status__c = \''+paymentStatus+'\', '+
-    'Status__c = \''+status+'\', '+
-    'Payment_Received_Acknowledgement__c = \''+payement+'\', '+
-    'Receiver_Name__c = \''+receiverName+'\', '+
-    'if_3_quotations_specify_reason__c= \''+quotations+'\', '+
-    'reason_for_non_registered_gst_Vendor__c= \''+reason+'\', '+
-    'pricing_terms_cost_comparison__c= \''+pricing+'\', '+
-    'delivery_terms_delivery_place__c= \''+deliveryPlace+'\', '+
-   // 'delivery_terms_delivery_time__c= \''+deliveryTime+'\', '+
-    'delivery_cost_incl__c= \''+deliveryCost+'\', '+
-    'Received_Quantity_Goods__c= \''+receivedQuantity+'\', '+
-    'Date_of_Receiving_Goods__c= \''+goodsDate+'\' '+
-    'WHERE sfid = $1';
-    console.log('updateQuerry '+updateQuerry);
-
-
+    'delivery_terms_delivery_place__c= \''+deliveryPlace+'\', ';
+    
+    if(totamt >= 1) {
+        updateQuerry += 'Payment_Status__c = \''+paymentStatus+'\', '+
+        'delivery_terms_delivery_time__c= \''+deliveryTime+'\', ';
     }
+
+    if(deliveryCost != '') {
+        updateQuerry += 'delivery_cost_incl__c= \''+deliveryCost+'\', ';
+    }
+
+    updateQuerry += 'Received_Quantity_Goods__c= \''+receivedQuantity+'\', '+
+    'Date_of_Receiving_Goods__c= \''+goodsDate+'\' '+
+    'WHERE sfid = $1';
+    console.log('---- 725 procurement.js updateQuerry: ' + updateQuerry);
 
     var payPass='';
     var attchPass='';
     var quant='';
-
-    if(receivedQuantity >0 || receivedQuantity == null || receivedQuantity == '')
+    
+    console.log('---- 731 procurement.js receivedQuantity: ' + receivedQuantity);
+    if(receivedQuantity > 0 || receivedQuantity == null || receivedQuantity == '')
     {
         quant = true;
     }
@@ -635,9 +742,7 @@ router.post('/updateasset',(request,response)=>{
             payPass='true';
             console.log('status :'+status+' paymetStatus :'+paymentStatus+' payPass:'+payPass);
         } 
-          
     }
-    
     else{
         if(status!='Closed'){
             payPass='false';
@@ -645,7 +750,7 @@ router.post('/updateasset',(request,response)=>{
     }
     if(attachment!=null && attachment!=''){
         console.log('reason '+reason+' quotations:'+quotations+' pricing:'+pricing+' deliveryPlace:'+deliveryPlace+' deliveryTime:'+deliveryTime+' deliveryCost:'+deliveryCost);
-        if(reason=='true' && quotations =='true' && pricing=='true'  && deliveryPlace!='' && deliveryTime!='' && deliveryCost!='' ){
+        if(reason=='true' || quotations =='true' || pricing=='true'  || deliveryPlace!='' || deliveryTime!='' || deliveryCost!='' ){
             attchPass='true';
             console.log('attchPass '+attchPass);
         }
@@ -669,26 +774,24 @@ router.post('/updateasset',(request,response)=>{
          console.log('queryResultUpdate '+JSON.stringify(queryResultUpdate));
          response.send('Successfully Updated!');
         }).catch((eroor)=>{console.log(JSON.stringify(eroor.stack))})
-
             }
-
-
-        
      }
-
-
-
      else{
-         response.send('Final Payment Status can be chosen as Closed only when Final Payment Status is Released.')
+         response.send('Final Payment Status can be chosen as Closed only when Final Payment Status is Released.');
+         return;
      }
-    
     }
     else{
-        console.log('@@@@@');
-        if(attchPass=='true'){
-            if(payPass=='true' || payPass=='false'){
-                console.log('@@@@@1111');
-                if(quant == 'true'){
+        console.log('---- 785 procurement.js quant: ' + quant);
+        console.log('---- 786 procurement.js attchPass: ' + attchPass);
+        console.log('---- 787 procurement.js payPass: ' + payPass);
+        if(attchPass=='true')
+        {
+            if(payPass=='true' || payPass=='false')
+            {
+                console.log('---- 792 procurement.js (quant == \'true\'): ' + (quant == 'true'));
+                if(quant == true || quant == 'true')
+                {
                     const schema=joi.object({
                         assetName:joi.string().min(3).required().label('Please Fill Asset Requisition Name'),
                     })
@@ -702,95 +805,36 @@ router.post('/updateasset',(request,response)=>{
                     .then((queryResultUpdate)=>{
                     console.log('queryResultUpdate '+JSON.stringify(queryResultUpdate));
                     response.send('Successfully Updated!');
-                    }).catch((eroor)=>{console.log(JSON.stringify(eroor.stack))})  
-                    
-
+                    }).catch((eroor)=>{console.log(JSON.stringify(eroor.stack));})
                     }
-
-        
-                    
-
                 }
                 else{
-                    response.send('Received Quantity(Goods) should not be negative.')
+                    response.send('Received Quantity(Goods) should not be negative.');
+                    return;
                 }
-               
             }
             else{
-                response.send('Choose Status Closed only When payment is Released !!!')
-
+                response.send('Choose Status Closed only When payment is Released !!!');
+                return;
             }
-           
-        }  
+        }
         else{
             response.send('Please fill all field in Purchase Order Checklist');
-        }        
-    }
-
-
-})
-
-
-
-   
-    
-    /* 
-    else if(paymentStatus=='Rejected'){
-        if(status=='' && payement=='' && receiverName=='' && receivedQuantity==''){
-            console.log('VAlidation passed for REJECTED payments');
-            let updateQuerry = 'UPDATE salesforce.Asset_Requisition_Form__c SET '+
-    'Name = \''+assetName+'\', '+
-    'Requested_Closure_Actual_Date__c = \''+closureActualDate+'\', '+
-    'Requested_Closure_Plan_Date__c = \''+closurePlanDate+'\', '+
-    'Activity_Code_Project__c = \''+activityCode+'\', '+
-    'p_o_attachment__c = \''+attachment+'\', '+
-  //  'Payment_Status__c = \''+paymentStatus+'\', '+
-    'Status__c = \''+status+'\', '+
-    'Payment_Received_Acknowledgement__c = \''+payement+'\', '+
-    'Receiver_Name__c = \''+receiverName+'\', '+
-    'Received_Quantity_Goods__c= \''+receivedQuantity+'\', '+
-    'if_3_quotations_specify_reason__c= \''+quotations+'\', '+
-    'reason_for_non_registered_gst_Vendor__c= \''+reason+'\', '+
-    'pricing_terms_cost_comparison__c= \''+pricing+'\', '+
-    'delivery_terms_delivery_place__c= \''+deliveryPlace+'\', '+
-    'delivery_terms_delivery_time__c= \''+deliveryTime+'\', '+
-    'delivery_cost_incl__c= \''+deliveryCost+'\', '+
-    'Date_of_Receiving_Goods__c= \''+goodsDate+'\' '+
-    'WHERE sfid = $1';
-    console.log('updateQuerry '+updateQuerry);
-   pool.query(updateQuerry,[assetid])
-   .then((queryResultUpdate)=>{
-       console.log('queryResultUpdate '+JSON.stringify(queryResultUpdate));
-       response.send('succesfully inserted');
-   }).catch((eroor)=>{console.log(JSON.stringify(eroor.stack))})
+            return;
         }
-        else{response.send('LEAVE raiser fields blank')}
+    }
+})
  
-    }
-    else {
-        response.send('Updates error ');
-    }
-    */
-    
-   router.get('/nonItProducts/:parentAssetId',verify, (request,response) => {
+   router.get('/nonItProducts/:parentAssetId&:isDisabled',verify, (request,response) => {
 
     let parentAssetId = request.params.parentAssetId;
     console.log('parentAssetId  '+parentAssetId);
     var userId = request.user.sfid; 
     var objUser = request.user;
     console.log('Expense userId : '+userId);
-  /*   let qry ='SELECT sfid ,	State__c,District__c,Items__c Form salesforce.Impaneled_Vendor__c';
-    pool
-    .query()
-    .then((queryResult)=>{
-        console.log('queryResult=>'+JSON.stringify(queryResult.rows));
-        let state =[];
-        queryResult.forEach((each)=>{
-            state.push(each.state);
-        })
-        response.render('procurementIT',{name: request.user.name, email: request.user.email, parentAssetId: parentAssetId});
-    }) */
-    response.render('procurementNonIT',{name: request.user.name,objUser: objUser, email: request.user.email, parentAssetId: parentAssetId});
+    isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled); 
+    response.render('procurementNonIT',{name: request.user.name,objUser: objUser, email: request.user.email,isDisabled: isDisabled, parentAssetId: parentAssetId});
 
 });
 
@@ -803,29 +847,12 @@ router.post('/nonItProducts', (request,response) => {
     console.log('nonItFormResult  '+JSON.stringify(nonItFormResult));
     let parentProcurementId = nonItFormResult.parentProcurementId;
     console.log('parent Id Asset Requisition Form '+parentProcurementId);
-   /*  let img1=request.body.imgpath1;
-    console.log('=>>'+img1);
-    let img2=request.body.imgpath2;
-    console.log('=>>'+img2);
-    let img3=request.body.imgpath3;
-    console.log('=>>'+img3);
-    let justify=request.body.justification;
-    console.log('justified'+justify); */
  
     const{state,district,unit,unitCost,vendor,itemsCategory,items,itemSpecification,quantity,budget}=request.body;
     let numberOfRows,lstNonItProcurement = [];
-   
- 
- 
- 
- 
- 
- 
- 
     
     if(typeof(nonItFormResult.quantity) != 'object')
-    {
- 
+    { 
          let schema=joi.object({
              state:joi.string().required().label('Please select State.'),
               district:joi.string().required().label('Please select District.'),
@@ -835,7 +862,7 @@ router.post('/nonItProducts', (request,response) => {
              itemSpecification:joi.string().min(3).required().label('Please fill Item Specification.'),   
              itemSpeci:joi.string().invalid(' ').label('Please fill Item Specification.'),          
              quantity:joi.number().required().label('Please enter Quantity.'),
-             quanty:joi.number().min(1).label('The Quantity must be greater than 0'),
+             quanty:joi.number().min(0).label('The Quantity cannot be negative.'),
              budget:joi.number().required().label('Please enter Budget.'),
              budg:joi.number().min(0).label('The Budget cannot be negative.'),
          })
@@ -846,7 +873,7 @@ router.post('/nonItProducts', (request,response) => {
              response.send(result.error.details[0].context.label);
          }
          else{
-             if(nonItFormResult.quoteNum<3 && nonItFormResult.justification.length<3){
+             if(nonItFormResult.quoteNum<3 && (nonItFormResult.justification==null || nonItFormResult.justification=="" || nonItFormResult.justification==' ')){
                      response.send('Please enter Justification because quote count is not equal to 3.');    
             }
             else{
@@ -890,7 +917,7 @@ router.post('/nonItProducts', (request,response) => {
                  itemSpecification:joi.string().min(3).required().label('Please fill Item Specification.'), 
                  itemSpeci:joi.string().invalid(' ').label('Please fill Item Specification.'),            
                  quantity:joi.number().required().label('Please enter Quantity.'),
-                 quanty:joi.number().min(1).label('The Quantity cannot be greater tha 0'),
+                 quanty:joi.number().min(0).label('The Quantity cannot be negative.'),
                  budget:joi.number().required().label('Please enter Budget.'),
                  budg:joi.number().min(0).label('The Budget cannot be negative.'),
      
@@ -967,32 +994,21 @@ router.post('/nonItProducts', (request,response) => {
  });
  
 
-router.get('/itProducts/:parentAssetId',verify, (request,response) => {
+router.get('/itProducts/:parentAssetId&:isDisabled',verify, (request,response) => {
 
     let parentAssetId = request.params.parentAssetId;
     console.log('parentAssetId  '+parentAssetId);
     var userId = request.user.sfid; 
     var objUser = request.user;
     console.log('Expense userId : '+userId);
-  /*   let qry ='SELECT sfid ,	State__c,District__c,Items__c Form salesforce.Impaneled_Vendor__c';
-    pool
-    .query()
-    .then((queryResult)=>{
-        console.log('queryResult=>'+JSON.stringify(queryResult.rows));
-        let state =[];
-        queryResult.forEach((each)=>{
-            state.push(each.state);
-        })
-        response.render('procurementIT',{name: request.user.name, email: request.user.email, parentAssetId: parentAssetId});
-    }) */
-    response.render('procurementIT',{name: request.user.name,objUser: objUser, email: request.user.email, parentAssetId: parentAssetId});
-
+    isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled); 
+    response.render('procurementIT',{name: request.user.name,objUser: objUser, email: request.user.email,isDisabled: isDisabled, parentAssetId: parentAssetId});
 });
 router.post('/itProducts', (request,response) => {
 
     console.log('Inside ItProducts Post Method');
     let itFormResult = request.body;
-    console.log('request.body It = '+JSON.stringify(request.body));
     const{state,items,district,vendor,itemCategory,unitCost,unit,itemSpecification,quantity,budget,justification}=request.body;
     let parentProcurementId = '';
   
@@ -1031,8 +1047,7 @@ router.post('/itProducts', (request,response) => {
                  itemSpecification:joi.string().min(3).required().label('Please fill Item Specification.'),
                  itemSpeci:joi.string().invalid(' ').label('Please fill Item Specification.'),
                  quantity:joi.number().required().label('Please enter Quantity.'),
-                // quanty:joi.number().min(1).label('The Quantity cannot be negative.'),
-                 quanty:joi.number().min(1).label('The Quantity must be greater than 0 '),
+                 quanty:joi.number().min(0).label('The Quantity cannot be negative.'),
                  budget:joi.number().required().label('Please enter Budget.'),
                  budg:joi.number().min(0).label('The budget cannot be negative.'),
                 })
@@ -1044,7 +1059,7 @@ router.post('/itProducts', (request,response) => {
             }
             else{
                // if(itFormResult.quoteNum<3 &&(itFormResult.justification==null || itFormResult.justification=="" || itFormResult.justification==' ')){
-                  if(itFormResult.quoteNum<3 && itFormResult.justification.length < 3 ){
+                  if(itFormResult.quoteNum<3 && itFormResult.justification.length < 2 ){
                        response.send('Please enter Justification because quote count is not equal to 3.');     
                  }
                  else{
@@ -1084,8 +1099,7 @@ router.post('/itProducts', (request,response) => {
                     itemSpecification:joi.string().min(3).required().label('Please fill Item Specification.'),  
                     itemSpeci:joi.string().invalid(' ').label('Please fill Item Specification.'),        
                     quantity:joi.number().required().label('Please enter Quantity.'),
-                   // quanty:joi.number().min(0).label('The Quantity cannot be negative.'),
-                    quanty:joi.number().min(1).label('The Quantity must be greater than 0'),
+                    quanty:joi.number().min(0).label('The Quantity cannot be negative.'),
                     budget:joi.number().required().label('Please enter Budget.'),
                     budg:joi.number().min(0).label('The budget cannot be negative.'),
                 })
@@ -1097,8 +1111,7 @@ router.post('/itProducts', (request,response) => {
                 }
                 else{                
                    // if(itFormResult.quoteNum[i]<3 &&(itFormResult.justification[i]==null || itFormResult.justification[i]=="" || itFormResult.justification[i]== ' ' || itFormResult.justification=='  ')){
-                  console.log('itFormResult.justification[i].length => +'+itFormResult.justification[i]);
-                   if(itFormResult.quoteNum[i]<3 && itFormResult.justification[i].length<3){
+                    if(itFormResult.quoteNum[i]<3 && itFormResult.justification[i].length<3){
                        response.send('Please enter Your Justificaton for Quote less than 3 in row number');     
                  }
                  else{
@@ -1145,7 +1158,6 @@ router.post('/itProducts', (request,response) => {
             })
     
         }
-        console.log('Before Inserting Row Count '+request.body.state.length);
        if(lstItProducts.length==numberOfRows)
        {
         const itProductsInsertQuery = format('INSERT INTO salesforce.Product_Line_Item_IT__c (Items__c,Impaneled_Vendor__c,Product_Service_specification__c,State__c,District__c,Per_Unit_Cost__c,Unit__c, Quantity__c, Budget__c,Quote1__c,Quote2__c,Quote3__c,Number_of_quotes__c,justification__c ,Asset_Requisition_Form__c ) values %L returning id',lstItProducts);
@@ -1167,18 +1179,9 @@ router.post('/itProducts', (request,response) => {
     .catch((error)=>{
         console.log('Error in validation Parent Objct Asset REquisition Form '+JSON.stringify(error.stack));
     })
-
-
-
-
-
-
-   
 });
 
-
 router.get('/getRelatedQuote',(request, response) => {
-
     let filterValues = request.query.filtervalues;
     console.log('filtervalues  '+JSON.stringify(filterValues));
     console.log('filterValues.itemsCategoryValue '+filterValues.itemsCategoryValue);
@@ -1195,14 +1198,13 @@ router.get('/getRelatedQuote',(request, response) => {
             console.log('Else Block');
             response.send('Not Found');
         }
-            
     })
     .catch((QuoteQueryError) => {
         console.log('QuoteQueryError  '+QuoteQueryError.stack);
         response.send('Not Found');
     })
-
 });
+
 router.get('/getCostandGSt',async(request,response)=>{
     let data=request.query.data;
     console.log('Data requiremet'+JSON.stringify(data));
@@ -1265,8 +1267,6 @@ router.get('/getCostandGSt',async(request,response)=>{
          console.log('querryError '+querryError.stack);
          response.send(querryError);
      })
-     
-    
 })
 
 router.get('/getCostPerUnit',(request,response)=>{
@@ -1374,8 +1374,6 @@ router.get('/getProjectList', verify ,(request,response) => {
                             { 
                               console.error('Error executing contact query', contactQueryError.stack);
                             })
-    
-
     }
     else {
         pool
@@ -1457,17 +1455,17 @@ router.get('/getProjectList', verify ,(request,response) => {
                             { 
                               console.error('Error executing contact query', contactQueryError.stack);
                             })
-    
     }
-   
 })
 
-router.get('/getProcurementApproval/:parentAssetId',verify,(request,response)=>{
+router.get('/getProcurementApproval/:parentAssetId&:isDisabled',verify,(request,response)=>{
     let objUser=request.user;
     console.log('user '+objUser);
     let parentAssetId = request.params.parentAssetId;
     console.log('parentAssetId  '+parentAssetId);
-    response.render('approvalView',{objUser,parentAssetId:parentAssetId});
+    let isDisabled = request.params.isDisabled;
+    console.log('parentAssetId  '+isDisabled);
+    response.render('approvalView',{objUser,isDisabled,parentAssetId:parentAssetId});
 })
 
 router.get('/getProcurementApprovalList',verify,(request,response)=>{
@@ -1560,12 +1558,14 @@ router.get('/getProcurementApprovalDetails',verify,(request,response)=>{
 })
 
 
-router.get('/getProcurementItListView/:parentAssetId',verify,(request,response)=>{
+router.get('/getProcurementItListView/:parentAssetId&:isDisabled',verify,(request,response)=>{
     let objUser=request.user;
     console.log('user '+objUser);
     let parentAssetId = request.params.parentAssetId;
-    console.log('parentAssetId  '+parentAssetId);
-    response.render('procurementListView',{objUser,parentAssetId:parentAssetId});
+    console.log('parentAssetId ++++  '+parentAssetId);
+    isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled); 
+    response.render('procurementListView',{objUser,isDisabled,parentAssetId: parentAssetId});
 })
 
 router.get('/itProcurementList',(request,response)=>{
@@ -1601,8 +1601,14 @@ router.get('/itProcurementList',(request,response)=>{
               obj.vendor=eachRecord.vendername;
               obj.createdDate = strDate;
              // obj.editAction = '<button href="#" class="btn btn-primary editProcIt" id="'+eachRecord.sfid+'" >Edit</button>'
-              obj.deleteAction = '<button href="#" class="btn btn-primary deleteProcIt" id="'+eachRecord.sfid+'" >Delete</button>'
-
+             if(isDisabled == 'true')
+             {
+                console.log('++Inside if check ++ '+isDisabled);
+             obj.deleteAction = '<button href="#" class="btn btn-primary deleteProcIt" disabled = "true" id="'+eachRecord.sfid+'" >Delete</button>'
+            } else{
+                console.log('++Inside else check ++ '+isDisabled);
+                obj.deleteAction = '<button href="#" class="btn btn-primary deleteProcIt" id="'+eachRecord.sfid+'" >Delete</button>'
+            }
               i= i+1;
               modifiedProcurementITList.push(obj);
             })
@@ -1653,18 +1659,23 @@ router.get('/getProcurementITDetail',(request,response)=>{
     })
 })
 /**********************************  NON IT PROCUREMENT LIST VIEW   ******************************/
-router.get('/getNonItProcurementListVIew/:parentAssetId',verify,(request,response)=>{
+var isDisabled = false;
+
+router.get('/getNonItProcurementListVIew/:parentAssetId&:isDisabled',verify,(request,response)=>{
     let objUser=request.user;
     console.log('user '+objUser);
     let parentAssetId = request.params.parentAssetId;
     console.log('parentAssetId  '+parentAssetId);
-    response.render('getNonItProcurementList',{objUser,parentAssetId: parentAssetId});
+     isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled); 
+    response.render('getNonItProcurementList',{objUser,isDisabled,parentAssetId: parentAssetId});
     
 })
 
 router.get('/NonItProcurementList',(request,response)=>{
     let parentAssetId=request.query.parentId;
     console.log('nonIT DETAIL LIST for parent id=  '+parentAssetId);
+   
     let qry='SELECT proc.sfid,proc.Name as procName ,proc.Items__c ,proc.Products_Services_Name__c, proc.createddate, vend.name as vendorName,proc.Product_Service__c,proc.Quantity__c, proc.Number_of_quotes__c, proc.Budget__c,proc.Impaneled_Vendor__c '+
     'FROM salesforce.Product_Line_Item__c proc '+
     'INNER JOIN salesforce.Impaneled_Vendor__c vend '+
@@ -1695,7 +1706,16 @@ router.get('/NonItProcurementList',(request,response)=>{
               obj.vendor=eachRecord.vendorname;
               obj.createdDate = strDate;
            //   obj.editAction = '<button href="#" class="btn btn-primary editProcurement" id="'+eachRecord.sfid+'" >Edit</button>'
-             obj.deleteAction = '<button href="#" class="btn btn-primary deleteProcIt" id="'+eachRecord.sfid+'" >Delete</button>'
+             console.log('++Inside PROCUREMENT NON-IT isDisabled ++ '+isDisabled);
+            if(isDisabled == 'true')
+            {
+                console.log('++Inside if check ++ '+isDisabled);
+                obj.deleteAction = '<button href="#" class="btn btn-primary deleteProcIt" disabled = "true" id="'+eachRecord.sfid+'" >Delete</button>'
+            } else{
+                console.log('++Inside else check ++ '+isDisabled);
+                obj.deleteAction = '<button href="#" class="btn btn-primary deleteProcIt" id="'+eachRecord.sfid+'" >Delete</button>'
+            }
+             
            i= i+1;
               modifiedProcurementList.push(obj);
             })
@@ -1914,7 +1934,7 @@ router.post('/saveItemDescription',(request,response)=>{
     {
         schema=joi.object({
             category:joi.string().required().label('Please Choose Item Category'),
-            unit:joi.string().min(3).required().label('Please Fill Unit'),
+            unit:joi.string().min(2).required().label('Please Fill Unit'),
             items:joi.string().required().label('Please Select Items'),
             cost:joi.string().min(1).required().label('Please Fill Per Unit Cost'),
             other:joi.string().min(1).max(255).required().label('Please Fill Others as you have choosen other Items'),
@@ -1927,7 +1947,7 @@ router.post('/saveItemDescription',(request,response)=>{
     {
         schema=joi.object({
             category:joi.string().required().label('Please Choose Item Category'),
-            unit:joi.string().min(3).required().label('Please Fill Unit'),
+            unit:joi.string().min(2).required().label('Please Fill Unit'),
             items:joi.string().required().label('Please Select Items'),
             cost:joi.string().min(1).required().label('Please Fill Per Unit Cost'),
               })
@@ -1968,8 +1988,7 @@ router.post('/saveItemDescription',(request,response)=>{
     let body = request.body;
     let schema, result;
     console.log('body  : '+JSON.stringify(body));
-    var bankkDet= request.body.bankkDet;
-    const{name,authority, cont,ifsc,pan,gst,add,accNo,state,url,other,district,reason}=request.body;
+    const{name,authority, cont,bankkDet,ifsc,pan,gst,add,accNo,state,url,other,district,reason}=request.body;
     console.log(name+authority+cont+bankkDet+ifsc+pan+gst+add+accNo+state+url+other+district+reason);
 
     if(gst == null || gst == '' )
@@ -1979,7 +1998,7 @@ router.post('/saveItemDescription',(request,response)=>{
             schema=joi.object({
                 state:joi.string().required().label('Please Choose State'),
                district:joi.string().required().label('Please Choose District'),
-               name:joi.string().min(3).required().label('Please Fill Vendor Name'),
+               name:joi.string().min(3).max(80).required().label('Please Fill Vendor Name'),
                conta:joi.string().required().label('Please Enter Contact Number'),
                cont:joi.number().integer().min(1000000000).max(9999999999).required().label('Contact number should have exact 10 digits'),
                pan:joi.string().min(10).max(10).label('Pan Number Should be Exactly of 10 Digits'),
@@ -1998,7 +2017,7 @@ router.post('/saveItemDescription',(request,response)=>{
             schema=joi.object({
                 state:joi.string().required().label('Please Choose State'),
                district:joi.string().required().label('Please Choose District'),
-               name:joi.string().min(3).required().label('Please Fill Vendor Name'),
+               name:joi.string().min(3).max(80).required().label('Please Fill Vendor Name'),
                conta:joi.string().required().label('Please Enter Contact Number'),
                cont:joi.number().integer().min(1000000000).max(9999999999).required().label('Contact number should have exact 10 digits'),
               // pan:joi.string().min(10).max(10).label('Pan Number Should be Exactly of 10 Digits'),
@@ -2022,7 +2041,7 @@ router.post('/saveItemDescription',(request,response)=>{
             schema=joi.object({
                 state:joi.string().required().label('Please Choose State'),
                 district:joi.string().required().label('Please Choose District'),
-                name:joi.string().min(3).required().label('Please Fill Vendor Name'),
+                name:joi.string().min(3).max(80).required().label('Please Fill Vendor Name'),
                 conta:joi.string().required().label('Please Enter Contact Number'),
                 cont:joi.number().integer().min(1000000000).max(9999999999).required().label('Contact number should have exact 10 digits'),
                 bankkDet:joi.string().min(3).max(255).required().label('Please Fill Bank Details'),
@@ -2038,7 +2057,7 @@ router.post('/saveItemDescription',(request,response)=>{
             schema=joi.object({
                 state:joi.string().required().label('Please Choose State'),
                 district:joi.string().required().label('Please Choose District'),
-                name:joi.string().min(3).required().label('Please Fill Vendor Name'),
+                name:joi.string().min(3).max(80).required().label('Please Fill Vendor Name'),
                 conta:joi.string().required().label('Please Enter Contact Number'),
                 cont:joi.number().integer().min(1000000000).max(9999999999).required().label('Contact number should have exact 10 digits'),
                 bankkDet:joi.string().min(3).max(255).required().label('Please Fill Bank Details'),
@@ -2090,7 +2109,7 @@ console.log(recordlist);
     })
     .catch((error) => {
         console.log('error  : '+error.stack);
-        response.send('Sorry! Data exceeded in Fields');
+        response.send('Error Occurred !');
     })
 }
 
@@ -2150,29 +2169,17 @@ router.get('/getItemList',(request,response)=>{
     })
 })
 
-router.post('/sendProcurementApproval',(request, response) => {
+router.post('/sendProcurementApproval',verify, (request, response) => {
+    let objUser = request.user;
     let body = request.body;
     console.log('body  : '+JSON.stringify(body));
     let comment = body.comment;
     console.log('comment'+comment);
+    let trueValue = true;
+    let falseValue = false;
 
-  /*  let updateProcurementQuery = 'UPDATE salesforce.Asset_Requisition_Form__c SET '+  
-    'isSentForApprovalFromHeroku__c = true , '+
-    'Heroku_Approval_Comment__c = $1 '+
-    'WHERE sfid = $2';
-    pool
-    .query(updateProcurementQuery,[body.comment, body.assetRequisitionFormId])
-    .then((requisitionQueryResult) =>{
-        console.log('requisitionQueryResult  : '+JSON.stringify(requisitionQueryResult));
-        response.send('Approval Sent Successfully !');
-    })
-    .catch((requisitionQueryError) =>{
-        response.send('Error occured while sending approval !');
-    })  */
     const schema=joi.object({
         comment:joi.string().min(4).required().label('Please Fill Comment'),
-
-
     })
 
    let result=schema.validate({comment:comment});
@@ -2182,7 +2189,7 @@ router.post('/sendProcurementApproval',(request, response) => {
      }
      else{
     pool
-    .query('UPDATE salesforce.Asset_Requisition_Form__c SET isSentForApprovalFromHeroku__c = $1 ,Heroku_Approval_Comment__c =$2, isHerokuApprovalButtonDisabled__c = $3 WHERE sfid= $4;',[true, body.comment,true, body.assetRequisitionFormId])
+    .query('UPDATE salesforce.Asset_Requisition_Form__c SET isSentForApprovalFromHeroku__c = $1 ,Heroku_Approval_Comment__c =$2, isHerokuApprovalButtonDisabled__c = $3, Submitted_By_Heroku_User__c = $4 WHERE sfid= $5;',[trueValue, body.comment,trueValue,objUser.sfid, body.assetRequisitionFormId])
     .then((requisitionQueryResult) =>{
         console.log('requisitionQueryResult  : '+JSON.stringify(requisitionQueryResult));
         response.send('Approval Sent Successfully !');
@@ -2194,98 +2201,110 @@ router.post('/sendProcurementApproval',(request, response) => {
        }
 });
 
-router.post('/sendProcurementAccountsApproval',(request, response) => {
+router.post('/sendProcurementAccountsApproval',verify,(request, response) => {
+    let objUser = request.user;
     let body = request.body;
     console.log('body  : '+JSON.stringify(body));
     let comment = body.comment;
-    console.log('comment'+comment);
-    let selectqry ='SELECT asset.id, asset.sfid as sfid,asset.name as name ,asset.Requested_Closure_Plan_Date__c,asset.Project_Department__c, '+
-    'asset.Manager_Approval__c,asset.Management_Approval__c,asset.Procurement_Committee_Approval__c,asset.Chairperson_Approval__c,'+
-    'asset.Accounts_Approval__c,asset.Procurement_Head_Approval__c,'+
-    'asset.Number_Of_IT_Product__c,asset.Number_Of_Non_IT_Product__c,asset.Procurement_IT_total_amount__c,asset.Procurement_Non_IT_total_amount__c, asset.Total_amount__c,proj.name as projname,proj.sfid as profsfid, '+
-    'asset.Management_Approval_Activity_Code__c,asset.Management_Approval_for_fortnight_limit__c, '+
-    'asset.Management_Approval_less_than_3_quotes__c,asset.Procurement_Comt_Approval_for_fortnight__c, '+
-     'asset.P_O_attachment__c,po_attachment_url__c,payment_status__c,asset.status__c,asset.payment_received_acknowledgement__c,asset.receiver_name__c,asset.received_quantity_goods__c,asset.date_of_receiving_goods__c '+
-    'FROM  salesforce.Asset_Requisition_Form__c asset '+
-     'INNER JOIN salesforce.Milestone1_Project__c proj '+
-     'ON asset.Project_Department__c =  proj.sfid '+
-      'WHERE asset.sfid = $1';
-      console.log(selectqry);
-      pool.query(selectqry,[body.assetRequisitionFormId])
-      .then((result)=>{
-          console.log('result '+JSON.stringify(result.rows));
-          let eachRequisitionForm=result.rows[0];
-          if((eachRequisitionForm.manager_approval__c == null) &&
-              (eachRequisitionForm.procurement_head_approval__c == null) &&
-              (eachRequisitionForm.procurement_committee_approval__c == null) &&
-              (eachRequisitionForm.procurement_comt_approval_for_fortnight__c == null)  &&
-              (eachRequisitionForm.management_approval__c == null)  &&
-              (eachRequisitionForm.chairperson_approval__c == null) &&
-              (eachRequisitionForm.management_approval_less_than_3_quotes__c == null ) &&
-              (eachRequisitionForm.management_approval_for_fortnight_limit__c == null) &&
-              (eachRequisitionForm.management_approval_activity_code__c == null )
-          ){
-              console.log('All Approval fields are null');
-              response.send('Please send the record for 1st approval stage , then only it can be send for Accounts Approval.');
-          }
-          else if((eachRequisitionForm.manager_approval__c == 'Pending') ||
-          ( eachRequisitionForm.procurement_head_approval__c == 'Pending') ||
-          ( eachRequisitionForm.procurement_committee_approval__c == 'Pending') ||
-          ( eachRequisitionForm.procurement_comt_approval_for_fortnight__c == 'Pending') ||
-          ( eachRequisitionForm.management_approval__c == 'Pending') ||
-          ( eachRequisitionForm.chairperson_approval__c == 'Pending') ||
-          ( eachRequisitionForm.management_approval_less_than_3_quotes__c == 'Pending') ||
-          ( eachRequisitionForm.management_approval_for_fortnight_limit__c == 'Pending') ||
-          (  eachRequisitionForm.management_approval_activity_code__c == 'Pending')
-          )
-          {
-              console.log('One of the fields are in pending state');
-              response.send('You cannot send for accounts approval until there is a pending status !');
-          }
-          else{
-              console.log('READY FOR SEND Accout APPROVAL');
-              const schema=joi.object({
-                comment:joi.string().required().label('Please Fill Comment'),
-            })
-        
-           let result=schema.validate({comment});
-           if(result.error){
-            console.log('fd'+result.error);
-            response.send(result.error.details[0].context.label);    
-             }
-             else{
+    let sendAccountsApproval = true;
 
-              pool
-              .query('UPDATE salesforce.Asset_Requisition_Form__c SET isSentForApprovalFromHeroku__c = $1 ,Heroku_Accounts_Approval_Comment__c =$2 WHERE sfid= $3;',[true, body.comment, body.assetRequisitionFormId])
-              .then((requisitionQueryResult) =>{
-                  console.log('requisitionQueryResult  : '+JSON.stringify(requisitionQueryResult));
-                  response.send('Accounts Approval Sent Successfully !');
-              })
-              .catch((error)=>{
-                  console.log('error '+JSON.stringify(error.stack));
-                  response.send(error);
-            })
-          }
+    pool
+    .query('SELECT id, sfid, isSentForAccountsApprovalFromHeroku__c from salesforce.Asset_Requisition_Form__c where sfid = $1',[body.assetRequisitionFormId])
+    .then((assetQueryResult) =>{
+        console.log('assetQueryResult.rows  '+JSON.stringify(assetQueryResult.rows));
+        if(assetQueryResult.rowCount > 0)
+        {
+                if(assetQueryResult.rows[0].issentforaccountsapprovalfromheroku__c)
+                {
+                        response.send('Accounts approval sent already !');
+                        return;
+                }
+                else
+                {
+                    console.log('comment'+comment);
+                    let selectqry ='SELECT asset.id, asset.sfid as sfid,asset.name as name ,asset.Requested_Closure_Plan_Date__c,asset.Project_Department__c, '+
+                    'asset.Manager_Approval__c,asset.Management_Approval__c,asset.Procurement_Committee_Approval__c,asset.Chairperson_Approval__c,'+
+                    'asset.Accounts_Approval__c,asset.Procurement_Head_Approval__c,'+
+                    'asset.Number_Of_IT_Product__c,asset.Number_Of_Non_IT_Product__c,asset.Procurement_IT_total_amount__c,asset.Procurement_Non_IT_total_amount__c, asset.Total_amount__c,proj.name as projname,proj.sfid as profsfid, '+
+                    'asset.Management_Approval_Activity_Code__c,asset.Management_Approval_for_fortnight_limit__c, '+
+                    'asset.Management_Approval_less_than_3_quotes__c,asset.Procurement_Comt_Approval_for_fortnight__c, '+
+                     'asset.P_O_attachment__c,po_attachment_url__c,payment_status__c,asset.status__c,asset.payment_received_acknowledgement__c,asset.receiver_name__c,asset.received_quantity_goods__c,asset.date_of_receiving_goods__c '+
+                    'FROM  salesforce.Asset_Requisition_Form__c asset '+
+                     'INNER JOIN salesforce.Milestone1_Project__c proj '+
+                     'ON asset.Project_Department__c =  proj.sfid '+
+                      'WHERE asset.sfid = $1';
+                      console.log(selectqry);
+                
+                      pool.query(selectqry,[body.assetRequisitionFormId])
+                      .then((result)=>{
+                          console.log('result '+JSON.stringify(result.rows));
+                          let eachRequisitionForm=result.rows[0];
+                          if((eachRequisitionForm.manager_approval__c == null) &&
+                              (eachRequisitionForm.procurement_head_approval__c == null) &&
+                              (eachRequisitionForm.procurement_committee_approval__c == null) &&
+                              (eachRequisitionForm.procurement_comt_approval_for_fortnight__c == null)  &&
+                              (eachRequisitionForm.management_approval__c == null)  &&
+                              (eachRequisitionForm.chairperson_approval__c == null) &&
+                              (eachRequisitionForm.management_approval_less_than_3_quotes__c == null ) &&
+                              (eachRequisitionForm.management_approval_for_fortnight_limit__c == null) &&
+                              (eachRequisitionForm.management_approval_activity_code__c == null )
+                          ){
+                              console.log('All Approval fields are null');
+                              response.send('Please send the record for 1st approval stage , then only it can be send for Accounts Approval.');
+                          }
+                          else if((eachRequisitionForm.manager_approval__c == 'Pending') ||
+                          ( eachRequisitionForm.procurement_head_approval__c == 'Pending') ||
+                          ( eachRequisitionForm.procurement_committee_approval__c == 'Pending') ||
+                          ( eachRequisitionForm.procurement_comt_approval_for_fortnight__c == 'Pending') ||
+                          ( eachRequisitionForm.management_approval__c == 'Pending') ||
+                          ( eachRequisitionForm.chairperson_approval__c == 'Pending') ||
+                          ( eachRequisitionForm.management_approval_less_than_3_quotes__c == 'Pending') ||
+                          ( eachRequisitionForm.management_approval_for_fortnight_limit__c == 'Pending') ||
+                          (  eachRequisitionForm.management_approval_activity_code__c == 'Pending')
+                          )
+                          {
+                              console.log('One of the fields are in pending state');
+                              response.send('You cannot send for accounts approval until there is a pending status !');
+                          }
+                          else{
+                              console.log('READY FOR SEND Accout APPROVAL');
+                              const schema=joi.object({
+                                comment:joi.string().required().label('Please Fill Comment'),
+                            })
+                        
+                           let result=schema.validate({comment});
+                           if(result.error){
+                            console.log('fd'+result.error);
+                            response.send(result.error.details[0].context.label);    
+                             }
+                             else{
+                
+                              pool
+                              .query('UPDATE salesforce.Asset_Requisition_Form__c SET isSentForAccountsApprovalFromHeroku__c = $1 ,Heroku_Accounts_Approval_Comment__c =$2, Submitted_By_Heroku_User__c = $3 WHERE sfid= $4;',[sendAccountsApproval, body.comment, objUser.sfid, body.assetRequisitionFormId])
+                              .then((requisitionQueryResult) =>{
+                                  console.log('requisitionQueryResult  : '+JSON.stringify(requisitionQueryResult));
+                                  response.send('Accounts Approval Sent Successfully !');
+                              })
+                              .catch((error)=>{
+                                  console.log('error '+JSON.stringify(error.stack));
+                                  response.send(error);
+                            })
+                          }
+                        }
+                      })
+                    .catch((requisitionQueryError) =>{
+                        console.log('requisitionQueryError   '+requisitionQueryError);
+                        response.send('Error occured while sending approval !');
+                    }) 
+
+                }
         }
-      })
-
-  /*  pool
-    .query('UPDATE salesforce.Asset_Requisition_Form__c SET isSentForApprovalFromHeroku__c = $1 ,Heroku_Approval_Comment__c =$2 WHERE sfid= $3;',[true, body.comment, body.assetRequisitionFormId])
-    .then((requisitionQueryResult) =>{
-        console.log('requisitionQueryResult  : '+JSON.stringify(requisitionQueryResult));
-        response.send('Accounts Approval Sent Successfully !');
     })
-    */
-    .catch((requisitionQueryError) =>{
-        console.log('requisitionQueryError   '+requisitionQueryError);
+    .catch((assetQueryError)=>{
+        console.log('assetQueryError  : '+assetQueryError.stack);
         response.send('Error occured while sending approval !');
-    }) 
-
-    
+    })
 });
-
-
-
 
 router.post('/updateVendor',(request,response)=>{
     let body = request.body;
@@ -2312,7 +2331,7 @@ router.post('/updateVendor',(request,response)=>{
          schema=joi.object({
             state:joi.string().required().label('Please Choose State'),
             district:joi.string().required().label('Please Choose District'),
-            name:joi.string().min(3).required().label('Please Fill Vendor Name'),
+            name:joi.string().min(3).max(80).required().label('Please Fill Vendor Name'),
             bankDetail:joi.string().min(3).max(255).required().label('Please Fill Bank Details'),
             aacc:joi.string().min(3).required().label('Please Fill Bank Account Number'),
             ifsc:joi.string().min(3).max(20).required().label('Please Fill Bank IFSC Code.'),
@@ -2324,11 +2343,10 @@ router.post('/updateVendor',(request,response)=>{
     }
     else
     {
-
         schema=joi.object({
            state:joi.string().required().label('Please Choose State'),
            district:joi.string().required().label('Please Choose District'),
-           name:joi.string().min(3).required().label('Please Fill Vendor Name'),
+           name:joi.string().min(3).max(80).required().label('Please Fill Vendor Name'),
            bankDetail:joi.string().min(3).max(255).required().label('Please Fill Bank Details'),
            aacc:joi.string().required(3).label('Please Fill Bank Account Number'),
            ifsc:joi.string().min(3).max(20).required().label('Please Fill Bank IFSC Code.'),
@@ -2348,7 +2366,7 @@ router.post('/updateVendor',(request,response)=>{
                          'Bank_Account_No__c = \''+aacc+'\', '+
                          'contact_no__c = \''+cont+'\', '+
                          'name_of_signing_authority__c = \''+auth+'\', '+
-                         'name = \''+bankDetail+'\', '+
+                         'bank_details__c = \''+bankDetail+'\', '+
                          'Bank_IFSC_Code__c = \''+ifsc+'\', '+
                          'pan_no__c = \''+pan+'\', '+
                          'address__c = \''+add+'\', '+
@@ -2357,6 +2375,7 @@ router.post('/updateVendor',(request,response)=>{
                       //   'Others__c = \''+other+'\' '+ 
                       //   'quote_public_url__c = \''+quote+'\' '+                       
                          'WHERE sfid = $1';
+                        //  console.log('dolorr>>>>>>>>>>>',$1)
   console.log('updateQuerry  '+updateQuerry);
     pool
     .query(updateQuerry,[hide])
@@ -2674,12 +2693,14 @@ response.send("succesfully Update");
 
 })
 
-router.get('/upload/:parentAssetId',verify,(request,response)=>{
+router.get('/upload/:parentAssetId&:isDisabled',verify,(request,response)=>{
 
     let parentAssetId = request.params.parentAssetId;
     let objUser=request.user;
     console.log('parentAssetId  '+parentAssetId);
-    response.render('uploadFile',{parentAssetId,objUser});
+    let isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled);
+    response.render('uploadFile',{parentAssetId,isDisabled,objUser});
 })
 
 router.post('/uploadFiless',(request,response)=>{
@@ -2745,12 +2766,15 @@ router.post('/uploadItemFiless',(request,response)=>{
 })
 
 
-router.get('/assetRequisitionViewRel/:parentExpenseId',verify,(request, response) => {
+router.get('/assetRequisitionViewRel/:parentExpenseId&:isDisabled',verify,(request, response) => {
     var parentprocurementId = request.params.parentExpenseId;
     console.log('parentExpenseId  '+parentprocurementId);
+    isDisabled = request.params.isDisabled;
+    console.log(' ++++ isDisabled ++++ '+isDisabled); 
+    
   let objUser=request.user;
         console.log('user '+objUser);  
-        response.render('AssetLandingPage',{objUser,parentprocurementId:parentprocurementId}); 
+        response.render('AssetLandingPage',{objUser,isDisabled,parentprocurementId:parentprocurementId}); 
 })
 
 router.get('/impaneledVendorUpload/:itemId',verify,(request, response) => {
