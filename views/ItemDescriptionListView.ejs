@@ -4,9 +4,7 @@
 <p id="vendorId"><%= vendorId %></p>
 <link rel="stylesheet" href="/stylesheets/table-sortable.css">
 <script src="/scripts/table-sortable.js" ></script>
-<div>
-  <a href="#" class="btn btn-primary float-right" style="margin-right: 3%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
-</div>
+
 <h3 style="text-align: center;">Item Description</h3>
 <div class="container">
     <div class="row mt-5 mb-3 align-items-center">
@@ -130,7 +128,7 @@
                     </div>
                     <div class="col-md-6">
                         <label for="vendor">Vendor Name </label>
-                        <input type="text"  class="form-control" id="vendor" value=""  readonly name="vendor" >
+                        <input type="text"  class="form-control" id="vendor" value=""   name="vendor" >
                       </div>
                 </div>
               </div>
@@ -139,11 +137,11 @@
                   
                   
                   <div class="col-md-6">
-                  <label for="cate">Category </label><label style="color:red">*</label>
+                  <label for="cate">Category </label>
                     <select id="cate" name="cate" class="form-control item_unit"><option value="">Select</option></select>
                   </div>
                   <div class="col-md-6">
-                    <label for="item">  Item </label><label style="color:red">*</label>
+                    <label for="item">  Item </label>
                     <select id="item" name="item" class="form-control item_unit" ><option value="">Select</option></select>
                     </div>
                 </div>
@@ -153,12 +151,12 @@
             <div class="form-group">
                 <div class="row">
                   <div class="col-md-6">
-                  <label for="unit">Unit </label><label style="color:red">*</label>
-                    <input type="text" class="form-control" id="unit" value="" maxlength="255"   name="unit" >
+                  <label for="unit">Unit </label>
+                    <input type="text" class="form-control" id="unit" value=""   name="unit" >
                   </div>
                   <div class="col-md-6">
-                    <label for="cost"> Cost Per Unit </label><label style="color:red">*</label>
-                    <input type="number" class="form-control" id="cost" value="" max="10"  name="cost" >
+                    <label for="cost"> Cost Per Unit </label>
+                    <input type="number" class="form-control" id="cost" value=""   name="cost" >
                     </div>
                 </div>
             </div>
@@ -168,13 +166,13 @@
                   <div class="row">
                     <div class="col-md-6">
                         <label for="other"> Other Items</label>
-                        <input type="text" class="form-control" id="other" value=""  maxlength="255" name="other" >
+                        <input type="text" class="form-control" id="other" value=""   name="other" >
                         </div>
                       <div class="col-md-6">
                         <input type="hidden" class="form-control" id="hide" value=""   name="hide" >
                         </div>
                   </div>     
-              </div> 
+              </div>
               <div class="modal-footer">
                   <button type="submit" class="btn btn-primary" id="editItemButton" data-dismiss="modal">Save</button>
                   <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -191,19 +189,16 @@
         $('#vendorId').hide();
         var id = document.getElementById('vendorId').innerHTML;
        // alert('id '+id);
-       $('#ref').click(function() {
-       window.location.reload();
-        })
 
         let columns ={
             sequence : 'Sequence',
-            editAction:'Action',
             name: ' Item ID',
             category: 'Category',
             item : 'Items',
             unit:'Unit',
             cost:'Per Unit Cost',
            createdDate:'Created Date',
+           editAction:'Action'
         }
         var table = $('#ItemDescriptionTable').tableSortable({
             data :[],
