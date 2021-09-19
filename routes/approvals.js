@@ -79,7 +79,7 @@ router.get('/pldFormApprovals',verify, (request, response) => {
 router.get('/pldFormsApprovalList', verify, (request, response) => {
     let objUser = request.user;
 
-    pool.query('SELECT app.Submitter_Heroku__c, app.status__c, app.createddate, app.record_name__c, app.expense__c, pldresp.name FROM salesforce.Custom_Approval__c as app INNER JOIN salesforce.Project_Survey_Response__c as pldresp ON app.expense__c = pldresp.sfid WHERE Approval_Type__c = $1 AND Assign_To__c = $2 ',['PldForm', objUser.sfid])
+    pool.query('SELECT app.Submitter_Heroku__c, app.status__c, app.createddate, pldresp.createddate, app.record_name__c, app.expense__c, pldresp.name FROM salesforce.Custom_Approval__c as app INNER JOIN salesforce.Project_Survey_Response__c as pldresp ON app.expense__c = pldresp.sfid WHERE Approval_Type__c = $1 AND Assign_To__c = $2 ',['PldForm', objUser.sfid])
     .then((customApprovalResult) => {
             console.log('customApprovalResult  : '+JSON.stringify(customApprovalResult.rows));
             if(customApprovalResult.rowCount > 0)
@@ -88,14 +88,31 @@ router.get('/pldFormsApprovalList', verify, (request, response) => {
                 for(let i=0, len = customApprovalResult.rows.length ; i < len ; i++ )
                 {
                     let crDate = new Date(customApprovalResult.rows[i].createddate);
+                    console.log('crDate  : '+crDate);
                     let strDate = crDate.toLocaleString();
+                    console.log('strDate  :'+strDate);
+                    let dateTime = new Date(customApprovalResult.rows[i].createddate);
+                   dateTime.setHours(dateTime.getHours() + 5);
+                   dateTime.setMinutes(dateTime.getMinutes() + 30);
+                  //  dateTime =  dateTime.toLocaleString();
+                  //  console.log('dateTime   : '+dateTime);
                     let obj = {};
                     obj.sequence = (i+1);
-                    obj.recordName = '<a href="https://llfdev1-llf1.cs74.force.com/responsepdf?Id='+customApprovalResult.rows[i].expense__c+'" target="_blank"  id="name'+customApprovalResult.rows[i].expense__c+'" class="pldResponseName" >'+customApprovalResult.rows[i].name+'</a>';
+                    obj.recordName = '<a href="https://learninglinksfoundationdonor.secure.force.com/responsepdf?Id='+customApprovalResult.rows[i].expense__c+'" target="_blank"  id="name'+customApprovalResult.rows[i].expense__c+'" class="pldResponseName" >'+customApprovalResult.rows[i].name+'</a>';
                     obj.currentStatus = customApprovalResult.rows[i].status__c;
-                    obj.createdDate = strDate;
+                    obj.createdDate =  dateTime.toLocaleString();
+                  //  obj.status = assetQueryResult.rows[i].status__c
+                    if(customApprovalResult.rows[i].status__c == 'Approved' || customApprovalResult.rows[i].status__c == 'Rejected' )
+                    {
+                      obj.approveBtn = '<button class="btn btn-primary approveResponse" disabled = "true" id="approve'+customApprovalResult.rows[i].expense__c+'"  >Approve</button>';
+                      obj.rejectBtn = '<button class="btn btn-danger rejectResponse" disabled = "true" id="reject'+customApprovalResult.rows[i].expense__c+'" >Reject</button>';
+                    }
+                   else
+                   {
                     obj.approveBtn = '<button class="btn btn-primary approveResponse" id="approve'+customApprovalResult.rows[i].expense__c+'"  >Approve</button>';
                     obj.rejectBtn = '<button class="btn btn-danger rejectResponse" id="reject'+customApprovalResult.rows[i].expense__c+'" >Reject</button>';
+                  }
+                    
                     lstApprovalRecords.push(obj);
                 }
                 response.send(lstApprovalRecords);
@@ -127,23 +144,45 @@ router.post('/pldApprovalFeedback',verify, (request,response) => {
         statusToSet = 'Rejected';
     }
     console.log('statusToSet  : '+statusToSet);
-    
-    let updateQueryText = 'UPDATE salesforce.Custom_Approval__c SET  '+
+
+
+
+    pool.query('UPDATE salesforce.Project_Survey_Response__c SET Approval_Status__c = $1 WHERE sfid = $2',[statusToSet,body.responseId])
+    .then((responseUpdateQuery) => {
+            if(responseUpdateQuery.rowCount > 0)
+            {
+                let updateQueryText = 'UPDATE salesforce.Custom_Approval__c SET  '+
                           'status__c = \''+statusToSet+'\' '+
                           'WHERE Assign_To__c = $1 AND Approval_Type__c = $2 AND expense__c = $3 ';
 
-    console.log('updateQueryText  : '+updateQueryText);
-    console.log('objUser.Id  :  '+objUser.Id+' body.responseId  : '+body.responseId);
-    pool
-    .query(updateQueryText,[objUser.sfid, 'PldForm', body.responseId])
-    .then((approvalFeedbackResult) => {
-            console.log('approvalFeedbackResult  '+JSON.stringify(approvalFeedbackResult));
-            response.send('Success');
+                console.log('updateQueryText  : '+updateQueryText);
+                console.log('objUser.Id  :  '+objUser.Id+' body.responseId  : '+body.responseId);
+                pool
+                .query(updateQueryText,[objUser.sfid, 'PldForm', body.responseId])
+                .then((approvalFeedbackResult) => {
+                        console.log('approvalFeedbackResult  '+JSON.stringify(approvalFeedbackResult));
+                        response.send('Success');
+                })
+                .catch((approvalFeedbackError) => {
+                    console.log('approvalFeedbackError  '+approvalFeedbackError.stack);
+                    response.send('Error');
+                })
+            }
+            else
+            {
+                response.send('Error');
+            }
+
     })
-    .catch((approvalFeedbackError) => {
+    .catch((responseUpdateQueryError) => {
         console.log('approvalFeedbackError  '+approvalFeedbackError.stack);
         response.send('Error');
     })
+            
+                    
+
+    
+    
  
 });
 
@@ -311,7 +350,7 @@ router.get('/getExpenseApprovalDetail',verify, async(request,response)=>{
           'where app.sfid = $1 '; 
 
           let qryPM ='SELECT app.sfid as appsdif ,app.name as appname , app.Approval_Type__c, app.comment__c,app.Reporting_Manager_Comment__c, app.Submitter_Heroku__c, '+
-          'app.Project_Manager_Comment__c, app.Status__c,  app.Approver_RM__c,userpm.name as userpmname,exp.name as expname,con2.name as submitter, '+
+          'app.Project_Manager_Comment__c, app.Status__c,  app.Approver_RM__c,userpm.name as conname,exp.name as expname,con2.name as submitter, '+
           'app.Amount__c,app.createddate, app.Expense__c,app.Assign_To_PM__c,app.Project_Manager_Approval_Status__c, app.Project_Manager_Comment__c, app.Approver_PM__c '+
           'FROM salesforce.Custom_Approval__c app '+
           'INNER JOIN salesforce.User userpm ON app.Approver_PM__c=userpm.sfid '+
