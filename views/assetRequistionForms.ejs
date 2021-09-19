@@ -2,6 +2,11 @@
 <% include ./partials/footer %> 
 <% include ./partials/messages %>
 
+<style>
+.anchorDisable{
+  pointer-events: none;
+}
+</style>
 
 <!-- <link rel="stylesheet" href="/stylesheets/table-sortable.css">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,11 +15,10 @@
  -->
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="/stylesheets/table-sortable.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
 <script src="/scripts/table-sortable.js" ></script>
 <p id="expenseIdpTag"> </p>
-<div>
-  <a href="#" class="btn btn-primary float-right" style="margin-right: 3%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
-</div>
 <!-- 
 <script>
   
@@ -99,12 +103,12 @@
 <!--Asset Requisition List View-->
 <p id="assetIdpTag"> </p>
 <div class="responsive">
-<h3 style="text-align: center; margin-top: 40px;">Asset Requisition</h3>
+<h3 style="text-align: center; margin-top: 20px;">Asset Requisition</h3>
 <div class="container">
     <div class="row mt-5 mb-3 align-items-center">
         <div class="col-md-6">
           <button class="btn btn-primary btn-md bg-gray"  id="createAssetRequisitionFormButton">Create New</button>
-          <!-- <a href="/procurement/" style="color: #555;" id="refresh" ><i class="fa fa-refresh" style="font-size:34px; margin-left: 10px; margin-top: 30px;"></i> </a> -->
+          <a href="/procurement/" style="color: #555;" id="refresh" ><i class="fa fa-refresh" style="font-size:34px; margin-left: 10px; margin-top: 30px;"></i> </a>
                </div>
         <div class="col-md-3">
         <input type="text" class="form-control" placeholder="Search By Asset Requisition Name" id="searchField" style="margin-top: 5px;">
@@ -156,12 +160,12 @@
  <div class="form-group"> 
  <div class="row">
  <div class="col-md-6">
- <label for="assetRequisitionName">Asset Requisition Name</label><label style="color: red;" for="validationTooltip01">*</label>
- <input type="text" class="form-control" maxlength="80" id="assetRequisitionName" placeholder="Asset Requisition Name" name="assetRequisitionName" required>
+ <label for="assetRequisitionName">Asset Requisition Name <span style="color: red;">*</span></label>
+ <input type="text" class="form-control" id="assetRequisitionName" placeholder="Asset Requisition Name" name="assetRequisitionName" required>
  </div>
 
  <div class="col-md-6">
- <label for="validationTooltip01">Project/Department</label><label style="color: red;" for="validationTooltip01">*</label>
+ <label for="validationTooltip01">Project/Department <span style="color: red;">*</span></label>
  <select id="project" class="form-control project" name="project">
   <option value="">None</option>
  </select>
@@ -173,8 +177,8 @@
  <div class="row">
 
  <div class="col-md-6">
- <label for="planDate">Target Date of Receiving</label>
- <input type="date" class="form-control" id="planDate" value="" name="planDate" >
+ <label for="planDate">Target Date of Receiving <span style="color: red;">*</span></label>
+ <input type="text" class="mydate form-control" id="datepicker" value="" name="date_from" >
  </div>
  <div class="col-md-6">
   <label for="act">Activity code</label>
@@ -235,17 +239,20 @@
   <div class="form-group">
   <div class="row">
   <div class="col-md-6">
-  <label for="assetName">Asset Requistion Name</label><label style="color: red;">*</label>
-  <input type="text" class="form-control" id="assetName" maxlength="80" value="" name="assetName" required>
+  <label for="assetName">Asset Requistion Name</label>
+  <input type="text" class="form-control" id="assetName" value="" name="assetName" required>
   </div>
   
   <div class="col-md-6">
-  <label for="projectName">Project Name<label style="color: red;">*</label></label>
+  <label for="projectName">Project Name</label>
   <input type="text" class="form-control" id="projectName" value="" name="projectName" readonly="true">
   </div>
   <div class="col-md-6">
     <label for="closurePlanDate">Target Date of Receiving</label>
-    <input type="date" class="form-control" id="closurePlanDate" value="" name="closurePlanDate" >
+    <input type="text" class="mydate form-control" id="datepicker1" value="" name="date_from1" >
+   <!--
+<input type="date" class="form-control" id="closurePlanDate" value="" name="closurePlanDate" >
+   --> 
     </div>
     <div class="col-md-6">
       <label for="activityCode">Activity Code</label>
@@ -311,7 +318,8 @@
      <div class="row">
      <div class="col-md-6">
      <label for="deliveryTime">Expected Delivery Date</label>
-     <input type="date" class="form-control" id="deliveryTime" value="" name="deliveryTime" >
+     <!--<input type="date" class="form-control" id="deliveryTime" value="" name="deliveryTime" >-->
+      <input type="text" class="mydate form-control" id="deliveryTime" value="" name="deliveryTime" >
      </div>
      
      <div class="col-md-6">
@@ -448,7 +456,9 @@
   <div class="row">
   <div class="col-md-6">
   <label for="goodsDate">Date Of Receiving(Goods)</label>
-  <input type="date" class="form-control" id="goodsDate" value="" name="goodsDate" >
+  <!--<input type="date" class="form-control" id="goodsDate" value="" name="goodsDate" >-->
+  <input type="text" class="mydate form-control" id="goodsDate" value="" name="date_from3" >
+  
   </div>
   
   <div class="col-md-6">
@@ -482,7 +492,7 @@
 <!--Approval Pop up-->
 
 <div id="approvalCommentModal" class="modal fade bs-example-modal-lg" tabindex ="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
   <h5 class="modal-title" id="commentModalHeading">Approval Comment</h5>
@@ -496,7 +506,7 @@
         <form id="approvalpopup" class="needs-validation" novalidate>
           <div class="form-group">  
             <div class="row">
-              <div class="col-md-12">
+              <div class="col-md-9">
                 <label for="commentTextarea">Comment</label>
                 <textarea class="form-control" id="commentTextarea" rows="3" autocomplete="off"></textarea>
               </div>
@@ -527,7 +537,7 @@
 <!--Accounts Approval Pop up-->
 
 <div id="accountsApprovalCommentModal" class="modal fade bs-example-modal-lg" tabindex ="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
   <h5 class="modal-title" id="commentModalHeading">Accounts Approval Comment</h5>
@@ -541,7 +551,7 @@
   <form name="accountsapproval" id="accountsapprovalpopup" class="needs-validation" novalidate>
     <div class="form-group">  
       <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-9">
           <label for="commentTextarea">Comment</label>
             <textarea class="form-control" id="acccommentTextarea" rows="3" autocomplete="off"></textarea>
               </div>
@@ -614,7 +624,9 @@
                       <i class="fa fa-angle-double-right mr-3"></i>Procurement-Non IT
                     </button>
                     <!-- <button class="btn btn-primary float-right" id="pettyCashButton" >New</button> -->
-                  <a href="#" class="btn btn-primary float-right procurementNonIT" id="pettyCashButton" style="color:white;" >New</a>
+                 
+                    <a href = "#" class="btn btn-primary float-right procurementNonIT"  id="pettyCashButton" style="color:white;" >New</a>              
+                 
                 </h5>
               </div>
 
@@ -636,7 +648,7 @@
           <i class="fa fa-angle-double-right mr-3"></i>Procurement-IT
         </button>
         <!-- <button class="btn btn-primary float-right">New</button> -->
-        <a href="#" class="btn btn-primary float-right procurementIT" style="color:white;">New</a>
+        <a href="#" class="btn btn-primary float-right procurementIT" id="pettyCashButton2" style="color:white;">New</a>
       </h5>
     </div>
     <div id="collapseTwo" class="collapse fade" aria-labelledby="headingTwo"
@@ -716,12 +728,8 @@
 
 <script>
     $(document).ready(function(){
-      $('#ref').click(function() {
-       window.location.reload();
-        })
         let columns ={
           sequence: 'Sr No.',
-          editbutton : 'Action',
           name: 'Asset Requisition Name',
           projectname: 'Project Name',
           //actCode:'Activity Code',
@@ -734,9 +742,10 @@
        //   nonitamount: 'Non-IT Amount' ,
           totalamount: 'Total Amount', 
           createdDate : 'Created Date',
+          editbutton : 'Action',
           approvalbutton : '1st Stage Approval', 
           accountsapprovalbutton : 'Accounts Approval',
-
+       
         }
         var table = $('#AssetListViewTable').tableSortable({
             data :[],
@@ -807,22 +816,28 @@
       console.log('procurementNonIT anchor tag ');
       var assetId = document.getElementById('expenseIdpTag').innerHTML;
       console.log('assetId : '+assetId);
+      let buttonDisable = document.getElementById(assetId).disabled;
+            console.log(' button Disable + '+buttonDisable);
     //  location.assign('/procurement/nonItProducts/'+assetId);
-      window.open('/procurement/nonItProducts/'+assetId,'_blank');
+      window.open('/procurement/nonItProducts/'+assetId+'&'+buttonDisable,'_blank');
       });
       $('a.procurementIT').click(() => {
       console.log('procurementIT anchor tag ');
       var assetId = document.getElementById('expenseIdpTag').innerHTML;
       console.log('assetId : '+assetId);
+      let buttonDisable = document.getElementById(assetId).disabled;
+            console.log(' button Disable + '+buttonDisable);
      // location.assign('/procurement/itProducts/'+assetId);
-      window.open('/procurement/itProducts/'+assetId,'_blank');
+      window.open('/procurement/itProducts/'+assetId+'&'+buttonDisable,'_blank');
       });
       $('a.notes').on('click',function(event){
       //alert('Hello'+this.id);
       var assetId = document.getElementById('expenseIdpTag').innerHTML;
       console.log('assetId notes : '+assetId);
+      let buttonDisable = document.getElementById(assetId).disabled;
+            console.log(' button Disable + '+buttonDisable);
      // location.assign('/procurement/upload/'+assetId);
-      window.open('/procurement/upload/'+assetId,'_blank');
+      window.open('/procurement/upload/'+assetId+'&'+buttonDisable,'_blank');
       })
       $('.approvalCommentModalButton').on('click',function(event){
       //alert('Hello'+this.id);
@@ -872,6 +887,7 @@
       })
     $('#assetIdpTag').hide();
    var assetIds;
+   
     function anchorClickFunctionalities()
     {
         $('a.assetTag').on('click',function(event){
@@ -882,13 +898,24 @@
             $('#expenseIdpTag').hide();
             let assetId = $(this).attr('href');
             console.log('assetId   : '+assetId);
+            let buttonDisable = document.getElementById(assetId).disabled;
+            console.log(' button Disable + '+buttonDisable);
+           
+            if(buttonDisable ===true ){
+          //   document.getElementById("pettyCashButton").setAttribute('disabled',true);
+                document.getElementById("pettyCashButton").classList.add("anchorDisable");
+                document.getElementById("pettyCashButton2").classList.add("anchorDisable");
+              //  document.getElementById("notes").classList.add("anchorDisable");
+            }
+           
           document.getElementById('expenseIdpTag').innerHTML = assetId;
           $("#popup").modal("show");
             $.ajax({
                 type : 'GET',
                 url  : '/procurement/details',
                 data : {
-                    'assetId' : assetId
+                    'assetId' : assetId,
+
                 },
                 dataType : 'json',
                 beforeSend: function()
@@ -1012,9 +1039,9 @@
     assetDetailsTableRows += '<tr>';
     assetDetailsTableRows += '<tr>';
     assetDetailsTableRows += '<td><strong>Proc. Comm. Approval(Amount= 30k-5L)<strong></td>';
-    assetDetailsTableRows += '<td>'+assetDetailsRecord.procurement_comt_approval_for_fortnight__c+'</td>';
+    assetDetailsTableRows += '<td>'+assetDetailsRecord.procurement_committee_approval__c+'</td>';
     assetDetailsTableRows += '<td><strong>Proc. Comm. Approval(>30k/14days/Vendor)<strong></td>';
-    assetDetailsTableRows += '<td>'+assetDetailsRecord.management_approval_for_fortnight_limit__c+'</td>';
+    assetDetailsTableRows += '<td>'+assetDetailsRecord.procurement_comt_approval_for_fortnight__c+'</td>';
     assetDetailsTableRows += '</tr>';
     
         assetDetailsTableRows += '<tr>';
@@ -1028,7 +1055,7 @@
     assetDetailsTableRows += '<td><strong>Management Approval(Less than 3 Quotes)<strong></td>';
     assetDetailsTableRows += '<td>'+assetDetailsRecord.management_approval_less_than_3_quotes__c+'</td>';
     assetDetailsTableRows += '<td><strong>Mgmt. Approval(>30k/14day/Vendor/No GST)<strong></td>';
-    assetDetailsTableRows += '<td>'+assetDetailsRecord.procurement_committee_approval__c+'</td>';
+    assetDetailsTableRows += '<td>'+assetDetailsRecord.management_approval_for_fortnight_limit__c+'</td>';
     assetDetailsTableRows += '</tr>';
     assetDetailsTableRows += '<tr>';
     assetDetailsTableRows += '<tr>';
@@ -1048,7 +1075,7 @@
     assetDetailsTableRows += '<td><strong>UTR Number/Transaction Details<strong></td>';
     assetDetailsTableRows += '<td>'+assetDetailsRecord.utr_number_transaction_details__c+'</td>';
     assetDetailsTableRows += '</tr>';
-    /* assetDetailsTableRows += '<tr>'; */
+    assetDetailsTableRows += '<tr>';
     assetDetailsTableRows += '<tr>';
     assetDetailsTableRows += '<td><strong>Advance Payment Status<strong></td>';
     assetDetailsTableRows += '<td>'+assetDetailsRecord.advance_payment_status__c+'</td>';
@@ -1056,7 +1083,7 @@
     assetDetailsTableRows += '<td>'+assetDetailsRecord.payment_status__c+'</td>';
     assetDetailsTableRows += '</tr>';
     assetDetailsTableRows += '<tr>';
-        /* assetDetailsTableRows += '<tr>'; */
+        assetDetailsTableRows += '<tr>';
     assetDetailsTableRows += '<td><strong>P.O Attachment<strong></td>';
     assetDetailsTableRows += '<td>'+assetDetailsRecord.p_o_attachment__c +'</td>';
     assetDetailsTableRows += '<td><strong>PO Attachment URL<strong></td>';
@@ -1068,7 +1095,6 @@
     else{
     assetDetailsTableRows +='<td></td>';
     }
-    assetDetailsTableRows += '<td></td>';
     assetDetailsTableRows += '</tr>'; 
     
     assetDetailsTableRows += '<tr>';
@@ -1079,11 +1105,9 @@
     }
     }
     else{
-    assetDetailsTableRows +='<td>'+' '+'</td>';
+    assetDetailsTableRows +='<td></td>';
     }
-   
-    assetDetailsTableRows += '<td></td>';
-    assetDetailsTableRows += '<td></td>';
+    assetDetailsTableRows += '<td><strong><strong></td>';
     assetDetailsTableRows += '<td></td>';
     assetDetailsTableRows += '</tr>'; 
     
@@ -1122,21 +1146,21 @@
       if(assetDetails.nonItProducts.length > 0)
                     {
                         let nonItProductTable = '';
-                        nonItProductTable+='<thead>  <th>Procurement_Non-IT ID</th><th>Items</th><th>Quantity</th><th>Budget</th></thead>';
+                        nonItProductTable+='<thead>  <th>Procuremnet_Non-IT ID</th><th>Items</th><th>Quantity</th><th>Budget</th></thead>';
                         assetDetails.nonItProducts.forEach((eachNonIt) => {
                             nonItProductTable += '<tr><td>'+eachNonIt.name +'</td>';
                             nonItProductTable += '<td>'+eachNonIt.items__c +'</td>';
                             nonItProductTable += '<td>'+eachNonIt.quantity__c +'</td>';
                             nonItProductTable += '<td>'+eachNonIt.budget__c +'</td></tr>';  
                         })
-                        nonItProductTable+=  '<td colspan="6"><center><a target="_blank" href="/procurement/getNonItProcurementListVIew/'+assetId+'">View All</a></centre></td>';
+                        nonItProductTable+=  '<td colspan="6"><center><a target="_blank" href="/procurement/getNonItProcurementListVIew/'+assetId+'&'+buttonDisable+'">View All</a></centre></td>';
                             $('#procuremnetNonItTable').empty();
                             $('#procuremnetNonItTable').append(nonItProductTable);
                     }
                     if(assetDetails.itProducts.length > 0)
                     {
                         let itProductTable = '';
-                        itProductTable+='<thead>  <th>Procurement IT ID</th><th>Items</th><th>Quantity</th><th>Budget</th></thead>';
+                        itProductTable+='<thead>  <th>ProcuremnetName</th><th>Items</th><th>Quantity</th><th>Budget</th></thead>';
                         assetDetails.itProducts.forEach((eachIt)=> {
                             console.log('chdc'+JSON.stringify(eachIt));
                             itProductTable += '<tr><td>'+eachIt.name +'</td>';
@@ -1144,7 +1168,7 @@
                             itProductTable += '<td>'+eachIt.quantity__c +'</td>';
                             itProductTable += '<td>'+eachIt.budget__c +'</td></tr>';      
                         })
-                        itProductTable+=  '<td colspan="6"><center><a target="_blank" href="/procurement/getProcurementItListView/'+assetId+'">View All</a></centre></td>';
+                        itProductTable+=  '<td colspan="6"><center><a target="_blank" href="/procurement/getProcurementItListView/'+assetId+'&'+buttonDisable+'">View All</a></centre></td>';
                             $('#procuremnetItTable').empty();
                         $('#procuremnetItTable').append(itProductTable);   
                     }
@@ -1159,7 +1183,7 @@
                             approvalHtml += '<td>'+eachApproval.status__c +'</td>';
                             approvalHtml += '<td>'+eachApproval.approver_s_emails__c +'</td></tr>';      
                         })
-                        approvalHtml+=  '<td colspan="6"><center><a target="_blank" href="/procurement/getProcurementApproval/'+assetId+'">View All</a></centre></td>';
+                        approvalHtml+=  '<td colspan="6"><center><a target="_blank" href="/procurement/getProcurementApproval/'+assetId+'&'+buttonDisable+'">View All</a></centre></td>';
                         $('#approvalTable').empty();
                         $('#approvalTable').append(approvalHtml);   
                     }
@@ -1228,6 +1252,15 @@
       let assetId = this.id;
       console.log('Before Show Edit Modal ');
       $('#assetRequisitionEditModal').modal('show');
+      var date = new Date();
+          date.setDate(date.getDate());
+          console.log('Date picker ++ '+date);
+         
+        $(function() {
+           $( "#datepicker1" ).datepicker({ startDate: date});
+           $( "#deliveryTime" ).datepicker({ startDate: date});
+           $( "#goodsDate" ).datepicker({ startDate: date});
+        });
        console.log('After Show Edit Modal ');
  /*let lstActivityCodes = [];
  $.ajax({
@@ -1258,10 +1291,9 @@
     {
       console.log('hdjsj');
       
-      
         console.log('Validation pqass');
         $('#assetName').attr("readonly",true);
-        $('#closurePlanDate').attr("readonly",true);
+        $('#datepicker1').attr("readonly",true);
         $('#activityCode').attr("readonly",true);
         $('#quotations').attr("disabled",true);
       $('#reason').attr("readonly",true);
@@ -1269,12 +1301,7 @@
       $('#deliveryPlace').attr("readonly",true);
       $('#deliveryTime').attr("readonly",true);
       $('#deliveryCost').attr("readonly",true);
-    
-
     }
-
-
-
 
     if(assetRecord.total_amount__c==0){
       $('#quotations').attr("disabled",true);
@@ -1283,7 +1310,6 @@
       $('#deliveryPlace').attr("disabled",true);
       $('#deliveryTime').attr("disabled",true);
       $('#deliveryCost').attr("disabled",true);
-
     }
       
     //let activityCodes = assetDetailsRecord.activity[0];
@@ -1309,7 +1335,7 @@
       clousrePlanDate = assetRecord.requested_closure_plan_date__c.split('T')[0];
       }
       if(assetRecord.date_of_receiving_goods__c!=null){
-      strReceivingGoodsDate = assetRecord.date_of_receiving_goods__c.split('T')[0];
+      //strReceivingGoodsDate = assetRecord.date_of_receiving_goods__c.split('T')[0];
       console.log('strReceivingGoodsDate : '+strReceivingGoodsDate +' :clousrePlanDate '+ clousrePlanDate);
       }
       
@@ -1344,7 +1370,7 @@
  document.forms["editAssetForm"]["assetName"].value = assetRecord.name;
  document.forms["editAssetForm"]["projectName"].value = assetRecord.projname;
 //document.forms["editAssetForm"]["closureActualDate"].value = strclousreActualDate;
- document.forms["editAssetForm"]["closurePlanDate"].value =clousrePlanDate;
+ document.forms["editAssetForm"]["datepicker1"].value =clousrePlanDate;
  if( assetRecord.activity_code_project__c!=null ){
   document.forms["editAssetForm"]["activityCode"].value = assetRecord.activity_code_project__c;
  }
@@ -1433,6 +1459,13 @@ $('#editassetForm').on('click',function(event){
 // console.log('assetId : '+assetId);
  
  //alert('Save Button Clicked !' );
+ let dateValue = $( "#datepicker1" ).val();
+         // alert('Date value : '+dateValue);
+          if(dateValue == ''){
+            alert('Please fill Target Date of Receiving');
+            return;
+          }        
+         
  var $inputs = $('#editAssetForm :input');
  // not sure if you wanted this, but I thought I'd add it.
  // get an associative array of just the values.
@@ -1450,7 +1483,6 @@ $('#editassetForm').on('click',function(event){
  })
  .done((response) => {
  console.log('resonse :'+response);
- 
  })
  .fail((jqXHR, status, error) => {
  console.log('jqXHR '+JSON.stringify(jqXHR));
@@ -1572,31 +1604,46 @@ function accountsApprovalFunctionality(){
       $.post('/procurement/sendProcurementAccountsApproval',{assetRequisitionFormId:assetRequisitionFormId, comment: comment }, function(response){
       console.log('jqxhrjjkj'+JSON.stringify(response))
       let resp = JSON.stringify(response);
-      console.log('response....'+resp);
+      console.log('response....'+String(resp));
       
-      if(resp== 'Accounts Approval Sent Successfully !')
-      {
-           //    $('#taskForm')[0].reset()
-               let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+ resp+
-            '<button type="button" class="close" data-dismiss="alert aria-label="Close">'+
-              '<span aria-hidden="true">&times;</span>'+
+    if(resp == '"Accounts Approval Sent Successfully !"')
+    {
+          //    $('#taskForm')[0].reset()
+          console.log('Line 1590 response....'+String(resp));
+              let errorHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+ resp+
+          '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+            '<span aria-hidden="true">&times;</span>'+
+          '</button>'+
+        '</div>';
+        $('#accApprovalerrorMessages').empty();
+        $('#accApprovalerrorMessages').append(errorHtml);
+        $('#accountsapprovalpopup')[0].reset()
+    }
+    else if(resp == '"Accounts approval sent already !"')
+    {
+            let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+ resp+
+            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+            '<span aria-hidden="true">&times;</span>'+
             '</button>'+
-          '</div>';
-          $('#accApprovalerrorMessages').empty();
-          $('#accApprovalerrorMessages').append(errorHtml);
-          $('#accountsapprovalpopup')[0].reset()
-             }
-             else{
-              let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+ resp+
-              '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
-              '<span aria-hidden="true">&times;</span>'+
-              '</button>'+
-              '</div>';
-              $('#accApprovalerrorMessages').empty();
-              $('#accApprovalerrorMessages').append(errorHtml); 
-              $('#accountsapprovalpopup')[0].reset()
+            '</div>';
+            $('#accApprovalerrorMessages').empty();
+            $('#accApprovalerrorMessages').append(errorHtml); 
+            $('#accountsapprovalpopup')[0].reset()
 
-             }
+    }
+    else
+    {
+      console.log('Line 1614 response....'+String(resp));
+      let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+ resp+
+        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+        '<span aria-hidden="true">&times;</span>'+
+        '</button>'+
+        '</div>';
+        $('#accApprovalerrorMessages').empty();
+        $('#accApprovalerrorMessages').append(errorHtml); 
+        $('#accountsapprovalpopup')[0].reset()
+
+    }
     
             })
             .fail(function(jqXHR, status, error){
@@ -1609,6 +1656,16 @@ function accountsApprovalFunctionality(){
         let projId = this.id;
       console.log('procurement roter ');
       $('#createAssetRequisitionForm').modal('show');
+     
+          var date = new Date();
+          date.setDate(date.getDate());
+          console.log('Date picker ++ '+date);
+          $(function() {
+           $( "#datepicker" ).datepicker({ startDate: date});
+           });
+         // $('#date').datepicker({ 
+         // startDate: date
+        //  });
       console.log('After Show Edit Modal ');
       $('#act').empty();
       $('#act')
