@@ -6,21 +6,17 @@
 <script src="/scripts/table-sortable.js" ></script>
 <meta name="viewport" content="width=device-width"/>
 
-<div>
-  <a href="#" class="btn btn-primary float-right" style="margin-right: 3%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
-</div>
-
 <center><h3 style="text-align: center; margin-top: 20px;">Petty Cash</h3></center>     
 <p id="expenseId"><%= expenseId %></p>
 
 <div class="container">
                 <div class="row mt-5 mb-3 align-items-center">
                     <div class="col-md-5">
-                        <a class="btn btn-primary btn-md bg-gray" href="/expense/pettyCash/<%= expenseId %>" id="createNewPettyCashButton">Create New</a>
-                        <a class="btn btn-primary btn-md bg-gray" href="/expense/expenseViewRel/<%= expenseId %>" >Go To Expense </a>
+                        <a class="btn btn-primary btn-md bg-gray" href="/expense/pettyCash/<%= expenseId %>&<%= isDisabled %>" id="createNewPettyCashButton">Create New</a>
+                        <a class="btn btn-primary btn-md bg-gray" href="/expense/expenseViewRel/<%= expenseId %>&<%= isDisabled %>" >Go To Expense </a>
                     </div>
                     <div class="col-md-3">
-                    <input type="text" class="form-control" placeholder="Search" id="searchField" style="margin-top: 5px;">
+                    <input type="text" class="form-control" placeholder="Search in table..." id="searchField" style="margin-top: 5px;">
                     </div>
                     <div class="col-md-2 text-right">
                     <span class="pr-2">Rows Per Page:</span>
@@ -81,21 +77,17 @@
     $(document).ready(function(){
        $('#expenseId').hide();
         let expenseId = document.getElementById('expenseId').innerHTML;
-        $('#ref').click(function() {
-       window.location.reload();
-
-     })
       //  alert('expenseId  : '+expenseId);
     /**************Table Sortable Start ***********/
         let columns ={
             sequence : 'Sequence',
-            deleteAction: 'Action',
             name: 'Petty Cash Name',
             billNo : 'Bill Number',
             billDate: 'Bill Date',
             total:'Total Amount',
            // natureOfExpense: 'Nature Of Expense',
             createDdate: 'Created Date',
+            deleteAction: 'Action',
         }
       
       var table = $('#pettyCashExpenseTable').tableSortable({
@@ -207,7 +199,7 @@
                               htmlTable += '<tr>';
                                   htmlTable += '<td ><strong>Nature Of Expense</strong></td>';
                                   if(pettyCashRecord.nature_of_exp__c != null)
-                                      htmlTable += '<td>'+pettyCashRecord.nature_of_exp__c+'</td>';
+                                      htmlTable += '<td style="word-break: break-all">'+pettyCashRecord.nature_of_exp__c+'</td>';
                                   else
                                       htmlTable += '<td></td>';
                                   htmlTable += '<td><strong>Amount</strong></td>';
