@@ -6,9 +6,7 @@
 <link rel="stylesheet" href="/stylesheets/table-sortable.css">
 <script src="/scripts/table-sortable.js" ></script>
 
-<div>
-  <a href="#" class="btn btn-primary float-right" style="margin-right: 3%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
-</div>
+
 <center><h3 style="text-align: center; margin-top: 20px;"> Conveyance Voucher</h3></center>     
 
 <p id="expenseId"><%= expenseId %></p>
@@ -16,8 +14,8 @@
   <div class="container">
     <div class="row mt-5 mb-3 align-items-center">
         <div class="col-md-5">
-            <a class="btn btn-primary btn-md bg-gray" href="/expense/conveyanceVoucher/<%= expenseId %>" id="createNewConveyanceVoucherButton">Create New </a>
-            <a class="btn btn-primary btn-md bg-gray" href="/expense/expenseViewRel/<%= expenseId %>"  >Go To Expense</a>
+            <a class="btn btn-primary btn-md bg-gray" href="/expense/conveyanceVoucher/<%= expenseId %>&<%= isDisabled %>" id="createNewConveyanceVoucherButton">Create New </a>
+            <a class="btn btn-primary btn-md bg-gray" href="/expense/expenseViewRel/<%= expenseId %>&<%= isDisabled %>"  >Go To Expense</a>
             <i class="fa fa-refresh"  id="refresh" style="font-size:34px; margin-left: 10px; margin-top: 30px;"></i> 
           </div>
         <div class="col-md-3">
@@ -76,20 +74,17 @@
     $(document).ready(function() { 
         $('#expenseId').hide();
         let expenseId =document.getElementById('expenseId').innerHTML;
-        $('#ref').click(function() {
-       window.location.reload();
-        })
+
        // alert(expenseId);
        
         let columns ={
-            sequence : 'Sequence',
-            deleteAction: 'Action',
+            sequence : 'Sequence',    
             name: 'Conveyance Voucher ',
             BillAmt:'Bill Amount',
            // TravellingPurpose : 'Purpose of Travel',
            // modeOfTravel : 'Mode of Conveyance',
             createDdate : 'Created Date',
-
+            deleteAction: 'Action',
         }
         
       var table = $('#ConveyanceVoucherTable').tableSortable({
@@ -223,15 +218,18 @@
                                 htmlTable += '<td style="word-break: break-all">'+conveyanceRecord.purpose_of_travel__c+'</td>';
                                /*  htmlTable += '<td><strong>Created Date</strong></td>';
                                 htmlTable += '<td>'+strDate+'</td>'; */
-                                htmlTable += '<td><strong>View Image</strong></td>';
+                              htmlTable += '</tr>';
+                               htmlTable += '<tr>';
+                              htmlTable += '<td><strong>View Image</strong></td>';
                               console.log('conveyanceRecord.heroku_image_url__c) '+conveyanceRecord.heroku_image_url__c);
                               if(conveyanceRecord.heroku_image_url__c != null && conveyanceRecord.heroku_image_url__c != '' && conveyanceRecord.heroku_image_url__c != 'demo')
                                   htmlTable += '<td><a target="_blank" href="'+conveyanceRecord.heroku_image_url__c+'" >Click Here</a></td>';
                               else
                                   htmlTable += '<td></td>';
-                                                         
                               
-                                  
+                                  htmlTable += '<td><strong></strong></td>';
+                                  htmlTable += '<td></td>';
+                              htmlTable += '</tr>';
                               $('#conveyanceVouchertable').empty();
                               $('#conveyanceVouchertable').html(htmlTable);
         
