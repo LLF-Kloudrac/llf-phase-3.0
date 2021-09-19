@@ -5,22 +5,12 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.1/fullcalendar.min.css" type="text/css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.2/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.1/fullcalendar.min.js"></script>
-
 <div class="form-group" style="overflow-y: auto;">
   <p id="objUser"><%= objUser %></p>
   <p id="objname"><%= objname %></p>
   <p id="objUserId"><%= objUserId %></p>
   <p id="contactList"><%= contactList %></p>
-
-  
-  <div>
-    <a href="#" class="btn btn-primary float-right" style="margin-right: 3%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
-  </div>
-  
-  <div>
-    <center><h3 style="text-align: center; margin-top: 20px;">Calendar</h3></center> 
-   
-  </div>
+  <center><h3 style="text-align: center; margin-top: 20px;">Calendar</h3></center>     
 
      <div class="row" style="overflow-y: auto;">
            <div class="col-md-6">
@@ -100,9 +90,6 @@
 
 <script>
     $(document).ready(function() { 
-      $('#ref').click(function() {
-       window.location.reload();
-        })
       $('#objUser').hide();
       $('#objname').hide();
       $('#objUserId').hide();
@@ -685,15 +672,13 @@
                      console.log('Selected view ++ '+selectedView);
                          // selectedView=this.value;
                         console.log('hii i m inside current user view');
-                       $('#assignedresource').empty();
-                       
-                       $('#assignedresource').val('');
+                        $('#assignedresource').val('');
 
                         if(selectedView == 'currentuser')
                         {
                           $('#assignedresource').attr("readonly","readonly");
                           $('#assignedresource')
-                          .append($("<option selected></option>")
+                          .append($("<option></option>")
                           .attr("value",objUserId)
                           .text(objUserName))                        
                         }
@@ -702,10 +687,6 @@
                         {
                           console.log('hii i m inside team view');
                           $('#assignedresource').attr("readonly",false);
-                          $('#assignedresource')
-                            .append($("<option></option>")
-                            .attr("value",'')
-                            .text('None'))
                           $.ajax({
                         url : '/users/getContact',
                         data : {
@@ -718,7 +699,6 @@
                         console.log('response  '+JSON.stringify(response));
                         if(response.length > 0)
                             {
-
                             response.forEach((eachContact) => {
                             console.log('eachContact.name '+eachContact.name);
                             $('#assignedresource')
@@ -752,7 +732,7 @@
                 
                     if(seletedDate.getTime() > currentDate.getTime())
                     {
-                          alert('You cannot fill timesheet of future date !');
+                          alert('You cannot fill timesheet of the today date !');
                     }
                     else
                     {
@@ -992,12 +972,12 @@
         <div class="form-group">  
           <div class="row">
             <div class="col-md-6">
-              <label for="validationTooltip01">Task Description</label><label style="color: red;">*</label>
-              <input type="text" class="form-control" id="validationTooltip01" maxlength="80" placeholder=""  name="taskname" required>
+              <label for="validationTooltip01">Task Description <span style="color: red;">*</span></label>
+              <input type="text" class="form-control" id="validationTooltip01" placeholder=""  name="taskname" required>
             </div>
            
             <div class="col-md-6">
-              <label for="validationTooltip02">Task Type</label><label style="color: red;">*</label>
+              <label for="validationTooltip02">Task Type <span style="color: red;">*</span></label>
               <select class="custom-select custom-select-sm form-control" name="tasktype">
                   <option value=''>None</option>
                   <option value="Generic-Reflecting & Planning - Personal Time for official work">Generic-Reflecting & Planning - Personal Time for official work</option>
@@ -1060,7 +1040,7 @@
         <div class="form-group"> 
           <div class="row">
           <div class="col-md-6">
-            <label for="validationTooltip03">Project</label><label style="color: red;">*</label>
+            <label for="validationTooltip03">Project <span style="color: red;">*</span></label>
             <select class="custom-select custom-select-sm form-control" name="projectname">
               <option value="" >None</option>
               <% if(projectList.length != 0) { %>
@@ -1081,7 +1061,7 @@
         <div class="form-group">
           <div class="row">
             <div class="col-md-6">
-              <label for="validationTooltip02">Assign to Heroku user</label><label style="color: red;">*</label>
+              <label for="validationTooltip02">Assign to Heroku user <span style="color: red;">*</span></label>
               <select class="custom-select custom-select-sm form-control" name="assignedresource" id="assignedresource">
                 <option value="">None</option>
                </select>
@@ -1090,7 +1070,7 @@
             </div>
 
             <div class="col-md-6">
-                <label for="validationTooltipUsername">Status</label><label style="color: red;">*</label>
+                <label for="validationTooltipUsername">Status <span style="color: red;">*</span></label>
                 <select class="custom-select custom-select-sm form-control" name="status" >
                      <option selected>None</option>
                      <option value="Started">Started</option>
@@ -1104,12 +1084,12 @@
         <div class="form-group">
           <div class="row">
             <div class="col-md-6">
-              <label for="validationTooltip02">Planned Start Time</label><label style="color: red;">*</label>
+              <label for="validationTooltip02">Planned Start Time</label>
               <input type="time" class="form-control" id="plannedstarttimeTask" name="plannedstarttime" required>
             </div>
             
             <div class="col-md-6">
-              <label for="validationTooltip02">Planned End Time</label><label style="color: red;">*</label>
+              <label for="validationTooltip02">Planned End Time</label>
               <input type="time" class="form-control" id="plannedendtimeTask" name="plannedendtime" required>
             </div>
           </div>  
@@ -1118,7 +1098,7 @@
         <div class="form-group">
           <div class="row">
             <div class="col-md-6">
-              <label for="validationTooltipUsername">Deadline Type</label><label style="color: red;">*</label>
+              <label for="validationTooltipUsername">Deadline Type</label>
               <select class="custom-select custom-select-sm form-control" id="deadline" name="deadline" >
                 <option selected>Select</option>
                 <option value="Deadlines">Deadlines</option>
@@ -1160,7 +1140,7 @@
         <div class="form-group">  
           <div class="row">
             <div class="col-md-6">
-              <label for="validationTooltip01">Project Name</label><label style="color: red;">*</label>
+              <label for="validationTooltip01">Project Name <span style="color: red;">*</span></label>
               <select class="custom-select custom-select-sm form-control" name="projectName" id="projectName">
                     <option selected>None</option>
                     <% if(projectList.length != 0) { %>
@@ -1182,13 +1162,13 @@
         <div class="form-group"> 
           <div class="row">
           <div class="col-md-6">
-            <label for="selectedTask">Task Description</label><label style="color: red;">*</label>
+            <label for="selectedTask">Task Description <span style="color: red;">*</span></label>
             <select class="custom-select custom-select-sm form-control" name="selectedTask" id="selectedTask" > 
                     <option value="None" selected>None</option>
            </select>
           </div>
           <div class="col-md-6">
-            <label for="validationTooltipUsername">Status</label><label style="color: red;">*</label>
+            <label for="validationTooltipUsername">Status <span style="color: red;">*</span></label>
              <select class="custom-select custom-select-sm form-control" name="statusTimesheet">
                   <option selected>None</option>
                   <option value="Started">Started</option>
@@ -1204,12 +1184,12 @@
         <div class="form-group">
           <div class="row">
             <div class="col-md-6">
-              <label for="validationTooltip02">Actual Start Time</label><label style="color: red;">*</label>
+              <label for="validationTooltip02">Actual Start Time <span style="color: red;">*</span></label>
               <input type="time" class="form-control" id="startTime" placeholder="Last name" value="Otto" name="plannedStartTimeTimesheet" required>
             </div>
             
             <div class="col-md-6">
-              <label for="validationTooltip02">Actual End Time</label><label style="color: red;">*</label>
+              <label for="validationTooltip02">Actual End Time <span style="color: red;">*</span></label>
               <input type="time" class="form-control" id="endTime" placeholder="Last name" value="Otto" name="plannedEndTimeTimesheet" required>
             </div>
           </div>  
@@ -1218,8 +1198,8 @@
         <div class="form-group">
           <div class="row">
             <div class="col-md-6">
-                  <label for="validationTooltip02">Description</label><label style="color: red;">*</label>
-                  <textarea class="form-control" id="descriptionTimesheet" rows="3" maxlength="255" autocomplete="off" name="descriptionTimesheet"></textarea>
+                  <label for="validationTooltip02">Description <span style="color: red;">*</span></label>
+                  <textarea class="form-control" id="descriptionTimesheet" rows="3" autocomplete="off" name="descriptionTimesheet"></textarea>
             </div>
 
             <div class="col-md-6">
