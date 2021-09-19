@@ -2,17 +2,17 @@
 <% include ./partials/footer %>
 <% include ./partials/messages %>
 <p id ="parentId"><%=parentAssetId %></p>
+<p id ="isDisabled"><%=isDisabled %></p>
+
 <link rel="stylesheet" href="/stylesheets/table-sortable.css">
 <script src="/scripts/table-sortable.js" ></script>
-<div>
-  <a href="#" class="btn btn-primary float-right" style="margin-right: 3%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
-</div>
-<h3 style="text-align: center; margin-top: 40px;">PROCUREMENT NON-IT </h3>
+
+<h3 style="text-align: center; margin-top: 20px;">PROCUREMENT NON-IT </h3>
 
 <div class="container">
   <div class="row mt-5 mb-3 align-items-center">
       <div class="col-md-5">
-        <a class="btn btn-primary btn-md bg-gray" href="/procurement/assetRequisitionViewRel/<%=parentAssetId %>" >Go To Asset Requisition </a>
+        <a class="btn btn-primary btn-md bg-gray" href="/procurement/assetRequisitionViewRel/<%=parentAssetId %>&<%= isDisabled %>" >Go To Asset Requisition </a>
        <!--    <a class="btn btn-primary btn-md bg-gray" href="#" id="">Create New It Procurement</a> -->
        <!--    <a class="btn btn-primary btn-md bg-gray" href="/procurement/getProcurementItListView/"+<%=parentAssetId %> >Refresh</a> -->
       </div>
@@ -242,20 +242,17 @@
 
     $(document).ready(function(){
       $('#parentId').hide();
-       
+      $('#isDisabled').hide();
 
         let parentId=document.getElementById('parentId').innerHTML;
-        $('#ref').click(function() {
-       window.location.reload();
-        })
        // alert('parentId '+parentId);
-    
+       let isDisabled = document.getElementById('isDisabled').innerHTML;
+      // alert('isDisabled1 '+isDisabled1);
         /**************Table Sortable Start ***********/
     
             let columns ={
                 sequence : 'Sequence',
               //  editAction:'Action',
-                deleteAction: 'Action',
                 name: 'Procurement Non-IT ID',
                 item : 'Items',
                // item_category:'Items Category',
@@ -264,7 +261,7 @@
                // no:'Number of quotes',
                // vendor:'Impaneled Vendor',
                 createdDate: 'Created Date',
-             
+                deleteAction: 'Action'
             }
           
           var table = $('#nonItTable').tableSortable({
@@ -362,7 +359,7 @@
                               htmlTable += '<tr>';
                                 htmlTable += '<td><strong>Procurement_Non-IT ID</strong></td>';
                                 htmlTable += '<td>'+record.procname+'</td>';
-                                htmlTable += '<td><strong>Vendor Name</strong></td>';
+                                htmlTable += '<td><strong>Impaneled Vendor</strong></td>';
                               //  htmlTable += '<td>'+'<a href="#" class="vendorDetTag" id="'+record.impaneled_vendor__c+'" >'+record.vendorname+'</a>'+'</td>';
                               //  htmlTable += '<td>'+'<a href="#" class="vendorDetTag" id="'+record.impaneled_vendor__c+'" >'+record.vendorname+'</a>'+'</td>';
                               htmlTable += '<td>'+record.vendorname+'</td>';
@@ -481,29 +478,30 @@
                 console.log('response from the feedback Tab Ajax '+JSON.stringify(response));
                 let msg = response;
                console.log('messageeee '+msg);
-
-               if(msg == 'OK'){
+               window.open('/procurement/createFeedback/'+proid,'_blank');
+              /* if(msg == 'OK'){
                 console.log('proccurement id '+proid);
           //  location.assign('/procurement/createFeedback/'+proid);
             window.open('/procurement/createFeedback/'+proid,'_blank');
-               }
-               if(msg == 'Rejected'){
+               }*/
+            /*   if(msg == 'Rejected'){
                  alert('Feedback cannot be filled unless the Final Payment Status is equal to RELEASED.');
-               }
+               }*/
 
             })
             .fail((jqXHR, status, error) =>{
               $('#detailLoadingSpinner').hide();
                 console.log('jqXHR  : '+JSON.stringify(jqXHR));
                 console.log('error  : '+error);
-                if(jqXHR.responseText== "OK"){
+                window.open('/procurement/createFeedback/'+proid,'_blank');
+               /* if(jqXHR.responseText== "OK"){
                   console.log('proccurement id '+proid);
               //  location.assign('/procurement/createFeedback/'+proid);
                 window.open('/procurement/createFeedback/'+proid,'_blank');
-                }
-                if(jqXHR.responseText== "Rejected"){
+                }*/
+             /*   if(jqXHR.responseText== "Rejected"){
                   alert('Feedback cannot be filled unless the Final Payment Status is equal to RELEASED.');
-                }
+                }*/
               });
            
         });
