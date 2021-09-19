@@ -7,14 +7,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
-<div>
-  <a href="#" class="btn btn-primary float-right" style="margin-right: 3%;color:blue;background-color: white;border: hidden;font-weight: bolder;font-size: larger;" id="ref">Refresh</a>
-</div>
+
 <h3 style="text-align: center; margin-top: 20px;">Tasks </h3>
 <div class="container">
 <div class="row mt-5 mb-3 align-items-center">
     <div class="col-md-5">
-     <!--  <a  href="/timesheets/taskListView" style="color: #555;" id="ref" ><i class="fa fa-refresh" style="font-size:34px; margin-left: 10px; margin-top: 30px;"></i> </a> -->
+      <a  href="/timesheets/taskListView" style="color: #555;" id="ref" ><i class="fa fa-refresh" style="font-size:34px; margin-left: 10px; margin-top: 30px;"></i> </a>
     </div>
     <div class="col-md-4">
     <input type="text" class="form-control" placeholder="Search by Task" id="searchField" style="margin-top: 5px;">
@@ -54,11 +52,9 @@
           <div id="detailLoadingSpinner">
             <center> <img src="/spinner-gif-transparent-background-14.gif" />  </center>
         </div>
-        <div style="overflow-y: auto;">
         <table id="taskViewTable" class="table">
 
         </table>
-        </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -157,9 +153,7 @@
 
 <script>
     $(document).ready(function() { 
-      $('#ref').click(function() {
-       window.location.reload();
-        })
+
        
         let columns ={
             sequence : 'Sequence',
@@ -272,7 +266,7 @@
                               htmlTable += '</tr>';
                               htmlTable += '<tr>';
                                 htmlTable += '<td><strong> Task Type</strong></td>';
-                                htmlTable += '<td    style="width: 30%;">'+taskRecord.task_type__c+'</td>';
+                                htmlTable += '<td>'+taskRecord.task_type__c+'</td>';
                                   htmlTable += '<td><strong>Project Task Category</strong></td>';
                                   htmlTable += '<td>'+taskRecord.categoname+'</td>';
                               htmlTable += '</tr>';
