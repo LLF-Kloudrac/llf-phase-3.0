@@ -9,11 +9,16 @@ const dotenv = require('dotenv');
 const flash = require('connect-flash');
 //const session = require('express-session');
 var session = require('cookie-session');
+const cors = require('cors');
+var timeout = require('connect-timeout'); //express v4
+
+
 dotenv.config();
 
 
 
 var app = express();
+app.use(cors());
 app.use(expressLayout);
 app.use(function(req, res, next) {  
   res.header('Access-Control-Allow-Origin', req.headers.origin);
@@ -21,6 +26,13 @@ app.use(function(req, res, next) {
   next();
 });  
 
+
+app.use(timeout(120000));
+app.use(haltOnTimedout);
+
+function haltOnTimedout(req, res, next){
+  if (!req.timedout) next();
+}
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -30,6 +42,8 @@ var procurementRouter = require('./routes/procurement');
 var tourBillClaimRouter = require('./routes/tourBillClaim');
 var approvalsRouter = require('./routes/approvals');
 var testCodesRouter = require('./routes/testCodes');
+var tasksRouter = require('./routes/tasks');
+var activityCodesRouter = require('./routes/activityCodes');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -73,6 +87,8 @@ app.use('/procurement',procurementRouter);
 app.use('/expense/tourBillClaim',tourBillClaimRouter);
 app.use('/approvals',approvalsRouter);
 app.use('/testCodes',testCodesRouter);
+app.use('/tasks',tasksRouter);
+app.use('/activityCodes',activityCodesRouter);
 
 
 
