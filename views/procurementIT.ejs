@@ -21,8 +21,8 @@
       <div class="container-fluid">
       </br>
         <div class="col-md-5">
-          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/procurement/assetRequisitionViewRel/<%= parentAssetId %>" >Go To AssetRequisition </a>
-          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/procurement/getProcurementItListView/<%= parentAssetId %>" >Go To Procurement IT</a>
+          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/procurement/assetRequisitionViewRel/<%= parentAssetId %>&<%= isDisabled %>" >Go To AssetRequisition </a>
+          <a class="btn btn-primary btn-md bg-gray mb-mobile" href="/procurement/getProcurementItListView/<%= parentAssetId %>&<%= isDisabled %>" >Go To Procurement IT</a>
       </div>
        <br />
        <h3 align="center">Procurement IT</h3>
@@ -35,18 +35,18 @@
          <table class="table table-bordered" id="item_table">
           <tr>
            <th>SR. NO</th>
-           <th>STATE<label style="color: red;">*</label></th>
-           <th>DISTRICT<label style="color: red;">*</label></th>
-           <th>ITEM CATEGORY<label style="color: red;">*</label></th>
-           <th>ITEMS<label style="color: red;">*</label></th>
+           <th>STATE <span style="color: red;">*</span></th>
+           <th>DISTRICT <span style="color: red;">*</span></th>
+           <th>ITEM CATEGORY <span style="color: red;">*</span></th>
+           <th>ITEMS <span style="color: red;">*</span></th>
            <th>OTHER ITEMS</th>
-           <th>VENDOR PICKLIST<label style="color: red;">*</label></th>
-           <th>COST PER UNIT ITEM</label></th>
+           <th>VENDOR PICKLIST <span style="color: red;">*</span></th>
+           <th>COST PER UNIT ITEM</th>
            <th>UNIT</th>
            <th>VENDOR GST NUMBER</th>
-           <th>ITEMS SPECIFICATION<label style="color: red;">*</label></th>
-           <th>QUANTITY<label style="color: red;">*</label></th>
-           <th>BUDGET<label style="color: red;">*</label></th>
+           <th>ITEMS SPECIFICATION <span style="color: red;">*</span></th>
+           <th>QUANTITY <span style="color: red;">*</span></th>
+           <th>BUDGET <span style="color: red;">*</span></th>
            <th>Preview</th>
            <th>QUOTE1</th>
            <th>QUOTE2</th>
@@ -76,7 +76,7 @@
     
     <script>
 
-let st =["Andaman and Nicobar Islands","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chandigarh","Chhattisgarh","Dadra Nagar Haveli","Daman Diu","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh","Jammu Kashmir",
+let st =["Andaman Nicobar","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chandigarh","Chhattisgarh","Dadra Nagar Haveli","Daman Diu","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh","Jammu Kashmir",
     "Jharkhand","Karnataka","Kerala","Lakshadweep","Ladakh","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Puducherry","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal"];
     let dstrAN=["Nicobar","North Middle Andaman","South Andaman"]
     let dstrAP=["Anantapur","Chittoor","East Godavari","Guntur","Kadapa","Krishna","Kurnool","Nellore","Prakasam","Srikakulam","Visakhapatnam","Vizianagaram","West Godavari"]
@@ -138,15 +138,14 @@ let st =["Andaman and Nicobar Islands","Andhra Pradesh","Arunachal Pradesh","Ass
         html += '<td><select id="district'+cnt+'" name="district" class="form-control item_unit" ><option value="">Select</option></select></td>';
         html += '<td><select id="itemCategory'+cnt+'" name="itemCategory" class="form-control item_unit"><option value="">Select</option><option value="IT">IT</option></select></td>';
         html += '<td><select id="items'+cnt+'" name="items" class="form-control item_unit"><option value="">Select</option></select></td>';
-        html +='<td><input id="otherItems'+cnt+'" type="text" name="otherItems" maxlength="255" class="form-control" disabled="true" /></td>';
+        html +='<td><input id="otherItems'+cnt+'" type="text" name="otherItems" class="form-control" disabled="true" /></td>';
         html += '<td><select id="vendor'+cnt+'" name="vendor" class="form-control item_unit"><option value="">Select</option></select></td>';      
         html +='<td><input id="unitCost'+cnt+'" type="text" name="unitCost" class="form-control" readonly="true"  /></td>';
         html +='<td><input id="unit'+cnt+'" type="text" name="unit" class="form-control" readonly="true"  /></td>';  
         html +='<td><input id="gst'+cnt+'" type="text" name="gst" class="form-control" readonly="true"  /></td>';
-       // html += '<td><input type="text" name="itemSpecification" class="form-control" /></td>';
-        html += '<td><textarea  name="itemSpecification" maxlength="255" class="form-control"></textarea></td>';
-        html += '<td><input type="number" name="quantity" max="9000000000000000" class="form-control" /></td>';
-        html += '<td><input type="number" name="budget" max="9999999999.99" step="0.01" class="form-control" /></td>';
+        html += '<td><input type="text" name="itemSpecification" class="form-control" /></td>';
+        html += '<td><input type="number" name="quantity" class="form-control" /></td>';
+        html += '<td><input type="number" name="budget" class="form-control" /></td>';
         html += '<td><a id="itquote'+cnt+'" target="_blank" href="#" >No Qoutes Available</a></td>';
         html += '<td><input type="file" onChange="chkFile1(this,'+cnt+')" name="fileprety" id="fileprety"  style="overflow:hidden" class="form-control" /><input type="hidden" value="demo1" name="imgpath1" id="file_1'+cnt+'"></td>';
         html += '<td><input type="file" onChange="chkFile2(this,'+cnt+')" name="fileprety" id="fileprety"  style="overflow:hidden" class="form-control" /><input type="hidden" value="demo2" name="imgpath2" id="file_2'+cnt+'"></td>';
@@ -181,7 +180,7 @@ let st =["Andaman and Nicobar Islands","Andhra Pradesh","Arunachal Pradesh","Ass
              select.options[i] = null;
             }
          //  alert('You Choose'+state);
-         if(state=='Andaman and Nicobar Islands')
+         if(state=='Andaman Nicobar')
         {
          $('#district'+cnt).attr("readonly",false);
        //  alert('You Choose=> '+state);
@@ -886,11 +885,9 @@ else if(state=='Uttarakhand')
         console.log('qt'+qtHTML);
          if(qtHTML==3)
          {
-          $('#justification'+id).attr("readonly",true); 
+          $('#justification'+id).attr("disabled",true); 
          }
-         alert('File Uploaded SuccesFully');
         }
-        
     });
   }
   function chkFile2(file1,id) {
@@ -915,9 +912,9 @@ else if(state=='Uttarakhand')
       console.log('qt'+qtHTML);
       if(qtHTML==3)
       {
-       $('#justification'+id).attr("readonly",true);
+       $('#justification'+id).attr("disabled",true);
       }
-      alert('File Uploaded SuccesFully');
+     
      }
   });
 }
@@ -943,9 +940,8 @@ function chkFile3(file1,id) {
     console.log('qt'+qtHTML);   
     if(qtHTML==3)
     {
-     $('#justification'+id).attr("readonly",true);
+     $('#justification'+id).attr("disabled",true);
     }
-    alert('File Uploaded SuccesFully');
    }
 });
 }
