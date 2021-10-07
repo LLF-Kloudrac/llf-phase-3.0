@@ -64,8 +64,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <label for="name"> Activity Code<span style="color: red;">*</span></label>
-                                                <input type="text" class="form-control" id="name"
-                                                    value="" name="name" maxlength="80" onkeypress="return AvoidSpace(event)">
+                                                <input type="text" class="form-control" id="name" value="" name="name" maxlength="80" onkeypress="return AvoidSpace(event)">
                                             </div>
 
                                             <div class="col-md-6">
@@ -76,7 +75,6 @@
                                     </div>
                                     <div class="form-group">
                                         <div class="row">
-
                                             <div class="col-md-6">
                                                 <label for="projectDropdown">Project <span style="color: red;">*</span></label>
                                                 <select id="projectDropdown" name="projectDropdown"
@@ -90,6 +88,10 @@
                                                     class="form-control item_unit">
                                                     <option value="">Select</option>
                                                 </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="idApprovedBudget">Approved Activity Code Budget <span style="color: red;">*</span></label>
+                                                <input type="number" class="form-control" id="idApprovedBudget" value="" name="approvedBudget" maxlength="14" onkeypress="return AvoidSpace(event)">
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="description">Description </label>
@@ -149,7 +151,7 @@
                                                 <input type="text" disabled class="form-control" id="project" value="" name="project">
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="expenseHead"> Expense Head Category </label>
+                                                <label for="expenseHead"> Expense Head Category <span style="color: red;">*</span></label>
                                                 <select id="expenseHead" name="expenseHead"
                                                     class="form-control item_unit">
                                                     <option value="">Select</option>
@@ -196,8 +198,8 @@
                                                 <input type="date" disabled class="form-control" id="tallyDate" value=""   name="tallyDate" >
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="approvedactivitycodebudget">Approved Activity Code Budget </label>
-                                                <input type="number" class="form-control" id="approvedactivitycodebudget" value=""   name="approvedactivitycodebudget" >
+                                                <label for="approvedactivitycodebudget">Approved Activity Code Budget <span style="color: red;">*</span></label>
+                                                <input type="number" class="form-control" id="approvedactivitycodebudget" value="" name="approvedactivitycodebudget" >
                                             </div>
                                         </div>
                                     </div>
@@ -416,10 +418,10 @@
                                         ActivityCodeDetailRow += '</tr>';
 
                                         ActivityCodeDetailRow += '<tr>';
-                                        ActivityCodeDetailRow += '<td><strong> Activity Code<span style="color: red;">*</span><strong></td>';
-                                        ActivityCodeDetailRow += '<td>' + eachRecord.name + '</td>';
+                                        ActivityCodeDetailRow += '<td><strong> Activity Code<strong></td>';
+                                        ActivityCodeDetailRow += '<td style="word-break: break-word">' + eachRecord.name + '</td>';
                                         ActivityCodeDetailRow += '<td><strong>Activity Code Name<strong></td>';
-                                        ActivityCodeDetailRow += '<td>' + eachRecord.activity_code_name__c + '</td>';
+                                        ActivityCodeDetailRow += '<td style="word-break: break-word">' + eachRecord.activity_code_name__c + '</td>';
                                         ActivityCodeDetailRow += '</tr>';
 
                                         ActivityCodeDetailRow += '<tr>';
@@ -464,19 +466,19 @@
                                         ActivityCodeDetailRow += '</tr>';
 
                                         ActivityCodeDetailRow += '<tr>';
-                                        ActivityCodeDetailRow += '<td><strong>Approved Annual Budget<strong></td>';
-                                        var actual_utilization_against_annual_budget = eachRecord.actual_utilization_against_annual_budget__c != null ? eachRecord.actual_utilization_against_annual_budget__c+'%': eachRecord.actual_utilization_against_annual_budget__c;
-                                        ActivityCodeDetailRow += '<td> ' + actual_utilization_against_annual_budget + '</td>';
+                                        //ActivityCodeDetailRow += '<td><strong>Approved Annual Budget<strong></td>';
+                                        //var actual_utilization_against_annual_budget = eachRecord.actual_utilization_against_annual_budget__c != null ? eachRecord.actual_utilization_against_annual_budget__c+'%': eachRecord.actual_utilization_against_annual_budget__c;
+                                        //ActivityCodeDetailRow += '<td> ' + actual_utilization_against_annual_budget + '</td>';
                                         ActivityCodeDetailRow += '<td><strong>Actual Expense on Tally Date<strong></td>';
                                         ActivityCodeDetailRow += '<td> ' + eachRecord.actual_expense_on_tally_date__c + '</td>';
-                                        ActivityCodeDetailRow += '</tr>';
-
-                                        ActivityCodeDetailRow += '<tr>';
                                         ActivityCodeDetailRow += '<td><strong>Approved Activity Code Budget<strong></td>';
                                         ActivityCodeDetailRow += '<td> ' + eachRecord.planned_annual_budget__c + '</td>';
-                                        ActivityCodeDetailRow += '<td></td>';
-                                        ActivityCodeDetailRow += '<td></td>';
                                         ActivityCodeDetailRow += '</tr>';
+
+                                        //ActivityCodeDetailRow += '<tr>';
+                                        //ActivityCodeDetailRow += '<td></td>';
+                                        //ActivityCodeDetailRow += '<td></td>';
+                                        //ActivityCodeDetailRow += '</tr>';
                                         
                                         $('#activityCodeDetail').html(ActivityCodeDetailRow);
 
@@ -489,13 +491,13 @@
                                     taskDescription += '<thead>  <th>Project Task Name</th><th>Status</th><th>Project</th><th>Activity Code</th><th>Project Task Category</th></thead>';
                                     data.task.forEach((each) => {
                                         taskDescription
-                                        taskDescription += '<td>' + each.name + '</td>';
+                                        taskDescription += '<td style="word-break: break-word;">' + each.name + '</td>';
                                         taskDescription += '<td>' + each.task_stage__c + '</td>';
-                                        taskDescription += '<td>' + each.project_name2__c	+ '</td>';
-                                        taskDescription += '<td>' + each.activity_code_name__c + '</td>';
-                                        taskDescription += '<td>' + each.project_task_category_name__c + '</td></tr>';
+                                        taskDescription += '<td style="word-break: break-word;">' + each.project_name2__c	+ '</td>';
+                                        taskDescription += '<td style="word-break: break-word;">' + each.activity_code_name__c + '</td>';
+                                        taskDescription += '<td style="word-break: break-word;">' + each.project_task_category_name__c + '</td></tr>';
                                     })
-                                    taskDescription += '<td colspan="6"><center><a target="_blank" href="/activityCodes/getRelatedTasks/'+data.task[0].activity_codes__c+ '&' + data.task[0].activity_code_name__c + '">View All</a></centre></td>';
+                                    taskDescription += '<td colspan="6" style="word-break: break-word;"><center><a target="_blank" href="/activityCodes/getRelatedTasks/'+data.task[0].activity_codes__c+ '&' + data.task[0].activity_code_name__c + '">View All</a></centre></td>';
 
                                     console.log('iddd' + data.ActivityCodeDetail.sfid);
                                     $('#TaskDescriptionTable').empty();
@@ -594,8 +596,10 @@
                         var $inputs = $('#createActivityCode :input');
                         var values = {};
                         $inputs.each(function () {
-                            values[this.name] = $(this).val();
-                            console.log('fomvalues=> ' + JSON.stringify(values));
+                            if($(this).val() != '') {
+                                values[this.name] = $(this).val();
+                                console.log('fomvalues=> ' + JSON.stringify(values));
+                            }
                         });
                         console.log('>>>>valuess>>>>. in craeeetet>>>>>>',values)
                         console.log('fomvalues=> ' + JSON.stringify(values));
@@ -696,7 +700,7 @@
                                 document.forms["editActivityCode"]["actualexpenseonsalesforce"].value = response.ActivityCodeDetail[0].actual_expense_on_salesforce__c;
                                 document.forms["editActivityCode"]["actualexpensefromtally"].value = response.ActivityCodeDetail[0].actual_expense_from_tally__c!= null ? response.ActivityCodeDetail[0].actual_expense_from_tally__c.toFixed(2): response.ActivityCodeDetail[0].actual_expense_from_tally__c;
                                 document.forms["editActivityCode"]["estimatedexpensefromtasks"].value = response.ActivityCodeDetail[0].estimated_expense_from_tasks__c!=null ? response.ActivityCodeDetail[0].estimated_expense_from_tasks__c.toFixed(2): response.ActivityCodeDetail[0].estimated_expense_from_tasks__c;
-                                document.forms["editActivityCode"]["actualutilizationagainstannualbudget"].value = response.ActivityCodeDetail[0].actual_utilization_against_annual_budget__c != null ? response.ActivityCodeDetail[0].actual_utilization_against_annual_budget__c+'%': response.ActivityCodeDetail[0].actual_utilization_against_annual_budget__c;
+                                //document.forms["editActivityCode"]["actualutilizationagainstannualbudget"].value = response.ActivityCodeDetail[0].actual_utilization_against_annual_budget__c != null ? response.ActivityCodeDetail[0].actual_utilization_against_annual_budget__c+'%': response.ActivityCodeDetail[0].actual_utilization_against_annual_budget__c;
                                 document.forms["editActivityCode"]["tallyDate"].value = response.ActivityCodeDetail[0].actual_expense_on_tally_date__c;
                                 //document.forms["editActivityCode"]["plannedannualbudget"].value = response.ActivityCodeDetail[0].planned_annual_budget__c !=null ? response.ActivityCodeDetail[0].planned_annual_budget__c.toFixed(2): response.ActivityCodeDetail[0].planned_annual_budget__c;
                                 if(response.ActivityCodeDetail[0].actual_hours_from_tasks__c != null){
@@ -740,7 +744,7 @@
                             $('#deleteErrorMessages').empty();
                             $('#deleteErrorMessages').append(errorHtml);
                         }else {
-                            if(confirm('Do you want to continue')){
+                            if(confirm('Do you want to continue?')){
                                 $.ajax({
                                     url: '/activityCodes/deleteAllActivityCodes',
                                     type: 'post',
@@ -778,8 +782,10 @@
                         var $inputs = $('#editActivityCode :input');
                         var values = {};
                         $inputs.each(function () {
-                            values[this.name] = $(this).val();
-                            console.log('fomvalues=> ' + JSON.stringify(values));
+                            if($(this).val() != '') {
+                                values[this.name] = $(this).val();
+                                console.log('fomvalues=> ' + JSON.stringify(values));
+                            }
                         });
                         console.log('>>>>valuess>>>>.',values)
                         console.log('fomvalues=> ' + JSON.stringify(values));

@@ -14,9 +14,9 @@ router.get('/getRelatedTasks/:activityCodeId&:activityCodeName', verify, (reques
     let objUser = request.user;
     console.log('user ' + objUser);
     let activityCodeId = request.params.activityCodeId;
-    console.log('--- 18 activityCodes.js activityCodeId:  '+activityCodeId);
+    console.log('--- 17 activityCodes.js activityCodeId:  '+activityCodeId);
     activityCodeName = request.params.activityCodeName;
-    console.log('--- 20 activityCodes.js activityCodeName: ' + activityCodeName);
+    console.log('--- 19 activityCodes.js activityCodeName: ' + activityCodeName);
     response.render('relatedTasksToActivityCodePage', { objUser, activityCodeId, activityCodeName});
 })
 
@@ -50,7 +50,7 @@ router.get('/getTasksRelatedToActivityCode', verify, (request, response) => {
                 //    obj.sequence = i;
                     obj.selectAction = '<input type="checkbox" id="' + eachRecord.sfid + '" name="' + eachRecord.sfid + '" value="' + eachRecord.sfid + '">'
                     obj.editAction = '<button href="#" class="btn btn-primary editTask" id="'+eachRecord.sfid+'" >Edit</button>'
-                    obj.name = '<a href="#" class="ActivityTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
+                    obj.name = '<a href="#" class="ActivityTag" style="word-break: break-word;" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
                     obj.status = eachRecord.task_stage__c;
                     obj.project = eachRecord.project_name2__c	;
                     obj.activityCode = eachRecord.activity_code_name__c;
@@ -147,8 +147,10 @@ router.get('/activityCodesList', verify,async(request, response) => {
     
     
 
-    let qry = 'SELECT sfid,Name,project_Name__c,Project__c,expense_head_category__c,Activity_Code_Name__c,Description__c,Actual_Expense_from_tally__c,CreatedById,CreatedDate,Id,IsDeleted,planned_annual_budget__c,estimated_expense_from_tasks__c,LastActivityDate,LastModifiedById,LastModifiedDate,LastReferencedDate,LastViewedDate ' +
-        'FROM salesforce.Activity_Code__c WHERE Project__c IN (' + params.join(',') + ') AND  sfid IS NOT NULL';
+    let qry = 'SELECT sfid,Name,project_Name__c,Project__c,expense_head_category__c,Activity_Code_Name__c,Description__c,'
+        + 'Actual_Expense_from_tally__c,CreatedById,CreatedDate,Id,IsDeleted,planned_annual_budget__c,estimated_expense_from_tasks__c,'
+        + 'LastActivityDate,LastModifiedById,LastModifiedDate,LastReferencedDate,LastViewedDate '
+        + 'FROM salesforce.Activity_Code__c WHERE Project__c IN (' + params.join(',') + ') AND  sfid IS NOT NULL';
     console.log('qry  =>' + qry)
     await
     pool.query(qry,lstProjectIds)
@@ -166,7 +168,7 @@ router.get('/activityCodesList', verify,async(request, response) => {
                     obj.sequence = i;
                     obj.selectAction = '<input type="checkbox" id="' + eachRecord.sfid + '" name="' + eachRecord.sfid + '" value="' + eachRecord.sfid + '">'
                     obj.editAction = '<button href="#" class="btn btn-primary editActivityCode" id="' + eachRecord.sfid + '" >Edit</button>'
-                    obj.name = '<a href="#" class="ActivityTag" id="' + eachRecord.sfid + '" >' + eachRecord.name + '</a>';
+                    obj.name = '<a href="#" class="ActivityTag" style="word-break: break-word;" id="' + eachRecord.sfid + '" >' + eachRecord.name + '</a>';
                     obj.activityCodeName = eachRecord.activity_code_name__c;
                     obj.project = eachRecord.project_name__c;
                     obj.expenseHead = eachRecord.expense_head_category__c;
@@ -205,9 +207,10 @@ router.post('/updateActivityCode', (request, response) => {
 
     schema = joi.object({
         expenseHead: joi.string().required().label('Please Enter Expense Head Category'),
-        name: joi.string().required().label('Please Fill Activity Code')
+        name: joi.string().required().label('Please Fill Activity Code'),
+        approvedactivitycodebudget: joi.string().required().label('Please fill the Approved Activity Code Budget')
     })
-    result = schema.validate({ expenseHead: expenseHead, name: name });
+    result = schema.validate({ expenseHead: expenseHead, name: name, approvedactivitycodebudget: approvedactivitycodebudget });
 
     if (result.error) {
         console.log('fd' + result.error);
@@ -272,21 +275,22 @@ router.get('/getProjects',verify,(request,response)=>{
 router.post('/createActivityCode', (request, response) => {
     let body = request.body;
     console.log('body  : ' + JSON.stringify(body));
-    const { name, projectDropdown, activityCodeName, expenseHeadDropdown, description } = request.body;
+    const { name, projectDropdown, activityCodeName, expenseHeadDropdown, approvedBudget, description } = request.body;
     console.log('request body=======  ', request.body);
 
     schema = joi.object({
         expenseHeadDropdown: joi.string().required().label('Please Enter Expense Head Category'),
-        name: joi.string().required().label('Please Fill Activity Code')
+        name: joi.string().required().label('Please Fill Activity Code'),
+        approvedBudget: joi.string().required().label('Please fill the Approved Activity Code Budget')
     })
-    result = schema.validate({ expenseHeadDropdown: expenseHeadDropdown, name: name });
+    result = schema.validate({expenseHeadDropdown: expenseHeadDropdown, name: name, approvedBudget: approvedBudget});
     if (result.error) {
         console.log('fd' + result.error);
         response.send(result.error.details[0].context.label);
     }
     else {
         pool
-            .query('INSERT INTO salesforce.Activity_Code__c (Name, Activity_Code_Name__c, ExpenseHeadCategory__c, Description__c,Project__c ) values ($1,$2,$3,$4,$5)',[name, activityCodeName, expenseHeadDropdown, description,projectDropdown])
+            .query('INSERT INTO salesforce.Activity_Code__c (Name, Activity_Code_Name__c, ExpenseHeadCategory__c, Planned_Annual_Budget__c, Description__c,Project__c ) values ($1,$2,$3,$4,$5,$6)',[name, activityCodeName, expenseHeadDropdown, approvedBudget, description,projectDropdown])
             .then((updateQuerryResult) => {
                 console.log('updateQuerryResult =>>' + JSON.stringify(updateQuerryResult));
                 response.send('Success');

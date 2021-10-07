@@ -30,16 +30,15 @@ router.get('/taskList',verify,async(request,response)=>{
     await
     pool.query('select id, sfid,project__c from salesforce.Heroku_Visibility__c where to_contact__c = $1 and hastaskaccess__c = $2', [objUser.sfid, true])
     .then((result)=>{
-            if(result.rowCount > 0)
+        if(result.rowCount > 0)
+        {
+            let herokuVisibiltyRows = result.rows;
+            for(let k=0 ; k < herokuVisibiltyRows.length ; k++)
             {
-                let herokuVisibiltyRows = result.rows;
-                for(let k=0 ; k < herokuVisibiltyRows.length ; k++)
-                {
-                    lstProjectIds.push(herokuVisibiltyRows[k].project__c);
-                    projectIdParams.push('$'+(k+1));
-                } 
-            }
-            
+                lstProjectIds.push(herokuVisibiltyRows[k].project__c);
+                projectIdParams.push('$'+(k+1));
+            } 
+        }  
     })
     .catch((error)=>{
         console.log('heroku visibility error : '+error.stack);
@@ -84,7 +83,7 @@ router.get('/taskList',verify,async(request,response)=>{
           //    obj.sequence = i;
               obj.selectAction = '<input type="checkbox" id="' + eachRecord.sfid + '" name="' + eachRecord.sfid + '" value="' + eachRecord.sfid + '">'
               obj.editAction = '<button href="#" class="btn btn-primary editTask" id="'+eachRecord.sfid+'" >Edit</button>'
-              obj.name = '<a href="#" class="ActivityTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
+              obj.name = '<a href="#" class="ActivityTag" style="word-break: break-word;" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
               obj.status = eachRecord.task_stage__c;
               obj.project = eachRecord.project_name2__c	;
               obj.activityCode = eachRecord.activity_code_name__c;

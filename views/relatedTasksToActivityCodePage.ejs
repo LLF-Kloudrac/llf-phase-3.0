@@ -329,21 +329,21 @@
 
                             ActivityCodeDetailRow += '<tr>';
                             ActivityCodeDetailRow += '<td><strong> Project Task Name<span style="color: red;">*</span><strong></td>';
-                            ActivityCodeDetailRow += '<td>' + eachRecord.name + '</td>';
+                            ActivityCodeDetailRow += '<td style="word-break: break-word;">' + eachRecord.name + '</td>';
                             ActivityCodeDetailRow += '<td><strong>Status<strong></td>';
                             ActivityCodeDetailRow += '<td>' + eachRecord.task_stage__c + '</td>';
                             ActivityCodeDetailRow += '</tr>';
 
                             ActivityCodeDetailRow += '<tr>';
                             ActivityCodeDetailRow += '<td><strong>Project<strong></td>';
-                            ActivityCodeDetailRow += '<td>' + eachRecord.project_name2__c + '</td>';
+                            ActivityCodeDetailRow += '<td style="word-break: break-word;">' + eachRecord.project_name2__c + '</td>';
                             ActivityCodeDetailRow += '<td><strong> Activity Code<strong></td>';
-                            ActivityCodeDetailRow += '<td>' + eachRecord.activity_code_name__c + '</td>';
+                            ActivityCodeDetailRow += '<td style="word-break: break-word;">' + eachRecord.activity_code_name__c + '</td>';
                             ActivityCodeDetailRow += '</tr>';
 
                             ActivityCodeDetailRow += '<tr>';
                             ActivityCodeDetailRow += '<td><strong> Project Task Category<strong></td>';
-                            ActivityCodeDetailRow += '<td>' + eachRecord.project_task_category_name__c + '</td>';
+                            ActivityCodeDetailRow += '<td style="word-break: break-word;">' + eachRecord.project_task_category_name__c + '</td>';
                             ActivityCodeDetailRow += '<td><strong> Planned Start Date<span style="color: red;">*</span><strong></td>';
                             ActivityCodeDetailRow += '<td>' + eachRecord.start_date__c + '</td>';
                             ActivityCodeDetailRow += '</tr>';

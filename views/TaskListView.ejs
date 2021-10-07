@@ -82,7 +82,7 @@
                                                     style="color: red;">*</span></label>
                                                 <select id="projectDropdown" name="projectDropdown"
                                                     class="form-control item_unit" onChange="getActivityCodes(value)">
-                                                    <option value="">Select</option>
+                                                    <!--<option value="">Select</option>-->
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
@@ -516,10 +516,7 @@
                             let activityCode = response.ActivityCodeDetail;
                             //let activityCode = ['Test_activity17/03','test_today','test_activity_code17/03','tetsttst644646'] -->
                             $('#activitycodes').empty();
-                            $('#activitycodes')
-                            .append($("<option></option>")
-                            .attr("value",'')
-                            .text('None'))
+                            $('#activitycodes').append($("<option></option>").attr("value",'').text('None'));
                             for(let i=0; i <activityCode.length; i++)
                             {
                                 console.log('activityCode>>>>>>>>>>>',activityCode)
@@ -571,7 +568,7 @@
 
                                         ActivityCodeDetailRow += '<tr>';
                                         ActivityCodeDetailRow += '<td><strong> Project Task Name<span style="color: red;">*</span><strong></td>';
-                                        ActivityCodeDetailRow += '<td>' + eachRecord.name + '</td>';
+                                        ActivityCodeDetailRow += '<td style="word-break: break-word">' + eachRecord.name + '</td>';
                                         ActivityCodeDetailRow += '<td><strong>Status<strong></td>';
                                         ActivityCodeDetailRow += '<td>' + eachRecord.task_stage__c + '</td>';
                                         ActivityCodeDetailRow += '</tr>';
@@ -580,7 +577,7 @@
                                         ActivityCodeDetailRow += '<td><strong>Project<strong></td>';
                                         ActivityCodeDetailRow += '<td>' + eachRecord.project_name2__c + '</td>';
                                         ActivityCodeDetailRow += '<td><strong> Activity Code<strong></td>';
-                                        ActivityCodeDetailRow += '<td>' + eachRecord.activity_code_name__c + '</td>';
+                                        ActivityCodeDetailRow += '<td style="word-break: break-word">' + eachRecord.activity_code_name__c + '</td>';
                                         ActivityCodeDetailRow += '</tr>';
 
                                         ActivityCodeDetailRow += '<tr>';
@@ -594,7 +591,7 @@
                                         ActivityCodeDetailRow += '<td><strong> Planned End Date<span style="color: red;">*</span><strong></td>';
                                         ActivityCodeDetailRow += '<td>' + eachRecord.due_date__c + '</td>';
                                         ActivityCodeDetailRow += '<td><strong>Description<strong></td>';
-                                        ActivityCodeDetailRow += '<td>' + eachRecord.description__c + '</td>';
+                                        ActivityCodeDetailRow += '<td style="word-break: break-word">' + eachRecord.description__c + '</td>';
                                         //ActivityCodeDetailRow += '<td><strong>Actual Expense On Salesforce<strong></td>';
                                         ActivityCodeDetailRow += '</tr>';
 
@@ -716,10 +713,7 @@
                                 let project = response.project;
                                 $('#projectDropdown').empty();
                                 
-                                $('#projectDropdown')
-                                    .append($("<option></option>")
-                                    .attr("value",'')
-                                    .text('None'))
+                                //$('#projectDropdown').append($("<option></option>").attr("value",'').text('None')); //07-Oct-2021
 
                                 for(let i=0; i <project.length; i++)
                                 {
@@ -1004,7 +998,7 @@
                         }
                         let resp;
                         if (typeof checkPlannedDate == 'object') {
-                            resp = 'Planned Start Date & Planned End Date  cannot be blank.';
+                            resp = 'Planned Start Date & Planned End Date cannot be blank.';
                         }
                         else if (!checkPlannedDate) {
                             resp = 'Planned Start Date must be less than Planned End Date.';
@@ -1017,10 +1011,16 @@
                             resp = 'Actual End Date should not be of future date';
                         }
                         else if(values.Actual_Start_Date != "" && values.Actual_End_Date == "") {
-                            resp = 'Actual Start Date & Planned End Date cannot be blank.';
+                            resp = 'Actual End Date cannot be blank.';
                         }
                         else if(values.Actual_Start_Date == "" && values.Actual_End_Date != "") {
-                            resp = 'Actual Start Date & Planned End Date cannot be blank.';
+                            resp = 'Actual Start Date cannot be blank.';
+                        }
+                        else if(values.start_date__c != "" && values.due_date__c == "") {
+                            resp = 'Planned End Date cannot be blank.';
+                        }
+                        else if(values.start_date__c == "" && values.due_date__c != "") {
+                            resp = 'Planned Start Date cannot be blank.';
                         }
                         if (resp) {
                             let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' + resp +
