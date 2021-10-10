@@ -185,9 +185,9 @@
                               let strDate = strCreatedDate.toLocaleString();
                               htmlTable += '<tr>';
                                   htmlTable += '<td><strong>Name</strong></td>';
-                                  htmlTable += '<td>'+pettyCashRecord.pettycashname+'</td>';
+                                  htmlTable += '<td style="word-break: break-word;">'+pettyCashRecord.pettycashname+'</td>';
                                   htmlTable += '<td><strong>Expense Name</strong></td>';
-                                  htmlTable += '<td>'+pettyCashRecord.expname+'</td>';
+                                  htmlTable += '<td style="word-break: break-word;">'+pettyCashRecord.expname+'</td>';
                               htmlTable += '</tr>';
                                
                               htmlTable += '<tr>';
@@ -207,7 +207,7 @@
                               htmlTable += '</tr>';
                               htmlTable += '<tr>';
                                 htmlTable += '<td><strong>Activity Code</strong></td>';
-                                htmlTable += '<td>'+pettyCashRecord.activitycode+'</td>';
+                                htmlTable += '<td style="word-break: break-word;">'+pettyCashRecord.activitycode+'</td>';
                                 htmlTable += '<td><strong>Description</strong></td>';
                                   htmlTable += '<td style="word-break: break-all">'+pettyCashRecord.description_of_activity_expenses__c+'</td>';
                             htmlTable += '</tr>';
@@ -218,7 +218,7 @@
                              
                                 htmlTable += '<td><strong>View Image</strong></td>';
                                 if(pettyCashRecord.heroku_image_url__c != null && pettyCashRecord.heroku_image_url__c != '')
-                                  htmlTable += '<td><a target="_blank" href="'+pettyCashRecord.heroku_image_url__c+'" >Click Here</a></td>';
+                                  htmlTable += '<td><a target="_blank" style="word-break: break-word;" href="'+pettyCashRecord.heroku_image_url__c+'" >Click Here</a></td>';
                                 else
                                   htmlTable += '<td></td>';
                                   

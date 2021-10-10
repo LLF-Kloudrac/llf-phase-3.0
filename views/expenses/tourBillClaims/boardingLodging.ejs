@@ -271,24 +271,24 @@
 
                           htmlTable += '<tr>';
                               htmlTable += '<td><strong>Boarding Lodging Number</strong></td>';
-                              htmlTable += '<td>'+boardingRecord.boardingname+'</td>';
+                              htmlTable += '<td style="word-break: break-word;">'+boardingRecord.boardingname+'</td>';
                               htmlTable += '<td><strong>Tour Bill Claim</strong></td>';
-                              htmlTable += '<td>'+boardingRecord.tourbillname+'</td>';
+                              htmlTable += '<td style="word-break: break-word;">'+boardingRecord.tourbillname+'</td>';
                           htmlTable += '</tr>';
                            
                           htmlTable += '<tr>';
                           htmlTable += '<td><strong>Activity Code</strong></td>';
                             if(boardingRecord.activitycode != null)
-                            htmlTable += '<td>'+boardingRecord.activitycode+'</td>';
+                            htmlTable += '<td style="word-break: break-word;">'+boardingRecord.activitycode+'</td>';
                             else
                             htmlTable += '<td></td>';
                           htmlTable += '<td><strong>Stay Option</strong></td>';
-                          htmlTable += '<td>'+boardingRecord.stay_option__c+'</td>';
+                          htmlTable += '<td style="word-break: break-word;">'+boardingRecord.stay_option__c+'</td>';
                           htmlTable += '</tr>';
 
                           htmlTable += '<tr>';
                             htmlTable += '<td><strong>Place OF Journey</strong></td>';
-                          htmlTable += '<td>'+boardingRecord.place_journey__c+'</td>';
+                          htmlTable += '<td style="word-break: break-word;">'+boardingRecord.place_journey__c+'</td>';
                           htmlTable += '<td><strong>View Image</strong></td>';
                                   console.log('typeof(boardingRecord.heroku_image_url__c) '+typeof(boardingRecord.heroku_image_url__c));
                                   if(boardingRecord.heroku_image_url__c != null && boardingRecord.heroku_image_url__c != '')
@@ -303,7 +303,7 @@
                           htmlTable += '<tr>';
                             htmlTable += '<td><strong>Tier 3 City</strong></td>';
                           if(boardingRecord.correspondence_city__c != null)
-                            htmlTable += '<td>'+boardingRecord.correspondence_city__c+'</td>';
+                            htmlTable += '<td style="word-break: break-word;">'+boardingRecord.correspondence_city__c+'</td>';
                             else
                             htmlTable += '<td></td>';
                             

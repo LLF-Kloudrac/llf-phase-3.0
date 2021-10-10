@@ -31,7 +31,7 @@ router.get('/expenseApprovalsList',verify, (request, response) => {
                     let strDate = crDate.toLocaleString();
                     let obj = {};
                     obj.sequence = (i+1);
-                    obj.recordName = '<a href="#" data-toggle="modal" data-target=""  id="name'+customApprovalResult.rows[i].expense__c+'" class="expnseRecordName" >'+customApprovalResult.rows[i].record_name__c+'</a>';
+                    obj.recordName = '<a href="#" data-toggle="modal" data-target="" style="word-break: break-word;" id="name'+customApprovalResult.rows[i].expense__c+'" class="expnseRecordName" >'+customApprovalResult.rows[i].record_name__c+'</a>';
                     obj.currentStatus = customApprovalResult.rows[i].status__c;
                     obj.totalAmount = customApprovalResult.rows[i].amount__c;
                     obj.createdDate = strDate;
@@ -98,7 +98,7 @@ router.get('/pldFormsApprovalList', verify, (request, response) => {
                   //  console.log('dateTime   : '+dateTime);
                     let obj = {};
                     obj.sequence = (i+1);
-                    obj.recordName = '<a href="https://learninglinksfoundationdonor.secure.force.com/responsepdf?Id='+customApprovalResult.rows[i].expense__c+'" target="_blank"  id="name'+customApprovalResult.rows[i].expense__c+'" class="pldResponseName" >'+customApprovalResult.rows[i].name+'</a>';
+                    obj.recordName = '<a href="https://learninglinksfoundationdonor.secure.force.com/responsepdf?Id='+customApprovalResult.rows[i].expense__c+'" style="word-break: break-word;" target="_blank" id="name'+customApprovalResult.rows[i].expense__c+'" class="pldResponseName" >'+customApprovalResult.rows[i].name+'</a>';
                     obj.currentStatus = customApprovalResult.rows[i].status__c;
                     obj.createdDate =  dateTime.toLocaleString();
                   //  obj.status = assetQueryResult.rows[i].status__c
@@ -240,7 +240,7 @@ router.get('/getApprovalListView/:parentId',verify,(request,response)=>{
             let approvalList = [],i =1;
             querryResult.rows.forEach((eachRecord) => {
               let obj = {};
-              obj.name = '<a href="#" class="approveTag" id="'+eachRecord.sfid+'" >'+eachRecord.appname+'</a>';
+              obj.name = '<a href="#" class="approveTag" style="word-break: break-word;" id="'+eachRecord.sfid+'" >'+eachRecord.appname+'</a>';
               obj.type = eachRecord.approval_type__c;
               obj.asset = eachRecord.assetname;
               obj.status = eachRecord.status__c;

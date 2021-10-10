@@ -107,16 +107,16 @@
 
                             vendorDetailRow += '<tr>';
                                     vendorDetailRow += '<td><strong> Vendor List ID<strong></td>';
-                                    vendorDetailRow += '<td>'+eachRecord.name+'</td>';
+                                    vendorDetailRow += '<td style="word-break: break-word;">'+eachRecord.name+'</td>';
                                     vendorDetailRow += '<td><strong>State<strong></td>';
-                                        vendorDetailRow += '<td>'+eachRecord.state__c+'</td>';
+                                        vendorDetailRow += '<td style="word-break: break-word;">'+eachRecord.state__c+'</td>';
                                 vendorDetailRow += '</tr>'; 
 
                                 vendorDetailRow += '<tr>';
                                     vendorDetailRow += '<td><strong>District<strong></td>';
-                                    vendorDetailRow += '<td>'+eachRecord.district__c+'</td>';
+                                    vendorDetailRow += '<td style="word-break: break-word;">'+eachRecord.district__c+'</td>';
                                     vendorDetailRow += '<td><strong> Vendor Name<strong></td>';
-                                        vendorDetailRow += '<td>'+eachRecord.vendor_name__c+'</td>';
+                                        vendorDetailRow += '<td style="word-break: break-word;">'+eachRecord.vendor_name__c+'</td>';
                                 vendorDetailRow += '</tr>';
                                 vendorDetailRow += '<tr>';
                     
@@ -124,29 +124,29 @@
                                     vendorDetailRow += '<td><strong>Contact no.<strong></td>';
                                     vendorDetailRow += '<td>'+eachRecord.contact_no__c+'</td>';
                                     vendorDetailRow += '<td><strong>Name of Signing Authority from Vendor<strong></td>';
-                                    vendorDetailRow += '<td>'+eachRecord.name_of_signing_authority__c+'</td>';
+                                    vendorDetailRow += '<td style="word-break: break-word;">'+eachRecord.name_of_signing_authority__c+'</td>';
                                 vendorDetailRow += '</tr>';
 
                                 vendorDetailRow += '<tr>';
                                     vendorDetailRow += '<td><strong>PAN<strong></td>';
                                     vendorDetailRow += '<td>'+eachRecord.pan_no__c+'</td>';
                                     vendorDetailRow += '<td><strong>Bank Account No.<strong></td>';
-                                    vendorDetailRow += '<td>'+eachRecord.bank_account_no__c+'</td>';
+                                    vendorDetailRow += '<td style="word-break: break-word;">'+eachRecord.bank_account_no__c+'</td>';
                                 vendorDetailRow += '</tr>';
 
                                     vendorDetailRow += '<tr>';
                                         vendorDetailRow += '<td><strong>Bank Details(Name,Branch, etc)<strong></td>';
-                                        vendorDetailRow += '<td>'+eachRecord.bank_details__c+'</td>';
+                                        vendorDetailRow += '<td style="word-break: break-word;">'+eachRecord.bank_details__c+'</td>';
                                         vendorDetailRow += '<td><strong>Bank IFSC Code<strong></td>';
                                         vendorDetailRow += '<td>'+eachRecord.bank_ifsc_code__c+'</td>';
                                     vendorDetailRow += '</tr>';
 
                                     vendorDetailRow += '<tr>';
                                     vendorDetailRow += '<td><strong>Address/Web Address<strong></td>';
-                                    vendorDetailRow += '<td>'+eachRecord.address__c+'</td>';
+                                    vendorDetailRow += '<td style="word-break: break-word;">'+eachRecord.address__c+'</td>';
                                     vendorDetailRow += '<td><strong>GST No.<strong></td>';
                                         if(eachRecord.gst_no__c!=null){
-                                            vendorDetailRow += '<td>'+eachRecord.gst_no__c+'</td>';
+                                            vendorDetailRow += '<td style="word-break: break-word;">'+eachRecord.gst_no__c+'</td>';
                                         }
                                         else{
                                             vendorDetailRow +='<td></td>';
@@ -157,7 +157,7 @@
                    
                             vendorDetailRow += '<td><strong>Reason for not providing GST no.<strong></td>';
                                 if(eachRecord.reason_for_not_providing_gst_no__c!=null){
-                                    vendorDetailRow += '<td>'+eachRecord.reason_for_not_providing_gst_no__c+'</td>';
+                                    vendorDetailRow += '<td style="word-break: break-word;">'+eachRecord.reason_for_not_providing_gst_no__c+'</td>';
                                         }
                                         else{
                                             vendorDetailRow +='<td></td>';
@@ -177,9 +177,9 @@
                     itemDescription+='<thead>  <th>Item Name</th><th>Category</th><th>Item</th><th>Unit</th><th>Cost Per Unit</th></thead>';
                     data.item.forEach((each)=>{
                         itemDescription
-                        itemDescription += '<td>'+each.name +'</td>'; 
-                        itemDescription += '<td>'+each.category__c +'</td>'; 
-                        itemDescription += '<td>'+each.items__c +'</td>'; 
+                        itemDescription += '<td style="word-break: break-word;">'+each.name +'</td>'; 
+                        itemDescription += '<td style="word-break: break-word;">'+each.category__c +'</td>'; 
+                        itemDescription += '<td style="word-break: break-word;">'+each.items__c +'</td>'; 
                         itemDescription += '<td>'+each.unit__c +'</td>'; 
                         itemDescription += '<td>'+each.per_unit_cost__c +'</td></tr>';
                     })

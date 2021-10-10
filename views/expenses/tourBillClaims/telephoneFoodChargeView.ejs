@@ -251,9 +251,9 @@
                           let strCreatedDate = createdDate.toLocaleString();
                           htmlTable += '<tr>';
                               htmlTable += '<td><strong>Name</strong></td>';
-                              htmlTable += '<td>'+foodChargeRecord.chargegname+'</td>';
+                              htmlTable += '<td style="word-break: break-word;">'+foodChargeRecord.chargegname+'</td>';
                               htmlTable += '<td><strong>TourBill Name</strong></td>';
-                              htmlTable += '<td>'+foodChargeRecord.tourbillname+'</td>';
+                              htmlTable += '<td style="word-break: break-word;">'+foodChargeRecord.tourbillname+'</td>';
                           htmlTable += '</tr>';
                            
                           htmlTable += '<tr>';
@@ -266,7 +266,7 @@
                           htmlTable += '<tr>';  
                           htmlTable += '<td><strong>Activity Code</strong></td>';
                           if(foodChargeRecord.activitycode != null)
-                              htmlTable += '<td>'+foodChargeRecord.activitycode+'</td>';
+                              htmlTable += '<td style="word-break: break-word;">'+foodChargeRecord.activitycode+'</td>';
                           else
                               htmlTable += '<td></td>';
                               htmlTable += '<td><strong>Total Amount</strong></td>';
@@ -282,10 +282,10 @@
 
                           htmlTable += '<tr>'; 
                             htmlTable += '<td><strong>Remarks</strong></td>';
-                          htmlTable += '<td>'+foodChargeRecord.remarks__c+'</td>';      
+                          htmlTable += '<td style="word-break: break-word;">'+foodChargeRecord.remarks__c+'</td>';      
                           htmlTable += '<td><strong>View Image</strong></td>';
                           if(foodChargeRecord.heroku_image_url__c != null && foodChargeRecord.heroku_image_url__c != '')
-                              htmlTable += '<td><a target="_blank" href="'+foodChargeRecord.heroku_image_url__c+'" >Click Here</a></td>';
+                              htmlTable += '<td><a target="_blank" href="'+foodChargeRecord.heroku_image_url__c+'" style="word-break: break-word;" >Click Here</a></td>';
                           else
                               htmlTable += '<td></td>';
                           

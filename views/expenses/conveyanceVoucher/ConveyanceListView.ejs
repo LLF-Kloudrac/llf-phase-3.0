@@ -187,9 +187,9 @@
                               let strDate = strCreatedDate.toLocaleString();
                               htmlTable += '<tr>';
                                   htmlTable += '<td><strong>Name</strong></td>';
-                                  htmlTable += '<td>'+conveyanceRecord.conveyancename+'</td>';
+                                  htmlTable += '<td style="word-break: break-word;">'+conveyanceRecord.conveyancename+'</td>';
                                   htmlTable += '<td><strong>Expense Name</strong></td>';
-                                  htmlTable += '<td>'+conveyanceRecord.expname+'</td>';
+                                  htmlTable += '<td style="word-break: break-word;">'+conveyanceRecord.expname+'</td>';
                               htmlTable += '</tr>';
                               htmlTable += '<tr>';
                                 htmlTable += '<td><strong>From Date</strong></td>';
@@ -206,7 +206,7 @@
                               htmlTable += '<tr>';  
                               htmlTable += '<td><strong>Activity Code</strong></td>';
                               if(conveyanceRecord.activitycode != null)
-                                  htmlTable += '<td>'+conveyanceRecord.activitycode+'</td>';
+                                  htmlTable += '<td style="word-break: break-word;">'+conveyanceRecord.activitycode+'</td>';
                                   else
                                   htmlTable += '<td></td>';
                                   htmlTable += '<td><strong>Km. Travelled</strong></td>';
@@ -223,7 +223,7 @@
                               htmlTable += '<td><strong>View Image</strong></td>';
                               console.log('conveyanceRecord.heroku_image_url__c) '+conveyanceRecord.heroku_image_url__c);
                               if(conveyanceRecord.heroku_image_url__c != null && conveyanceRecord.heroku_image_url__c != '' && conveyanceRecord.heroku_image_url__c != 'demo')
-                                  htmlTable += '<td><a target="_blank" href="'+conveyanceRecord.heroku_image_url__c+'" >Click Here</a></td>';
+                                  htmlTable += '<td><a target="_blank" style="word-break: break-word;" href="'+conveyanceRecord.heroku_image_url__c+'" >Click Here</a></td>';
                               else
                                   htmlTable += '<td></td>';
                               

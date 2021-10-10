@@ -191,7 +191,7 @@ router.get('/expenseAllRecords',verify, async (request, response) => {
                 crDate.setMinutes(crDate.getMinutes() + 30);
                 let strDate = crDate.toLocaleString();
                 obj.sequence = i+1;
-                obj.name = '<a href="'+expenseQueryResult.rows[i].sfid+'" data-toggle="modal" data-target="#popup" class="expId" id="name'+expenseQueryResult.rows[i].sfid+'"  >'+expenseQueryResult.rows[i].name+'</a>';
+                obj.name = '<a href="'+expenseQueryResult.rows[i].sfid+'" style="word-break: break-word;" data-toggle="modal" data-target="#popup" class="expId" id="name'+expenseQueryResult.rows[i].sfid+'"  >'+expenseQueryResult.rows[i].name+'</a>';
                 obj.projectName = expenseQueryResult.rows[i].proname;
                // obj.approvalStatus = expenseQueryResult.rows[i].approval_status__c;
                 obj.totalAmount = '<span id="amount'+expenseQueryResult.rows[i].sfid+'" >'+expenseQueryResult.rows[i].amount_claimed__c+'</span>';
@@ -764,7 +764,7 @@ router.get('/approvalList',verify,(request,response)=>{
             createdDate.setMinutes(createdDate.getMinutes() + 30);
             let strDate = createdDate.toLocaleString();
             obj.sno = i;
-            obj.name = '<a href="#" class="approvalTag" id="'+eachRecord.appsfid+'" >'+eachRecord.appname+'</a>';
+            obj.name = '<a href="#" style="word-break: break-word;" class="approvalTag" id="'+eachRecord.appsfid+'" >'+eachRecord.appname+'</a>';
             obj.type = eachRecord.approval_type__c;
             obj.approver = eachRecord.conname;
             obj.comment = eachRecord.comment__c;
@@ -1600,7 +1600,7 @@ router.get('/getpettycashlist',verify,(request, response) => {
                 let strDate = createdDate.toLocaleString();
                 let strBillDate = new Date(eachRecord.bill_date__c).toLocaleString();
                 obj.sequence = i;
-                obj.name = '<a href="#" class="pettyCashTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
+                obj.name = '<a href="#" style="word-break: break-word;" class="pettyCashTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
                 obj.billNo = eachRecord.bill_no__c;
                 obj.natureOfExpense = eachRecord.nature_of_exp__c;
                 obj.total=eachRecord.amount__c;
@@ -1700,7 +1700,7 @@ router.get('/getconveyancelist' ,verify,(request,response) => {
         createdDate.setMinutes(createdDate.getMinutes() + 30);
         let strDate = createdDate.toLocaleString();
         obj.sequence = i;
-        obj.name = '<a href="#" class="conveyanceTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
+        obj.name = '<a href="#" style="word-break: break-word;" class="conveyanceTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
         obj.TravellingPurpose = eachRecord.purpose_of_travel__c;
         obj.createDdate = strDate;
         obj.BillAmt=eachRecord.amount__c;

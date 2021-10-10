@@ -210,7 +210,7 @@ function anchorClickFunctionalities(){
                               let htmlTable = '';
                               htmlTable += '<tr>';
                                 htmlTable += '<td><strong>Approval Name</strong></td>';
-                                htmlTable += '<td>'+record.appname+'</td>';
+                                htmlTable += '<td style="word-break: break-word;">'+record.appname+'</td>';
                                 htmlTable += '<td><strong>Approval type</strong></td>';
                                 htmlTable += '<td>'+record.approval_type__c+'</td>';
                          
@@ -219,13 +219,13 @@ function anchorClickFunctionalities(){
                                 htmlTable += '<td><strong>Status</strong></td>';
                                 htmlTable += '<td>'+record.status__c+'</td>';
                                 htmlTable += '<td><strong>Asset Requisition Form</strong></td>';
-                                htmlTable += '<td>'+record.assetname+'</td>';
+                                htmlTable += '<td style="word-break: break-word;">'+record.assetname+'</td>';
                             htmlTable += '</tr>';
                             htmlTable += '<tr>';
                               htmlTable += '<td><strong>Approver Emails</strong></td>';
-                              htmlTable += '<td>'+record.approver_s_emails__c+'</td>';
+                              htmlTable += '<td style="word-break: break-word;">'+record.approver_s_emails__c+'</td>';
                               htmlTable += '<td><strong>Comment</strong></td>';
-                              htmlTable += '<td>'+record.approval_comment__c+'</td>';
+                              htmlTable += '<td style="word-break: break-word;">'+record.approval_comment__c+'</td>';
                           htmlTable += '</tr>';
                             htmlTable += '<tr>';
                               htmlTable += '<td><strong>Submitted by Heroku User</strong></td>';
@@ -245,12 +245,12 @@ function anchorClickFunctionalities(){
                               htmlTable +='<thead><th>Approval History Name</th><th>Status</th><th>Approval</th><th>Comment</th><th>Approver Email</th><th>Approver Profile</th></thead>';
                              response.relatedHistrory.forEach((eachRecord)=> {
                                 htmlTable += '<tr>';
-                                htmlTable += '<td>'+eachRecord.histname+'</td>';
+                                htmlTable += '<td style="word-break: break-word;">'+eachRecord.histname+'</td>';
                                 htmlTable += '<td>'+eachRecord.status__c+'</td>';
-                                htmlTable += '<td>'+eachRecord.appname+'</td>';
-                                htmlTable += '<td>'+eachRecord.comment__c+'</td>';
-                              htmlTable += '<td>'+eachRecord.approver_email__c+'</td>';
-                              htmlTable += '<td>'+eachRecord.approver_profile__c+'</td>';
+                                htmlTable += '<td style="word-break: break-word;">'+eachRecord.appname+'</td>';
+                                htmlTable += '<td style="word-break: break-word;">'+eachRecord.comment__c+'</td>';
+                              htmlTable += '<td style="word-break: break-word;">'+eachRecord.approver_email__c+'</td>';
+                              htmlTable += '<td style="word-break: break-word;">'+eachRecord.approver_profile__c+'</td>';
                           htmlTable += '</tr>';
                              })
                           $('#historyTable').empty();

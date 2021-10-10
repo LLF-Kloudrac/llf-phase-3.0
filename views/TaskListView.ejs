@@ -567,28 +567,28 @@
                                         ActivityCodeDetailRow += '</tr>';
 
                                         ActivityCodeDetailRow += '<tr>';
-                                        ActivityCodeDetailRow += '<td><strong> Project Task Name<span style="color: red;">*</span><strong></td>';
+                                        ActivityCodeDetailRow += '<td><strong> Project Task Name<strong></td>';
                                         ActivityCodeDetailRow += '<td style="word-break: break-word">' + eachRecord.name + '</td>';
                                         ActivityCodeDetailRow += '<td><strong>Status<strong></td>';
-                                        ActivityCodeDetailRow += '<td>' + eachRecord.task_stage__c + '</td>';
+                                        ActivityCodeDetailRow += '<td style="word-break: break-word;">' + eachRecord.task_stage__c + '</td>';
                                         ActivityCodeDetailRow += '</tr>';
 
                                         ActivityCodeDetailRow += '<tr>';
                                         ActivityCodeDetailRow += '<td><strong>Project<strong></td>';
-                                        ActivityCodeDetailRow += '<td>' + eachRecord.project_name2__c + '</td>';
+                                        ActivityCodeDetailRow += '<td style="word-break: break-word;">' + eachRecord.project_name2__c + '</td>';
                                         ActivityCodeDetailRow += '<td><strong> Activity Code<strong></td>';
                                         ActivityCodeDetailRow += '<td style="word-break: break-word">' + eachRecord.activity_code_name__c + '</td>';
                                         ActivityCodeDetailRow += '</tr>';
 
                                         ActivityCodeDetailRow += '<tr>';
                                         ActivityCodeDetailRow += '<td><strong> Project Task Category<strong></td>';
-                                        ActivityCodeDetailRow += '<td>' + eachRecord.project_task_category_name__c + '</td>';
-                                        ActivityCodeDetailRow += '<td><strong> Planned Start Date<span style="color: red;">*</span><strong></td>';
+                                        ActivityCodeDetailRow += '<td style="word-break: break-word;">' + eachRecord.project_task_category_name__c + '</td>';
+                                        ActivityCodeDetailRow += '<td><strong> Planned Start Date<strong></td>';
                                         ActivityCodeDetailRow += '<td>' + eachRecord.start_date__c + '</td>';
                                         ActivityCodeDetailRow += '</tr>';
 
                                         ActivityCodeDetailRow += '<tr>';
-                                        ActivityCodeDetailRow += '<td><strong> Planned End Date<span style="color: red;">*</span><strong></td>';
+                                        ActivityCodeDetailRow += '<td><strong> Planned End Date<strong></td>';
                                         ActivityCodeDetailRow += '<td>' + eachRecord.due_date__c + '</td>';
                                         ActivityCodeDetailRow += '<td><strong>Description<strong></td>';
                                         ActivityCodeDetailRow += '<td style="word-break: break-word">' + eachRecord.description__c + '</td>';
@@ -713,7 +713,7 @@
                                 let project = response.project;
                                 $('#projectDropdown').empty();
                                 
-                                //$('#projectDropdown').append($("<option></option>").attr("value",'').text('None')); //07-Oct-2021
+                                //$('#projectDropdown').append($("<option></option>").attr("value",'').text('None')); //08-Oct-2021
 
                                 for(let i=0; i <project.length; i++)
                                 {
@@ -723,6 +723,11 @@
                                     .attr("value",project[i].project__c)
                                     .text(project[i].project_name__c))
                                 }
+
+                                if(project.length > 0) {
+                                    getActivityCodes(project[0].project__c);
+                                }
+
                                 $('#projecttaskcategorycreate').empty();
                                 for (let i = 0; i < projectTaskCategory.length; i++) {
                                     $('#projecttaskcategorycreate')
@@ -910,7 +915,7 @@
                                 $('#deleteErrorMessages').empty()
                             }, 5000);
                         } else {
-                            if (confirm('Do you want to continue')) {
+                            if (confirm('Do you want to continue?')) {
                                 $.ajax({
                                     url: '/tasks/deleteAllTaskList',
                                     type: 'post',
@@ -949,7 +954,7 @@
                             var g1 = new Date(startDate);
                             // (YYYY-MM-DD) 
                             var g2 = new Date(endDate);
-                            if (g1.getTime() < g2.getTime())
+                            if (g1 <= g2 && g1.getTime() <= g2.getTime())
                                 return true;
                             else
                                 return false;
@@ -990,6 +995,7 @@
                         });
                         console.log('fomvalues=> ' + JSON.stringify(values));
                         console.log('valuess>>>>>', values)
+
                         let checkPlannedDate = compareDate(values.StartDate, values.DueDate, 'plannedDate')
                         let checkActualDate=true,checkActual_End_Date=true;
                         if(values.Actual_Start_Date!="" && values.Actual_End_Date!=""){
@@ -1001,11 +1007,11 @@
                             resp = 'Planned Start Date & Planned End Date cannot be blank.';
                         }
                         else if (!checkPlannedDate) {
-                            resp = 'Planned Start Date must be less than Planned End Date.';
+                            resp = 'Planned Start Date must be less/equal to Planned End Date.';
                         } else if (typeof checkActualDate == 'object') {
                             resp = 'please fill Actual start date/end date as these are mandatory field.';
                         } else if (!checkActualDate) {
-                            resp = 'Actual Start Date must be less than Actual End Date.';
+                            resp = 'Actual Start Date must be less/equal to Actual End Date.';
                         }
                         else if (!checkActual_End_Date) {
                             resp = 'Actual End Date should not be of future date';
@@ -1022,6 +1028,7 @@
                         else if(values.start_date__c == "" && values.due_date__c != "") {
                             resp = 'Planned Start Date cannot be blank.';
                         }
+
                         if (resp) {
                             let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' + resp +
                                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
@@ -1103,6 +1110,7 @@
                         });
                         console.log('fomvalues=> ' + JSON.stringify(values));
                         console.log('valuess>>>>> in before create>>>>>>>>>', values)
+
                         let checkPlannedDate = compareDate(values.StartDate, values.DueDate, 'plannedDate')
                         let checkActualDate=true,checkActual_End_Date=true;
                         if(values.Actual_Start_Date!="" && values.Actual_End_Date!=""){

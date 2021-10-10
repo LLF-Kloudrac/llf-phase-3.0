@@ -197,21 +197,21 @@
     console.log('Inside Loop'+actualDt);
   assetDetailsTableRows += '<tr>';
     assetDetailsTableRows += '<td ><strong>Asset Requisition Name<strong></td>';
-    assetDetailsTableRows += '<td >'+assetDetailsRecord.name+'</td>';
+    assetDetailsTableRows += '<td style="word-break: break-word;">'+assetDetailsRecord.name+'</td>';
     assetDetailsTableRows += '<td><strong>Project/Department<strong></td>';
-    assetDetailsTableRows += '<td>'+assetDetailsRecord.projname +'</td>';
+    assetDetailsTableRows += '<td style="word-break: break-word;">'+assetDetailsRecord.projname +'</td>';
     assetDetailsTableRows += '</tr>'; 
     assetDetailsTableRows += '<tr>';
     assetDetailsTableRows += '<td><strong>Target Date of receiving<strong></td>';
     assetDetailsTableRows += '<td>'+ planDt+'</td>';
     assetDetailsTableRows += '<td ><strong>Activity Code<strong></td>';
     
-    assetDetailsTableRows += '<td >'+assetDetailsRecord.actname+'</td>';
+    assetDetailsTableRows += '<td style="word-break: break-word;">'+assetDetailsRecord.actname+'</td>';
     
     assetDetailsTableRows += '</tr>'; 
     assetDetailsTableRows += '<tr>';
     assetDetailsTableRows += '<td><strong>Submitted By Heroku User<strong></td>';
-    assetDetailsTableRows += '<td>'+ '<%=objUser.name %>'+'</td>';
+    assetDetailsTableRows += '<td style="word-break: break-word;">'+ '<%=objUser.name %>'+'</td>';
     assetDetailsTableRows += '<td></td>';
     assetDetailsTableRows += '<td></td>';
 
@@ -278,7 +278,7 @@
         }
     //  assetDetailsTableRows += '<td>'+assetDetailsRecord.pricing_terms_cost_comparison__c+'</td>';
       assetDetailsTableRows += '<td><strong>Delivery Place<strong></td>';
-      assetDetailsTableRows += '<td>'+assetDetailsRecord.delivery_terms_delivery_place__c+'</td>';
+      assetDetailsTableRows += '<td style="word-break: break-word;">'+assetDetailsRecord.delivery_terms_delivery_place__c+'</td>';
       assetDetailsTableRows += '</tr>'; 
       assetDetailsTableRows += '<tr>';
       assetDetailsTableRows += '<td><strong>Expected Delivery Date<strong></td>';
@@ -300,14 +300,14 @@
     assetDetailsTableRows += '<td><strong>PM Approval(amount<=10k, 10k-30k)<strong></td>';
     assetDetailsTableRows += '<td>'+assetDetailsRecord.manager_approval__c+'</td>';
     assetDetailsTableRows += '<td><strong>Proc. Head Approval(amount= 10k-30k)<strong></td>';
-    assetDetailsTableRows += '<td>'+assetDetailsRecord. procurement_head_approval__c+'</td>';
+    assetDetailsTableRows += '<td>'+assetDetailsRecord.procurement_head_approval__c+'</td>';
     assetDetailsTableRows += '</tr>';
     assetDetailsTableRows += '<tr>';
     assetDetailsTableRows += '<tr>';
     assetDetailsTableRows += '<td><strong>Proc. Comm. Approval(amount= 30k-5L)<strong></td>';
-    assetDetailsTableRows += '<td>'+assetDetailsRecord.procurement_comt_approval_for_fortnight__c+'</td>';
+    assetDetailsTableRows += '<td style="word-break: break-word;">'+assetDetailsRecord.procurement_comt_approval_for_fortnight__c+'</td>';
     assetDetailsTableRows += '<td><strong>Proc. Comm. Approval(>30k/14days/vendor)<strong></td>';
-    assetDetailsTableRows += '<td>'+assetDetailsRecord.management_approval_for_fortnight_limit__c+'</td>';
+    assetDetailsTableRows += '<td style="word-break: break-word;">'+assetDetailsRecord.management_approval_for_fortnight_limit__c+'</td>';
     assetDetailsTableRows += '</tr>';
     
         assetDetailsTableRows += '<tr>';
@@ -327,7 +327,7 @@
     assetDetailsTableRows += '<tr>';
 
     assetDetailsTableRows += '<td><strong>Mgmt. Approval(No Activity Code)<strong></td>';
-    assetDetailsTableRows += '<td>'+assetDetailsRecord.management_approval_activity_code__c+'</td>';
+    assetDetailsTableRows += '<td style="word-break: break-word;">'+assetDetailsRecord.management_approval_activity_code__c+'</td>';
     assetDetailsTableRows += '<td></td>';
     assetDetailsTableRows += '<td></td>';
     assetDetailsTableRows += '</tr>';
@@ -339,7 +339,7 @@
     assetDetailsTableRows += '<td><strong> Accounts Approval<strong></td>';
     assetDetailsTableRows += '<td>'+assetDetailsRecord.accounts_approval__c+'</td>';
     assetDetailsTableRows += '<td><strong>UTR Number/Transaction Details<strong></td>';
-    assetDetailsTableRows += '<td>'+assetDetailsRecord.utr_number_transaction_details__c+'</td>';
+    assetDetailsTableRows += '<td style="word-break: break-word;">'+assetDetailsRecord.utr_number_transaction_details__c+'</td>';
     assetDetailsTableRows += '</tr>';
     assetDetailsTableRows += '<tr>';
     assetDetailsTableRows += '<tr>';
@@ -374,7 +374,7 @@
       
       assetDetailsTableRows += '<tr>';
       assetDetailsTableRows += '<td><strong>Receiver Name<strong></td>';
-      assetDetailsTableRows += '<td>'+assetDetailsRecord.receiver_name__c+'</td>';
+      assetDetailsTableRows += '<td style="word-break: break-word;">'+assetDetailsRecord.receiver_name__c+'</td>';
       assetDetailsTableRows += '<td><strong>Received Quantity<strong></td>';
       assetDetailsTableRows += '<td>'+assetDetailsRecord.received_quantity_goods__c+'</td>';
       assetDetailsTableRows += '</tr>'; 
@@ -395,7 +395,7 @@
                         let nonItProductTable = '';
                         nonItProductTable+='<thead>  <th>Procuremnet_Non-IT ID</th><th>Items</th><th>Quantity</th><th>Budget</th></thead>';
                         assetDetails.nonItProducts.forEach((eachNonIt) => {
-                            nonItProductTable += '<tr><td>'+eachNonIt.name +'</td>';
+                            nonItProductTable += '<tr><td style="word-break: break-word;">'+eachNonIt.name +'</td>';
                             nonItProductTable += '<td>'+eachNonIt.items__c +'</td>';
                             nonItProductTable += '<td>'+eachNonIt.quantity__c +'</td>';
                             nonItProductTable += '<td>'+eachNonIt.budget__c +'</td></tr>';  
@@ -410,7 +410,7 @@
                         itProductTable+='<thead>  <th>ProcuremnetName</th><th>Items</th><th>Quantity</th><th>Budget</th></thead>';
                         assetDetails.itProducts.forEach((eachIt)=> {
                             console.log('chdc'+JSON.stringify(eachIt));
-                            itProductTable += '<tr><td>'+eachIt.name +'</td>';
+                            itProductTable += '<tr><td style="word-break: break-word;">'+eachIt.name +'</td>';
                             itProductTable += '<td>'+eachIt.items__c +'</td>';
                             itProductTable += '<td>'+eachIt.quantity__c +'</td>';
                             itProductTable += '<td>'+eachIt.budget__c +'</td></tr>';      
@@ -424,10 +424,10 @@
                         let approvalHtml = '';
                         approvalHtml+='<thead><th>Name </th><th>Type</th> <th>Status</th> <th>Approver Emails</th></thead>';
                         assetDetails.approvals.forEach((eachApproval)=> {
-                            approvalHtml += '<tr><td>'+eachApproval.name +'</td>';
+                            approvalHtml += '<tr><td style="word-break: break-word;">'+eachApproval.name +'</td>';
                             approvalHtml += '<td>'+eachApproval.approval_type__c +'</td>';
                             approvalHtml += '<td>'+eachApproval.status__c +'</td>';
-                            approvalHtml += '<td>'+eachApproval.approver_s_emails__c +'</td></tr>';      
+                            approvalHtml += '<td style="word-break: break-word;">'+eachApproval.approver_s_emails__c +'</td></tr>';      
                         })
                         approvalHtml+=  '<td colspan="6"><center><a target="_blank" href="/procurement/getProcurementApproval/'+assetId+'&'+isDisabled+'">View All</a></centre></td>';
                         $('#approvalTable').empty();

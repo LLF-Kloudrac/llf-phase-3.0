@@ -260,9 +260,9 @@
 
                           htmlTable += '<tr>';
                               htmlTable += '<td><strong>Name</strong></td>';
-                              htmlTable += '<td>'+ChargeRecord.chargegname+'</td>';
+                              htmlTable += '<td style="word-break: break-word;">'+ChargeRecord.chargegname+'</td>';
                               htmlTable += '<td><strong>TourBill Name</strong></td>';
-                              htmlTable += '<td>'+ChargeRecord.tourbillname+'</td>';
+                              htmlTable += '<td style="word-break: break-word;">'+ChargeRecord.tourbillname+'</td>';
                           htmlTable += '</tr>';
                            
                           htmlTable += '<tr>';
@@ -274,7 +274,7 @@
 
                           htmlTable += '<tr>';
                           htmlTable += '<td><strong>Remarks</strong></td>';
-                          htmlTable += '<td>'+ChargeRecord.remarks__c+'</td>';
+                          htmlTable += '<td style="word-break: break-word;">'+ChargeRecord.remarks__c+'</td>';
                           htmlTable += '<td><strong>Partiular Mode</strong></td>';
                           htmlTable += '<td>'+ChargeRecord.particulars_mode__c+'</td>';
                           htmlTable += '</tr>';
@@ -283,7 +283,7 @@
                           htmlTable += '<tr>';  
                             htmlTable += '<td><strong>Activity Code</strong></td>';
                                if(ChargeRecord.activitycode != null)
-                                  htmlTable += '<td>'+ChargeRecord.activitycode+'</td>';
+                                  htmlTable += '<td style="word-break: break-word;">'+ChargeRecord.activitycode+'</td>';
                                   else
                                   htmlTable += '<td></td>';
                                   htmlTable += '<td><strong>Date</strong></td>';
@@ -296,7 +296,7 @@
                               htmlTable += '<td>'+strCreatedDate+'</td>'; */
                                htmlTable += '<td><strong>View Image</strong></td>';
                                   if(ChargeRecord.heroku_image_url__c != null && ChargeRecord.heroku_image_url__c != '')
-                                      htmlTable += '<td><a target="_blank" href="'+ChargeRecord.heroku_image_url__c+'" >Click Here</a></td>';
+                                      htmlTable += '<td><a target="_blank" href="'+ChargeRecord.heroku_image_url__c+'" style="word-break: break-word;" >Click Here</a></td>';
                                   else
                                       htmlTable += '<td></td>';
 

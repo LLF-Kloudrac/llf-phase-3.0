@@ -814,13 +814,13 @@
                                  console.log('date str '+eachTaskCol.date.toString().split('T')[0]);
                                  var strDate = eachTaskCol.date.toString().split('T')[0];
                                  tasktableData += '<tr>';
-                                  tasktableData  += '<td>'+eachTaskCol.projectName+'</td>';
-                                 tasktableData  += '<td>'+eachTaskCol.name+'</td>';
+                                  tasktableData  += '<td style="word-break: break-word;">'+eachTaskCol.projectName+'</td>';
+                                 tasktableData  += '<td style="word-break: break-word;">'+eachTaskCol.name+'</td>';
                                  tasktableData  += '<td>'+strDate+'</td>';
                                  tasktableData  += '<td>'+eachTaskCol.status+'</td>';
                                  tasktableData  += '<td>'+eachTaskCol.plannedHours+'</td>';
                                  tasktableData  += '<td>'+eachTaskCol.actualHours+'</td>';
-                                 tasktableData  += '<td>'+eachTaskCol.userName+'</td>';
+                                 tasktableData  += '<td style="word-break: break-word;">'+eachTaskCol.userName+'</td>';
                                  tasktableData += '</tr>';   
                          });
                         // $('#taskDetails').append(tasktableData);
@@ -858,15 +858,13 @@
                                  console.log('date str '+eachTaskCol.date.toString().split('T')[0]);
                                  var strDate = eachTaskCol.date.toString().split('T')[0];
                                  tasktableData += '<tr>';
-                                  tasktableData  += '<td>'+eachTaskCol.projectName+'</td>';
-                                 tasktableData  += '<td>'+eachTaskCol.name+'</td>';
+                                  tasktableData  += '<td style="word-break: break-word;">'+eachTaskCol.projectName+'</td>';
+                                 tasktableData  += '<td style="word-break: break-word;">'+eachTaskCol.name+'</td>';
                                  tasktableData  += '<td>'+strDate+'</td>';
                                  tasktableData  += '<td>'+eachTaskCol.status+'</td>';
                                  tasktableData  += '<td>'+eachTaskCol.plannedHours+'</td>';
                                  tasktableData  += '<td>'+eachTaskCol.actualHours+'</td>';
-                                
-                               
-                                 tasktableData  += '<td>'+eachTaskCol.userName+'</td>';
+                                 tasktableData  += '<td style="word-break: break-word;">'+eachTaskCol.userName+'</td>';
                                  tasktableData += '</tr>';   
                          });
                         // $('#taskDetails').append(tasktableData);
@@ -920,12 +918,12 @@
                         console.log('date str '+eachTaskCol.date.toString().split('T')[0]);
                         var strDate = eachTaskCol.date.toString().split('T')[0];
                         tasktableData += '<tr>';
-                        tasktableData  += '<td>'+eachTaskCol.projectName+'</td>';
-                        tasktableData  += '<td>'+eachTaskCol.name+'</td>';
+                        tasktableData  += '<td style="word-break: break-word;">'+eachTaskCol.projectName+'</td>';
+                        tasktableData  += '<td style="word-break: break-word;">'+eachTaskCol.name+'</td>';
                         tasktableData  += '<td>'+strDate+'</td>';
                         tasktableData  += '<td>'+eachTaskCol.plannedHours+'</td>';
                         tasktableData  += '<td>'+eachTaskCol.actualHours+'</td>';
-                        tasktableData  += '<td>'+eachTaskCol.userName+'</td>';
+                        tasktableData  += '<td style="word-break: break-word;">'+eachTaskCol.userName+'</td>';
                         tasktableData += '</tr>';  
                   })
                   $('#taskDetails').html(tasktableData);

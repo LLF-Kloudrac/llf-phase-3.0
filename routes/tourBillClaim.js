@@ -52,7 +52,7 @@ router.get('/gettourbillclaim',verify,(request,response)=>{
           createdDate.setMinutes(createdDate.getMinutes() + 30);
           let strDate = createdDate.toLocaleString();
           obj.sequence = i;
-          obj.name = '<a href="'+eachRecord.sfid+'"  data-toggle="modal" data-target="#popup" class="tourBillId"  id="" >'+eachRecord.name+'</a>';
+          obj.name = '<a href="'+eachRecord.sfid+'" style="word-break: break-word;" data-toggle="modal" data-target="#popup" class="tourBillId"  id="" >'+eachRecord.name+'</a>';
           obj.grandTotal = eachRecord.grand__c;
           obj.createDdate = strDate;
           i= i+1;
@@ -304,7 +304,7 @@ router.get('/getAirBusListView/:parentTourBillId&:isDisabled',verify,(request,re
 
           obj.sequence = i;
           obj.departure=eachRecord.departure_station__c
-          obj.name = '<a href="#" class="airRailBusTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
+          obj.name = '<a href="#" class="airRailBusTag" style="word-break: break-word;" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
           obj.amount = eachRecord.amount__c;
           obj.createDdate = strDate;
           obj.arrival=eachRecord.arrival_station__c;
@@ -780,7 +780,7 @@ router.post('/conveyanceCharges',verify, (request, response) => {
           let strDate3 = strDate2.toLocaleString();
           obj.sequence = i;
           obj.place=eachRecord.place__c;
-          obj.name = '<a href="#" class="conveyanceViewTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
+          obj.name = '<a href="#" class="conveyanceViewTag" style="word-break: break-word;" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
           obj.amount = eachRecord.amount__c;
           obj.createDdate = strDate;
           obj.dated=strDate3;
@@ -1584,7 +1584,7 @@ router.get('/boardingLodgingListView/:parentTourBillId&:isDisabled',verify,(requ
               let strDateTo = strto.toLocaleString();
               obj.sequence = i;
               obj.place=eachRecord.place_journey__c;
-              obj.name = '<a href="#" class="boardingTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
+              obj.name = '<a href="#" style="word-break: break-word;" class="boardingTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
               obj.amount = eachRecord.total_amount__c;
               obj.from=strDateFrom;
               obj.to=strDateTo;
@@ -1911,7 +1911,7 @@ router.get('/telephoneFoodCharge/:parentTourBillId&:isDisabled',verify,(request,
           createdDate.setMinutes(createdDate.getMinutes() + 30);
           let strDate = createdDate.toLocaleString();
           obj.sequence = i;
-          obj.name = '<a href="#" class="telephoneChargeTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
+          obj.name = '<a href="#" style="word-break: break-word;" class="telephoneChargeTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
           obj.amount = eachRecord.total_amount__c;
           obj.fooding=eachRecord.fooding_expense__c;
           obj.laundry=eachRecord.laundry_expense__c;
@@ -2089,7 +2089,7 @@ router.get('/miscellaneousCharge/:parentTourBillId&:isDisabled',verify,(request,
           createdDate.setMinutes(createdDate.getMinutes() + 30);
           let strDate = createdDate.toLocaleString();
           obj.sequence = i;
-          obj.name = '<a href="#" class="miscellaneousTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
+          obj.name = '<a href="#" style="word-break: break-word;" class="miscellaneousTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
           obj.amount = eachRecord.amount__c;
           obj.mode=eachRecord.particulars_mode__c;
           obj.remarks=eachRecord.remarks__c;

@@ -199,7 +199,7 @@
 
                           <!-- Modal Header -->
                           <div class="modal-header">
-                              <h4 class="modal-title">Expense Name </h4>
+                              <h4 class="modal-title">Expense Detail </h4>
                               <button type="button" class="close" data-dismiss="modal">&times;</button>
                           </div>
 
@@ -353,12 +353,12 @@
               <div class="form-group">  
                 <div class="row">
                   <div class="col-md-6">
-                    <label for="validationTooltip01">Expense Name</label>
-                    <input type="text" class="form-control" id="validationTooltip01" value="" placeholder="Expense Name"  name="taskname" >
+                    <label for="validationTooltip01">Expense Name<span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" id="validationTooltip01" value="" placeholder="Expense Name" maxlength="80" name="taskname" >
                   </div>
                   
                   <div class="col-md-6">
-                    <label for="proj">Project Name</label>
+                    <label for="proj">Project Name<span style="color: red;">*</span></label>
                     <select class="custom-select custom-select-sm form-control" id="proj" required="true" name="proj">
                         <option value="">None</option>
                     </select>
@@ -421,12 +421,12 @@
         <div class="form-group"> 
           <div class="row">
           <div class="col-md-6">
-                <label for="name">Expense Name</label>
-                <input type="text" class="form-control" id="name" value=""   name="name" >
+                <label for="name">Expense Name <span style="color: red;">*</span></label>
+                <input type="text" class="form-control" id="name" value="" maxlength="80"  name="name" >
               </div>
 
               <div class="col-md-6">
-                <label for="editProject">Project Name </label>
+                <label for="editProject">Project Name <span style="color: red;">*</span></label>
                 <select id="editProject" class="custom-select custom-select-sm form-control" name="editProject">
                   <option value="">--None--</option> 
                 </select> 
@@ -1121,16 +1121,16 @@
             let expenseTableRows = '';
             expenseTableRows += '<tr>';
             expenseTableRows += '<td><strong>Expense Name<strong></td>';
-            expenseTableRows += '<td>'+expenseRecord.name+'</td>';
+            expenseTableRows += '<td style="word-break: break-word;">'+expenseRecord.name+'</td>';
             expenseTableRows += '<td><strong>Project Name<strong></td>';
-            expenseTableRows += '<td>'+expenseRecord.projname+'</td>';
+            expenseTableRows += '<td style="word-break: break-word;">'+expenseRecord.projname+'</td>';
             expenseTableRows += '</tr>';   
             
             expenseTableRows += '<tr>';
             expenseTableRows += '<td><strong>Designation<strong></td>';
-            expenseTableRows += '<td>'+expenseRecord.designation__c+'</td>';
+            expenseTableRows += '<td style="word-break: break-word;">'+expenseRecord.designation__c+'</td>';
             expenseTableRows += '<td><strong>Employee ID<strong></td>';
-            expenseTableRows += '<td>'+expenseRecord.employee_id__c+'</td>';
+            expenseTableRows += '<td style="word-break: break-word;">'+expenseRecord.employee_id__c+'</td>';
             expenseTableRows += '</tr>';   
             expenseTableRows += '<tr>';
             expenseTableRows += '<td><strong>Employee Category / Band<strong></td>';
@@ -1262,7 +1262,7 @@
                   tourBillClaimTableRows += '</tr></thead><tbody>';
               }
               tourBillClaimTableRows += '<tr>';
-              tourBillClaimTableRows += '<td>'+tourBillClaimList[i].name+'</td>';
+              tourBillClaimTableRows += '<td style="word-break: break-word;">'+tourBillClaimList[i].name+'</td>';
               tourBillClaimTableRows += '<td>'+tourBillClaimList[i].grand__c+'</td>';
               tourBillClaimTableRows += '</tr>';
             }
@@ -1290,10 +1290,10 @@
                 customApprovalTableRows += '</tr></thead><tbody>';
               }
               customApprovalTableRows += '<tr>';
-                customApprovalTableRows += '<td>'+customApprovalList[i].custname+'</td>';
+                customApprovalTableRows += '<td style="word-break: break-word;">'+customApprovalList[i].custname+'</td>';
                 customApprovalTableRows += '<td>'+customApprovalList[i].approval_type__c+'</td>';
-                customApprovalTableRows += '<td>'+customApprovalList[i].conname+'</td>';
-                customApprovalTableRows += '<td>'+customApprovalList[i].custcomm+'</td>';
+                customApprovalTableRows += '<td style="word-break: break-word;">'+customApprovalList[i].conname+'</td>';
+                customApprovalTableRows += '<td style="word-break: break-word;">'+customApprovalList[i].custcomm+'</td>';
                 customApprovalTableRows += '</tr>';
             }
             if(customApprovalListLength>0){
@@ -1484,16 +1484,16 @@ $('.printexp').on('click', function(event){
   let expenseTableRows = '';
   expenseTableRows += '<tr>';
   expenseTableRows += '<td><strong>Expense Name<strong></td>';
-  expenseTableRows += '<td>'+expenseRecord.name+'</td>';
+  expenseTableRows += '<td style="word-break: break-word;">'+expenseRecord.name+'</td>';
   expenseTableRows += '<td><strong>Project Name<strong></td>';
-  expenseTableRows += '<td>'+expenseRecord.projname+'</td>';
+  expenseTableRows += '<td style="word-break: break-word;">'+expenseRecord.projname+'</td>';
   expenseTableRows += '</tr>';   
   
   expenseTableRows += '<tr>';
   expenseTableRows += '<td><strong>Designation<strong></td>';
-  expenseTableRows += '<td>'+expenseRecord.designation__c+'</td>';
+  expenseTableRows += '<td style="word-break: break-word;">'+expenseRecord.designation__c+'</td>';
   expenseTableRows += '<td><strong>Employee ID<strong></td>';
-  expenseTableRows += '<td>'+expenseRecord.employee_id__c+'</td>';
+  expenseTableRows += '<td style="word-break: break-word;">'+expenseRecord.employee_id__c+'</td>';
   expenseTableRows += '</tr>';   
 
   expenseTableRows += '<tr>';
@@ -1569,7 +1569,7 @@ $('.printexp').on('click', function(event){
               {
                 var strDate = pettyCashList[i].bill_date__c.toString().split('T')[0];
                 pettyCashTableRows += '<tr>';
-                pettyCashTableRows += '<td>'+pettyCashList[i].name+'</td>';
+                pettyCashTableRows += '<td style="word-break: break-word;">'+pettyCashList[i].name+'</td>';
                 pettyCashTableRows += '<td>'+pettyCashList[i].amount__c+'</td>';
                 pettyCashTableRows += '<td>'+pettyCashList[i].bill_no__c+'</td>';
                 pettyCashTableRows += '<td>'+pettyCashList[i].actname+'</td>';
@@ -1608,10 +1608,10 @@ $('.printexp').on('click', function(event){
                 var strDate1 = conveyanceVoucherList[i].to__c.toString().split('T')[0];
             
                 conveyanceVoucherTableRows += '<tr>';
-                conveyanceVoucherTableRows += '<td>'+conveyanceVoucherList[i].name+'</td>';
+                conveyanceVoucherTableRows += '<td style="word-break: break-word;">'+conveyanceVoucherList[i].name+'</td>';
                 conveyanceVoucherTableRows += '<td>'+conveyanceVoucherList[i].amount__c+'</td>';
                 conveyanceVoucherTableRows += '<td>'+conveyanceVoucherList[i].mode_of_conveyance__c+'</td>';
-                conveyanceVoucherTableRows += '<td>'+conveyanceVoucherList[i].actname+'</td>';
+                conveyanceVoucherTableRows += '<td style="word-break: break-word;">'+conveyanceVoucherList[i].actname+'</td>';
                 conveyanceVoucherTableRows += '<td>'+strDate+'</td>';
                 conveyanceVoucherTableRows += '<td>'+strDate1+'</td>';
                 conveyanceVoucherTableRows += '</tr>';
@@ -1645,14 +1645,14 @@ $('.printexp').on('click', function(event){
                 var strDate1 = airBustlist[i].arrival_date__c.toString().split('T')[0];
                 
               AirRailBustTableRow += '<tr>';
-              AirRailBustTableRow += '<td>'+airBustlist[i].name+'</td>';
+              AirRailBustTableRow += '<td style="word-break: break-word;">'+airBustlist[i].name+'</td>';
               AirRailBustTableRow += '<td>'+airBustlist[i].amount__c+'</td>';
               AirRailBustTableRow += '<td>'+airBustlist[i].departure_station__c+'</td>';
               AirRailBustTableRow += '<td>'+airBustlist[i].arrival_station__c+'</td>';
-              AirRailBustTableRow += '<td>'+airBustlist[i].actname+'</td>';
+              AirRailBustTableRow += '<td style="word-break: break-word;">'+airBustlist[i].actname+'</td>';
               AirRailBustTableRow += '<td>'+strDate+'</td>';
               AirRailBustTableRow += '<td>'+strDate1+'</td>';
-              AirRailBustTableRow += '<td>'+airBustlist[i].tourname+'</td>';
+              AirRailBustTableRow += '<td style="word-break: break-word;">'+airBustlist[i].tourname+'</td>';
               AirRailBustTableRow += '</tr>';
               }
              // conveyanceVoucherTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/ConveyanceListView?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
@@ -1684,13 +1684,13 @@ $('.printexp').on('click', function(event){
                 
                
                 conveyaneChargeTableRow += '<tr>';
-                conveyaneChargeTableRow += '<td>'+conveyanceChargelist[i].name+'</td>';
+                conveyaneChargeTableRow += '<td style="word-break: break-word;">'+conveyanceChargelist[i].name+'</td>';
                 conveyaneChargeTableRow += '<td>'+conveyanceChargelist[i].amount__c+'</td>';
                 conveyaneChargeTableRow += '<td>'+strDate+'</td>';
                 conveyaneChargeTableRow += '<td>'+conveyanceChargelist[i].place__c+'</td>';
-                conveyaneChargeTableRow += '<td>'+conveyanceChargelist[i].actname+'</td>';
+                conveyaneChargeTableRow += '<td style="word-break: break-word;">'+conveyanceChargelist[i].actname+'</td>';
                 conveyaneChargeTableRow += '<td>'+conveyanceChargelist[i].remarks__c+'</td>';
-                conveyaneChargeTableRow += '<td>'+conveyanceChargelist[i].tourname+'</td>';
+                conveyaneChargeTableRow += '<td style="word-break: break-word;">'+conveyanceChargelist[i].tourname+'</td>';
                 conveyaneChargeTableRow += '</tr>';
               }
              // conveyanceVoucherTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/ConveyanceListView?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
@@ -1736,15 +1736,15 @@ $('.printexp').on('click', function(event){
                 
             
                     boardingTableRow += '<tr>';
-                    boardingTableRow+= '<td>'+boardinglodginglist[i].name+'</td>';
-                    boardingTableRow += '<td>'+boardinglodginglist[i].tourname+'</td>';
+                    boardingTableRow+= '<td style="word-break: break-word;">'+boardinglodginglist[i].name+'</td>';
+                    boardingTableRow += '<td style="word-break: break-word;">'+boardinglodginglist[i].tourname+'</td>';
                     boardingTableRow += '<td>'+boardinglodginglist[i].stay_option__c+'</td>';
-                    boardingTableRow += '<td>'+boardinglodginglist[i].place_journey__c+'</td>';
-                    boardingTableRow += '<td>'+boardinglodginglist[i].correspondence_city__c+'</td>';
+                    boardingTableRow += '<td style="word-break: break-word;">'+boardinglodginglist[i].place_journey__c+'</td>';
+                    boardingTableRow += '<td style="word-break: break-word;">'+boardinglodginglist[i].correspondence_city__c+'</td>';
                     boardingTableRow += '<td>'+strDate1+'</td>';
                     boardingTableRow += '<td>'+boardinglodginglist[i].own_stay_amount__c+'</td>';
                    // boardingTableRow += '<td>'+boardinglodginglist[i].no_of_days__c+'</td>';
-                    boardingTableRow += '<td>'+boardinglodginglist[i].actname+'</td>';
+                    boardingTableRow += '<td style="word-break: break-word;">'+boardinglodginglist[i].actname+'</td>';
                     boardingTableRow += '<td>'+boardinglodginglist[i].daily_allowance__c+'</td>';
                     boardingTableRow += '<td>'+boardinglodginglist[i].amount_of_b_l_as_per_policy__c+'</td>';
                     boardingTableRow += '<td>'+strDate+'</td>';
@@ -1785,13 +1785,13 @@ $('.printexp').on('click', function(event){
                 
 
                       telefoodTableRow += '<tr>';
-                      telefoodTableRow += '<td>'+telfoodlist[i].name+'</td>';
+                      telefoodTableRow += '<td style="word-break: break-word;">'+telfoodlist[i].name+'</td>';
                       telefoodTableRow += '<td>'+telfoodlist[i].laundry_expense__c+'</td>';
                       telefoodTableRow += '<td>'+telfoodlist[i].fooding_expense__c+'</td>';
                       telefoodTableRow += '<td>'+telfoodlist[i].total_amount__c+'</td>';
-                      telefoodTableRow += '<td>'+telfoodlist[i].actname+'</td>';
-                      telefoodTableRow += '<td>'+telfoodlist[i].remarks__c+'</td>';
-                      telefoodTableRow += '<td>'+telfoodlist[i].tourname+'</td>';
+                      telefoodTableRow += '<td style="word-break: break-word;">'+telfoodlist[i].actname+'</td>';
+                      telefoodTableRow += '<td style="word-break: break-word;">'+telfoodlist[i].remarks__c+'</td>';
+                      telefoodTableRow += '<td style="word-break: break-word;">'+telfoodlist[i].tourname+'</td>';
                       telefoodTableRow += '</tr>';
               }
              // conveyanceVoucherTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/ConveyanceListView?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';
@@ -1821,13 +1821,13 @@ $('.printexp').on('click', function(event){
                  var strDate = miscelllist[i].date__c.toString().split('T')[0];
                 
                 miscellTableRow += '<tr>';
-                miscellTableRow += '<td>'+miscelllist[i].name+'</td>';
+                miscellTableRow += '<td style="word-break: break-word;">'+miscelllist[i].name+'</td>';
                 miscellTableRow += '<td>'+strDate+'</td>';
                 miscellTableRow += '<td>'+miscelllist[i].amount__c+'</td>';
                 miscellTableRow += '<td>'+miscelllist[i].particulars_mode__c+'</td>';
-                miscellTableRow += '<td>'+miscelllist[i].actname+'</td>';
-                miscellTableRow += '<td>'+miscelllist[i].remarks__c+'</td>';
-                miscellTableRow += '<td>'+miscelllist[i].tourname+'</td>';
+                miscellTableRow += '<td style="word-break: break-word;">'+miscelllist[i].actname+'</td>';
+                miscellTableRow += '<td style="word-break: break-word;">'+miscelllist[i].remarks__c+'</td>';
+                miscellTableRow += '<td style="word-break: break-word;">'+miscelllist[i].tourname+'</td>';
                 miscellTableRow += '</tr>';
               }
              // conveyanceVoucherTableRows += '<tr><td colspan="4"><center><a target="_blank" href="/expense/ConveyanceListView?expenseId='+expenseId+'" >View All</a></center></td></tr></tbody>';

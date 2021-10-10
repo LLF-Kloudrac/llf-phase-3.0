@@ -210,7 +210,7 @@
                                 console.log('dateTime after edit on 197 : '+planDt);
                                 htmlResponsesTable += '<tr>';
                                 htmlResponsesTable += '<td>'+i+' </td>';
-                                htmlResponsesTable += '<td>'+eachRecord.name+' </td>';
+                                htmlResponsesTable += '<td style="word-break: break-word;">'+eachRecord.name+' </td>';
                                 htmlResponsesTable += '<td>'+planDt+' </td>';
                                 if(eachRecord.approval_status__c == 'Pending' || eachRecord.approval_status__c == 'Rejected'  || eachRecord.approval_status__c == 'Approved' )
                                 htmlResponsesTable += '<td><button class="btn btn-primary submitFormForApproval" disabled = true id="'+eachRecord.sfid+'" >Submit For Approval</a> </td>';

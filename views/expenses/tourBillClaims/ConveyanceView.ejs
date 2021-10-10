@@ -249,34 +249,34 @@
                           let htmlTable = '';
                               htmlTable += '<tr>';
                                   htmlTable += '<td><strong>Name</strong></td>';
-                                  htmlTable += '<td>'+conveyanceRecord.conveyname+'</td>';
+                                  htmlTable += '<td style="word-break: break-word;">'+conveyanceRecord.conveyname+'</td>';
                                   htmlTable += '<td><strong>TourBillClaim Name</strong></td>';
-                                  htmlTable += '<td>'+conveyanceRecord.tourbillname+'</td>';
+                                  htmlTable += '<td style="word-break: break-word;">'+conveyanceRecord.tourbillname+'</td>';
                               htmlTable += '</tr>';
                               htmlTable += '<tr>';
                                 htmlTable += '<td><strong>Amount</strong></td>';
                                 htmlTable += '<td>'+conveyanceRecord.amount__c+'</td>';
                                 htmlTable += '<td><strong>Place</strong></td>';
-                                htmlTable += '<td>'+conveyanceRecord.place__c+'</td>';
+                                htmlTable += '<td style="word-break: break-word;">'+conveyanceRecord.place__c+'</td>';
                               htmlTable += '</tr>';
                               htmlTable += '<tr>';
                                   htmlTable += '<td><strong>Date</strong></td>';
                                   htmlTable += '<td>'+conveyanceRecord.date__c.slice(0, 10)+'</td>';
                                   htmlTable += '<td><strong>Remarks</strong></td>';
-                                  htmlTable += '<td>'+conveyanceRecord.remarks__c+'</td>';
+                                  htmlTable += '<td style="word-break: break-word;">'+conveyanceRecord.remarks__c+'</td>';
                               htmlTable += '</tr>';
                               
                               htmlTable += '<tr>';
                                htmlTable += '<td><strong>Activity Code</strong></td>';
                                if(conveyanceRecord.activitycode != null)
-                                  htmlTable += '<td>'+conveyanceRecord.activitycode+'</td>';
+                                  htmlTable += '<td style="word-break: break-word;">'+conveyanceRecord.activitycode+'</td>';
                                   else
                                   htmlTable += '<td></td>';
 
                                   htmlTable += '<td><strong>View Image</strong></td>';
                               console.log('typeof(conveyanceRecord.heroku_image_url__c) '+typeof(conveyanceRecord.heroku_image_url__c));
                               if(conveyanceRecord.heroku_image_url__c != null && conveyanceRecord.heroku_image_url__c != '')
-                                  htmlTable += '<td><a target="_blank" href="'+conveyanceRecord.heroku_image_url__c+'" >Click Here</a></td>';
+                                  htmlTable += '<td><a target="_blank" href="'+conveyanceRecord.heroku_image_url__c+'" style="word-break: break-word;" >Click Here</a></td>';
                               else
                                   htmlTable += '<td></td>';
  

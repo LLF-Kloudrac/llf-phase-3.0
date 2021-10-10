@@ -235,19 +235,19 @@
                                 htmlTable += '<td><strong>Approval Type</strong></td>';
                                 htmlTable += '<td>'+record.approval_type__c+'</td>';
                                 htmlTable += '<td><strong>Asset Requisition Form</strong></td>';
-                                htmlTable += '<td>'+record.assetname+'</td>';
+                                htmlTable += '<td style="word-break: break-word;">'+record.assetname+'</td>';
                                 htmlTable += '</tr>';
                             htmlTable += '<tr>';
                                 htmlTable += '<td><strong>Status</strong></td>';
                                 htmlTable += '<td>'+record.status__c+'</td>';
                                 htmlTable += '<td><strong>Approvers Emails</strong></td>';
-                                htmlTable += '<td>'+record.approver_s_emails__c+'</td>';
+                                htmlTable += '<td style="word-break: break-word;">'+record.approver_s_emails__c+'</td>';
                             htmlTable += '</tr>';
                             htmlTable += '<tr>';
                                 htmlTable += '<td><strong>Approval Comment</strong></td>';
-                                htmlTable += '<td>'+record.approval_comment__c+'</td>';
+                                htmlTable += '<td style="word-break: break-word;">'+record.approval_comment__c+'</td>';
                                 htmlTable += '<td><strong>Submitted By Heroku User</strong></td>';
-                                htmlTable += '<td>'+record.conname+'</td>';
+                                htmlTable += '<td style="word-break: break-word;">'+record.conname+'</td>';
                             htmlTable += '</tr>';
                            
                             $('#approvalTableDetails').empty();
@@ -259,9 +259,9 @@
                   ftable +='<thead><th>Approval History Name</th><th>Approver</th><th>Comment</th><th>Status</th>';
                   response.history.forEach((eachRecord)=>{
                     ftable +='<tr>';
-                      ftable +='<td>'+eachRecord.name+'</td>';
-                      ftable +='<td>'+eachRecord.username+'</td>';
-                      ftable +='<td>'+eachRecord.comment__c+'</td>';  
+                      ftable +='<td style="word-break: break-word;">'+eachRecord.name+'</td>';
+                      ftable +='<td style="word-break: break-word;">'+eachRecord.username+'</td>';
+                      ftable +='<td style="word-break: break-word;">'+eachRecord.comment__c+'</td>';  
                       ftable +='<td>'+eachRecord.status__c+'</td>';
                     ftable +='</tr>';
                   })

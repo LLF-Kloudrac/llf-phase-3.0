@@ -59,7 +59,7 @@ router.get('/assetDetails',verify,(request, response)=> {
               obj.sequence = i+1;
              // obj.editbutton = '<button    data-toggle="modal" data-target="#assetRequisitionEditModal" class="btn btn-primary assetRequisitionEditModalButton"   id="'+assetQueryResult.rows[i].sfid+'" >Edit</button>';
               
-              obj.name = '<a href="'+assetQueryResult.rows[i].sfid+'" data-toggle="modal" data-target="#popup" class="assetTag" id="name'+assetQueryResult.rows[i].sfid+'"  >'+assetQueryResult.rows[i].name+'</a>';
+              obj.name = '<a href="'+assetQueryResult.rows[i].sfid+'" data-toggle="modal" data-target="#popup" style="word-break: break-word;" class="assetTag" id="name'+assetQueryResult.rows[i].sfid+'"  >'+assetQueryResult.rows[i].name+'</a>';
               obj.projectname = assetQueryResult.rows[i].projname;
               obj.noit = assetQueryResult.rows[i].number_of_it_product__c;
               obj.nononit = assetQueryResult.rows[i].number_of_non_it_product__c;
@@ -1485,7 +1485,7 @@ router.get('/getProcurementApprovalList',verify,(request,response)=>{
               crDate.setMinutes(crDate.getMinutes() + 30);
               let strDate = crDate.toLocaleString();
               obj.sequence = i;
-              obj.name = '<a href="#" data-toggle="modal" data-target=""  id="'+eachRecord.sfid+'" class="approvalTag" >'+eachRecord.name+'</a>';
+              obj.name = '<a href="#" data-toggle="modal" data-target="" style="word-break: break-word;" id="'+eachRecord.sfid+'" class="approvalTag" >'+eachRecord.name+'</a>';
 
            //   obj.name = '<a href="#" class="approvalTag"" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
               obj.type = eachRecord.approval_type__c;
@@ -1592,7 +1592,7 @@ router.get('/itProcurementList',(request,response)=>{
                 crDate.setMinutes(crDate.getMinutes() + 30);
                 let strDate = crDate.toLocaleString();
               obj.sequence = i;
-              obj.name = '<a href="#" class="procureItTag" id="'+eachRecord.sfid+'" >'+eachRecord.procitname+'</a>';
+              obj.name = '<a href="#" class="procureItTag" style="word-break: break-word;" id="'+eachRecord.sfid+'" >'+eachRecord.procitname+'</a>';
               obj.item = eachRecord.items__c;
               obj.item_spec = eachRecord.product_service_specification__c;
               obj.quantity = eachRecord.quantity__c;
@@ -1696,7 +1696,7 @@ router.get('/NonItProcurementList',(request,response)=>{
               crDate.setMinutes(crDate.getMinutes() + 30);
               let strDate = crDate.toLocaleString();
               obj.sequence = i;
-              obj.name = '<a href="#" class="procurementTag" id="'+eachRecord.sfid+'" >'+eachRecord.procname+'</a>';
+              obj.name = '<a href="#" class="procurementTag" style="word-break: break-word;" id="'+eachRecord.sfid+'" >'+eachRecord.procname+'</a>';
               obj.item = eachRecord.items__c;
               obj.item_spec=eachRecord.product_service__c;
               obj.item_category = eachRecord.products_services_name__c;
@@ -1841,7 +1841,7 @@ router.get('/getVendorsList',(request,response)=>{
               let strDate = crDate.toLocaleString();
               obj.sequence = i;
               obj.editAction = '<button href="#" class="btn btn-primary editVendor" id="'+eachRecord.sfid+'" >Edit</button>'
-              obj.name = '<a href="#" class="vendorTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
+              obj.name = '<a href="#" class="vendorTag" style="word-break: break-word;" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
               obj.vendorname = eachRecord.vendor_name__c;
               obj.state = eachRecord.state__c;
               obj.district = eachRecord.district__c;
@@ -2148,7 +2148,7 @@ router.get('/getItemList',(request,response)=>{
               let strDate = crDate.toLocaleString();
               obj.sequence = i;
               obj.editAction = '<button href="#" class="btn btn-primary editItem" id="'+eachRecord.sfid+'" >Edit</button>'
-              obj.name = '<a href="#" class="itemDetailTag" id="'+eachRecord.sfid+'" >'+eachRecord.itemname+'</a>';
+              obj.name = '<a href="#" class="itemDetailTag" style="word-break: break-word;" id="'+eachRecord.sfid+'" >'+eachRecord.itemname+'</a>';
               obj.category = eachRecord.category__c;
               obj.item = eachRecord.items__c;
               obj.unit = eachRecord.unit__c;
@@ -2480,7 +2480,7 @@ router.get('/getFeedbacklist',verify,(request,response)=>{
               crDate.setMinutes(crDate.getMinutes() + 30);
               let strDate = crDate.toLocaleString();
               obj.sequence = i;
-              obj.name = '<a href="#" class="vendorTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
+              obj.name = '<a href="#" class="vendorTag" style="word-break: break-word;" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
               obj.time=eachRecord.timely_submissions_of_all_deliverables__c;
               obj.quality=eachRecord.work_quality_goods_quality__c;
               obj.issue = eachRecord.issue_knowledge_expertise__c;
@@ -2525,7 +2525,7 @@ router.get('/getfeedbackITlist',verify,(request,response)=>{
               let obj = {};
               obj.sequence = i;
               obj.editAction = '<button href="#" class="btn btn-primary editfeedIt" id="'+eachRecord.sfid+'" >Edit</button>'
-              obj.name = '<a href="#" class="vendorTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
+              obj.name = '<a href="#" class="vendorTag" style="word-break: break-word;" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
               obj.quantity=eachRecord.quyantiut__c
               obj.time=eachRecord.timely_submissions_of_deliverables_goods__c;
               obj.quality=eachRecord.work_quality_goods_quality__c;

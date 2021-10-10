@@ -218,19 +218,19 @@
             let expenseTableRows = '';
             expenseTableRows += '<tr>';
             expenseTableRows += '<td><strong>Expense Name<strong></td>';
-            expenseTableRows += '<td>'+expenseRecord.name+'</td>';
+            expenseTableRows += '<td style="word-break: break-word;">'+expenseRecord.name+'</td>';
             expenseTableRows += '<td><strong>Project Name<strong></td>';
-            expenseTableRows += '<td>'+expenseRecord.projname+'</td>';
+            expenseTableRows += '<td style="word-break: break-word;">'+expenseRecord.projname+'</td>';
             expenseTableRows += '</tr>';   
             
             expenseTableRows += '<tr>';
             expenseTableRows += '<td><strong>Department<strong></td>';
             if(expenseRecord.department__c != null)
-              expenseTableRows += '<td>'+expenseRecord.department__c+'</td>';
+              expenseTableRows += '<td style="word-break: break-word;">'+expenseRecord.department__c+'</td>';
             else
               expenseTableRows += '<td> </td>';
             expenseTableRows += '<td><strong>Designation<strong></td>';
-            expenseTableRows += '<td>'+expenseRecord.designation__c+'</td>';
+            expenseTableRows += '<td style="word-break: break-word;">'+expenseRecord.designation__c+'</td>';
             expenseTableRows += '</tr>';   
 
             expenseTableRows += '<tr>';
@@ -238,7 +238,7 @@
             expenseTableRows += '<td>'+expenseRecord.employee_id__c+'</td>';
             expenseTableRows += '<td><strong>Employee Category / Band<strong></td>';
             if(expenseRecord.conveyance_employee_category_band__c != null)
-              expenseTableRows += '<td>'+expenseRecord.conveyance_employee_category_band__c+'</td>';
+              expenseTableRows += '<td style="word-break: break-word;">'+expenseRecord.conveyance_employee_category_band__c+'</td>';
             else
             expenseTableRows += '<td> </td>';
             expenseTableRows += '</tr>';   
@@ -310,7 +310,7 @@
                 }
                 var strDate = pettyCashList[i].bill_date__c.toString().split('T')[0];
                 pettyCashTableRows += '<tr>';
-                pettyCashTableRows += '<td>'+pettyCashList[i].name+'</td>';
+                pettyCashTableRows += '<td style="word-break: break-word;">'+pettyCashList[i].name+'</td>';
                 pettyCashTableRows += '<td>'+pettyCashList[i].amount__c+'</td>';
               //  pettyCashTableRows += '<td>'+pettyCashList[i].activity_code__c+'</td>';
                 pettyCashTableRows += '<td>'+pettyCashList[i].nature_of_exp__c+'</td>';
@@ -342,7 +342,7 @@
                   conveyanceVoucherTableRows += '</tr></thead><tbody>';
                 }
                 conveyanceVoucherTableRows += '<tr>';
-                conveyanceVoucherTableRows += '<td>'+conveyanceVoucherList[i].name+'</td>';
+                conveyanceVoucherTableRows += '<td style="word-break: break-word;">'+conveyanceVoucherList[i].name+'</td>';
                 conveyanceVoucherTableRows += '<td>'+conveyanceVoucherList[i].amount__c+'</td>';
                 conveyanceVoucherTableRows += '<td>'+conveyanceVoucherList[i].mode_of_conveyance__c+'</td>';
                 conveyanceVoucherTableRows += '<td>'+strDate+'</td>';
@@ -372,7 +372,7 @@
                     tourBillClaimTableRows += '</tr></thead><tbody>';
                 }
                 tourBillClaimTableRows += '<tr>';
-                tourBillClaimTableRows += '<td>'+tourBillClaimList[i].name+'</td>';
+                tourBillClaimTableRows += '<td style="word-break: break-word;">'+tourBillClaimList[i].name+'</td>';
                 tourBillClaimTableRows += '<td>'+tourBillClaimList[i].grand__c+'</td>';
                 tourBillClaimTableRows += '</tr>';
               }
@@ -400,9 +400,9 @@
                   customApprovalTableRows += '</tr></thead><tbody>';
                 }
                 customApprovalTableRows += '<tr>';
-                  customApprovalTableRows += '<td>'+customApprovalList[i].custname+'</td>';
-                  customApprovalTableRows += '<td>'+customApprovalList[i].conname+'</td>';
-                  customApprovalTableRows += '<td>'+customApprovalList[i].custcomm+'</td>';
+                  customApprovalTableRows += '<td style="word-break: break-word;">'+customApprovalList[i].custname+'</td>';
+                  customApprovalTableRows += '<td style="word-break: break-word;">'+customApprovalList[i].conname+'</td>';
+                  customApprovalTableRows += '<td style="word-break: break-word;">'+customApprovalList[i].custcomm+'</td>';
 
                   customApprovalTableRows += '</tr>';
               }

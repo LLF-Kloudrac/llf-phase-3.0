@@ -193,9 +193,9 @@
                   let tourBillClaimTableHtml = '';
                   tourBillClaimTableHtml += '<tr>';
                   tourBillClaimTableHtml += '<td>Name</td>';
-                  tourBillClaimTableHtml += '<td>'+tourBillClaim.name+'</td>';
+                  tourBillClaimTableHtml += '<td style="word-break: break-word;">'+tourBillClaim.name+'</td>';
                   tourBillClaimTableHtml += '<td>Expense </td>';
-                  tourBillClaimTableHtml += '<td>'+tourBillClaim.expname+'</td>';
+                  tourBillClaimTableHtml += '<td style="word-break: break-word;">'+tourBillClaim.expname+'</td>';
                   tourBillClaimTableHtml += '</tr>'; 
                   tourBillClaimTableHtml += '<tr>'; 
                   tourBillClaimTableHtml += '<td>Grand Total</td>';
@@ -225,7 +225,7 @@
                       let strArrivalDate = eachAirRailBus.arrival_date__c.toString().split('T')[0];
                       let strDepartureDate = eachAirRailBus.departure_date__c.toString().split('T')[0];
                       airBusRailFareHtml += '<tr>';
-                      airBusRailFareHtml += '<td>'+eachAirRailBus.name+'</td>';
+                      airBusRailFareHtml += '<td style="word-break: break-word;">'+eachAirRailBus.name+'</td>';
                       airBusRailFareHtml += '<td>'+strArrivalDate+'</td>';
                       airBusRailFareHtml += '<td>'+strDepartureDate+'</td>';
                       airBusRailFareHtml += '<td>'+eachAirRailBus.amount__c+'</td>';
@@ -250,7 +250,7 @@
                     conveyanceCharges.forEach((eachConveyanceCharge) => {
                       let strDate = eachConveyanceCharge.date__c.toString().split('T')[0]; 
                       conveyanceChargesHtml += '<tr>';
-                      conveyanceChargesHtml += '<td>'+eachConveyanceCharge.name+'</td>';
+                      conveyanceChargesHtml += '<td style="word-break: break-word;">'+eachConveyanceCharge.name+'</td>';
                       conveyanceChargesHtml += '<td>'+strDate+'</td>';
                       conveyanceChargesHtml += '<td>'+eachConveyanceCharge.amount__c+'</td>';  
                       conveyanceChargesHtml += '</tr>';
@@ -272,9 +272,9 @@
                         boardingLodgingChargesHtml += '</thead><tbody>';
                       boardingLodgingCharges.forEach((eachBoardingLodging) => {
                         boardingLodgingChargesHtml += '<tr>';
-                        boardingLodgingChargesHtml += '<td>'+eachBoardingLodging.name+'</td>';
+                        boardingLodgingChargesHtml += '<td style="word-break: break-word;">'+eachBoardingLodging.name+'</td>';
                         boardingLodgingChargesHtml += '<td>'+eachBoardingLodging.total_amount__c+'</td>';
-                        boardingLodgingChargesHtml += '<td>'+eachBoardingLodging.place_journey__c+'</td>';  
+                        boardingLodgingChargesHtml += '<td style="word-break: break-word;">'+eachBoardingLodging.place_journey__c+'</td>';  
                         boardingLodgingChargesHtml += '</tr>';
                     });
                     boardingLodgingChargesHtml+='<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/boardingLodgingListView/'+tourBillClaimId+'&'+isDisabled+'" >View All</a></center></td></tr>';
@@ -295,10 +295,10 @@
                           telephoneFoodChargesHtml += '</thead><tbody>';
                     telephoneFoodCharges.forEach((eachTelephoneFoodCharge) => {
                           telephoneFoodChargesHtml += '<tr>';
-                          telephoneFoodChargesHtml += '<td>'+eachTelephoneFoodCharge.name+'</td>';
+                          telephoneFoodChargesHtml += '<td style="word-break: break-word;">'+eachTelephoneFoodCharge.name+'</td>';
                           telephoneFoodChargesHtml += '<td>'+eachTelephoneFoodCharge.laundry_expense__c+'</td>';
                           telephoneFoodChargesHtml += '<td>'+eachTelephoneFoodCharge.fooding_expense__c+'</td>';  
-                          telephoneFoodChargesHtml += '<td>'+eachTelephoneFoodCharge.remarks__c+'</td>';  
+                          telephoneFoodChargesHtml += '<td style="word-break: break-word;">'+eachTelephoneFoodCharge.remarks__c+'</td>';  
                           telephoneFoodChargesHtml += '</tr>';
                     });
                     telephoneFoodChargesHtml+='<tr ><td colspan="4"><center><a target="_blank" href="/expense/tourBillClaim/telephoneFoodCharge/'+tourBillClaimId+'&'+isDisabled+'" >View All</a></center></td></tr>';
@@ -320,10 +320,10 @@
                     miscellenousCharges.forEach((eachMiscellenousCharge) => {
                         let strDate = eachMiscellenousCharge.date__c.toString().split('T')[0];
                         miscellenousChargesHtml += '<tr>';
-                        miscellenousChargesHtml += '<td>'+eachMiscellenousCharge.name+'</td>';
+                        miscellenousChargesHtml += '<td style="word-break: break-word;">'+eachMiscellenousCharge.name+'</td>';
                         miscellenousChargesHtml += '<td>'+strDate+'</td>';
                         miscellenousChargesHtml += '<td>'+eachMiscellenousCharge.amount__c+'</td>';  
-                        miscellenousChargesHtml += '<td>'+eachMiscellenousCharge.remarks__c+'</td>';  
+                        miscellenousChargesHtml += '<td style="word-break: break-word;">'+eachMiscellenousCharge.remarks__c+'</td>';  
                         miscellenousChargesHtml += '</tr>';
                     });
                     

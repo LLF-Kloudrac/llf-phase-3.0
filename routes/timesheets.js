@@ -1436,7 +1436,7 @@ router.get('/getTasklist',verify,(request,response)=>{
 
 
           obj.sequence = i;
-          obj.name = '<a href="#" class="taskreferenceTag" id="'+eachRecord.sfids+'" >'+eachRecord.tskname+'</a>';
+          obj.name = '<a href="#" class="taskreferenceTag" style="word-break: break-word;" id="'+eachRecord.sfids+'" >'+eachRecord.tskname+'</a>';
           obj.assigned = eachRecord.contname;
           obj.hrs=eachRecord.planned_hours__c;
           obj.startTime=eachRecord.start_time__c;
@@ -1570,7 +1570,7 @@ router.get('/getTimesheetlist',verify,(request,response)=>{
           strDated.setMinutes(strDated.getMinutes() + 30);
           let strDated1 = strDated.toLocaleString();
           obj.sequence = i;
-          obj.name = '<a href="#" class="taskreferenceTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
+          obj.name = '<a href="#" class="taskreferenceTag" style="word-break: break-word;" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
           obj.hours=eachRecord.hours__c;
           obj.startTime=eachRecord.start_time__c;
           obj.endtime=eachRecord.end_time__c;

@@ -221,9 +221,9 @@ function anchorClickFunctionalities(){
                                 htmlTable += '</tr>';
                                 htmlTable += '<tr>';
                                 htmlTable += '<td><strong>Expense Approval Name</strong></td>';
-                                htmlTable += '<td>'+record.appname+'</td>';
+                                htmlTable += '<td style="word-break: break-word;">'+record.appname+'</td>';
                                 htmlTable += '<td><strong>Expense</strong></td>';
-                              htmlTable += '<td>'+record.expname+'</td>';
+                              htmlTable += '<td style="word-break: break-word;">'+record.expname+'</td>';
                               htmlTable += '</tr>';
 
                               htmlTable += '<tr>';
@@ -235,9 +235,9 @@ function anchorClickFunctionalities(){
                             
                                 htmlTable += '<tr>';
                                 htmlTable += '<td><strong>Submitter</strong></td>';
-                                htmlTable += '<td>'+record.submitter+'</td>';
+                                htmlTable += '<td style="word-break: break-word;">'+record.submitter+'</td>';
                                 htmlTable += '<td><strong>Submitter Comment</strong></td>';
-                                htmlTable += '<td>'+record.comment__c+'</td>';
+                                htmlTable += '<td style="word-break: break-word;">'+record.comment__c+'</td>';
                                 htmlTable += '</tr>';
 
                                 htmlTable += '<tr>';
@@ -247,7 +247,7 @@ function anchorClickFunctionalities(){
                                 htmlTable += '<tr>';
                                 htmlTable += '<td><strong>Approver (RM)</strong></td>';
                                 if(record.conname!=null){
-                                  htmlTable += '<td>'+record.conname+'</td>';
+                                  htmlTable += '<td style="word-break: break-word;">'+record.conname+'</td>';
                                 }
                                 else{
                                   htmlTable += '<td>'+''+'</td>';
@@ -259,7 +259,7 @@ function anchorClickFunctionalities(){
                          
                                 htmlTable += '<tr>';
                                 htmlTable += '<td><strong>Reporting Manager Comment</strong></td>';
-                                htmlTable += '<td>'+record.reporting_manager_comment__c+'</td>';
+                                htmlTable += '<td style="word-break: break-word;">'+record.reporting_manager_comment__c+'</td>';
                                 htmlTable += '<td></td>';
                                 htmlTable += '<td></td>';
                                htmlTable += '</tr>';
@@ -272,7 +272,7 @@ function anchorClickFunctionalities(){
                                  
                                 htmlTable += '<td><strong>Approver (PM)</strong></td>';
                                 if(record.connamerm!=null){
-                                  htmlTable += '<td>'+record.connamerm+'</td>';
+                                  htmlTable += '<td style="word-break: break-word;">'+record.connamerm+'</td>';
                                 }
                                 else
                                 htmlTable += '<td>'+''+'</td>';
@@ -285,7 +285,7 @@ function anchorClickFunctionalities(){
 
                                 htmlTable += '<tr>';
                                   htmlTable += '<td><strong>Project Manager Comment</strong></td>';
-                                htmlTable += '<td>'+record.project_manager_comment__c+'</td>';
+                                htmlTable += '<td style="word-break: break-word;">'+record.project_manager_comment__c+'</td>';
                                 htmlTable += '</tr>';
                         
                           $('#approvalTable').empty();

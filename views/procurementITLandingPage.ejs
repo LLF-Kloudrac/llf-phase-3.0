@@ -104,16 +104,16 @@
                               let htmlTable = '';
                               htmlTable += '<tr>';
                                 htmlTable += '<td><strong>Procurement- IT ID</strong></td>';
-                                htmlTable += '<td>'+record.procitname+'</td>';
+                                htmlTable += '<td style="word-break: break-word;">'+record.procitname+'</td>';
                                 htmlTable += '<td><strong>ImpaneledVendor Name</strong></td>';
-                                htmlTable += '<td>'+'<a target="_blank" href="#" class="vendorDetTag" id="'+record.impaneled_vendor__c+'" >'+record.vendername+'</a>'+'</td>';
+                                htmlTable += '<td>'+'<a target="_blank" href="#" class="vendorDetTag" style="word-break: break-word;" id="'+record.impaneled_vendor__c+'" >'+record.vendername+'</a>'+'</td>';
                          
                             htmlTable += '</tr>';
                             htmlTable += '<tr>';
                                 htmlTable += '<td><strong>Items</strong></td>';
                                 htmlTable += '<td>'+record.items__c+'</td>';
                                 htmlTable += '<td><strong>Items Specification</strong></td>';
-                                htmlTable += '<td>'+record.product_service_specification__c+'</td>';
+                                htmlTable += '<td style="word-break: break-word;">'+record.product_service_specification__c+'</td>';
                             htmlTable += '</tr>';
                             htmlTable += '<tr>';
                               htmlTable += '<td><strong>Quantity</strong></td>';
@@ -123,7 +123,7 @@
                           htmlTable += '</tr>';
                             htmlTable += '<tr>';
                               htmlTable += '<td><strong>Others</strong></td>';
-                              htmlTable += '<td>'+record.others__c+'</td>';
+                              htmlTable += '<td style="word-break: break-word;">'+record.others__c+'</td>';
                               htmlTable += '<td><strong>Quote1</strong></td>';
                             if(record.quote1__c!="demo1"){
                             htmlTable += '<td>'+'<a href="'+record.quote1__c+'" target="_blank">Click to View Quote</a></td>';
@@ -150,9 +150,9 @@
                            htmlTable += '</tr>';
                            htmlTable += '<tr>';
                             htmlTable += '<td><strong>State</strong></td>';
-                            htmlTable += '<td>'+record.state__c+'</td>';
+                            htmlTable += '<td style="word-break: break-word;">'+record.state__c+'</td>';
                             htmlTable += '<td><strong>District</strong></td>';
-                            htmlTable += '<td>'+record.district__c+'</td>';
+                            htmlTable += '<td style="word-break: break-word;">'+record.district__c+'</td>';
                             
                          htmlTable += '</tr>';
                          htmlTable += '<tr>';
@@ -163,7 +163,7 @@
                        htmlTable += '</tr>';
                        htmlTable += '<tr>';
                         htmlTable += '<td><strong>Justification</strong></td>';
-                        htmlTable += '<td>'+record.justification__c+'</td>';
+                        htmlTable += '<td style="word-break: break-word;">'+record.justification__c+'</td>';
                         htmlTable += '<td><strong>Number Of Quotes</strong></td>';
                         htmlTable += '<td>'+record.number_of_quotes__c+'</td>';
                      htmlTable += '</tr>';
@@ -177,7 +177,7 @@
                   ftable +='<thead><th>Feedbacks(IT) Name</th><th>Quantity Requested vs Received</th><th>Timely submissions of Deliverables/Goods</th><th>Work Quality/Goods Quality</th><th>Issue Knowledge/ Expertise</th>';
                   response.feedback.forEach((eachRecord)=>{
                     ftable +='<tr>';
-                      ftable +='<td>'+eachRecord.name+'</td>';   
+                      ftable +='<td style="word-break: break-word;">'+eachRecord.name+'</td>';   
                       ftable +='<td>'+eachRecord.quyantiut__c+'</td>';
                       ftable +='<td>'+eachRecord.timely_submissions_of_deliverables_goods__c+'</td>';
                       ftable +='<td>'+eachRecord.work_quality_goods_quality__c+'</td>';  

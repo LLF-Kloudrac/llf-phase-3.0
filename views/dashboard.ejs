@@ -67,7 +67,7 @@
                 console.log('dateTime  : '+dateTime);
                 htmlTable += '<tr>';
                 htmlTable += '<td>'+i+' </td>';
-                htmlTable += '<td>'+eachRecord.projectname+' </td>';
+                htmlTable += '<td style="word-break: break-word;">'+eachRecord.projectname+' </td>';
                 htmlTable += '<td><a class="btn btn-primary" style="color:white;" href="'+eachRecord.pldformurl+'" target="_blank" >Click Here</a></td>';
                 htmlTable += '<td>'+dateTime+' </td>';
                 htmlTable += '<td><a class="btn btn-primary responseModalAnchorId" id="'+eachRecord.pldformid+'"  style="color:white;" href="#"  >View Responses</a> </td>';
@@ -120,7 +120,7 @@
                               console.log('dateTime  : '+dateTime);
                               htmlResponsesTable += '<tr>';
                               htmlResponsesTable += '<td>'+i+' </td>';
-                              htmlResponsesTable += '<td>'+eachRecord.name+' </td>';
+                              htmlResponsesTable += '<td style="word-break: break-word;">'+eachRecord.name+' </td>';
                               htmlResponsesTable += '<td>'+dateTime+' </td>';
                               htmlResponsesTable += '<td><a class="btn btn-primary " href="https://llfdev1-llf1.cs74.force.com/responsepdf?Id='+eachRecord.sfid+'" target="_blank" style="color:white;"  >Preview</a> </td>';
                               htmlResponsesTable += '</tr>';

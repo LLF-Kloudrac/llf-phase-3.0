@@ -291,15 +291,15 @@
                                 let htmlTable='';
                               htmlTable += '<tr>';
                                   htmlTable += '<td><strong>Name</strong></td>';
-                                  htmlTable += '<td>'+response[0].itemname+'</td>';
+                                  htmlTable += '<td style="word-break: break-word;">'+response[0].itemname+'</td>';
                                   htmlTable += '<td><strong>Vendor Name</strong></td>';
-                                  htmlTable += '<td>'+response[0].vendername+'</td>';
+                                  htmlTable += '<td style="word-break: break-word;">'+response[0].vendername+'</td>';
                               htmlTable += '</tr>';
                               htmlTable += '<tr>';
                                 htmlTable += '<td><strong>Item Category</strong></td>';
-                                htmlTable += '<td>'+response[0].category__c+'</td>';
+                                htmlTable += '<td style="word-break: break-word;">'+response[0].category__c+'</td>';
                                 htmlTable += '<td><strong> Item</strong></td>';
-                                htmlTable += '<td>'+response[0].items__c+'</td>';
+                                htmlTable += '<td style="word-break: break-word;">'+response[0].items__c+'</td>';
                             htmlTable += '</tr>';
                             htmlTable += '<tr>';
                                 htmlTable += '<td><strong>Unit </strong></td>';
@@ -309,7 +309,7 @@
                             htmlTable += '</tr>';
                             htmlTable += '<tr>';
                                 htmlTable += '<td><strong>Other </strong></td>';
-                                htmlTable += '<td>'+response[0].other_items__c+'</td>';
+                                htmlTable += '<td style="word-break: break-word;">'+response[0].other_items__c+'</td>';
                                 htmlTable += '<td><strong>Quote URL </strong></td>';
                                 if(response[0].public_quote_url__c!="demo"){
                                 if(response[0].public_quote_url__c!=null){

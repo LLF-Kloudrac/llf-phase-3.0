@@ -311,9 +311,9 @@
                               let strCreatedDate = createdDate.toLocaleString();
                               htmlTable += '<tr>';
                                   htmlTable += '<td><strong>Name</strong></td>';
-                                  htmlTable += '<td>'+airRailBusRecord.airbusrailname+'</td>';
+                                  htmlTable += '<td style="word-break: break-word;">'+airRailBusRecord.airbusrailname+'</td>';
                                   htmlTable += '<td><strong>TourBill Name</strong></td>';
-                                  htmlTable += '<td>'+airRailBusRecord.tourbillname+'</td>';
+                                  htmlTable += '<td style="word-break: break-word;">'+airRailBusRecord.tourbillname+'</td>';
                               htmlTable += '</tr>';
                                
                               htmlTable += '<tr>';
@@ -332,7 +332,7 @@
                               htmlTable += '<tr>';  
                               htmlTable += '<td><strong>Activity Code</strong></td>';
                               if(airRailBusRecord.activitycode != null)
-                                  htmlTable += '<td>'+airRailBusRecord.activitycode+'</td>';
+                                  htmlTable += '<td style="word-break: break-word;">'+airRailBusRecord.activitycode+'</td>';
                                   else
                                   htmlTable += '<td></td>';
                                   htmlTable += '<td><strong>Amount</strong></td>';
