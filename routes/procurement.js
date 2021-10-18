@@ -683,9 +683,9 @@ router.post('/updateasset',(request,response)=>{
         closurePlanDate='';
     }
   
-     if(goodsDate == '' || typeof(goodsDate) == "undefined"){
-        goodsDate= closurePlanDate;
-    } 
+     //if(goodsDate == '' || typeof(goodsDate) == "undefined"){
+        //goodsDate= closurePlanDate;
+    //} 
 
     if(deliveryTime=='' || typeof(deliveryTime) == "undefined"){
         console.log('deliveryTime ');
@@ -718,9 +718,12 @@ router.post('/updateasset',(request,response)=>{
         updateQuerry += 'delivery_cost_incl__c= \''+deliveryCost+'\', ';
     }
 
-    updateQuerry += 'Received_Quantity_Goods__c= \''+receivedQuantity+'\', '+
-    'Date_of_Receiving_Goods__c= \''+goodsDate+'\' '+
-    'WHERE sfid = $1';
+    updateQuerry += 'Received_Quantity_Goods__c= \''+receivedQuantity+'\'';
+
+    if(goodsDate != null && goodsDate != '' && typeof(goodsDate) !== 'undefined') {
+        updateQuerry += ', Date_of_Receiving_Goods__c= \''+goodsDate+'\'';
+    }
+    updateQuerry += ' WHERE sfid = $1';
     console.log('---- 725 procurement.js updateQuerry: ' + updateQuerry);
 
     var payPass='';
@@ -871,10 +874,12 @@ router.post('/nonItProducts', (request,response) => {
          if(result.error){
              console.log('fd'+result.error);
              response.send(result.error.details[0].context.label);
+             return;
          }
          else{
              if(nonItFormResult.quoteNum<3 && (nonItFormResult.justification==null || nonItFormResult.justification=="" || nonItFormResult.justification==' ')){
-                     response.send('Please enter Justification because quote count is not equal to 3.');    
+                     response.send('Please enter Justification because quote count is not equal to 3.');
+                    return; 
             }
             else{
              let singleRecordValues = [];
@@ -923,16 +928,19 @@ router.post('/nonItProducts', (request,response) => {
      
              })
              let result=schema.validate({state:state[i],items:items[i],itemsCategory:itemsCategory[i],district:district[i],vendor:vendor[i],itemSpecification:itemSpecification[i],itemSpeci:itemSpecification[i],quantity:quantity[i],quanty:quantity[i],budget:budget[i],budg:budget[i]});
-             console.log('validation REsult mul'+JSON.stringify(result.error));
+             //console.log('--- 931 procurement.js validation REsult mul'+JSON.stringify(result.error));
+             console.log('--- 931 procurement.js validation REsult mul ==== ');
              if(result.error){
                  console.log('Validation error'+result.error);
                  response.send(result.error.details[0].context.label);
+                 return;
              }
              else{
-                // if(nonItFormResult.quoteNum[i]<3 &&(nonItFormResult.justification[i]==null || nonItFormResult.justification[i]=="" || nonItFormResult.justification[i]== ' ')){               
-                   if(nonItFormResult.quoteNum[i]<3 && nonItFormResult.justification[i].length <3){
+                 if(nonItFormResult.quoteNum[i] < 3 && (nonItFormResult.justification[i] == null || nonItFormResult.justification[i] == "" || nonItFormResult.justification[i] == ' ')){               
+                   //if(nonItFormResult.quoteNum[i]<3 && nonItFormResult.justification[i].length <3){
                     console.log('charter count '+nonItFormResult.justification[i].length);
-                    response.send('Please enter Justification because quote count is not equal to 3.');    
+                    response.send('Please enter Justification because quote count is not equal to 3.');
+                    return;
                  }
                  else{
  
@@ -1052,15 +1060,18 @@ router.post('/itProducts', (request,response) => {
                  budg:joi.number().min(0).label('The budget cannot be negative.'),
                 })
             let result=schema.validate({state:state,district:district,itemCategory:itemCategory,items:items,vendor:vendor,itemSpecification:itemSpecification,itemSpeci:itemSpecification,quantity:quantity,quanty:quantity,budget:budget,budg:budget});
-            console.log('validation REsult '+JSON.stringify(result.error));
+            //console.log('--- 1062 procurement.js validation REsult '+JSON.stringify(result.error));
+            console.log('--- 1064 procurement.js validation REsult mul ==== ');
             if(result.error){
                 console.log('fd'+result.error);
                 response.send(result.error.details[0].context.label);
+                return;
             }
             else{
-               // if(itFormResult.quoteNum<3 &&(itFormResult.justification==null || itFormResult.justification=="" || itFormResult.justification==' ')){
-                  if(itFormResult.quoteNum<3 && itFormResult.justification.length < 2 ){
-                       response.send('Please enter Justification because quote count is not equal to 3.');     
+                if(itFormResult.quoteNum<3 &&(itFormResult.justification == null || itFormResult.justification == "" || itFormResult.justification == ' ')){
+                  //if(itFormResult.quoteNum<3 && itFormResult.justification.length < 2 ){
+                       response.send('Please enter Justification because quote count is not equal to 3.');  
+                       return;   
                  }
                  else{
                     let singleItProductRecordValue = [];
@@ -1104,15 +1115,18 @@ router.post('/itProducts', (request,response) => {
                     budg:joi.number().min(0).label('The budget cannot be negative.'),
                 })
                 let result=schema.validate({state:state[i],items:items[i],district:district[i],vendor:vendor[i],itemSpecification:itemSpecification[i],itemSpeci:itemSpecification[i],quantity:quantity[i],quanty:quantity[i],budget:budget[i],budg:budget[i]});
-                console.log('validation REsult '+JSON.stringify(result.error));
+                //console.log('--- 1116 procurement.js validation REsult '+JSON.stringify(result.error));
+                console.log('--- 1119 procurement.js validation REsult mul ==== ');
                 if(result.error){
                     console.log('fd'+result.error);
                     response.send(result.error.details[0].context.label);
+                    return;
                 }
                 else{                
-                   // if(itFormResult.quoteNum[i]<3 &&(itFormResult.justification[i]==null || itFormResult.justification[i]=="" || itFormResult.justification[i]== ' ' || itFormResult.justification=='  ')){
-                    if(itFormResult.quoteNum[i]<3 && itFormResult.justification[i].length<3){
-                       response.send('Please enter Your Justificaton for Quote less than 3 in row number');     
+                    if(itFormResult.quoteNum[i] < 3 && (itFormResult.justification[i] == null || itFormResult.justification[i] == "" || itFormResult.justification[i] == ' ' || itFormResult.justification == '  ')){
+                    //if(itFormResult.quoteNum[i]<3 && itFormResult.justification[i].length<3){
+                       response.send('Please enter Your Justificaton for Quote less than 3 in row number'); 
+                       return;    
                  }
                  else{
                     let singleItProductRecordValue = [];

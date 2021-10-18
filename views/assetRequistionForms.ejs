@@ -721,12 +721,11 @@
   <div class="modal-footer">
   <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
   </div>
- 
   </div>
   </div>
  </div>
 
-<!--  
+<!--
   ==========================================================================================================================================
   Asset Requisition List View
   ==========================================================================================================================================
@@ -737,14 +736,11 @@
           sequence: 'Sr No.',
           name: 'Asset Requisition Name',
           projectname: 'Project Name',
-          //actCode:'Activity Code',
           noit: 'Number of IT Product',
           nononit: 'Number of Non-IT Product',
           dateofRec:'Target Date of Receiving',
           accAppStatus:'Accounts Approval Status',
           status:'Status',
-        //  itamount: 'IT Amount',
-       //   nonitamount: 'Non-IT Amount' ,
           totalamount: 'Total Amount', 
           createdDate : 'Created Date',
           editbutton : 'Action',
@@ -761,8 +757,7 @@
             pagination:true,
             sorting: ['createdDate','sequence'],
             tableWillMount: () => {
-                console.log('table will mount')
-                
+                console.log('table will mount');
             },
             tableDidMount: () => {
                 console.log('table did mount');
@@ -770,9 +765,7 @@
                 $('#spinner').hide();
             },
             tableWillUpdate: () => {
-                console.log('table will update')
-            //  table.refresh();
-            // onLoadTask();
+                console.log('table will update');
             },
             tableDidUpdate: () => {
             console.log('table did update');
@@ -863,7 +856,7 @@
     //  $('#approvalCommentModal').modal('hide');
       }).fail(function(jqXHR, status, error){
       console.log('jqXHR '+JSON.stringify(jqXHR));
-
+      $("#submitForApproval").attr("disabled", false);
       //$('#approvalCommentModal').modal('hide');
       })
       });
@@ -884,7 +877,7 @@
      // $('#approvalCommentModal').modal('hide');
       })
       .fail(function(jqXHR, status, error){
-     
+        $("#submitForApproval").attr("disabled", false);
       console.log('jqXHR '+JSON.stringify(jqXHR));
 
       })
@@ -911,7 +904,7 @@
           //   document.getElementById("pettyCashButton").setAttribute('disabled',true);
                 document.getElementById("pettyCashButton").classList.add("anchorDisable");
                 document.getElementById("pettyCashButton2").classList.add("anchorDisable");
-              //  document.getElementById("notes").classList.add("anchorDisable");
+                document.getElementById("notes").classList.add("anchorDisable");
             }
            
           document.getElementById('expenseIdpTag').innerHTML = assetId;
@@ -1338,15 +1331,16 @@
       strclousreActualDate = assetRecord.requested_closure_actual_date__c.split('T')[0];
       }
       
-      // console.log('strclousreActualDate : '+strclousreActualDate);
+      console.log('---- 1341 assetRequisitionForms.ejs assetRecord.requested_closure_plan_date__c: ' + assetRecord.requested_closure_plan_date__c);
       if(assetRecord.requested_closure_plan_date__c!=null)
       {
-      clousrePlanDate = assetRecord.requested_closure_plan_date__c.split('T')[0];
+        clousrePlanDate = assetRecord.requested_closure_plan_date__c.split('T')[0];
       }
       
+      console.log('---- 1347 assetRequisitionForms.ejs (assetRecord.date_of_receiving_goods__c == null): ' + (assetRecord.date_of_receiving_goods__c == null));
       if(typeof(assetRecord.date_of_receiving_goods__c) != "undefined" && assetRecord.date_of_receiving_goods__c !=null){
         strReceivingGoodsDate = assetRecord.date_of_receiving_goods__c.split('T')[0];
-        console.log('strReceivingGoodsDate : '+strReceivingGoodsDate +' :clousrePlanDate '+ clousrePlanDate);
+        console.log('----- 1350 assetRequisitionForms.ejs strReceivingGoodsDate: '+strReceivingGoodsDate +' ::::: clousrePlanDate: '+ clousrePlanDate);
       }
       
              $('#activityCode').empty();
@@ -1361,21 +1355,6 @@
                    .attr("value",activityCodes[i].sfid)
                    .text(activityCodes[i].name));	
                 }
-               
-
-      
-    /*   $('#activityCode').on('change',function(){
-          let taskId = this.value;
-          let selectedCode = activityCodes.filter((eachCode)=> {
-            if(eachCode.sfid == taskId)
-              return eachCode;
-          })
-          let label = selectedCode[0].name;
-          document.getElementById('projectTask').value = label;
-        //  $('#projectTask'+cnt).value = label;
-          console.log('label  :'+label+' value : '+taskId);
-      }) -->
-      */
       
  document.forms["editAssetForm"]["assetName"].value = assetRecord.name;
  document.forms["editAssetForm"]["projectName"].value = assetRecord.projname;
@@ -1411,7 +1390,9 @@
  
  document.forms["editAssetForm"]["receiverName"].value = assetRecord.receiver_name__c;
  document.forms["editAssetForm"]["receivedQuantity"].value = assetRecord.received_quantity_goods__c;
+
  document.forms["editAssetForm"]["goodsDate"].value = strReceivingGoodsDate;//clousrePlanDate;
+
  console.log('assetRecord.sfidt;'+assetRecord.sfidt);
  document.forms["editAssetForm"]["assetsfid"].value = assetRecord.sfidt;
  document.forms["editAssetForm"]["quotations"].value = assetRecord.if_3_quotations_specify_reason__c;
@@ -1482,7 +1463,7 @@ $('#editassetForm').on('click',function(event){
  var values = {};
  $inputs.each(function() {
  values[this.name] = $(this).val();
- console.log('fomvalues=> '+JSON.stringify(values));
+ console.log('---- 1473 assetRequisitionForms.ejs fomvalues=> '+JSON.stringify(values));
  });
  //alert('formValues : '+JSON.stringify(values));
  $.ajax({
