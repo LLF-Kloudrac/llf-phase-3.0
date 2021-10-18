@@ -1841,13 +1841,13 @@ router.get('/getVendorsList',(request,response)=>{
               let strDate = crDate.toLocaleString();
               obj.sequence = i;
               obj.editAction = '<button href="#" class="btn btn-primary editVendor" id="'+eachRecord.sfid+'" >Edit</button>'
-              obj.name = '<a href="#" class="vendorTag" style="word-break: break-word;" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
-              obj.vendorname = eachRecord.vendor_name__c;
+              obj.name = '<a href="#" class="vendorTag" id="'+eachRecord.sfid+'" >'+eachRecord.name+'</a>';
+              obj.vendorname = '<font style="word-break : break-word;">' + eachRecord.vendor_name__c + '</font>';
               obj.state = eachRecord.state__c;
               obj.district = eachRecord.district__c;
-              obj.signAuthority=eachRecord.name_of_signing_authority__c;
+              obj.signAuthority= '<font style="word-break : break-word;">' + eachRecord.name_of_signing_authority__c + '</font>';
               obj.contact =eachRecord.contact_no__c;
-              obj.add = eachRecord.address__c;
+              obj.add = '<font style="word-break : break-word;">' + eachRecord.address__c + '</font>';
               obj.createdDate = strDate;
               i= i+1;
               modifiedList.push(obj);

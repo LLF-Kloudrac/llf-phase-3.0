@@ -197,16 +197,18 @@
     console.log('Inside Loop'+actualDt);
   assetDetailsTableRows += '<tr>';
     assetDetailsTableRows += '<td ><strong>Asset Requisition Name<strong></td>';
-    assetDetailsTableRows += '<td style="word-break: break-word;">'+assetDetailsRecord.name+'</td>';
+    let assetName = assetDetailsRecord.name.substr(0, 30);
+    assetDetailsTableRows += '<td style="word-break: break-word;" title="' + assetDetailsRecord.name + '">'+assetName+'</td>';
     assetDetailsTableRows += '<td><strong>Project/Department<strong></td>';
-    assetDetailsTableRows += '<td style="word-break: break-word;">'+assetDetailsRecord.projname +'</td>';
+    let projectName = assetDetailsRecord.projname.substr(0, 30);
+    assetDetailsTableRows += '<td style="word-break: break-word;" title="'+assetDetailsRecord.projname +'">' + projectName + '</td>';
     assetDetailsTableRows += '</tr>'; 
     assetDetailsTableRows += '<tr>';
     assetDetailsTableRows += '<td><strong>Target Date of receiving<strong></td>';
     assetDetailsTableRows += '<td>'+ planDt+'</td>';
     assetDetailsTableRows += '<td ><strong>Activity Code<strong></td>';
-    
-    assetDetailsTableRows += '<td style="word-break: break-word;">'+assetDetailsRecord.actname+'</td>';
+    let activityName = assetDetailsRecord.actnam.substr(0, 30);
+    assetDetailsTableRows += '<td style="word-break: break-word;" title="'+assetDetailsRecord.actname+'">' + activityName + '</td>';
     
     assetDetailsTableRows += '</tr>'; 
     assetDetailsTableRows += '<tr>';
@@ -438,7 +440,7 @@
                     {
                         let notesAttachmentTable = '';
                         assetDetails.assetFormDetails.forEach((assetDetailsRecord) => {
-                        notesAttachmentTable+='<thead><th>Name (PO Attachment URL) </th></thead>';
+                        notesAttachmentTable+='<thead><th>Name (PO Attachment URL)</th></thead>';
                         if(assetDetailsRecord.po_attachment_url__c!="demo"){
                         if(assetDetailsRecord.po_attachment_url__c!=null){
                           notesAttachmentTable += '<td>'+'<a href="'+assetDetailsRecord.po_attachment_url__c+'" target="_blank">Click to View </a></td>';

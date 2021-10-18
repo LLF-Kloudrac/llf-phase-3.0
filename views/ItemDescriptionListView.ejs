@@ -119,6 +119,7 @@
         </div>
       
         <div class="modal-body" id="editModalBody" >
+          <div id="errorMessages"></div>
             <form name="edititem" id="edititem" >
              <div class="form-group">
                 <div class="row">
@@ -137,13 +138,13 @@
                   
                   
                   <div class="col-md-6">
-                  <label for="cate">Category </label>
+                    <label for="cate">Category </label>
                     <select id="cate" name="cate" class="form-control item_unit"><option value="">Select</option></select>
                   </div>
                   <div class="col-md-6">
                     <label for="item">  Item </label>
-                    <select id="item" name="item" class="form-control item_unit" ><option value="">Select</option></select>
-                    </div>
+                    <select id="item" name="item" class="form-control item_unit"><option value="">Select</option></select>
+                  </div>
                 </div>
             </div>
 
@@ -185,7 +186,8 @@
 
 <script>
   
-    $(document).ready(function(){
+    $(document).ready(function()
+    {
         $('#vendorId').hide();
         var id = document.getElementById('vendorId').innerHTML;
        // alert('id '+id);
@@ -236,6 +238,7 @@
             },
         
         });
+
         $('#changeRows').on('change', function() {
             table.updateRowsPerPage(parseInt($(this).val(), 15));
             })
@@ -255,8 +258,6 @@
                table.setData(response, columns);
                //anchorClickFunctionalities();
                anchorClickFunctionalities();
-              
-              
             })
           .fail((jqXHR, status, error) =>{
               console.log('jqXHR  : '+JSON.stringify(jqXHR));
@@ -362,14 +363,33 @@
      "Ram", "Monitor", "CPU", "UPS" ,"Battery", "Software", "Laptop", "Desktop", "Laptop Chargers", "Base", "Screen",
      "Printer", "LCD projector", "Toner", "Cartridge", "Plasma",
      "Servers", "Telephones", "Camera", "Tablets","OtherItems"];
-    for(i=0;i<itemsCategory.length;i++)
-    {
-       $('#cate')
-               .append($("<option></option>")
-               .attr("value",itemsCategory[i])
-               .text(itemsCategory[i]));		
-    }
     
+      //Adding all values for Category picklist.
+      $('#cate').empty();
+      for(i=0;i<itemsCategory.length;i++)
+      {
+        $('#cate')
+          .append($("<option></option>")
+          .attr("value",itemsCategory[i])
+          .text(itemsCategory[i]));		
+      }
+    
+    //Adding values for Items picklist
+    var subListValue="";
+    $('#cate').on('change', function() {
+      $('#item').empty();
+      subListValue = eval(this.value);
+      console.log('subListValue  '+subListValue);
+      
+      for(i=0;i<subListValue.length;i++)
+      {
+        $('#item')
+          .append($("<option></option>")
+          .attr("value",subListValue[i])
+          .text(subListValue[i]));		
+      }
+    })
+
          //   alert(' editItem Modal ID=>'+itemId);
               $('#itemModal').modal('show'); 
               $.ajax({
@@ -387,8 +407,24 @@
             console.log('response from Item Edit Ajax +='+JSON.stringify(response[0]));
             document.forms["edititem"]["itemname"].value = response[0].itemname;
             document.forms["edititem"]["vendor"].value = response[0].vendername;
+            
+            console.log('---- 391 response[0].category__c: ' + response[0].category__c);
             document.forms["edititem"]["cate"].value = response[0].category__c;
+            
+            
+            //Adding for getting the default values for Item picklist.
+            subListValue = eval(response[0].category__c);
+            console.log('subListValue  '+subListValue);
+            
+            for(i=0;i<subListValue.length;i++)
+            {
+              $('#item')
+                .append($("<option></option>")
+                .attr("value",subListValue[i])
+                .text(subListValue[i]));		
+            }
             document.forms["edititem"]["item"].value = response[0].items__c;
+
             document.forms["edititem"]["unit"].value = response[0].unit__c;
             document.forms["edititem"]["cost"].value = response[0].per_unit_cost__c;
             document.forms["edititem"]["other"].value = response[0].other_items__c;
@@ -400,6 +436,8 @@
                 console.log('error  : '+error);
               })
         })
+
+
         $('#editItemButton').on('click',function(event){
             event.preventDefault();
                       event.stopPropagation();
@@ -414,8 +452,20 @@
                           values[this.name] = $(this).val();
                           console.log('fomvalues=> '+JSON.stringify(values));
                       });
-                      console.log('fomvalues=> '+JSON.stringify(values));
-                  //    alert('formValues : '+JSON.stringify(values));
+                      console.log('453 fomvalues=> '+JSON.stringify(values));
+
+                      if((values.item == 'Others' || values.item == 'Other Items' || values.item == 'OtherItems' || values.item == 'Any Other Expense') 
+                        && values.other == "") {
+                          $('#errorMessages').empty();
+                          let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">Others field is mandatory while selected Other in items.'+
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+                            '<span aria-hidden="true">&times;</span>'+
+                            '</button>'+
+                            '</div>';
+                            $('#errorMessages').append(errorHtml);
+                        return null;
+                      }
+
                       $.ajax({
                         url : '/procurement/updateItemescription',
                         type:'post',

@@ -1669,7 +1669,7 @@ router.get('/editProfile',verify,(request,response)=>{
   let objUser=request.user;
   let userId=objUser.sfid;
   console.log('Sfidddd :'+JSON.stringify(objUser));
-  let queryContact = 'SELECT sfid,email,  postal_code__c,address__c,name FROM salesforce.contact where sfid=$1' ;
+  let queryContact = 'SELECT sfid,email, postal_code__c,address__c,name FROM salesforce.contact where sfid=$1' ;
   pool
   .query(queryContact,[userId])
   .then((queryResult)=>{
@@ -1696,21 +1696,16 @@ router.post('/updateProfile',(request,response)=>{
    } */
  // request.checkQuery('postal','"Postal Code should not  be empty ').notEmpty().isInt();
   let bdy= request.body;
-   const schema = joi.object({
-    postal: joi.number().max(999999).min(100000),
-   /*
-    nam:joi.string().min(4).max(20)
-    phn:joi.string().required(),
-    add:joi.string(),
-    uid:joi.string(), */
-  }) 
+   /*const schema = joi.object({
+    postal: joi.number().max(999999).min(100000)
+  })
  // const scema = joi.number().max(5);
   let result= schema.validate({postal:bdy.postal});
   console.log('resutk '+JSON.stringify(result));
   if(result.error){
     response.status(400).send(result.error.details[0].message)
     return;
-    } 
+    }*/ 
   console.log('body : '+ JSON.stringify(bdy));
   const {nam , phn, postal,add,uid }=request.body;
   console.log('name '+nam);

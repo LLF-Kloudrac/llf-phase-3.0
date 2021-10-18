@@ -111,7 +111,7 @@
           <a href="/procurement/" style="color: #555;" id="refresh" ><i class="fa fa-refresh" style="font-size:34px; margin-left: 10px; margin-top: 30px;"></i> </a>
                </div>
         <div class="col-md-3">
-        <input type="text" class="form-control" placeholder="Search By Asset Requisition Name" id="searchField" style="margin-top: 5px;">
+        <input type="text" class="form-control" placeholder="Search By Asset Requisition Name" maxlength="80" id="searchField" style="margin-top: 5px;">
         </div>
         <div class="col-md-2 text-right">
         <span class="pr-2">Rows Per Page:</span>
@@ -161,7 +161,7 @@
  <div class="row">
  <div class="col-md-6">
  <label for="assetRequisitionName">Asset Requisition Name <span style="color: red;">*</span></label>
- <input type="text" class="form-control" id="assetRequisitionName" placeholder="Asset Requisition Name" name="assetRequisitionName" required>
+ <input type="text" class="form-control" id="assetRequisitionName" placeholder="Asset Requisition Name" maxlength="80" name="assetRequisitionName" required>
  </div>
 
  <div class="col-md-6">
@@ -240,7 +240,7 @@
   <div class="row">
   <div class="col-md-6">
   <label for="assetName">Asset Requistion Name</label>
-  <input type="text" class="form-control" id="assetName" value="" name="assetName" required>
+  <input type="text" class="form-control" id="assetName" value="" maxlength="80" name="assetName" required>
   </div>
   
   <div class="col-md-6">
@@ -726,6 +726,11 @@
   </div>
  </div>
 
+<!--  
+  ==========================================================================================================================================
+  Asset Requisition List View
+  ==========================================================================================================================================
+-->
 <script>
     $(document).ready(function(){
         let columns ={
@@ -784,6 +789,7 @@
             },
         
         });
+
         $('#changeRows').on('change', function() {
             table.updateRowsPerPage(parseInt($(this).val()));
             })
@@ -791,19 +797,17 @@
            $('#refresh').click(function() {
                 table.refresh(true);
                 onLoadTask();
-            })    
+            })
+
             $.ajax({
                 url :'/procurement/assetDetails',
                 type:'get',
                 dataType: 'json'
-           })
-           .done((response) => {
+           }).done((response) => {
                console.log('response it : '+JSON.stringify(response));
                table.setData(response, columns);
                anchorClickFunctionalities();
-              
-            })
-          .fail((jqXHR, status, error) =>{
+            }).fail((jqXHR, status, error) =>{
               console.log('jqXHR  : '+JSON.stringify(jqXHR));
               console.log('error  : '+error);
             })
@@ -821,6 +825,7 @@
     //  location.assign('/procurement/nonItProducts/'+assetId);
       window.open('/procurement/nonItProducts/'+assetId+'&'+buttonDisable,'_blank');
       });
+      
       $('a.procurementIT').click(() => {
       console.log('procurementIT anchor tag ');
       var assetId = document.getElementById('expenseIdpTag').innerHTML;
@@ -830,15 +835,16 @@
      // location.assign('/procurement/itProducts/'+assetId);
       window.open('/procurement/itProducts/'+assetId+'&'+buttonDisable,'_blank');
       });
+
+      //For attaching the notes and attachment
       $('a.notes').on('click',function(event){
-      //alert('Hello'+this.id);
-      var assetId = document.getElementById('expenseIdpTag').innerHTML;
-      console.log('assetId notes : '+assetId);
-      let buttonDisable = document.getElementById(assetId).disabled;
-            console.log(' button Disable + '+buttonDisable);
-     // location.assign('/procurement/upload/'+assetId);
-      window.open('/procurement/upload/'+assetId+'&'+buttonDisable,'_blank');
+        var assetId = document.getElementById('expenseIdpTag').innerHTML;
+        console.log('assetId notes : '+assetId);
+        let buttonDisable = document.getElementById(assetId).disabled;
+        console.log(' button Disable + '+buttonDisable);
+        window.open('/procurement/upload/'+assetId+'&'+buttonDisable,'_blank');
       })
+
       $('.approvalCommentModalButton').on('click',function(event){
       //alert('Hello'+this.id);
       event.stopImmediatePropagation();
@@ -946,17 +952,20 @@
     let actualDt = actu.toLocaleString().split(',')[0];
     console.log('Inside Loop'+actualDt);
     assetDetailsTableRows += '<tr>';
+    
     assetDetailsTableRows += '<td ><strong>Asset Requisition Name<strong></td>';
-    assetDetailsTableRows += '<td style="word-break: break-word;">'+assetDetailsRecord.name+'</td>';
+    let assetName = assetDetailsRecord.name.substr(0, 30);
+    assetDetailsTableRows += '<td style="word-break: break-word;" title="'+assetDetailsRecord.name+'">' + assetName + '</td>';
     assetDetailsTableRows += '<td><strong>Project/Department<strong></td>';
-    assetDetailsTableRows += '<td style="word-break: break-word;">'+assetDetailsRecord.projname +'</td>';
+    let projectName = assetDetailsRecord.projname.substr(0, 30);
+    assetDetailsTableRows += '<td style="word-break: break-word;" title="'+assetDetailsRecord.projname +'">' + projectName + '</td>';
     assetDetailsTableRows += '</tr>'; 
     assetDetailsTableRows += '<tr>';
     assetDetailsTableRows += '<td><strong>Target Date of Receiving<strong></td>';
     assetDetailsTableRows += '<td>'+ planDt+'</td>';
     assetDetailsTableRows += '<td ><strong>Activity Code<strong></td>';
-    
-    assetDetailsTableRows += '<td style="word-break: break-word;">'+assetDetailsRecord.actname+'</td>';
+    let activityCode = assetDetailsRecord.actname.substr(0, 30);
+    assetDetailsTableRows += '<td style="word-break: break-word;" title="'+assetDetailsRecord.actname+'">' + activityCode + '</td>';
     
     assetDetailsTableRows += '</tr>'; 
     assetDetailsTableRows += '<tr>';
@@ -1192,7 +1201,7 @@
                     {
                         let notesAttachmentTable = '';
                         assetDetails.assetFormDetails.forEach((assetDetailsRecord) => {
-                        notesAttachmentTable+='<thead><th>Name (PO Attachment URL) </th></thead>';
+                        notesAttachmentTable+='<thead><th>Name (PO Attachment URL)</th></thead>';
                         if(assetDetailsRecord.po_attachment_url__c!="demo"){
                         if(assetDetailsRecord.po_attachment_url__c!=null){
                           notesAttachmentTable += '<td>'+'<a href="'+assetDetailsRecord.po_attachment_url__c+'" target="_blank">Click to View </a></td>';
@@ -1334,9 +1343,10 @@
       {
       clousrePlanDate = assetRecord.requested_closure_plan_date__c.split('T')[0];
       }
-      if(assetRecord.date_of_receiving_goods__c!=null){
-      //strReceivingGoodsDate = assetRecord.date_of_receiving_goods__c.split('T')[0];
-      console.log('strReceivingGoodsDate : '+strReceivingGoodsDate +' :clousrePlanDate '+ clousrePlanDate);
+      
+      if(typeof(assetRecord.date_of_receiving_goods__c) != "undefined" && assetRecord.date_of_receiving_goods__c !=null){
+        strReceivingGoodsDate = assetRecord.date_of_receiving_goods__c.split('T')[0];
+        console.log('strReceivingGoodsDate : '+strReceivingGoodsDate +' :clousrePlanDate '+ clousrePlanDate);
       }
       
              $('#activityCode').empty();
@@ -1401,7 +1411,7 @@
  
  document.forms["editAssetForm"]["receiverName"].value = assetRecord.receiver_name__c;
  document.forms["editAssetForm"]["receivedQuantity"].value = assetRecord.received_quantity_goods__c;
- document.forms["editAssetForm"]["goodsDate"].value = strReceivingGoodsDate;
+ document.forms["editAssetForm"]["goodsDate"].value = strReceivingGoodsDate;//clousrePlanDate;
  console.log('assetRecord.sfidt;'+assetRecord.sfidt);
  document.forms["editAssetForm"]["assetsfid"].value = assetRecord.sfidt;
  document.forms["editAssetForm"]["quotations"].value = assetRecord.if_3_quotations_specify_reason__c;
@@ -1794,18 +1804,8 @@ function accountsApprovalFunctionality(){
       console.log('jqXHR '+JSON.stringify(jqXHR));
   })
 
-
-
-
-
-
-
-
-
-
       $('#createAssetRequisitionForm').modal('show');
       $('#assetRequisitionSubmitbutton').on('click',function(event){
-     // alert('clcker save button');
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
@@ -1816,8 +1816,8 @@ function accountsApprovalFunctionality(){
       // get an associative array of just the values.
       var values = {};
       $inputs.each(function() {
-      values[this.name] = $(this).val();
-      //console.log('fomvalues=> '+JSON.stringify(values));
+        values[this.name] = $(this).val();
+        //console.log('fomvalues=> '+JSON.stringify(values));
       });
     //  alert('formValues : '+JSON.stringify(values));
       $.ajax({

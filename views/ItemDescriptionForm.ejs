@@ -77,18 +77,16 @@
     $(document).ready(function(){
         $('#vendorID').hide();
         let vendId = document.getElementById('vendorID').innerHTML;
-      //  alert('venbderoIDv'+vendId);
         document.forms["formdata"]["hide"].value = vendId;
-       // var hide= document.getElementById('hide').innerHTML=vendId;
-       // alert('bc '+hide);
         for(i=0;i<itemsCategory.length;i++)
         {
            $('#category')
-                   .append($("<option></option>")
-                   .attr("value",itemsCategory[i])
-                   .text(itemsCategory[i]));		
+            .append($("<option></option>")
+            .attr("value",itemsCategory[i])
+            .text(itemsCategory[i]));		
         }
     })
+
     var subListValue="";
     let itemsCategoryValue;
     $('#category').on('change', function() {
@@ -109,6 +107,31 @@
      $(function () {
         $('form#formdata').bind('submit', function () {
           $("#CreateVendor").attr("disabled", true);
+
+
+          var $inputs = $('form#formdata :input');
+          var values = {};
+          $inputs.each(function() {
+              values[this.name] = $(this).val();
+              console.log('fomvalues=> '+JSON.stringify(values));
+          });
+          console.log('--- 121 ItemDescriptionForm.ejs fomvalues=> '+JSON.stringify(values));
+
+          if((values.items == 'Others' || values.items == 'Other Items' || values.items == 'OtherItems' || values.items == 'Any Other Expense') 
+            && values.other == "") {
+
+            $('#errorMessages').empty();
+            let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">Others field is mandatory while selected Other in items.'+
+              '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+              '<span aria-hidden="true">&times;</span>'+
+              '</button>'+
+              '</div>';
+              $('#errorMessages').append(errorHtml); 
+              $("#CreateVendor").attr("disabled", false);
+            return false;
+          }
+          //return;
+
           $.ajax({
             type: 'post',
             url: '/procurement/saveItemDescription',   // Need to make changes in post method url

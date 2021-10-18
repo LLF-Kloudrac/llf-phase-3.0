@@ -59,8 +59,8 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label for="name">Vendor Name </label>
-                        <input type="text"  class="form-control" id="name" value=""   name="name" >
+                        <label for="name">Vendor Name <span style="color: red;">*</span></label>
+                        <input type="text"  class="form-control" id="name" value="" required  name="name" >
                       </div>
                 </div>
               </div>
@@ -68,11 +68,11 @@
                 <div class="row">
                
                 <div class="col-md-6">
-                  <label for="state">state </label>
+                  <label for="state">state <span style="color: red;">*</span></label>
                     <select id="state" name="state" class="form-control item_unit"><option value="">Select</option></select>
                   </div>
                   <div class="col-md-6">
-                    <label for="district">  District </label>
+                    <label for="district">  District <span style="color: red;">*</span></label>
                     <select id="district" name="district" class="form-control item_unit" ><option value="">Select</option></select>
                     </div>
                 </div>
@@ -82,8 +82,8 @@
               <div class="form-group">
                 <div class="row">
                   <div class="col-md-6">
-                  <label for="aacc">Bank Account  No. </label>
-                  <input type="number" class="form-control" id="aacc" value=""   name="aacc" >
+                  <label for="aacc">Bank Account  No. <span style="color: red;">*</span></label>
+                  <input type="number" class="form-control" id="aacc" value="" required name="aacc" >
                   </div>
                   <div class="col-md-6">
                     <label for="auth"> Name of Signing Authority from Vendor</label>
@@ -95,12 +95,12 @@
             <div class="form-group">
                 <div class="row">
                   <div class="col-md-6">
-                  <label for="cont">Contact No. </label>
-                    <input type="number" class="form-control" id="cont" value=""   name="cont" >
+                  <label for="cont">Contact No. <span style="color: red;">*</span></label>
+                    <input type="number" class="form-control" id="cont" value="" required name="cont" >
                   </div>
                   <div class="col-md-6">
-                    <label for="bankDetail">Bank Details(Name,Branch, etc)</label>
-                    <input type="text" class="form-control" id="bankDetail" value=""   name="bankDetail" >
+                    <label for="bankDetail">Bank Details(Name,Branch, etc) <span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" id="bankDetail" value="" required name="bankDetail" >
                     </div>
                 </div>
             </div>
@@ -109,8 +109,8 @@
         <div class="form-group">
             <div class="row">
               <div class="col-md-6">
-              <label for="ifsc">Bank IFSC Code </label>
-                <input type="text" class="form-control" id="ifsc" value=""   name="ifsc" >
+              <label for="ifsc">Bank IFSC Code <span style="color: red;">*</span></label>
+                <input type="text" class="form-control" id="ifsc" value="" required name="ifsc" >
               </div>
               <div class="col-md-6">
                 <label for="pan"> Pan Number </label>
@@ -368,7 +368,7 @@ let st =["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Go
 
                                 vendorDetailRow += '<tr>';
                                     vendorDetailRow += '<td><strong> VendorList  ID<strong></td>';
-                                    vendorDetailRow += '<td style="word-break: break-word;">'+eachRecord.name+'</td>';
+                                    vendorDetailRow += '<td>'+eachRecord.name+'</td>';
                                     vendorDetailRow += '<td><strong>State<strong></td>';
                                         vendorDetailRow += '<td style="word-break: break-word;">'+eachRecord.state__c+'</td>';
                                 vendorDetailRow += '</tr>'; 
